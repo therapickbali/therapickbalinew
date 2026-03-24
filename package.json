@@ -10,12 +10,12 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "react-router-dom": "^7.10.0",
-    "react-dom": "^19.2.0",
-    "lucide-react": "^0.555.0",
     "@google/genai": "^1.30.0",
+    "framer-motion": "^12.35.1",
+    "lucide-react": "^0.555.0",
     "react": "^19.2.0",
-    "framer-motion": "^12.23.25"
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.10.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

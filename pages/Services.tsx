@@ -27,13 +27,13 @@ const Services: React.FC = () => {
                     className="group cursor-pointer flex flex-col"
                     onClick={() => navigate('/prices')}
                 >
-                    <div className="aspect-[4/5] overflow-hidden rounded-[40px] mb-6 relative bg-gray-200">
+                    <div className="aspect-[4/5] overflow-hidden rounded-none mb-6 relative bg-gray-200">
                         <img 
                             src={service.image} 
                             alt={service.name} 
                             className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
                         />
-                        <div className="absolute top-6 right-6 bg-white/90 backdrop-blur px-5 py-3 rounded-full text-[9px] font-sans font-semibold uppercase tracking-[0.3em] text-secondary opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute top-6 right-6 bg-white/90 backdrop-blur px-5 py-3 rounded-none border border-border text-[9px] font-sans font-semibold uppercase tracking-[0.3em] text-secondary opacity-0 group-hover:opacity-100 transition-opacity">
                             Book Now
                         </div>
                     </div>
