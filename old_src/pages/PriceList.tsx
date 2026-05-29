@@ -1,9 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { SERVICES, WHATSAPP_NUMBER, formatPrice } from '../constants';
 import { ServiceItem } from '../types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Filter, ShoppingBag, ArrowRight, ChevronRight, ChevronLeft, X } from 'lucide-react';
+import { ShoppingBag, ArrowRight, ChevronRight, ChevronLeft, X } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import ModernServiceCard from '../components/ModernServiceCard';
 import ReservationSidebar from '../components/ReservationSidebar';
@@ -129,7 +128,7 @@ _Looking forward to your confirmation._`;
     });
 
     return (
-        <div className="min-h-screen bg-background pt-24 pb-20 relative overflow-hidden">
+        <div className="min-h-screen bg-background pt-24 pb-20 relative overflow-hidden font-sans text-text">
 
             {/* --- MODAL --- */}
             <ServiceDetailModal
@@ -138,49 +137,46 @@ _Looking forward to your confirmation._`;
                 onAdd={addToCart}
             />
 
-            {/* Background Atmosphere */}
-            <div className="absolute inset-0 z-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/noise-lines.png')]"></div>
-
             {/* Page Container */}
             <div className="flex flex-col min-h-screen relative z-10 w-full max-w-[1600px] mx-auto overflow-hidden">
 
                 {/* Main Content Area */}
-                <div className="flex-1 flex flex-col w-full bg-white">
+                <div className="flex-1 flex flex-col w-full bg-background">
 
                     {/* Header Section */}
-                    <div className="px-6 md:px-16 pt-16 md:pt-24 pb-12 text-center lg:text-left bg-surface relative overflow-hidden border-b border-border">
+                    <div className="px-6 md:px-16 pt-12 md:pt-16 pb-12 text-center lg:text-left bg-surface/30 relative overflow-hidden border-b border-border/60">
                         <h1 className="sr-only">Elexoir Spa & Massage Treatments | Home Massage Service Ubud</h1>
 
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
                             className="max-w-4xl relative z-10"
                         >
-                            <div className="inline-block text-text-muted font-sans font-medium uppercase tracking-[0.2em] text-[10px] mb-8">
+                            <div className="inline-block text-accent font-bold uppercase tracking-[0.3em] text-[10px] mb-5">
                                 Complete Collection
                             </div>
 
-                            <h2 className="font-serif text-5xl md:text-[80px] font-light text-secondary leading-[1] tracking-[-0.02em] mb-8">
+                            <h2 className="font-serif text-5xl md:text-[76px] font-normal text-primary leading-[1.05] tracking-tight mb-6">
                                 Select Your <br />
-                                <span className="italic text-text-muted">Ritual</span>
+                                <span className="italic font-light opacity-95">Ritual</span>
                             </h2>
-                            <p className="text-secondary/70 font-light text-sm max-w-sm mx-auto lg:mx-0 leading-relaxed">
+                            <p className="text-text-muted font-light text-sm max-w-md mx-auto lg:mx-0 leading-relaxed">
                                 Professional therapeutic massages delivered straight to your villa. Explore our curated menu of relaxation and healing.
                             </p>
                         </motion.div>
                     </div>
 
                     {/* Sticky Filter Bar */}
-                    <div className="sticky top-[70px] z-30 bg-white/90 backdrop-blur-md border-b border-border py-4 px-6 md:px-16 shadow-none">
-                        <div className="flex gap-4 overflow-x-auto no-scrollbar items-center pb-2">
+                    <div className="sticky top-[70px] z-30 bg-background/80 backdrop-blur-md border-b border-border/60 py-3.5 px-6 md:px-16 shadow-none">
+                        <div className="flex gap-3 overflow-x-auto no-scrollbar items-center pb-1">
                             {categories.map((cat) => (
                                 <button
                                     key={cat}
                                     onClick={() => setActiveCategory(cat)}
-                                    className={`px-8 py-3 text-[11px] font-sans font-medium uppercase tracking-[0.2em] whitespace-nowrap transition-colors duration-300 ${activeCategory === cat
-                                        ? 'bg-primary text-white'
-                                        : 'bg-transparent text-text-muted hover:text-primary hover:bg-surface border border-transparent hover:border-border'
+                                    className={`px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] whitespace-nowrap transition-all duration-300 rounded-full border ${activeCategory === cat
+                                        ? 'bg-primary text-white border-primary shadow-soft'
+                                        : 'bg-transparent text-text-muted hover:text-primary hover:bg-surface border-border/80'
                                         }`}
                                 >
                                     {cat}
@@ -190,26 +186,26 @@ _Looking forward to your confirmation._`;
                     </div>
 
                     {/* Services View Toggle */}
-                    <div className="flex-1 bg-white">
+                    <div className="flex-1 bg-background">
                         {!isGridView ? (
                             /* Carousel View */
                             <div className="relative group/carousel">
                                 {/* Carousel Controls */}
-                                <div className="hidden md:flex px-6 md:px-16 pt-12 pb-6 justify-end items-center">
-                                    <div className="hidden md:flex gap-4">
+                                <div className="hidden md:flex px-6 md:px-16 pt-10 pb-4 justify-end items-center">
+                                    <div className="hidden md:flex gap-3">
                                         <button
                                             onClick={() => scrollCarousel('left')}
-                                            className="w-12 h-12 border border-border flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
+                                            className="w-11 h-11 border border-border/80 flex items-center justify-center text-primary bg-background hover:bg-surface rounded-full transition-colors"
                                             aria-label="Previous"
                                         >
-                                            <ChevronLeft size={24} strokeWidth={1} />
+                                            <ChevronLeft size={20} strokeWidth={1.5} />
                                         </button>
                                         <button
                                             onClick={() => scrollCarousel('right')}
-                                            className="w-12 h-12 border border-border flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
+                                            className="w-11 h-11 border border-border/80 flex items-center justify-center text-primary bg-background hover:bg-surface rounded-full transition-colors"
                                             aria-label="Next"
                                         >
-                                            <ChevronRight size={24} strokeWidth={1} />
+                                            <ChevronRight size={20} strokeWidth={1.5} />
                                         </button>
                                     </div>
                                 </div>
@@ -219,7 +215,7 @@ _Looking forward to your confirmation._`;
                                     className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-8 px-6 md:px-16 pb-12 pt-4"
                                 >
                                     {filteredServices.map((service) => (
-                                        <div key={service.id} className="snap-center shrink-0 w-[85vw] md:w-[450px]">
+                                        <div key={service.id} className="snap-center shrink-0 w-[82vw] md:w-[420px] bg-surface/20 border border-border/40 p-4 rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-500">
                                             <ModernServiceCard
                                                 service={service}
                                                 onView={(s) => setSelectedService(s)}
@@ -227,7 +223,7 @@ _Looking forward to your confirmation._`;
                                         </div>
                                     ))}
                                     {filteredServices.length === 0 && (
-                                        <div className="w-full py-20 text-center font-black text-2xl uppercase tracking-widest text-text-muted border-4 border-dashed border-black mx-6">
+                                        <div className="w-full py-20 text-center font-bold text-xl uppercase tracking-widest text-text-muted border-2 border-dashed border-border/80 rounded-2xl mx-6">
                                             No treatments found
                                         </div>
                                     )}
@@ -235,47 +231,51 @@ _Looking forward to your confirmation._`;
 
                                 {/* View More Button */}
                                 {filteredServices.length > 0 && (
-                                    <div className="flex justify-center mt-12 pb-16">
+                                    <div className="flex justify-center mt-10 pb-16">
                                         <motion.button
                                             onClick={() => setIsGridView(true)}
-                                            className="group flex items-center gap-3 px-10 py-5 bg-primary border border-primary text-white hover:bg-transparent hover:text-primary transition-colors duration-500"
+                                            className="group flex items-center gap-2.5 px-8 py-4.5 bg-primary border border-primary text-white hover:bg-transparent hover:text-primary rounded-xl transition-all duration-300"
                                         >
-                                            <span className="text-[11px] font-sans font-medium uppercase tracking-[0.2em]">
+                                            <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em]">
                                                 View All Treatments
                                             </span>
-                                            <ArrowRight size={16} strokeWidth={1} className="group-hover:translate-x-1 transition-transform" />
+                                            <ArrowRight size={14} strokeWidth={2} className="group-hover:translate-x-1 transition-transform" />
                                         </motion.button>
                                     </div>
                                 )}
                             </div>
                         ) : (
                             /* Grid View */
-                            <div className="px-6 md:px-16 pb-24 pt-12">
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
+                            <div className="px-6 md:px-16 pb-24 pt-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                     <AnimatePresence mode='popLayout'>
                                         {filteredServices.map((service) => (
-                                            <ModernServiceCard
-                                                key={service.id}
-                                                service={service}
-                                                onView={(s) => setSelectedService(s)}
-                                                domRef={(el) => { itemRefs.current[service.id] = el; }}
-                                            />
+                                            <div 
+                                                key={service.id} 
+                                                ref={(el) => { itemRefs.current[service.id] = el; }}
+                                                className="bg-surface/20 border border-border/40 p-4 rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-500"
+                                            >
+                                                <ModernServiceCard
+                                                    service={service}
+                                                    onView={(s) => setSelectedService(s)}
+                                                />
+                                            </div>
                                         ))}
                                     </AnimatePresence>
                                     {filteredServices.length === 0 && (
-                                        <div className="col-span-full py-20 text-center font-black text-2xl uppercase tracking-widest text-text-muted border-4 border-dashed border-black mx-6">
+                                        <div className="col-span-full py-20 text-center font-bold text-xl uppercase tracking-widest text-text-muted border-2 border-dashed border-border/80 rounded-2xl mx-6">
                                             No treatments found
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Back to Carousel button */}
-                                <div className="flex justify-center mt-16">
+                                <div className="flex justify-center mt-14">
                                     <button
                                         onClick={() => setIsGridView(false)}
-                                        className="text-[11px] font-sans font-medium uppercase tracking-[0.2em] text-primary bg-transparent border border-border px-10 py-5 hover:border-primary transition-colors duration-500 flex items-center gap-3 group"
+                                        className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-primary bg-background border border-border/80 px-8 py-4.5 rounded-xl hover:border-primary/50 hover:bg-surface transition-all duration-300 flex items-center gap-2 group"
                                     >
-                                        <ChevronLeft size={16} strokeWidth={1} className="group-hover:-translate-x-1 transition-transform" />
+                                        <ChevronLeft size={14} strokeWidth={2} className="group-hover:-translate-x-1 transition-transform" />
                                         Back to Carousel
                                     </button>
                                 </div>
@@ -295,7 +295,7 @@ _Looking forward to your confirmation._`;
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsCartOpen(false)}
-                            className="fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-[60]"
+                            className="fixed inset-0 bg-primary/40 backdrop-blur-sm z-[60]"
                         />
 
                         {/* Drawer */}
@@ -304,7 +304,7 @@ _Looking forward to your confirmation._`;
                             animate={{ x: 0 }}
                             exit={{ x: "100%" }}
                             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                            className="fixed top-0 right-0 h-full w-full md:w-[480px] bg-white z-[70] border-l border-border flex flex-col"
+                            className="fixed top-0 right-0 h-full w-full md:w-[460px] bg-background z-[70] shadow-2xl flex flex-col"
                         >
                             <ReservationSidebar
                                 cart={cart}
@@ -332,17 +332,17 @@ _Looking forward to your confirmation._`;
                     >
                         <div
                             onClick={() => setIsCartOpen(true)}
-                            className="bg-white border border-border px-6 py-4 flex items-center gap-4 transition-colors duration-300 pointer-events-auto cursor-pointer hover:border-primary"
+                            className="bg-background/90 backdrop-blur-md border border-border/80 px-6 py-4.5 flex items-center gap-4.5 transition-all duration-300 pointer-events-auto cursor-pointer hover:border-accent hover:shadow-soft rounded-2xl"
                         >
-                            <div className="text-primary w-8 h-8 flex items-center justify-center font-serif text-xl shrink-0">
+                            <div className="text-primary bg-surface w-9 h-9 flex items-center justify-center font-bold text-sm border border-border rounded-full shrink-0">
                                 {cart.length}
                             </div>
-                            <div className="flex flex-col items-start justify-center leading-none shrink-0 pl-1">
-                                <span className="font-semibold text-[10px] uppercase tracking-[0.2em] text-text-muted mb-1">IDR</span>
-                                <span className="font-serif text-xl text-primary">{formatPrice(calculateTotal()).replace(/IDR/i, '').trim()}</span>
+                            <div className="flex flex-col items-start justify-center leading-none shrink-0">
+                                <span className="font-bold text-[9px] uppercase tracking-[0.25em] text-accent mb-1.5">IDR</span>
+                                <span className="font-serif text-xl font-normal text-primary">{formatPrice(calculateTotal()).replace(/IDR/i, '').trim()}</span>
                             </div>
-                            <div className="h-8 w-[1px] bg-border shrink-0 mx-2"></div>
-                            <div className="flex flex-col text-[10px] font-medium uppercase tracking-[0.2em] leading-tight text-left shrink-0 text-text-muted">
+                            <div className="h-8 w-[1px] bg-border shrink-0 mx-1.5"></div>
+                            <div className="flex flex-col text-[9px] font-bold uppercase tracking-[0.2em] leading-tight text-left shrink-0 text-accent">
                                 <span>View</span>
                                 <span>Ritual</span>
                             </div>
@@ -351,10 +351,10 @@ _Looking forward to your confirmation._`;
                                     e.stopPropagation();
                                     setIsCartPillDismissed(true);
                                 }}
-                                className="p-2 ml-2 hover:text-primary transition-colors shrink-0"
+                                className="p-1.5 ml-1.5 hover:bg-surface text-text-muted hover:text-primary transition-colors shrink-0 rounded-full"
                                 aria-label="Close"
                             >
-                                <X size={16} strokeWidth={1} />
+                                <X size={14} strokeWidth={2} />
                             </button>
                         </div>
                     </motion.div>

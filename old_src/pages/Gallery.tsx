@@ -16,7 +16,7 @@ const IMAGES = [
 
 const Gallery: React.FC = () => {
     return (
-        <div className="pt-40 pb-32 min-h-screen bg-[#FAFAF9] overflow-hidden">
+        <div className="pt-40 pb-32 min-h-screen bg-background overflow-hidden">
             {/* Editorial Header */}
             <div className="max-w-[1600px] mx-auto px-6 md:px-12 text-center mb-24">
                 <motion.div
@@ -25,12 +25,12 @@ const Gallery: React.FC = () => {
                     transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                 >
                     <div className="flex items-center justify-center gap-4 mb-8">
-                        <div className="w-12 h-[1px] bg-[#c4a180]"></div>
-                        <span className="text-[9px] font-sans font-semibold uppercase tracking-[0.4em] text-[#c4a180]">Our Atmosphere</span>
-                        <div className="w-12 h-[1px] bg-[#c4a180]"></div>
+                        <div className="w-12 h-[1px] bg-accent/60"></div>
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-accent">Our Atmosphere</span>
+                        <div className="w-12 h-[1px] bg-accent/60"></div>
                     </div>
-                    <h1 className="font-serif text-6xl md:text-[140px] font-light text-secondary mb-8 leading-[0.85] tracking-[-0.03em]">
-                        Visual <span className="text-[#c4a180] italic">Journey</span>
+                    <h1 className="font-serif text-6xl md:text-[140px] font-light text-primary mb-8 leading-[0.85] tracking-[-0.03em]">
+                        Visual <span className="text-accent italic">Journey</span>
                     </h1>
                 </motion.div>
             </div>
@@ -44,9 +44,9 @@ const Gallery: React.FC = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                        className="break-inside-avoid rounded-none overflow-hidden bg-white p-2.5 shadow-none border border-border group relative hover:border-black transition-colors duration-500"
+                        className="break-inside-avoid rounded-2xl overflow-hidden bg-surface p-2.5 shadow-soft border border-border/80 group relative hover:border-primary/30 transition-colors duration-500"
                     >
-                        <div className="overflow-hidden rounded-none relative">
+                        <div className="overflow-hidden rounded-xl relative">
                             <img
                                 src={img.src}
                                 alt={img.alt}
@@ -54,7 +54,7 @@ const Gallery: React.FC = () => {
                                 className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-[2s] ease-out will-change-transform"
                             />
                             {/* Soft overlay */}
-                            <div className="absolute inset-0 bg-[#c4a180]/10 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            <div className="absolute inset-0 bg-primary/5 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                         </div>
                     </motion.div>
                 ))}

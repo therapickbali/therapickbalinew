@@ -100,7 +100,7 @@
   <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -109,43 +109,34 @@
       theme: {
         extend: {
           colors: {
-            background: '#FFFFFF', // Clean White
-            surface: '#F9F9F9', // Very light beige/gray
-            primary: '#1B1B1B', // Deep Black
-            secondary: '#1B1B1B', // Deep Black
-            accent: '#FFFFFF', // White
-            highlight: '#F9F9F9', // Light gray highlight
-            text: '#1B1B1B', // Deep Black Text
-            'text-muted': '#777777', // Soft gray text
-            border: '#EAEAEA', // Crisp light border
+            background: '#FAF9F5', // Warm paper-like neutral canvas
+            surface: '#F4F2EC', // Pale warm surface / card background
+            primary: '#1F2A20', // Grounded deep green / dark botanical
+            secondary: '#2E3D2F', // Deep forest botanical
+            accent: '#828C7A', // Muted sage / olive green
+            highlight: '#E4E6E1', // Pale sage highlight surface
+            text: '#1C221D', // Dark botanical graphite text
+            'text-muted': '#6B6E66', // Muted taupe-sage text
+            border: '#E2E0D8', // Fine warm stone border
           },
           fontFamily: {
-            sans: ['"Jost"', 'sans-serif'],
-            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '"Manrope"', 'sans-serif'],
+            serif: ['"Newsreader"', 'serif'],
           },
           boxShadow: {
-            'soft': 'none', // Removed soft shadows for Chrie aesthetic
-            'soft-lg': 'none',
-            'glow': 'none',
-            'glass': 'none',
+            'soft': '0 4px 20px -2px rgba(31, 42, 32, 0.05)',
+            'soft-lg': '0 10px 30px -4px rgba(31, 42, 32, 0.08)',
+            'glass': '0 8px 32px 0 rgba(31, 42, 32, 0.04)',
           },
           borderRadius: {
-            '4xl': '0px', // Removed all rounded corners
-            '5xl': '0px',
-            '6xl': '0px',
-            'pill': '0px',
-            'full': '0px',
-            '3xl': '0px',
-            '2xl': '0px',
-            'xl': '0px',
-            'lg': '0px',
-            'md': '0px',
-            'sm': '0px',
-          },
-          backgroundImage: {
-            'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-            'gradient-subtle': 'none',
-            'gradient-nude': 'none',
+            'none': '0px',
+            'sm': '4px',
+            'md': '8px',
+            'lg': '12px',
+            'xl': '16px',
+            '2xl': '24px',
+            '3xl': '32px',
+            'full': '9999px',
           }
         }
       }
@@ -153,17 +144,17 @@
   </script>
   <style>
     body {
-      background-color: #FFFFFF;
-      color: #1B1B1B;
-      font-family: 'Jost', sans-serif;
+      background-color: #FAF9F5;
+      color: #1C221D;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-weight: 300;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     h1, h2, h3, h4, h5, h6, .font-serif {
-      font-family: 'Cormorant Garamond', serif;
-      letter-spacing: 0em;
+      font-family: 'Newsreader', serif;
+      letter-spacing: -0.01em;
     }
 
     /* Elegant Scrollbar */
@@ -210,6 +201,7 @@
       box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.4);
     }
   </style>
+
   <script type="importmap">
 {
   "imports": {
@@ -223,11 +215,11 @@
   }
 }
 </script>
+  <script type="module" crossorigin src="/assets/index-D_h3yoeG.js"></script>
 </head>
 
 <body class="bg-background text-text font-sans antialiased overflow-x-hidden selection:bg-primary selection:text-white">
   <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
 </body>
 
 </html>

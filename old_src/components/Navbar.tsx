@@ -20,14 +20,14 @@ const Navbar: React.FC = () => {
     return (
         <>
             <header
-                className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ease-in-out ${!isHomeTop ? 'py-4 bg-white/95 backdrop-blur-md border-b border-border' : 'py-6 bg-transparent'
+                className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out ${!isHomeTop ? 'py-3.5 bg-background/90 backdrop-blur-md border-b border-border/60' : 'py-6 bg-transparent'
                     }`}
             >
                 <div className="max-w-[1600px] mx-auto px-6 md:px-12 flex justify-between items-center">
 
                     {/* Mobile Menu Trigger */}
                     <button onClick={() => setIsOpen(true)} className={`md:hidden w-10 h-10 flex justify-center items-center transition-all ${isHomeTop ? 'text-white' : 'text-primary'}`}>
-                        <Menu size={24} strokeWidth={1} />
+                        <Menu size={22} strokeWidth={1.5} />
                     </button>
 
                     {/* Desktop Left Nav */}
@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
                             <Link
                                 key={link.name}
                                 to={link.path}
-                                className={`text-[11px] font-sans font-medium uppercase tracking-[0.2em] transition-colors duration-500 hover:text-white/70 ${isHomeTop ? 'text-white' : (location.pathname === link.path ? 'text-primary' : 'text-text-muted hover:text-primary')}`}
+                                className={`text-[10px] font-sans font-bold uppercase tracking-[0.25em] transition-colors duration-500 hover:text-white/70 ${isHomeTop ? 'text-white' : (location.pathname === link.path ? 'text-primary' : 'text-text-muted hover:text-primary')}`}
                             >
                                 {link.name}
                             </Link>
@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
 
                     {/* Center Logo - Elegant Serif */}
                     <Link to="/" className="absolute left-1/2 -translate-x-1/2 group">
-                        <h1 className={`font-serif text-[32px] font-light tracking-[0.1em] uppercase text-center leading-none ${isHomeTop ? 'text-white' : 'text-primary'}`}>
+                        <h1 className={`font-serif text-[32px] font-normal tracking-[0.08em] uppercase text-center leading-none ${isHomeTop ? 'text-white' : 'text-primary'}`}>
                             Elexoir
                         </h1>
                     </Link>
@@ -56,14 +56,14 @@ const Navbar: React.FC = () => {
                             <Link
                                 key={link.name}
                                 to={link.path}
-                                className={`text-[11px] font-sans font-medium uppercase tracking-[0.2em] transition-colors duration-500 hover:text-white/70 ${isHomeTop ? 'text-white' : (location.pathname === link.path ? 'text-primary' : 'text-text-muted hover:text-primary')}`}
+                                className={`text-[10px] font-sans font-bold uppercase tracking-[0.25em] transition-colors duration-500 hover:text-white/70 ${isHomeTop ? 'text-white' : (location.pathname === link.path ? 'text-primary' : 'text-text-muted hover:text-primary')}`}
                             >
                                 {link.name}
                             </Link>
                         ))}
                         <Link to="/prices" className={`flex items-center gap-2 transition-all duration-500 ml-4 group ${isHomeTop ? 'text-white hover:text-white/70' : 'text-primary hover:text-text-muted'}`}>
-                            <span className="text-[11px] font-sans font-medium uppercase tracking-[0.2em] hidden xl:block">Reserve</span>
-                            <ShoppingBag size={18} strokeWidth={1} />
+                            <span className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] hidden xl:block">Reserve</span>
+                            <ShoppingBag size={17} strokeWidth={1.5} />
                         </Link>
                     </nav>
 
@@ -71,7 +71,7 @@ const Navbar: React.FC = () => {
                         to="/prices"
                         className={`md:hidden flex items-center justify-center w-10 h-10 transition-all ${isHomeTop ? 'text-white' : 'text-primary'}`}
                     >
-                        <ShoppingBag size={20} strokeWidth={1} />
+                        <ShoppingBag size={19} strokeWidth={1.5} />
                     </Link>
 
                 </div>
@@ -84,11 +84,11 @@ const Navbar: React.FC = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
+                        transition={{ duration: 0.4 }}
                         className="fixed inset-0 z-[100] bg-primary flex flex-col items-center justify-center p-6 lg:hidden"
                     >
                         <button onClick={() => setIsOpen(false)} className="absolute top-8 right-8 w-14 h-14 flex items-center justify-center text-white transition-all z-10">
-                            <X size={32} strokeWidth={1} />
+                            <X size={28} strokeWidth={1.5} />
                         </button>
 
                         <div className="flex flex-col gap-10 text-center relative z-10 w-full">
