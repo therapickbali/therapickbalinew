@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight } from 'lucide-react';
+import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X } from 'lucide-react';
 import Link from 'next/link';
 
 // Dummy data for redesign structure
@@ -17,9 +17,10 @@ const CATEGORIES = [
 
 export default function Home() {
     const [activeCategory, setActiveCategory] = useState('all');
+    const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-[#D2F34C] via-[#FDFBF7] to-[#FDFBF7] relative overflow-hidden font-sans text-text pb-24 md:pb-12">
+        <div className="min-h-screen bg-gradient-to-b from-[#D2F34C] via-[#FDFBF7] via-[40%] to-[#FDFBF7] relative overflow-hidden font-sans text-text pb-24 md:pb-12">
             
             {/* Luxurious Ambient Background */}
             <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] md:w-[800px] h-[600px] bg-secondary/30 blur-[120px] rounded-full z-0 pointer-events-none opacity-60 mix-blend-multiply" />
@@ -51,7 +52,7 @@ export default function Home() {
                 </div>
 
                 {/* Cinematic Campaign Card (Below Search) */}
-                <Link href="/rituals" className="block outline-none">
+                <div onClick={() => setIsCampaignModalOpen(true)} className="block outline-none">
                     <motion.div 
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -102,7 +103,7 @@ export default function Home() {
                             </div>
                         </div>
                     </motion.div>
-                </Link>
+                </div>
 
                 {/* Categories */}
                 <div className="mb-6">
@@ -154,21 +155,23 @@ export default function Home() {
                             },
                         ].map((item, idx) => (
                             <Link href="/rituals" key={idx} className="w-72 md:w-80 shrink-0 block group outline-none">
-                                <div className="rounded-[32px] p-6 md:p-8 bg-white border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2">
+                                <div className="rounded-[40px] p-6 md:p-8 bg-white border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2">
                                     <div className="mb-6 flex items-start justify-between">
-                                        <div className="bg-surface text-primary px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                                        <div className="bg-primary/5 border border-primary/10 text-primary px-4 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
                                             {item.category}
                                         </div>
-                                        <span className="flex items-center gap-1.5 text-[11px] font-bold text-text-muted"><Clock className="w-3 h-3" /> {item.time}</span>
                                     </div>
                                     <h4 className="font-serif text-2xl font-medium text-primary mb-3 leading-tight">{item.title}</h4>
                                     <p className="text-sm text-text-muted leading-relaxed font-light mb-8 flex-grow">{item.desc}</p>
                                     
-                                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/50">
-                                        <span className="font-serif text-lg text-primary">{item.price}</span>
-                                        <button className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                            <ArrowRight size={18} />
-                                        </button>
+                                    <div className="mt-auto pt-4 border-t border-border/50">
+                                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted mb-2 uppercase tracking-widest"><Clock className="w-3 h-3" /> {item.time}</div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-serif text-xl text-primary">{item.price}</span>
+                                            <button className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                                <ArrowRight size={20} />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </Link>
@@ -253,6 +256,88 @@ export default function Home() {
                 </div>
                 
             </div>
+
+            {/* Campaign Modal */}
+            {isCampaignModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 100 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 100 }}
+                        className="bg-[#FDFBF7] w-full h-[90dvh] md:h-auto md:max-h-[85vh] md:max-w-3xl md:rounded-[40px] rounded-t-[40px] shadow-2xl relative overflow-hidden flex flex-col"
+                    >
+                        {/* Modal Header */}
+                        <div className="p-6 md:p-8 flex items-center justify-between border-b border-border/50 bg-white shrink-0">
+                            <div>
+                                <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-[9px] font-bold tracking-widest uppercase text-primary mb-2">
+                                    Summer Retreat
+                                </div>
+                                <h2 className="font-serif text-2xl text-primary">Exclusive Offers</h2>
+                            </div>
+                            <button 
+                                onClick={() => setIsCampaignModalOpen(false)}
+                                className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-primary hover:bg-border transition-colors"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+                        
+                        {/* Modal Content (Campaign Treatments) */}
+                        <div className="p-6 md:p-8 overflow-y-auto bg-[#FDFBF7]">
+                            <p className="text-sm text-text-muted mb-6">Enjoy special discounts on our most popular treatments when you book during the Summer Retreat campaign.</p>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {[
+                                    { 
+                                        title: 'Radiance Facial', 
+                                        category: 'Facial', 
+                                        price: 'Rp 280,000', 
+                                        originalPrice: 'Rp 350,000',
+                                        time: '60 Min', 
+                                        desc: 'Restore your natural glow with organic botanical extracts and gentle exfoliation.',
+                                    },
+                                    { 
+                                        title: 'Couples Retreat', 
+                                        category: 'Package', 
+                                        price: 'Rp 950,000', 
+                                        originalPrice: 'Rp 1,200,000',
+                                        time: '120 Min', 
+                                        desc: 'A synchronized full-body massage experience designed for ultimate shared relaxation.',
+                                    },
+                                ].map((item, idx) => (
+                                    <Link href="/rituals" key={idx} className="block group outline-none" onClick={() => setIsCampaignModalOpen(false)}>
+                                        <div className="rounded-[32px] p-6 bg-white border border-border/40 shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
+                                            <div className="mb-4 flex items-start justify-between">
+                                                <div className="bg-primary/5 border border-primary/10 text-primary px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm">
+                                                    {item.category}
+                                                </div>
+                                                <div className="bg-accent/20 text-accent px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest">
+                                                    -20%
+                                                </div>
+                                            </div>
+                                            <h4 className="font-serif text-xl font-medium text-primary mb-2 leading-tight">{item.title}</h4>
+                                            <p className="text-xs text-text-muted leading-relaxed font-light mb-6 flex-grow">{item.desc}</p>
+                                            
+                                            <div className="mt-auto pt-4 border-t border-border/50">
+                                                <div className="flex items-center gap-1.5 text-[9px] font-bold text-text-muted mb-1.5 uppercase tracking-widest"><Clock className="w-3 h-3" /> {item.time}</div>
+                                                <div className="flex items-end justify-between">
+                                                    <div>
+                                                        <span className="text-[10px] text-text-muted line-through mr-2">{item.originalPrice}</span>
+                                                        <span className="font-serif text-lg text-primary">{item.price}</span>
+                                                    </div>
+                                                    <button className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                                        <ArrowRight size={16} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
         </div>
     );
 }
