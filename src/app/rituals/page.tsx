@@ -132,7 +132,7 @@ export default function RitualsDetails() {
                                 onClick={() => setIsModalOpen(true)}
                                 className="w-full bg-white text-primary px-6 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(255,255,255,0.15)]"
                             >
-                                Book an Appointment <Calendar className="w-4 h-4" />
+                                Book an Appointment
                             </button>
                         </div>
                     </div>
@@ -206,15 +206,49 @@ export default function RitualsDetails() {
                             <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
 
                             {/* Treatment Summary Card */}
-                            <div className="bg-surface border border-border/50 rounded-2xl p-4 mb-6 flex items-center justify-between shadow-sm">
-                                <div>
-                                    <h3 className="font-bold text-sm text-primary">Deep Tissue Flow</h3>
-                                    <p className="text-xs text-text-muted flex items-center gap-1 mt-0.5">
-                                        <Clock className="w-3 h-3" /> {selectedOption.duration} Mins
-                                    </p>
+                            <div className="bg-surface border border-border/50 rounded-2xl p-4 mb-3 shadow-sm">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 className="font-bold text-sm text-primary">Deep Tissue Flow</h3>
+                                        <p className="text-xs text-text-muted flex items-center gap-1 mt-0.5">
+                                            <Clock className="w-3 h-3" /> {selectedOption.duration} Mins
+                                        </p>
+                                    </div>
+                                    <span className="font-serif text-primary font-medium text-right flex flex-col">
+                                        Rp {selectedOption.price}
+                                        <span className="text-[9px] font-sans text-text-muted font-normal uppercase tracking-wider">Per Person</span>
+                                    </span>
                                 </div>
-                                <span className="font-serif text-primary font-medium">Rp {selectedOption.price}</span>
+                                <div className="flex items-center justify-between pt-3 border-t border-border/50">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Guests</span>
+                                    <div className="flex items-center gap-3">
+                                        <button 
+                                            type="button"
+                                            onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
+                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
+                                        >
+                                            <Minus className="w-3 h-3" />
+                                        </button>
+                                        <span className="font-bold text-sm text-primary w-4 text-center">{guestCount}</span>
+                                        <button 
+                                            type="button"
+                                            onClick={() => setGuestCount(guestCount + 1)}
+                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
+                                        >
+                                            <Plus className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                            
+                            {/* Add another treatment button */}
+                            <button 
+                                type="button"
+                                onClick={() => setIsModalOpen(false)}
+                                className="w-full bg-transparent text-primary border border-border/50 px-6 py-3 rounded-xl text-xs font-bold hover:bg-surface transition-colors mb-6"
+                            >
+                                + Add another treatment
+                            </button>
 
                             <form onSubmit={handleBooking} className="space-y-5 pb-8 md:pb-0">
                                 <div className="space-y-1.5">
@@ -242,27 +276,6 @@ export default function RitualsDetails() {
                                     />
                                 </div>
 
-                                <div className="space-y-1.5 pt-2">
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Number of Guests</label>
-                                    <div className="flex items-center justify-between bg-surface border border-border/50 rounded-xl p-2">
-                                        <button 
-                                            type="button"
-                                            onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
-                                            className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-primary hover:bg-border transition-colors"
-                                        >
-                                            <Minus className="w-4 h-4" />
-                                        </button>
-                                        <span className="font-bold text-primary">{guestCount} {guestCount === 1 ? 'Person' : 'People'}</span>
-                                        <button 
-                                            type="button"
-                                            onClick={() => setGuestCount(guestCount + 1)}
-                                            className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-primary hover:bg-border transition-colors"
-                                        >
-                                            <Plus className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-
                                 <div className="mt-8 pt-6 border-t border-border/50">
                                     <div className="flex items-end justify-between mb-6">
                                         <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
@@ -270,16 +283,9 @@ export default function RitualsDetails() {
                                     </div>
                                     <button 
                                         type="submit"
-                                        className="w-full bg-[#25D366] text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(37,211,102,0.25)] mb-3"
+                                        className="w-full bg-[#25D366] text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(37,211,102,0.25)]"
                                     >
                                         Confirm on WhatsApp <MessageCircle className="w-4 h-4" />
-                                    </button>
-                                    <button 
-                                        type="button"
-                                        onClick={() => setIsModalOpen(false)}
-                                        className="w-full bg-transparent text-primary border border-border/50 px-6 py-4 rounded-xl text-sm font-bold hover:bg-surface transition-colors"
-                                    >
-                                        + Add another treatment
                                     </button>
                                 </div>
                             </form>
