@@ -129,24 +129,46 @@ export default function Home() {
 
                 {/* Popular Treatments Scroll */}
                 <div className="mb-24">
-                    <div className="flex overflow-x-auto pb-6 -mx-6 px-6 md:mx-0 md:px-0 gap-4 no-scrollbar">
+                    <div className="flex overflow-x-auto pb-8 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {[
-                            { title: 'Deep Tissue Flow', category: 'Massage', price: 'Rp 450,000', time: '90 Min', bg: 'from-secondary/80 to-highlight/40' },
-                            { title: 'Radiance Facial', category: 'Facial', price: 'Rp 350,000', time: '60 Min', bg: 'from-accent/60 to-highlight/30' },
-                            { title: 'Couples Retreat', category: 'Package', price: 'Rp 1,200,000', time: '120 Min', bg: 'from-highlight/80 to-surface' },
+                            { 
+                                title: 'Deep Tissue Flow', 
+                                category: 'Massage', 
+                                price: 'Rp 450,000', 
+                                time: '90 Min', 
+                                desc: 'Relieve deep-seated tension with firm pressure and focused strokes. Ideal for muscle recovery.',
+                            },
+                            { 
+                                title: 'Radiance Facial', 
+                                category: 'Facial', 
+                                price: 'Rp 350,000', 
+                                time: '60 Min', 
+                                desc: 'Restore your natural glow with organic botanical extracts, gentle exfoliation, and a restorative mask.',
+                            },
+                            { 
+                                title: 'Couples Retreat', 
+                                category: 'Package', 
+                                price: 'Rp 1,200,000', 
+                                time: '120 Min', 
+                                desc: 'A synchronized full-body massage experience designed for ultimate shared relaxation and harmony.',
+                            },
                         ].map((item, idx) => (
-                            <Link href="/rituals" key={idx} className="w-56 md:w-64 shrink-0 block group outline-none">
-                                <div className={`rounded-[32px] overflow-hidden relative shadow-[0_8px_24px_rgb(0,0,0,0.04)] bg-gradient-to-br ${item.bg} h-80 w-full mb-4`}>
-                                    <div className="absolute inset-0 bg-primary/5 group-hover:bg-transparent transition-colors duration-500"></div>
-                                    <div className="absolute top-5 left-5 bg-white/40 backdrop-blur-md border border-white/20 text-primary px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
-                                        {item.category}
-                                    </div>
-                                    <div className="absolute bottom-5 left-5 right-5 text-primary">
-                                        <h4 className="font-serif text-2xl font-medium mb-2 leading-tight">{item.title}</h4>
-                                        <div className="flex items-center justify-between text-xs font-semibold text-primary/80">
-                                            <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" /> {item.time}</span>
-                                            <span>{item.price}</span>
+                            <Link href="/rituals" key={idx} className="w-72 md:w-80 shrink-0 block group outline-none">
+                                <div className="rounded-[32px] p-6 md:p-8 bg-white border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2">
+                                    <div className="mb-6 flex items-start justify-between">
+                                        <div className="bg-surface text-primary px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                                            {item.category}
                                         </div>
+                                        <span className="flex items-center gap-1.5 text-[11px] font-bold text-text-muted"><Clock className="w-3 h-3" /> {item.time}</span>
+                                    </div>
+                                    <h4 className="font-serif text-2xl font-medium text-primary mb-3 leading-tight">{item.title}</h4>
+                                    <p className="text-sm text-text-muted leading-relaxed font-light mb-8 flex-grow">{item.desc}</p>
+                                    
+                                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/50">
+                                        <span className="font-serif text-lg text-primary">{item.price}</span>
+                                        <button className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                            <ArrowRight size={18} />
+                                        </button>
                                     </div>
                                 </div>
                             </Link>
