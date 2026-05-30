@@ -19,7 +19,7 @@ export default function Home() {
     const [activeCategory, setActiveCategory] = useState('all');
 
     return (
-        <div className="min-h-screen bg-background relative overflow-hidden font-sans text-text pb-24 md:pb-12">
+        <div className="min-h-screen bg-gradient-to-b from-[#D2F34C] via-[#FDFBF7] to-[#FDFBF7] relative overflow-hidden font-sans text-text pb-24 md:pb-12">
             
             {/* Luxurious Ambient Background */}
             <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] md:w-[800px] h-[600px] bg-secondary/30 blur-[120px] rounded-full z-0 pointer-events-none opacity-60 mix-blend-multiply" />
@@ -78,7 +78,7 @@ export default function Home() {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2, duration: 0.6 }}
-                                    className="inline-flex items-center px-4 py-2 rounded-full bg-secondary/90 backdrop-blur-xl text-[9px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-secondary text-primary shadow-[0_4px_12px_rgb(0,0,0,0.1)]"
+                                    className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-2xl text-[9px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-white/40 text-white shadow-[0_4px_24px_rgb(0,0,0,0.12)]"
                                 >
                                     Limited Offer
                                 </motion.span>

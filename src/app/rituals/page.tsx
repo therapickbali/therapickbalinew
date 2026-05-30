@@ -193,7 +193,7 @@ export default function RitualsDetails() {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white rounded-[32px] p-6 md:p-8 w-full max-w-md shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto no-scrollbar"
+                            className="bg-white rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
                         >
                             <button 
                                 onClick={() => setIsModalOpen(false)}
@@ -205,7 +205,18 @@ export default function RitualsDetails() {
                             <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
                             <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
 
-                            <form onSubmit={handleBooking} className="space-y-5">
+                            {/* Treatment Summary Card */}
+                            <div className="bg-surface border border-border/50 rounded-2xl p-4 mb-6 flex items-center justify-between shadow-sm">
+                                <div>
+                                    <h3 className="font-bold text-sm text-primary">Deep Tissue Flow</h3>
+                                    <p className="text-xs text-text-muted flex items-center gap-1 mt-0.5">
+                                        <Clock className="w-3 h-3" /> {selectedOption.duration} Mins
+                                    </p>
+                                </div>
+                                <span className="font-serif text-primary font-medium">Rp {selectedOption.price}</span>
+                            </div>
+
+                            <form onSubmit={handleBooking} className="space-y-5 pb-8 md:pb-0">
                                 <div className="space-y-1.5">
                                     <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
                                     <input 
@@ -259,9 +270,16 @@ export default function RitualsDetails() {
                                     </div>
                                     <button 
                                         type="submit"
-                                        className="w-full bg-[#25D366] text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(37,211,102,0.25)]"
+                                        className="w-full bg-[#25D366] text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(37,211,102,0.25)] mb-3"
                                     >
                                         Confirm on WhatsApp <MessageCircle className="w-4 h-4" />
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        onClick={() => setIsModalOpen(false)}
+                                        className="w-full bg-transparent text-primary border border-border/50 px-6 py-4 rounded-xl text-sm font-bold hover:bg-surface transition-colors"
+                                    >
+                                        + Add another treatment
                                     </button>
                                 </div>
                             </form>
