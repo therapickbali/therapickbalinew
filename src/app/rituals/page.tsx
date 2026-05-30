@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Share, Heart, MapPin, Clock, Calendar, Sparkles } from 'lucide-react';
+import { ChevronLeft, Share, Heart, MapPin, Clock, Calendar, Sparkles, Plus, Minus, X, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 
 export default function RitualsDetails() {
@@ -16,13 +16,31 @@ export default function RitualsDetails() {
     const [selectedOptionIdx, setSelectedOptionIdx] = useState(1); // Default to 90 mins
     const selectedOption = treatmentOptions[selectedOptionIdx];
 
+    // Booking Modal State
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [guestCount, setGuestCount] = useState(1);
+    const [formData, setFormData] = useState({ name: '', location: '', room: '' });
+
+    // Calculate smart price
+    const basePrice = parseInt(selectedOption.price.replace(/,/g, ''));
+    const totalPrice = basePrice * guestCount;
+    const formattedTotalPrice = totalPrice.toLocaleString('en-US');
+
+    const handleBooking = (e: React.FormEvent) => {
+        e.preventDefault();
+        const waNumber = '6285174119423';
+        const message = `*New Spa Booking Request*%0A%0A*Treatment:* Deep Tissue Flow%0A*Duration:* ${selectedOption.duration} Mins%0A*Guests:* ${guestCount}%0A*Total Price:* Rp ${formattedTotalPrice}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to book this appointment.`;
+        window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
+        setIsModalOpen(false);
+    };
+
     return (
-        <div className="min-h-screen bg-background relative overflow-hidden font-sans text-text pb-24 md:pb-12 pt-6 md:pt-12">
+        <div className="min-h-screen bg-background relative overflow-hidden font-sans text-text pb-24 md:pb-12 pt-16 md:pt-24">
             
             <div className="max-w-3xl mx-auto px-6 md:px-8">
                 
-                {/* Header Actions - Enhanced Spacing */}
-                <header className="flex items-center justify-between mb-12">
+                {/* Header Actions - Enhanced Spacing (More padding top from the container) */}
+                <header className="flex items-center justify-between mb-16">
                     <Link href="/">
                         <button className="w-12 h-12 rounded-full bg-white border border-border/50 flex items-center justify-center text-primary shadow-[0_8px_20px_rgb(0,0,0,0.04)] hover:bg-surface hover:scale-105 transition-all">
                             <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
@@ -90,13 +108,13 @@ export default function RitualsDetails() {
                     </div>
 
                     {/* Price & Action */}
-                    <div className="bg-primary rounded-[32px] p-6 flex flex-col justify-between relative overflow-hidden shadow-soft-lg min-h-[160px]">
-                        <div className="absolute -top-4 -right-4 text-white/5 w-32 h-32 pointer-events-none">
-                            <Sparkles className="w-full h-full" />
-                        </div>
+                    <div className="rounded-[32px] p-6 flex flex-col justify-between relative overflow-hidden shadow-soft-lg min-h-[160px] bg-gradient-to-br from-[#1C1F1D] via-[#2A2E2C] to-[#1C1F1D]">
+                        {/* Removed generic icon, replaced with a subtle glowing radial gradient for cinematic depth */}
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)] pointer-events-none"></div>
+                        
                         <div className="relative z-10 flex flex-col h-full justify-between gap-6">
                             <div className="flex flex-col">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Total Price</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Price per person</span>
                                 <AnimatePresence mode="popLayout">
                                     <motion.div 
                                         key={selectedOption.price}
@@ -110,8 +128,11 @@ export default function RitualsDetails() {
                                     </motion.div>
                                 </AnimatePresence>
                             </div>
-                            <button className="w-full bg-white text-primary px-6 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(255,255,255,0.15)]">
-                                Choose Date & Book <Calendar className="w-4 h-4" />
+                            <button 
+                                onClick={() => setIsModalOpen(true)}
+                                className="w-full bg-white text-primary px-6 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(255,255,255,0.15)]"
+                            >
+                                Book an Appointment <Calendar className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
@@ -158,6 +179,97 @@ export default function RitualsDetails() {
                 </div>
 
             </div>
+
+            {/* WhatsApp Booking Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm"
+                    >
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="bg-white rounded-[32px] p-6 md:p-8 w-full max-w-md shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto no-scrollbar"
+                        >
+                            <button 
+                                onClick={() => setIsModalOpen(false)}
+                                className="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface flex items-center justify-center text-text-muted hover:bg-border transition-colors z-10"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                            
+                            <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
+                            <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
+
+                            <form onSubmit={handleBooking} className="space-y-5">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
+                                    <input 
+                                        type="text" required placeholder="John Doe"
+                                        value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
+                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Name</label>
+                                    <input 
+                                        type="text" required placeholder="e.g. Four Seasons Sayan"
+                                        value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
+                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Room Number (Optional)</label>
+                                    <input 
+                                        type="text" placeholder="e.g. Villa 12"
+                                        value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})}
+                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-1.5 pt-2">
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Number of Guests</label>
+                                    <div className="flex items-center justify-between bg-surface border border-border/50 rounded-xl p-2">
+                                        <button 
+                                            type="button"
+                                            onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
+                                            className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-primary hover:bg-border transition-colors"
+                                        >
+                                            <Minus className="w-4 h-4" />
+                                        </button>
+                                        <span className="font-bold text-primary">{guestCount} {guestCount === 1 ? 'Person' : 'People'}</span>
+                                        <button 
+                                            type="button"
+                                            onClick={() => setGuestCount(guestCount + 1)}
+                                            className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-primary hover:bg-border transition-colors"
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="mt-8 pt-6 border-t border-border/50">
+                                    <div className="flex items-end justify-between mb-6">
+                                        <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
+                                        <span className="text-2xl font-serif text-primary">Rp {formattedTotalPrice}</span>
+                                    </div>
+                                    <button 
+                                        type="submit"
+                                        className="w-full bg-[#25D366] text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(37,211,102,0.25)]"
+                                    >
+                                        Confirm on WhatsApp <MessageCircle className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
         </div>
     );
 }
