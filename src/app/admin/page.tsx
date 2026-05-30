@@ -10,6 +10,22 @@ export default function AdminDashboard() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    // Campaign specific fields
+    const [campaignTreatments, setCampaignTreatments] = useState<string[]>([]);
+    const [campaignDuration, setCampaignDuration] = useState('');
+
+    const availableTreatments = [
+        { id: 't1', title: 'Deep Tissue Flow', category: 'Massage' },
+        { id: 't2', title: 'Radiance Facial', category: 'Facial' },
+        { id: 't3', title: 'Couples Retreat', category: 'Package' },
+    ];
+
+    const toggleCampaignTreatment = (id: string) => {
+        setCampaignTreatments(prev => 
+            prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
+        );
+    };
+
     // Dynamic fields for Treatment
     const [pricingOptions, setPricingOptions] = useState([{ duration: '', price: '' }]);
     const [benefits, setBenefits] = useState(['']);
@@ -259,6 +275,60 @@ export default function AdminDashboard() {
                                                 required rows={3} placeholder="Enjoy up to 20% off all signature treatments this month..." 
                                                 className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
                                             />
+                                        </div>
+
+                                        {/* Campaign Duration */}
+                                        <div className="grid grid-cols-1 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Campaign Duration</label>
+                                                <div className="relative">
+                                                    <select 
+                                                        className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm appearance-none"
+                                                        value={campaignDuration}
+                                                        onChange={(e) => setCampaignDuration(e.target.value)}
+                                                    >
+                                                        <option value="" disabled>Select how long the offer lasts</option>
+                                                        <option value="1_week">1 Week</option>
+                                                        <option value="2_weeks">2 Weeks</option>
+                                                        <option value="1_month">1 Month</option>
+                                                        <option value="custom">Custom Date Range</option>
+                                                    </select>
+                                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted">
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Treatments Selection for Campaign */}
+                                        <div className="space-y-3 pt-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Select Treatments for Offer</label>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                {availableTreatments.map((t) => {
+                                                    const isSelected = campaignTreatments.includes(t.id);
+                                                    return (
+                                                        <div 
+                                                            key={t.id} 
+                                                            onClick={() => toggleCampaignTreatment(t.id)}
+                                                            className={`cursor-pointer p-4 rounded-2xl border transition-all duration-300 flex items-center justify-between ${
+                                                                isSelected 
+                                                                ? 'bg-primary/5 border-primary shadow-sm' 
+                                                                : 'bg-white/50 border-border/50 hover:bg-white'
+                                                            }`}
+                                                        >
+                                                            <div>
+                                                                <h4 className={`text-sm font-bold ${isSelected ? 'text-primary' : 'text-text-muted'}`}>{t.title}</h4>
+                                                                <p className="text-[10px] uppercase tracking-widest font-semibold text-text-muted/70">{t.category}</p>
+                                                            </div>
+                                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
+                                                                isSelected ? 'bg-primary text-white' : 'bg-surface border border-border/50 text-transparent'
+                                                            }`}>
+                                                                <CheckCircle size={14} />
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     </>
                                 )}
