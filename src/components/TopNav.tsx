@@ -12,6 +12,11 @@ export default function TopNav() {
     const [isScrolled, setIsScrolled] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
+    // Hide TopNav on admin routes
+    if (pathname?.startsWith('/admin')) {
+        return null;
+    }
+
     const navItems = [
         { href: '/', label: 'HOME' },
         { href: '/rituals', label: 'TREATMENT' },
@@ -63,19 +68,10 @@ export default function TopNav() {
                     </span>
                 </Link>
 
-                {/* Animated Location (Center) */}
-                <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1.5 cursor-pointer group">
-                    <motion.div
-                        animate={{ y: [0, -3, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    >
-                        <svg className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                    </motion.div>
+                {/* Location (Center) */}
+                <div className="absolute left-1/2 -translate-x-1/2 flex items-center cursor-pointer group">
                     <span className="text-[9px] md:text-[11px] font-bold uppercase tracking-[0.15em] text-primary">
-                        Ubud, Bali
+                        BALI, INDONESIA
                     </span>
                 </div>
 

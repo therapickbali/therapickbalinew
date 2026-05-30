@@ -14,24 +14,6 @@ const CATEGORIES = [
     { id: 'package', label: 'Package' },
 ];
 
-const TREATMENTS = [
-    {
-        id: '1',
-        title: 'Deep Tissue Flow',
-        duration: '60 Min',
-        price: 'IDR 450,000',
-        location: 'Ubud, Bali',
-        favorite: false,
-    },
-    {
-        id: '2',
-        title: 'Balinese Radiance',
-        duration: '90 Min',
-        price: 'IDR 550,000',
-        location: 'Ubud, Bali',
-        favorite: true,
-    }
-];
 
 export default function Home() {
     const [activeCategory, setActiveCategory] = useState('all');
@@ -67,6 +49,60 @@ export default function Home() {
                     </button>
                 </div>
 
+                {/* Cinematic Campaign Card (Below Search) */}
+                <Link href="/rituals" className="block outline-none">
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="relative w-full h-[240px] md:h-[420px] rounded-[32px] md:rounded-[40px] overflow-hidden shadow-[0_20px_40px_rgb(0,0,0,0.12)] mb-8 group cursor-pointer bg-primary"
+                    >
+                        {/* Background Image */}
+                        <img 
+                            src="https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop&crop=center" 
+                            alt="Summer Retreat" 
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                        />
+                        
+                        {/* Cinematic Vignette & Gradients (Apple-like depth) */}
+                        <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-1000"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/40 to-transparent"></div>
+                        
+                        {/* Content Overlay */}
+                        <div className="absolute inset-0 p-6 md:p-12 flex flex-col justify-between z-10">
+                            
+                            {/* Top Label */}
+                            <div className="flex justify-start">
+                                <motion.span 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2, duration: 0.6 }}
+                                    className="inline-flex items-center px-4 py-2 rounded-full bg-secondary/90 backdrop-blur-xl text-[9px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-secondary text-primary shadow-[0_4px_12px_rgb(0,0,0,0.1)]"
+                                >
+                                    Limited Offer
+                                </motion.span>
+                            </div>
+
+                            <div className="flex items-end justify-between">
+                                <div className="flex flex-col text-white">
+                                    
+                                    <h2 className="font-serif text-4xl md:text-6xl font-medium leading-tight tracking-tight mb-2 opacity-95 drop-shadow-sm mt-auto">
+                                        Summer Retreat
+                                    </h2>
+                                    <p className="text-white/70 text-[13px] md:text-base hidden md:block max-w-md leading-relaxed font-light">
+                                        Rejuvenate your mind and body with our exclusive summer packages. Enjoy up to 20% off all signature treatments.
+                                    </p>
+                                </div>
+
+                                {/* Minimal Apple-style Frosted Button */}
+                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 backdrop-blur-2xl border border-white/20 text-white flex items-center justify-center shrink-0 shadow-[0_8px_32px_rgb(0,0,0,0.12)] group-hover:bg-white/20 group-hover:scale-105 group-active:scale-95 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                                    <ArrowRight size={20} strokeWidth={2} />
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </Link>
+
                 {/* Categories */}
                 <div className="mb-6">
                     <h3 className="text-xs font-semibold text-text-muted mb-3 uppercase tracking-wider">Popular Category</h3>
@@ -88,55 +124,6 @@ export default function Home() {
                             );
                         })}
                     </div>
-                </div>
-
-                <p className="text-xs text-text-muted mb-4">{TREATMENTS.length} result found</p>
-
-                {/* Treatment Grid/List */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {TREATMENTS.map((treatment, idx) => (
-                        <motion.div 
-                            key={treatment.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                        >
-                            <Link href="/rituals" className="block relative bg-white/60 backdrop-blur-xl border border-white/50 rounded-[32px] p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-500 group overflow-hidden">
-                                
-                                {/* Decorative subtle glow */}
-                                <div className="absolute -top-24 -right-24 w-48 h-48 bg-white/40 rounded-full blur-[40px] pointer-events-none group-hover:bg-white/60 transition-colors duration-500" />
-
-                                <div className="flex justify-between items-start mb-12 relative z-10">
-                                    <div className="flex flex-col gap-1.5">
-                                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/60 border border-white/50 text-[10px] font-bold tracking-widest uppercase text-primary/70 w-max shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
-                                            <Clock size={10} strokeWidth={3} />
-                                            {treatment.duration}
-                                        </span>
-                                    </div>
-                                    <button className="w-10 h-10 rounded-full bg-white/60 border border-white/50 flex items-center justify-center text-primary shadow-sm hover:scale-110 hover:bg-white transition-all z-10 shrink-0">
-                                        <Heart className={`w-5 h-5 ${treatment.favorite ? 'fill-primary text-primary' : ''}`} />
-                                    </button>
-                                </div>
-                                
-                                <div className="relative z-10">
-                                    <h3 className="font-serif text-2xl md:text-3xl text-primary font-medium mb-4 group-hover:text-primary/70 transition-colors">
-                                        {treatment.title}
-                                    </h3>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col">
-                                            <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-0.5">Price</span>
-                                            <p className="text-base md:text-lg font-bold text-primary tracking-wide">
-                                                {treatment.price}
-                                            </p>
-                                        </div>
-                                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-500">
-                                            <ArrowRight size={18} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                        </motion.div>
-                    ))}
                 </div>
                 
             </div>
