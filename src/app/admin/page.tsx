@@ -6,7 +6,7 @@ import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'overview' | 'settings'>('treatment');
+    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings'>('treatment');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
 
@@ -127,7 +127,7 @@ export default function AdminDashboard() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
-                            className="bg-white/60 backdrop-blur-2xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[32px] p-6 md:p-10"
+                            className="md:bg-white/60 md:backdrop-blur-2xl md:border md:border-white/60 md:shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:rounded-[32px] md:p-10"
                         >
                             <form onSubmit={handleSubmit} className="space-y-8">
                                 
@@ -263,7 +263,28 @@ export default function AdminDashboard() {
                                     </>
                                 )}
 
-                                {(activeTab === 'overview' || activeTab === 'settings') && (
+                                {activeTab === 'list' && (
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between mb-6">
+                                            <h2 className="text-lg font-bold text-primary">Published Treatments</h2>
+                                            <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">2 Active</span>
+                                        </div>
+                                        {[
+                                            { title: 'Deep Tissue Flow', category: 'Massage', price: 'Rp 450,000' },
+                                            { title: 'Radiance Facial', category: 'Facial', price: 'Rp 350,000' }
+                                        ].map((t, i) => (
+                                            <div key={i} className="flex items-center justify-between p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm">
+                                                <div>
+                                                    <h3 className="font-bold text-primary text-sm mb-1">{t.title}</h3>
+                                                    <p className="text-xs text-text-muted">{t.category}</p>
+                                                </div>
+                                                <span className="text-sm font-semibold text-primary">{t.price}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {activeTab === 'settings' && (
                                     <div className="flex flex-col items-center justify-center py-20 text-text-muted">
                                         <Sparkles className="mb-4 opacity-50" size={32} />
                                         <p className="text-sm font-medium">This section is coming soon.</p>
@@ -311,7 +332,7 @@ export default function AdminDashboard() {
                     {[
                         { id: 'treatment', icon: PlusCircle, label: 'Add' },
                         { id: 'campaign', icon: Megaphone, label: 'Promo' },
-                        { id: 'overview', icon: LayoutDashboard, label: 'Stats' },
+                        { id: 'list', icon: LayoutDashboard, label: 'Menu' },
                         { id: 'settings', icon: Settings, label: 'Settings' },
                     ].map((tab) => {
                         const isActive = activeTab === tab.id;
