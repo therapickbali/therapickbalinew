@@ -6,7 +6,7 @@ import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign'>('treatment');
+    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'overview' | 'settings'>('treatment');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
 
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[100px] pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-highlight/20 rounded-full blur-[100px] pointer-events-none" />
 
-                <div className="max-w-4xl mx-auto p-6 md:p-12 relative z-10 pt-12 md:pt-12">
+                <div className="max-w-4xl mx-auto p-6 md:p-12 relative z-10 pt-12 md:pt-12 pb-32 md:pb-12">
                     
                     {/* Mobile Header (Hidden on Desktop) */}
                     <div className="md:hidden flex items-center justify-between mb-8">
@@ -108,10 +108,7 @@ export default function AdminDashboard() {
                             <Store size={20} strokeWidth={2.5} />
                             <span className="text-[13px] font-bold tracking-widest uppercase mt-1">Elexoir</span>
                         </Link>
-                        <div className="flex gap-2">
-                            <button onClick={() => setActiveTab('treatment')} className={`px-3 py-1.5 rounded-full text-xs font-bold ${activeTab === 'treatment' ? 'bg-primary text-white' : 'bg-surface text-primary'}`}>Treatments</button>
-                            <button onClick={() => setActiveTab('campaign')} className={`px-3 py-1.5 rounded-full text-xs font-bold ${activeTab === 'campaign' ? 'bg-primary text-white' : 'bg-surface text-primary'}`}>Campaigns</button>
-                        </div>
+                        {/* Tab buttons removed in favor of bottom nav bar */}
                     </div>
 
                     <header className="mb-10">
@@ -266,6 +263,13 @@ export default function AdminDashboard() {
                                     </>
                                 )}
 
+                                {(activeTab === 'overview' || activeTab === 'settings') && (
+                                    <div className="flex flex-col items-center justify-center py-20 text-text-muted">
+                                        <Sparkles className="mb-4 opacity-50" size={32} />
+                                        <p className="text-sm font-medium">This section is coming soon.</p>
+                                    </div>
+                                )}
+
                                 {/* Submit Area */}
                                 <div className="pt-6 border-t border-border/30 flex items-center justify-end gap-4">
                                     {success && (
@@ -300,6 +304,37 @@ export default function AdminDashboard() {
                     </AnimatePresence>
                 </div>
             </main>
+
+            {/* Mobile Bottom Navigation Bar */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-2xl border-t border-border/50 z-50 px-6 pb-safe">
+                <div className="flex items-center justify-between h-full max-w-md mx-auto">
+                    {[
+                        { id: 'treatment', icon: PlusCircle, label: 'Add' },
+                        { id: 'campaign', icon: Megaphone, label: 'Promo' },
+                        { id: 'overview', icon: LayoutDashboard, label: 'Stats' },
+                        { id: 'settings', icon: Settings, label: 'Settings' },
+                    ].map((tab) => {
+                        const isActive = activeTab === tab.id;
+                        const Icon = tab.icon;
+                        return (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id as any)}
+                                className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${
+                                    isActive ? 'text-primary' : 'text-text-muted hover:text-primary/70'
+                                }`}
+                            >
+                                <div className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${isActive ? 'bg-primary/10 scale-110' : 'bg-transparent'}`}>
+                                    <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+                                </div>
+                                <span className={`text-[10px] font-bold tracking-wider ${isActive ? 'opacity-100' : 'opacity-60'}`}>
+                                    {tab.label}
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
         </div>
     );
 }
