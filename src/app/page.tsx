@@ -21,8 +21,9 @@ export default function Home() {
     return (
         <div className="min-h-screen bg-background relative overflow-hidden font-sans text-text pb-24 md:pb-12">
             
-            {/* Top Gradient Background */}
-            <div className="absolute top-0 left-0 right-0 h-[60vh] md:h-[40vh] bg-gradient-to-b from-secondary via-secondary/60 to-background z-0 pointer-events-none" />
+            {/* Luxurious Ambient Background */}
+            <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] md:w-[800px] h-[600px] bg-secondary/30 blur-[120px] rounded-full z-0 pointer-events-none opacity-60 mix-blend-multiply" />
+            <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-accent/20 blur-[100px] rounded-full z-0 pointer-events-none opacity-50" />
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
@@ -113,13 +114,13 @@ export default function Home() {
                                 <button
                                     key={cat.id}
                                     onClick={() => setActiveCategory(cat.id)}
-                                    className={`flex items-center justify-center px-6 py-3.5 rounded-2xl whitespace-nowrap transition-all shadow-soft border border-white/50 ${
+                                    className={`flex items-center justify-center px-6 py-3 rounded-full whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                                         isActive 
-                                            ? 'bg-primary text-white shadow-soft-lg' 
-                                            : 'bg-white/60 backdrop-blur-sm text-primary hover:bg-white/90'
+                                            ? 'bg-primary text-white shadow-[0_8px_20px_rgb(0,0,0,0.12)] scale-[1.02] border border-primary' 
+                                            : 'bg-white/40 backdrop-blur-md text-primary border border-white/60 hover:bg-white/80 hover:scale-[1.02]'
                                     }`}
                                 >
-                                    <span className="text-sm font-medium">{cat.label}</span>
+                                    <span className="text-sm font-semibold tracking-wide">{cat.label}</span>
                                 </button>
                             );
                         })}
