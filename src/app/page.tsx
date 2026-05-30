@@ -128,24 +128,23 @@ export default function Home() {
                 </div>
 
                 {/* Popular Treatments Scroll */}
-                <div className="mb-16">
+                <div className="mb-24">
                     <div className="flex overflow-x-auto pb-6 -mx-6 px-6 md:mx-0 md:px-0 gap-4 no-scrollbar">
                         {[
-                            { title: 'Deep Tissue Flow', category: 'Massage', price: 'Rp 450,000', time: '90 Min', img: 'https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop' },
-                            { title: 'Radiance Facial', category: 'Facial', price: 'Rp 350,000', time: '60 Min', img: 'https://images.pexels.com/photos/3997984/pexels-photo-3997984.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop' },
-                            { title: 'Couples Retreat', category: 'Package', price: 'Rp 1,200,000', time: '120 Min', img: 'https://images.pexels.com/photos/6620942/pexels-photo-6620942.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop' },
+                            { title: 'Deep Tissue Flow', category: 'Massage', price: 'Rp 450,000', time: '90 Min', bg: 'from-secondary/80 to-highlight/40' },
+                            { title: 'Radiance Facial', category: 'Facial', price: 'Rp 350,000', time: '60 Min', bg: 'from-accent/60 to-highlight/30' },
+                            { title: 'Couples Retreat', category: 'Package', price: 'Rp 1,200,000', time: '120 Min', bg: 'from-highlight/80 to-surface' },
                         ].map((item, idx) => (
                             <Link href="/rituals" key={idx} className="w-56 md:w-64 shrink-0 block group outline-none">
-                                <div className="rounded-[32px] overflow-hidden relative shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white h-80 w-full mb-4">
-                                    <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent"></div>
-                                    <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-xl border border-white/40 text-white px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
+                                <div className={`rounded-[32px] overflow-hidden relative shadow-[0_8px_24px_rgb(0,0,0,0.04)] bg-gradient-to-br ${item.bg} h-80 w-full mb-4`}>
+                                    <div className="absolute inset-0 bg-primary/5 group-hover:bg-transparent transition-colors duration-500"></div>
+                                    <div className="absolute top-5 left-5 bg-white/40 backdrop-blur-md border border-white/20 text-primary px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
                                         {item.category}
                                     </div>
-                                    <div className="absolute bottom-4 left-4 right-4 text-white">
-                                        <h4 className="font-serif text-xl font-medium mb-1 drop-shadow-md">{item.title}</h4>
-                                        <div className="flex items-center justify-between text-xs font-medium text-white/90">
-                                            <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {item.time}</span>
+                                    <div className="absolute bottom-5 left-5 right-5 text-primary">
+                                        <h4 className="font-serif text-2xl font-medium mb-2 leading-tight">{item.title}</h4>
+                                        <div className="flex items-center justify-between text-xs font-semibold text-primary/80">
+                                            <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" /> {item.time}</span>
                                             <span>{item.price}</span>
                                         </div>
                                     </div>
@@ -156,7 +155,7 @@ export default function Home() {
                 </div>
 
                 {/* The Elexoir Experience (Next Level Section) */}
-                <div className="mb-24">
+                <div className="mb-32">
                     <div className="flex items-center justify-between mb-8">
                         <div>
                             <h3 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">The Elexoir Experience</h3>
@@ -171,41 +170,62 @@ export default function Home() {
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                         {/* Big Cinematic Card */}
-                        <div className="md:col-span-2 rounded-[32px] overflow-hidden relative h-64 md:h-96 shadow-soft group">
-                            <img src="https://images.pexels.com/photos/6620948/pexels-photo-6620948.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop" alt="Expert Therapists" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent"></div>
-                            <div className="absolute bottom-6 left-6 right-6 text-white">
-                                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xl flex items-center justify-center mb-3">
+                        <div className="md:col-span-2 rounded-[32px] overflow-hidden relative h-64 md:h-96 shadow-soft group bg-gradient-to-br from-[#1C1F1D] via-[#2A2E2C] to-[#1C1F1D]">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_50%)] pointer-events-none"></div>
+                            <div className="absolute bottom-8 left-8 right-8 text-white">
+                                <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center mb-4">
                                     <User className="w-5 h-5 text-white" />
                                 </div>
-                                <h4 className="font-serif text-2xl font-medium mb-1">Expert Therapists</h4>
-                                <p className="text-sm text-white/80 max-w-sm">Certified Balinese healers bringing centuries of traditional wellness techniques directly to your villa.</p>
+                                <h4 className="font-serif text-3xl font-medium mb-2">Expert Therapists</h4>
+                                <p className="text-sm text-white/70 max-w-sm leading-relaxed">Certified Balinese healers bringing centuries of traditional wellness techniques directly to your villa.</p>
                             </div>
                         </div>
 
                         {/* Two Small Cards */}
                         <div className="flex flex-col gap-4 md:gap-6">
-                            <div className="flex-1 bg-surface rounded-[32px] p-6 shadow-sm border border-border/50 relative overflow-hidden group">
-                                <div className="absolute -right-4 -bottom-4 text-primary/5">
-                                    <Droplet className="w-32 h-32" />
+                            <div className="flex-1 bg-surface rounded-[32px] p-6 md:p-8 shadow-sm border border-border/50 relative overflow-hidden flex flex-col justify-end">
+                                <div className="w-10 h-10 rounded-full bg-primary/5 border border-primary/10 flex items-center justify-center mb-4 text-primary">
+                                    <Droplet className="w-4 h-4" />
                                 </div>
-                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-4 text-primary">
-                                    <Droplet className="w-5 h-5" />
-                                </div>
-                                <h4 className="font-serif text-xl text-primary font-medium mb-1">100% Organic Oils</h4>
-                                <p className="text-xs text-text-muted">Locally sourced, cold-pressed essential oils.</p>
+                                <h4 className="font-serif text-xl text-primary font-medium mb-2">100% Organic Oils</h4>
+                                <p className="text-xs text-text-muted leading-relaxed">Locally sourced, cold-pressed essential oils.</p>
                             </div>
                             
-                            <div className="flex-1 bg-primary rounded-[32px] p-6 shadow-sm relative overflow-hidden group text-white">
-                                <div className="absolute -right-4 -bottom-4 text-white/5">
-                                    <Flame className="w-32 h-32" />
+                            <div className="flex-1 bg-primary rounded-[32px] p-6 md:p-8 shadow-sm relative overflow-hidden text-white flex flex-col justify-end">
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_70%)] pointer-events-none"></div>
+                                <div className="relative z-10">
+                                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center mb-4">
+                                        <Flame className="w-4 h-4 text-white" />
+                                    </div>
+                                    <h4 className="font-serif text-xl font-medium mb-2">Holistic Healing</h4>
+                                    <p className="text-xs text-white/70 leading-relaxed">Restoring the vital balance of body and spirit.</p>
                                 </div>
-                                <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center mb-4">
-                                    <Flame className="w-5 h-5 text-white" />
-                                </div>
-                                <h4 className="font-serif text-xl font-medium mb-1">Holistic Healing</h4>
-                                <p className="text-xs text-white/70">Restoring the vital balance of body and spirit.</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* About Us */}
+                <div className="mb-24 flex flex-col md:flex-row gap-12 md:gap-24 items-center">
+                    <div className="flex-1">
+                        <span className="text-xs font-bold uppercase tracking-widest text-primary/50 mb-4 block">Our Philosophy</span>
+                        <h3 className="font-serif text-4xl md:text-5xl text-primary font-medium mb-6 leading-tight">
+                            Sanctuary for the Soul
+                        </h3>
+                        <p className="text-text-muted leading-relaxed mb-8 font-light">
+                            Born from the ancient healing traditions of Bali, Elexoir Home Spa was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
+                        </p>
+                        <button className="text-primary text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-70 transition-opacity">
+                            Discover Our Story <ArrowRight size={16} />
+                        </button>
+                    </div>
+                    <div className="flex-1 w-full relative">
+                        <div className="aspect-[4/3] rounded-[40px] overflow-hidden bg-gradient-to-br from-highlight/60 to-surface border border-white shadow-soft relative flex items-center justify-center p-8 text-center">
+                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.8),transparent_100%)] pointer-events-none"></div>
+                             <div className="relative z-10">
+                                 <h4 className="font-serif text-3xl text-primary mb-3 italic">"A journey to pure tranquility."</h4>
+                                 <p className="text-[10px] text-primary/60 uppercase tracking-widest font-bold">Vogue Wellness</p>
+                             </div>
                         </div>
                     </div>
                 </div>
