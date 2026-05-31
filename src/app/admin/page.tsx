@@ -21,6 +21,7 @@ export default function AdminDashboard() {
     const [campaignDuration, setCampaignDuration] = useState(campaign?.duration || '');
     const [discountPercentage, setDiscountPercentage] = useState<number>(campaign?.discountPercentage || 20);
     const [campaignTreatments, setCampaignTreatments] = useState<SelectedCampaignTreatment[]>(campaign?.selectedTreatments || []);
+    const [campaignImage, setCampaignImage] = useState<string>(campaign?.image || '');
 
     const toggleCampaignTreatmentDuration = (treatmentId: string, duration: string) => {
         setCampaignTreatments(prev => {
@@ -98,6 +99,7 @@ export default function AdminDashboard() {
                     title: campaignTitle,
                     label: campaignLabel,
                     description: campaignDesc,
+                    image: campaignImage || 'https://images.pexels.com/photos/3951375/pexels-photo-3951375.jpeg',
                     duration: campaignDuration,
                     discountPercentage,
                     selectedTreatments: campaignTreatments,
@@ -196,6 +198,7 @@ export default function AdminDashboard() {
         setCampaignTitle(campaign.title);
         setCampaignLabel(campaign.label);
         setCampaignDesc(campaign.description);
+        setCampaignImage(campaign.image || '');
         setCampaignDuration(campaign.duration);
         setDiscountPercentage(campaign.discountPercentage);
         setCampaignTreatments(campaign.selectedTreatments);
@@ -223,10 +226,14 @@ export default function AdminDashboard() {
         setProducts(prev => prev.filter(p => p.id !== id));
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string>>) => {
         if (e.target.files && e.target.files[0]) {
-            const url = URL.createObjectURL(e.target.files[0]);
-            setProductImage(url);
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setter(reader.result as string);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -447,13 +454,25 @@ export default function AdminDashboard() {
                                         {/* Image Upload Area for Campaign */}
                                         <div className="space-y-2">
                                             <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Cinematic Background Image</label>
-                                            <div className="w-full border-2 border-dashed border-border/50 rounded-[24px] bg-white/30 hover:bg-white/50 transition-colors flex flex-col items-center justify-center py-12 cursor-pointer group">
-                                                <div className="w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
-                                                    <UploadCloud size={24} />
-                                                </div>
-                                                <p className="text-sm font-medium text-primary mb-1">Click to upload landscape image</p>
-                                                <p className="text-xs text-text-muted">High resolution JPG or PNG (1200x800 recommended)</p>
-                                            </div>
+                                            <label className="w-full border-2 border-dashed border-border/50 rounded-[24px] bg-white/30 hover:bg-white/50 transition-colors flex flex-col items-center justify-center py-12 cursor-pointer group relative overflow-hidden">
+                                                <input 
+                                                    type="file" 
+                                                    accept="image/*" 
+                                                    className="hidden" 
+                                                    onChange={(e) => handleImageUpload(e, setCampaignImage)} 
+                                                />
+                                                {campaignImage ? (
+                                                    <img src={campaignImage} alt="Campaign Background" className="absolute inset-0 w-full h-full object-cover opacity-80" />
+                                                ) : (
+                                                    <>
+                                                        <div className="w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
+                                                            <UploadCloud size={24} />
+                                                        </div>
+                                                        <p className="text-sm font-medium text-primary mb-1">Click to upload landscape image</p>
+                                                        <p className="text-xs text-text-muted">High resolution JPG or PNG</p>
+                                                    </>
+                                                )}
+                                            </label>
                                         </div>
 
                                         {/* Description */}
@@ -593,7 +612,7 @@ export default function AdminDashboard() {
                                             <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Upload Image</label>
                                             <div className="relative w-full h-48 bg-white/50 border-2 border-dashed border-border/50 rounded-2xl overflow-hidden hover:bg-white/80 transition-all flex flex-col items-center justify-center group cursor-pointer">
                                                 <input 
-                                                    type="file" accept="image/*" onChange={handleImageUpload}
+                                                    type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setProductImage)}
                                                     className="absolute inset-0 opacity-0 cursor-pointer z-10"
                                                 />
                                                 {productImage ? (

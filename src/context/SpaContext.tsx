@@ -52,6 +52,7 @@ export type Campaign = {
     title: string;
     label: string;
     description: string;
+    image?: string;
     duration: string; // e.g., "1_month"
     discountPercentage: number;
     selectedTreatments: SelectedCampaignTreatment[];
