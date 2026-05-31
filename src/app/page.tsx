@@ -138,10 +138,13 @@ export default function Home() {
                 {/* Popular Treatments Scroll */}
                 <div className="mb-24">
                     {treatments.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-16 text-center bg-white border border-[#E5E7EB] rounded-[32px] mx-6 md:mx-0">
-                            <span className="text-3xl mb-4">🌿</span>
-                            <h3 className="text-lg font-bold text-[#2B2B2B] mb-2">Treatments Available Soon</h3>
-                            <p className="text-sm text-[#6B7280] px-4">We are crafting exclusive experiences for you.</p>
+                        <div className="flex flex-col items-center justify-center py-24 text-center relative overflow-hidden rounded-[40px] bg-[#F5F5F7] mx-6 md:mx-0">
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 pointer-events-none"></div>
+                            <div className="relative z-10 flex flex-col items-center">
+                                <span className="bg-white/80 backdrop-blur-md border border-white/60 text-[#86868B] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm mb-4">Coming Soon</span>
+                                <h3 className="text-2xl md:text-3xl font-medium text-[#1D1D1F] tracking-tight mb-2">Signature Treatments</h3>
+                                <p className="text-[#86868B] max-w-sm mx-auto text-sm font-medium px-4">We are preparing our exclusive spa experiences.</p>
+                            </div>
                         </div>
                     ) : (
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
@@ -195,10 +198,13 @@ export default function Home() {
                     
                     {/* Swipeable Products */}
                     {products.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-16 text-center bg-white border border-[#E5E7EB] rounded-[32px]">
-                            <span className="text-3xl mb-4">✨</span>
-                            <h3 className="text-lg font-bold text-[#2B2B2B] mb-2">Boutique Available Soon</h3>
-                            <p className="text-sm text-[#6B7280]">We are curating our exclusive product collection.</p>
+                        <div className="flex flex-col items-center justify-center py-24 text-center relative overflow-hidden rounded-[40px] bg-[#F5F5F7] mx-6 md:mx-0">
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 pointer-events-none"></div>
+                            <div className="relative z-10 flex flex-col items-center">
+                                <span className="bg-white/80 backdrop-blur-md border border-white/60 text-[#86868B] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm mb-4">Coming Soon</span>
+                                <h3 className="text-2xl md:text-3xl font-medium text-[#1D1D1F] tracking-tight mb-2">Spa Boutique</h3>
+                                <p className="text-[#86868B] max-w-sm mx-auto text-sm font-medium px-4">Our premium product collection is being curated.</p>
+                            </div>
                         </div>
                     ) : (
                         <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">

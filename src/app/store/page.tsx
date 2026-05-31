@@ -135,12 +135,13 @@ export default function StorePage() {
 
                 {/* Product Grid */}
                 {filteredProducts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-20 text-center col-span-full">
-                        <div className="w-16 h-16 bg-white border border-[#E5E7EB] rounded-full flex items-center justify-center mb-6 shadow-sm">
-                            <span className="text-2xl">✨</span>
+                    <div className="flex flex-col items-center justify-center py-24 text-center col-span-full relative overflow-hidden rounded-[40px] bg-[#F5F5F7]">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 pointer-events-none"></div>
+                        <div className="relative z-10 flex flex-col items-center">
+                            <span className="bg-white/80 backdrop-blur-md border border-white/60 text-[#86868B] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm mb-4">Coming Soon</span>
+                            <h3 className="text-2xl md:text-3xl font-medium text-[#1D1D1F] tracking-tight mb-2">Boutique Curations</h3>
+                            <p className="text-[#86868B] max-w-sm mx-auto text-sm font-medium px-4">We are currently crafting an exclusive collection of spa products.</p>
                         </div>
-                        <h3 className="text-xl md:text-2xl font-serif text-[#2B2B2B] mb-2">Boutique Available Soon</h3>
-                        <p className="text-[#6B7280] max-w-sm mx-auto text-sm md:text-base">We are curating an exclusive collection of spa products. Please check back shortly.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
