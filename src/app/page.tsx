@@ -149,7 +149,7 @@ export default function Home() {
                     ) : (
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {treatments.map((item, idx) => (
-                            <Link href="/rituals" key={item.id} className="w-72 md:w-80 shrink-0 block group outline-none">
+                            <Link href={`/rituals/${item.id}`} key={item.id} className="w-72 md:w-80 shrink-0 block group outline-none">
                                 <div className={`rounded-[32px] md:rounded-[40px] bg-gradient-to-br ${item.bgPattern} border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6 md:p-8`}>
                                     
                                     {/* Subtle glowing orb for spa ambiance */}
@@ -162,15 +162,15 @@ export default function Home() {
                                     </div>
 
                                     <div className="relative z-10 flex-grow flex flex-col">
-                                        <h4 className="font-serif text-3xl font-medium text-primary mb-4 leading-tight">{item.title}</h4>
-                                        <p className="text-sm text-text-muted leading-relaxed font-light mb-8 flex-grow">{item.desc}</p>
+                                        <h4 className="font-serif text-xl font-medium text-primary mb-3 leading-tight capitalize">{item.title.toLowerCase()}</h4>
+                                        <p className="text-xs text-text-muted leading-relaxed font-light mb-6 flex-grow line-clamp-4">{item.desc}</p>
                                         
-                                        <div className="mt-auto pt-6 border-t border-border/50">
+                                        <div className="mt-auto pt-5 border-t border-border/50">
                                             <div className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">
-                                                <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration}
+                                                <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration} MINS
                                             </div>
                                             <div className="flex items-center justify-between bg-gray-50/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-gray-100">
-                                                <span className="font-semibold text-gray-900 text-[15px]">Rp {item.options[0]?.price}</span>
+                                                <span className="font-semibold text-gray-900 text-[14px]">IDR {parseInt(item.options[0]?.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                 <button className="w-10 h-10 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                                                     <Plus size={20} strokeWidth={2.5} />
                                                 </button>

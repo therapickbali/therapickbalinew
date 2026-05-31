@@ -4,42 +4,47 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Share, Heart, MapPin, Clock, Calendar, Sparkles, Plus, Minus, X, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useSpa } from '@/context/SpaContext';
 
 export default function RitualsDetails() {
-    // Smart logic for duration and pricing
-    const treatmentOptions = [
-        { duration: 60, price: '450,000' },
-        { duration: 90, price: '550,000' },
-        { duration: 120, price: '750,000' },
-    ];
-    
-    const [selectedOptionIdx, setSelectedOptionIdx] = useState(1); // Default to 90 mins
-    const selectedOption = treatmentOptions[selectedOptionIdx];
+    const params = useParams();
+    const id = params?.id as string;
+    const { treatments } = useSpa();
+    const treatment = treatments.find(t => t.id === id);
 
-    // Booking Modal State
+    const [selectedOptionIdx, setSelectedOptionIdx] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [guestCount, setGuestCount] = useState(1);
     const [formData, setFormData] = useState({ name: '', location: '', room: '' });
 
+    if (!treatment) {
+        return <div className="min-h-screen bg-background flex items-center justify-center font-serif text-2xl text-primary">Loading...</div>;
+    }
+
+    const selectedOption = treatment.options[selectedOptionIdx] || treatment.options[0];
+
     // Calculate smart price
-    const basePrice = parseInt(selectedOption.price.replace(/,/g, ''));
+    const basePrice = parseInt(selectedOption.price.replace(/,/g, '') || '0');
     const totalPrice = basePrice * guestCount;
     const formattedTotalPrice = totalPrice.toLocaleString('en-US');
 
     const handleBooking = (e: React.FormEvent) => {
         e.preventDefault();
         const waNumber = '6285174119423';
-        const message = `*New Spa Booking Request*%0A%0A*Treatment:* Deep Tissue Flow%0A*Duration:* ${selectedOption.duration} Mins%0A*Guests:* ${guestCount}%0A*Total Price:* Rp ${formattedTotalPrice}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to book this appointment.`;
+        const message = `*New Spa Booking Request*%0A%0A*Treatment:* ${treatment.title}%0A*Duration:* ${selectedOption.duration} Mins%0A*Guests:* ${guestCount}%0A*Total Price:* IDR ${formattedTotalPrice}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to book this appointment.`;
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
         setIsModalOpen(false);
     };
+
+    const relatedTreatments = treatments.filter(t => t.id !== treatment.id).slice(0, 3);
 
     return (
         <div className="min-h-screen bg-background relative overflow-hidden font-sans text-text pb-24 md:pb-12 pt-16 md:pt-24">
             
             <div className="max-w-3xl mx-auto px-6 md:px-8">
                 
-                {/* Header Actions - Enhanced Spacing (More padding top from the container) */}
+                {/* Header Actions */}
                 <header className="flex items-center justify-between mb-16">
                     <Link href="/">
                         <button className="w-12 h-12 rounded-full bg-white border border-border/50 flex items-center justify-center text-primary shadow-[0_8px_20px_rgb(0,0,0,0.04)] hover:bg-surface hover:scale-105 transition-all">
@@ -58,8 +63,8 @@ export default function RitualsDetails() {
 
                 {/* Title & Location */}
                 <div className="mb-8">
-                    <h1 className="font-serif text-4xl md:text-6xl text-primary leading-[1.1] mb-4 tracking-tight">
-                        Deep Tissue Flow
+                    <h1 className="font-serif text-4xl md:text-6xl text-primary leading-[1.1] mb-4 tracking-tight capitalize">
+                        {treatment.title.toLowerCase()}
                     </h1>
                     <p className="flex items-center gap-1.5 text-sm md:text-base text-text-muted font-medium">
                         <MapPin className="w-4 h-4" />
@@ -69,11 +74,9 @@ export default function RitualsDetails() {
 
                 {/* Tags */}
                 <div className="flex overflow-x-auto pb-2 -mx-6 px-6 md:mx-0 md:px-0 gap-2 no-scrollbar mb-10">
-                    {['Deep Tissue', 'Relaxation', 'Oil Massage'].map((tag, idx) => (
-                        <span key={idx} className="px-4 py-2 bg-white/80 backdrop-blur-sm border border-white rounded-xl text-xs font-bold tracking-wider text-primary whitespace-nowrap shadow-[0_4px_12px_rgb(0,0,0,0.02)]">
-                            {tag.toUpperCase()}
-                        </span>
-                    ))}
+                    <span className="px-4 py-2 bg-white/80 backdrop-blur-sm border border-white rounded-xl text-xs font-bold tracking-wider text-primary whitespace-nowrap shadow-[0_4px_12px_rgb(0,0,0,0.02)] uppercase">
+                        {treatment.category}
+                    </span>
                 </div>
 
                 {/* Smart Pricing & Duration Bento Grid */}
@@ -88,7 +91,7 @@ export default function RitualsDetails() {
                             </div>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                            {treatmentOptions.map((opt, idx) => {
+                            {treatment.options.map((opt, idx) => {
                                 const isActive = selectedOptionIdx === idx;
                                 return (
                                     <button 
@@ -100,7 +103,7 @@ export default function RitualsDetails() {
                                             : 'bg-white/60 text-primary border border-white hover:bg-white hover:scale-[1.02]'
                                         }`}
                                     >
-                                        {opt.duration} <span className={`text-[10px] ${isActive ? 'text-white/70' : 'text-primary/50'}`}>MIN</span>
+                                        {opt.duration} <span className={`text-[10px] ${isActive ? 'text-white/70' : 'text-primary/50'}`}>MINS</span>
                                     </button>
                                 );
                             })}
@@ -109,7 +112,6 @@ export default function RitualsDetails() {
 
                     {/* Price & Action */}
                     <div className="rounded-[32px] p-6 flex flex-col justify-between relative overflow-hidden shadow-soft-lg min-h-[160px] bg-gradient-to-br from-[#1C1F1D] via-[#2A2E2C] to-[#1C1F1D]">
-                        {/* Removed generic icon, replaced with a subtle glowing radial gradient for cinematic depth */}
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)] pointer-events-none"></div>
                         
                         <div className="relative z-10 flex flex-col h-full justify-between gap-6">
@@ -123,8 +125,8 @@ export default function RitualsDetails() {
                                         exit={{ opacity: 0, y: -10 }}
                                         className="flex items-baseline gap-2 text-white"
                                     >
-                                        <span className="text-lg font-medium text-white/70">Rp</span>
-                                        <span className="text-4xl md:text-5xl font-serif">{selectedOption.price}</span>
+                                        <span className="text-lg font-medium text-white/70">IDR</span>
+                                        <span className="text-4xl md:text-5xl font-serif">{parseInt(selectedOption.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                     </motion.div>
                                 </AnimatePresence>
                             </div>
@@ -143,11 +145,12 @@ export default function RitualsDetails() {
                 <div className="mb-14 bg-white/50 backdrop-blur-xl border border-white/60 p-6 md:p-8 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
                     <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-4">About this Treatment</h3>
                     <p className="text-sm md:text-base text-text-muted leading-relaxed font-light">
-                        A powerful, focused massage designed to relieve severe tension in the muscle and the connective tissue or fascia. This type of massage focuses on the muscles located below the surface of the top muscles. Highly recommended for individuals who experience consistent pain, are involved in heavy physical activity, or patients who have sustained physical injury.
+                        {treatment.desc}
                     </p>
                 </div>
 
-                {/* Related (Cinematic Cards without images) */}
+                {/* Related (Dynamic from Supabase) */}
+                {relatedTreatments.length > 0 && (
                 <div>
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xs font-bold uppercase tracking-widest text-primary">Related Treatments</h3>
@@ -155,14 +158,9 @@ export default function RitualsDetails() {
                     </div>
                     
                     <div className="flex overflow-x-auto pb-6 -mx-6 px-6 md:mx-0 md:px-0 gap-4 no-scrollbar">
-                        {[
-                            { title: 'Balinese Radiance', category: 'Massage', bg: 'from-secondary/80 to-highlight/40' },
-                            { title: 'Purifying Facial', category: 'Facial', bg: 'from-accent/60 to-highlight/30' },
-                            { title: 'Reflexology', category: 'Treatment', bg: 'from-highlight/80 to-surface' },
-                        ].map((item, idx) => (
-                            <div key={idx} className="w-40 h-48 shrink-0 rounded-[28px] overflow-hidden relative group shadow-[0_8px_24px_rgb(0,0,0,0.04)] cursor-pointer">
-                                {/* Cinematic gradient background instead of image */}
-                                <div className={`absolute inset-0 bg-gradient-to-br ${item.bg} transition-transform duration-500 group-hover:scale-110`}></div>
+                        {relatedTreatments.map((item, idx) => (
+                            <Link href={`/rituals/${item.id}`} key={idx} className="w-40 h-48 shrink-0 rounded-[28px] overflow-hidden relative group shadow-[0_8px_24px_rgb(0,0,0,0.04)] cursor-pointer block outline-none">
+                                <div className={`absolute inset-0 bg-gradient-to-br ${item.bgPattern || 'from-secondary/80 to-highlight/40'} transition-transform duration-500 group-hover:scale-110`}></div>
                                 <div className="absolute inset-0 bg-primary/5 group-hover:bg-transparent transition-colors duration-500"></div>
                                 
                                 <div className="absolute top-4 left-4">
@@ -171,12 +169,13 @@ export default function RitualsDetails() {
                                     </span>
                                 </div>
                                 <div className="absolute bottom-4 left-4 right-4">
-                                    <h4 className="text-sm font-serif font-medium text-primary leading-tight">{item.title}</h4>
+                                    <h4 className="text-sm font-serif font-medium text-primary leading-tight capitalize">{item.title.toLowerCase()}</h4>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>
+                )}
 
             </div>
 
@@ -209,13 +208,13 @@ export default function RitualsDetails() {
                             <div className="bg-surface border border-border/50 rounded-2xl p-4 mb-3 shadow-sm">
                                 <div className="flex items-center justify-between mb-4">
                                     <div>
-                                        <h3 className="font-bold text-sm text-primary">Deep Tissue Flow</h3>
+                                        <h3 className="font-bold text-sm text-primary capitalize">{treatment.title.toLowerCase()}</h3>
                                         <p className="text-xs text-text-muted flex items-center gap-1 mt-0.5">
                                             <Clock className="w-3 h-3" /> {selectedOption.duration} Mins
                                         </p>
                                     </div>
                                     <span className="font-serif text-primary font-medium text-right flex flex-col">
-                                        Rp {selectedOption.price}
+                                        IDR {parseInt(selectedOption.price.replace(/,/g, '') || '0').toLocaleString('en-US')}
                                         <span className="text-[9px] font-sans text-text-muted font-normal uppercase tracking-wider">Per Person</span>
                                     </span>
                                 </div>
@@ -279,7 +278,7 @@ export default function RitualsDetails() {
                                 <div className="mt-8 pt-6 border-t border-border/50">
                                     <div className="flex items-end justify-between mb-6">
                                         <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
-                                        <span className="text-2xl font-serif text-primary">Rp {formattedTotalPrice}</span>
+                                        <span className="text-2xl font-serif text-primary">IDR {formattedTotalPrice}</span>
                                     </div>
                                     <button 
                                         type="submit"
