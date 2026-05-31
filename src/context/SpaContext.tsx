@@ -75,6 +75,7 @@ type SpaContextType = {
     clearCart: () => void;
     savedProducts: string[];
     toggleSavedProduct: (productId: string) => void;
+    isLoading: boolean;
 };
 
 
@@ -87,14 +88,15 @@ export function SpaProvider({ children }: { children: ReactNode }) {
     const [products, setProducts] = useState<Product[]>([]);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [savedProducts, setSavedProducts] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         async function loadData() {
             try {
                 const [treatmentsRes, productsRes, campaignsRes] = await Promise.all([
-                    supabase.from('treatments').select('*').eq('is_published', true),
-                    supabase.from('products').select('*').eq('is_published', true),
-                    supabase.from('campaigns').select('*').eq('is_published', true)
+                    supabase.from('treatments').select('*').eq('is_published', true).order('created_at', { ascending: false }),
+                    supabase.from('products').select('*').eq('is_published', true).order('created_at', { ascending: false }),
+                    supabase.from('campaigns').select('*').eq('is_published', true).order('created_at', { ascending: false })
                 ]);
 
                 if (treatmentsRes.data && treatmentsRes.data.length > 0) setTreatments(treatmentsRes.data);
@@ -102,6 +104,8 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 if (campaignsRes.data && campaignsRes.data.length > 0) setCampaign(campaignsRes.data[0]);
             } catch (error) {
                 console.error("Error fetching data from Supabase:", error);
+            } finally {
+                setIsLoading(false);
             }
         }
         loadData();
@@ -139,7 +143,8 @@ export function SpaProvider({ children }: { children: ReactNode }) {
         <SpaContext.Provider value={{ 
             treatments, setTreatments, campaign, setCampaign, products, setProducts,
             cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart,
-            savedProducts, toggleSavedProduct
+            savedProducts, toggleSavedProduct,
+            isLoading
         }}>
             {children}
         </SpaContext.Provider>

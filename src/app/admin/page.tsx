@@ -462,7 +462,7 @@ export default function AdminDashboard() {
                                                     onChange={(e) => handleImageUpload(e, setCampaignImage)} 
                                                 />
                                                 {campaignImage ? (
-                                                    <img src={campaignImage} alt="Campaign Background" className="absolute inset-0 w-full h-full object-cover opacity-80" />
+                                                    <img src={campaignImage} alt="Campaign Background" className="absolute inset-0 w-full h-full object-contain bg-black/5 opacity-90" />
                                                 ) : (
                                                     <>
                                                         <div className="w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">

@@ -17,7 +17,7 @@ const CATEGORIES = [
 
 
 export default function Home() {
-    const { treatments, campaign, products } = useSpa();
+    const { treatments, campaign, products, isLoading } = useSpa();
     const [activeCategory, setActiveCategory] = useState('all');
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
 
@@ -67,7 +67,7 @@ export default function Home() {
                     >
                         {/* Background Image */}
                         <img 
-                            src="https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop&crop=center" 
+                            src={campaign.image || "https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop&crop=center"} 
                             alt={campaign.title} 
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
                         />
@@ -137,7 +137,13 @@ export default function Home() {
 
                 {/* Popular Treatments Scroll */}
                 <div className="mb-24">
-                    {treatments.length === 0 ? (
+                    {isLoading ? (
+                        <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
+                            {[1,2,3].map((skeleton) => (
+                                <div key={skeleton} className="w-72 md:w-80 h-96 shrink-0 rounded-[32px] md:rounded-[40px] bg-border/40 animate-pulse"></div>
+                            ))}
+                        </div>
+                    ) : treatments.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-24 text-center relative overflow-hidden rounded-[40px] bg-[#F5F5F7] mx-6 md:mx-0">
                             <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 pointer-events-none"></div>
                             <div className="relative z-10 flex flex-col items-center">
