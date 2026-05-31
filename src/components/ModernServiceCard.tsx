@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ServiceItem } from '@/lib/types';
 import { parseServiceOptions } from '@/lib/constants';
-import { Clock, ArrowRight } from 'lucide-react';
+import { Clock, ArrowRight, Plus } from 'lucide-react';
 
 interface Props {
     service: ServiceItem;
@@ -35,18 +35,18 @@ const ModernServiceCard: React.FC<Props> = ({ service, onView, domRef }) => {
             </div>
 
             {/* Content Section - Extremely Minimal */}
-            <div className="flex flex-col px-1">
+            <div className="flex flex-col px-1 flex-grow">
                 <h3 className="font-sans font-medium text-sm text-secondary tracking-wide mb-1 transition-colors group-hover:text-text-muted">
                     {service.name}
                 </h3>
-                <div className="flex items-center gap-2">
-                    <p className="text-[10px] font-sans font-semibold uppercase tracking-[0.1em] text-text-muted">
-                        {startingPrice} IDR
-                    </p>
-                    <span className="text-[8px] text-border/80">•</span>
-                    <p className="text-[10px] font-sans font-light text-text-muted/80">
-                        {durationDisplay}
-                    </p>
+                <p className="text-[10px] font-sans font-light text-text-muted/80 mb-3">
+                    {durationDisplay}
+                </p>
+                <div className="flex items-center justify-between bg-gray-50 rounded-full p-1 pl-3 mt-auto border border-gray-100">
+                    <span className="font-semibold text-gray-900 text-[13px] md:text-sm">Rp {startingPrice.toLocaleString()}</span>
+                    <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
+                        <Plus size={18} strokeWidth={2.5} />
+                    </div>
                 </div>
             </div>
         </motion.div>

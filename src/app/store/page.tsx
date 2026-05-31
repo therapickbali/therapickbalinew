@@ -177,23 +177,15 @@ export default function StorePage() {
                             className="w-full h-[100svh] md:max-w-md md:h-[90vh] bg-white rounded-none md:rounded-[40px] flex flex-col relative shadow-2xl mx-auto"
                         >
                                     {/* Top Nav */}
-                                    <div className="absolute top-6 left-6 right-6 flex justify-between z-20">
-                                        <button onClick={closeModal} className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#2B2B2B] shadow-sm hover:scale-105 transition-transform">
+                                    <div className="absolute top-6 left-6 right-6 flex justify-between z-20 pointer-events-none">
+                                        <button onClick={closeModal} className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#2B2B2B] shadow-sm hover:scale-105 transition-transform pointer-events-auto">
                                             <ChevronRight className="rotate-180" size={24} strokeWidth={2}/>
-                                        </button>
-                                        <button className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#EF4444] shadow-sm hover:scale-105 transition-transform">
-                                            <Heart size={20} fill="currentColor" />
                                         </button>
                                     </div>
                                     
                                     {/* Image Section */}
-                                    <div className="h-[45%] bg-[#EDF0F2] relative flex items-center justify-center shrink-0 overflow-hidden">
-                                        <img src={selectedProduct.image} className="w-full h-full object-cover mix-blend-multiply drop-shadow-2xl" />
-                                        <div className="absolute bottom-4 flex gap-1.5">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
-                                            <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>
-                                            <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>
-                                        </div>
+                                    <div className="h-[45%] bg-[#FDFBF7] relative flex items-center justify-center shrink-0 overflow-hidden p-8">
+                                        <img src={selectedProduct.image} className="w-full h-full object-contain mix-blend-multiply drop-shadow-md" />
                                     </div>
 
                                     {/* Content Section */}
