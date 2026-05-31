@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useSpa, Product } from '@/context/SpaContext';
 
 export default function StorePage() {
@@ -135,36 +135,50 @@ export default function StorePage() {
                                 exit={{ opacity: 0, scale: 0.95 }}
                                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                                 key={product.id} 
-                                onClick={() => setSelectedProduct(product)}
-                                className="group relative transition-all duration-500 cursor-pointer flex flex-col"
+                                onClick={() => product.stock > 0 && setSelectedProduct(product)}
+                                className={`group relative transition-all duration-500 flex flex-col ${product.stock > 0 ? 'cursor-pointer' : 'cursor-not-allowed opacity-80'}`}
                             >
-                                {/* Product Image Full Bleed Style */}
-                                <div className="aspect-[3/4] relative overflow-hidden rounded-2xl md:rounded-[32px] bg-surface mb-4">
-                                    <img 
-                                        src={product.image} 
-                                        alt={product.title} 
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                                    />
-                                    
-                                    {/* Glassmorphism Icon Button */}
-                                    <div className="absolute bottom-3 right-3 md:bottom-4 md:right-4 bg-white/80 backdrop-blur-md text-primary w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                                        <ShoppingBag size={18} strokeWidth={2} className="group-hover:opacity-0 transition-opacity duration-300 absolute" />
-                                        <ArrowRight size={18} strokeWidth={2} className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute" />
-                                    </div>
+                                    {/* Product Image Full Bleed Style */}
+                                    <div className="aspect-[3/4] relative overflow-hidden rounded-2xl md:rounded-[32px] bg-surface mb-4">
+                                        <img 
+                                            src={product.image} 
+                                            alt={product.title} 
+                                            className={`w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${product.stock > 0 ? 'group-hover:scale-105' : 'grayscale'}`}
+                                        />
+                                        
+                                        {/* Glassmorphism Icon Button */}
+                                        {product.stock > 0 && (
+                                            <div className="absolute bottom-3 right-3 md:bottom-4 md:right-4 bg-white/80 backdrop-blur-md text-primary w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                                                <ShoppingBag size={18} strokeWidth={2} className="group-hover:opacity-0 transition-opacity duration-300 absolute" />
+                                                <ArrowRight size={18} strokeWidth={2} className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute" />
+                                            </div>
+                                        )}
 
-                                    {/* Category Pill */}
-                                    <div className="absolute top-3 left-3 md:top-4 md:left-4">
-                                        <span className="bg-white/80 backdrop-blur-md text-primary px-3 py-1.5 rounded-full text-[8px] md:text-[9px] font-bold tracking-widest uppercase shadow-sm">
-                                            {product.category}
-                                        </span>
+                                        {/* Category Pill */}
+                                        <div className="absolute top-3 left-3 md:top-4 md:left-4">
+                                            <span className="bg-white/80 backdrop-blur-md text-primary px-3 py-1.5 rounded-full text-[8px] md:text-[9px] font-bold tracking-widest uppercase shadow-sm">
+                                                {product.category}
+                                            </span>
+                                        </div>
+
+                                        {/* Sold Out Overlay */}
+                                        {product.stock === 0 && (
+                                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center backdrop-blur-sm">
+                                                <span className="bg-white text-primary px-5 py-2 rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase shadow-xl -rotate-6">Sold Out</span>
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
-                                
-                                {/* Clean Typography Below Card */}
-                                <div className="px-1 flex flex-col">
-                                    <h4 className="font-serif text-lg md:text-xl text-primary mb-1 line-clamp-1 group-hover:text-primary/70 transition-colors">{product.title}</h4>
-                                    <span className="text-sm font-semibold text-text-muted">Rp {product.price}</span>
-                                </div>
+                                    
+                                    {/* Clean Typography Below Card */}
+                                    <div className="px-1 flex flex-col">
+                                        <div className="flex justify-between items-start gap-2 mb-1">
+                                            <h4 className="font-serif text-lg md:text-xl text-primary line-clamp-1 group-hover:text-primary/70 transition-colors flex-1">{product.title}</h4>
+                                            <span className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest whitespace-nowrap mt-1.5 ${product.stock > 0 ? 'text-primary/60' : 'text-red-500'}`}>
+                                                {product.stock > 0 ? `${product.stock} Left` : 'Out of Stock'}
+                                            </span>
+                                        </div>
+                                        <span className="text-sm font-semibold text-text-muted">Rp {product.price}</span>
+                                    </div>
                             </motion.div>
                         ))}
                     </AnimatePresence>
@@ -272,12 +286,15 @@ export default function StorePage() {
                                         <motion.div 
                                             key="checkout"
                                             initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-                                            className="flex flex-col h-full"
+                                            className="flex flex-col h-full relative"
                                         >
-                                            <div className="mb-6 md:mb-8 text-center flex flex-col items-center">
-                                                <button onClick={() => setIsCheckout(false)} className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-text-muted hover:text-primary transition-colors flex items-center justify-center gap-1 mb-4">
-                                                    &larr; Back to Details
-                                                </button>
+                                            <button 
+                                                onClick={() => setIsCheckout(false)} 
+                                                className="absolute -top-2 left-0 md:-top-4 md:-left-4 w-10 h-10 rounded-full flex items-center justify-center text-text-muted hover:text-primary hover:bg-surface transition-colors shadow-sm border border-border/50 bg-white"
+                                            >
+                                                <ArrowLeft size={18} strokeWidth={2.5} />
+                                            </button>
+                                            <div className="mb-6 md:mb-8 text-center flex flex-col items-center mt-10 md:mt-2">
                                                 <h3 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">Delivery Details</h3>
                                                 <p className="text-xs md:text-sm text-text-muted">Enter your information below to coordinate delivery.</p>
                                             </div>
@@ -355,7 +372,7 @@ export default function StorePage() {
                                                 </ul>
                                             </div>
 
-                                            <div className="mt-auto pt-6 border-t border-border/50 pb-4 md:pb-0">
+                                            <div className="sticky -bottom-6 md:-bottom-12 left-0 right-0 bg-white pt-6 pb-6 md:pb-12 z-20 mt-8 border-t border-border/30">
                                                 <button 
                                                     onClick={() => setIsCheckout(true)}
                                                     className="w-full bg-primary text-white px-6 py-4 md:py-5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-xl flex items-center justify-center gap-3"
