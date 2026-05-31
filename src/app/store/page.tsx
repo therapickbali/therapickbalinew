@@ -138,18 +138,31 @@ export default function StorePage() {
                     {filteredProducts.map((product, i) => (
                         <div 
                             key={product.id} 
-                            className="cursor-pointer group flex flex-col" 
+                            className="cursor-pointer group flex flex-col outline-none h-full" 
                             onClick={() => product.stock > 0 && setSelectedProduct(product)}
                         >
-                            <div className="aspect-[4/5] bg-[#EDF0F2] rounded-[24px] relative mb-4 flex items-center justify-center overflow-hidden">
-                                <button className="absolute top-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#9CA3AF] shadow-sm z-10 hover:scale-110 transition-transform">
-                                    <Heart size={16} fill={i % 3 === 0 ? "#EF4444" : "none"} stroke={i % 3 === 0 ? "#EF4444" : "currentColor"} />
-                                </button>
-                                <div className="absolute bottom-3 left-3 bg-white/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-[#2B2B2B] shadow-sm z-10">{product.category}</div>
-                                <img src={product.image} alt={product.title} className="w-full h-full object-cover mix-blend-multiply drop-shadow-xl group-hover:scale-105 transition-transform duration-700" />
+                            <div className="rounded-[24px] md:rounded-[32px] bg-white border border-[#E5E7EB] shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_12px_30px_rgb(0,0,0,0.08)] transition-all duration-500 flex flex-col h-full overflow-hidden group-hover:-translate-y-1 relative">
+                                <div className="aspect-[4/5] overflow-hidden relative bg-[#EDF0F2]">
+                                    <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase text-[#2B2B2B] shadow-sm z-10">
+                                        {product.category}
+                                    </div>
+                                    <button className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-[#9CA3AF] shadow-sm z-10 hover:text-[#EF4444] transition-colors">
+                                        <Heart size={14} fill={i % 3 === 0 ? "#EF4444" : "none"} stroke={i % 3 === 0 ? "#EF4444" : "currentColor"} />
+                                    </button>
+                                </div>
+                                <div className="p-4 md:p-5 flex flex-col flex-grow bg-gradient-to-b from-white to-[#F8F9F9]/50">
+                                    <h4 className="font-bold text-[#2B2B2B] text-sm md:text-base mb-1 line-clamp-1">{product.title}</h4>
+                                    <p className="text-[#6B7280] text-[10px] md:text-xs leading-relaxed font-light mb-4 line-clamp-2 flex-grow">{product.description}</p>
+                                    
+                                    <div className="flex items-center justify-between mt-auto">
+                                        <span className="font-bold text-sm md:text-base text-[#2B2B2B]">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
+                                        <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#F3F4F6] text-[#2B2B2B] flex items-center justify-center group-hover:bg-[#2B2B2B] group-hover:text-white transition-colors duration-500">
+                                            <ShoppingBag size={14} />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <h4 className="font-bold text-[#2B2B2B] text-sm md:text-base mb-1 line-clamp-1">{product.title}</h4>
-                            <span className="font-bold text-sm text-[#2B2B2B]">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
                         </div>
                     ))}
                 </div>

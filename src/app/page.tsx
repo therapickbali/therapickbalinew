@@ -175,38 +175,39 @@ export default function Home() {
 
                 {/* The Elexoir Boutique Section */}
                 <div className="mb-32">
-                    <div className="flex items-end justify-between mb-8 px-6 md:px-0">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 px-6 md:px-0 gap-4">
                         <div>
                             <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50 mb-2 block">Take the Spa Home</span>
                             <h3 className="font-serif text-3xl md:text-5xl text-primary font-medium leading-tight">The Elexoir Boutique</h3>
                         </div>
-                        <a href="/store" className="hidden md:flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-70 transition-opacity">
-                            View All Products <ArrowRight size={16} />
+                        <a href="/store" className="inline-flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 md:px-8 md:py-4 rounded-xl text-sm font-medium hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 whitespace-nowrap self-start md:self-auto">
+                            <ShoppingBag size={18} />
+                            Shop Now
                         </a>
                     </div>
                     
                     {/* Swipeable Products */}
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {products.map((product) => (
-                            <a href="/store" key={product.id} className="w-64 md:w-72 shrink-0 block group outline-none">
-                                <div className="rounded-[32px] md:rounded-[40px] bg-white border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full overflow-hidden group-hover:-translate-y-2 relative">
-                                    <div className="aspect-[4/5] overflow-hidden relative bg-surface">
+                            <a href="/store" key={product.id} className="w-48 md:w-56 shrink-0 block group outline-none">
+                                <div className="rounded-[24px] md:rounded-[32px] bg-white border border-border/40 shadow-sm hover:shadow-[0_16px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full overflow-hidden group-hover:-translate-y-2 relative">
+                                    <div className="aspect-square overflow-hidden relative bg-surface">
                                         <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase text-primary shadow-sm z-10">
+                                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[8px] font-bold tracking-widest uppercase text-primary shadow-sm z-10">
                                             {product.category}
                                         </div>
-                                        <div className="absolute top-4 right-4 w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-primary/50 shadow-sm z-10 hover:text-red-500 transition-colors">
-                                            <Heart size={14} />
+                                        <div className="absolute top-3 right-3 w-7 h-7 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-primary/50 shadow-sm z-10 hover:text-red-500 transition-colors">
+                                            <Heart size={12} />
                                         </div>
                                     </div>
-                                    <div className="p-6 md:p-8 flex flex-col flex-grow bg-gradient-to-b from-white to-surface/30">
-                                        <h4 className="font-serif text-xl font-medium text-primary mb-2 line-clamp-1">{product.title}</h4>
-                                        <p className="text-xs text-text-muted leading-relaxed font-light mb-6 line-clamp-2 flex-grow">{product.description}</p>
+                                    <div className="p-4 md:p-5 flex flex-col flex-grow bg-gradient-to-b from-white to-surface/30">
+                                        <h4 className="font-serif text-base font-medium text-primary mb-1 line-clamp-1">{product.title}</h4>
+                                        <p className="text-[10px] text-text-muted leading-relaxed font-light mb-4 line-clamp-2 flex-grow">{product.description}</p>
                                         
                                         <div className="flex items-center justify-between mt-auto">
-                                            <span className="font-serif text-xl text-primary">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
-                                            <div className="w-10 h-10 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-500">
-                                                <ShoppingBag size={16} />
+                                            <span className="font-serif text-base text-primary">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
+                                            <div className="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-500">
+                                                <ShoppingBag size={14} />
                                             </div>
                                         </div>
                                     </div>
@@ -215,11 +216,6 @@ export default function Home() {
                         ))}
                     </div>
                     
-                    <div className="mt-4 px-6 md:hidden flex justify-center">
-                        <a href="/store" className="w-full flex items-center justify-center gap-2 border border-primary/20 text-primary px-6 py-4 rounded-xl text-sm font-medium hover:bg-primary/5 transition-all">
-                            View All Products <ArrowRight size={16} />
-                        </a>
-                    </div>
                 </div>
 
                 {/* About Us */}
