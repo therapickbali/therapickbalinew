@@ -284,18 +284,18 @@ export default function StorePage() {
 
                                             <form onSubmit={handleCheckoutSubmit} className="space-y-4 flex-1 flex flex-col">
                                                 {/* Quantity Selector inside Checkout */}
-                                                <div className="flex items-center justify-between p-4 bg-surface rounded-2xl mb-2">
-                                                    <div>
-                                                        <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">Quantity</p>
-                                                        <p className="font-serif text-lg text-primary">{selectedProduct.title}</p>
+                                                <div className="flex items-center justify-between p-3 md:p-4 bg-surface rounded-2xl mb-2 gap-4">
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-text-muted mb-0.5">Quantity</p>
+                                                        <p className="font-serif text-base md:text-lg text-primary truncate pr-2" title={selectedProduct.title}>{selectedProduct.title}</p>
                                                     </div>
-                                                    <div className="flex items-center gap-4 bg-white px-2 py-1 rounded-full border border-border/50 shadow-sm">
-                                                        <button type="button" onClick={() => handleQuantityChange('dec')} className="w-8 h-8 rounded-full flex items-center justify-center text-primary hover:bg-surface transition-colors disabled:opacity-30" disabled={quantity <= 1}>
-                                                            <Minus size={14} />
+                                                    <div className="flex items-center gap-2 md:gap-3 bg-white px-1.5 py-1 rounded-full border border-border/50 shadow-sm shrink-0">
+                                                        <button type="button" onClick={() => handleQuantityChange('dec')} className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-primary hover:bg-surface transition-colors disabled:opacity-30" disabled={quantity <= 1}>
+                                                            <Minus size={12} />
                                                         </button>
-                                                        <span className="font-bold text-sm w-4 text-center">{quantity}</span>
-                                                        <button type="button" onClick={() => handleQuantityChange('inc')} className="w-8 h-8 rounded-full flex items-center justify-center text-primary hover:bg-surface transition-colors">
-                                                            <Plus size={14} />
+                                                        <span className="font-bold text-xs md:text-sm w-4 text-center">{quantity}</span>
+                                                        <button type="button" onClick={() => handleQuantityChange('inc')} className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-primary hover:bg-surface transition-colors">
+                                                            <Plus size={12} />
                                                         </button>
                                                     </div>
                                                 </div>
