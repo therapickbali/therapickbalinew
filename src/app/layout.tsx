@@ -77,6 +77,12 @@ export const metadata: Metadata = {
     },
   },
   manifest: "/manifest.json",
+  other: {
+    'geo.region': 'ID-BA',
+    'geo.placename': 'Bali',
+    'geo.position': '-8.4095;115.1889',
+    'ICBM': '-8.4095, 115.1889',
+  }
 };
 
 const jsonLd = {
@@ -84,12 +90,12 @@ const jsonLd = {
   '@type': 'HealthAndBeautyBusiness',
   name: 'Elexoir Home Spa',
   image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
-  '@id': 'https://elexoir-spa.com',
-  url: 'https://elexoir-spa.com',
-  telephone: '+6281234567890', // Replace with real number
+  '@id': 'https://www.elexoirhomespaubud.com',
+  url: 'https://www.elexoirhomespaubud.com',
+  telephone: '+6285174119423',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Ubud',
+    streetAddress: 'Jl. Sri Wedari, Ubud',
     addressLocality: 'Gianyar',
     addressRegion: 'Bali',
     postalCode: '80571',
@@ -100,6 +106,15 @@ const jsonLd = {
     latitude: -8.5069,
     longitude: 115.2625
   },
+  areaServed: [
+    "Ubud",
+    "Canggu",
+    "Seminyak",
+    "Kuta",
+    "Jimbaran",
+    "Uluwatu"
+  ],
+  priceRange: "$$$",
   openingHoursSpecification: {
     '@type': 'OpeningHoursSpecification',
     dayOfWeek: [
@@ -114,10 +129,42 @@ const jsonLd = {
     opens: '09:00',
     closes: '22:00'
   },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '5',
+    reviewCount: '154',
+    bestRating: '5',
+    worstRating: '1'
+  },
   sameAs: [
     'https://instagram.com/elexoirspa'
   ],
-  description: 'Luxury mobile spa and massage services in Ubud, Bali. Delivering premium wellness rituals directly to your villa.'
+  description: 'Bali\'s premier mobile spa. 5-star professional massage treatments brought directly to your private villa or hotel in Ubud, Canggu, Seminyak, Kuta, Jimbaran & Uluwatu.'
+};
+
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Mobile Massage Service',
+  provider: {
+    '@type': 'LocalBusiness',
+    name: 'Elexoir Home Spa'
+  },
+  areaServed: {
+    '@type': 'GeoCircle',
+    geoMidpoint: {
+      '@type': 'GeoCoordinates',
+      latitude: '-8.5069',
+      longitude: '115.2625'
+    },
+    geoRadius: '25000'
+  },
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'IDR',
+    price: '350000',
+    availability: 'https://schema.org/InStock'
+  }
 };
 
 export const viewport: Viewport = {
@@ -125,7 +172,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  userScalable: false, // Prevents zooming to feel like a native app
+  userScalable: false,
   viewportFit: "cover",
 };
 
@@ -140,6 +187,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
         />
       </head>
       <body
