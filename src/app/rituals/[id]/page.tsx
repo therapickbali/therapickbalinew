@@ -14,8 +14,16 @@ export default function RitualsDetails() {
     const treatment = treatments.find(t => t.id === id);
 
     const [selectedOptionIdx, setSelectedOptionIdx] = useState(0);
+    const [cartItems, setCartItems] = useState<{
+        id: string;
+        treatmentId: string;
+        title: string;
+        duration: string;
+        price: number;
+        guests: number;
+    }[]>([]);
+    const [isSelectingMore, setIsSelectingMore] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [guestCount, setGuestCount] = useState(1);
     const [formData, setFormData] = useState({ name: '', location: '', room: '' });
 
     if (!treatment) {
@@ -25,16 +33,29 @@ export default function RitualsDetails() {
     const selectedOption = treatment.options[selectedOptionIdx] || treatment.options[0];
 
     // Calculate smart price
-    const basePrice = parseInt(selectedOption.price.replace(/,/g, '') || '0');
-    const totalPrice = basePrice * guestCount;
+    const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0);
     const formattedTotalPrice = totalPrice.toLocaleString('en-US');
 
     const handleBooking = (e: React.FormEvent) => {
         e.preventDefault();
         const waNumber = '6285174119423';
-        const message = `*New Spa Booking Request*%0A%0A*Treatment:* ${treatment.title}%0A*Duration:* ${selectedOption.duration} Mins%0A*Guests:* ${guestCount}%0A*Total Price:* IDR ${formattedTotalPrice}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to book this appointment.`;
+        const treatmentsList = cartItems.map(item => `- ${item.title} (${item.duration} Mins) x${item.guests} Guest(s)`).join('%0A');
+        const message = `*New Spa Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${formattedTotalPrice}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
         setIsModalOpen(false);
+    };
+
+    const handleInitialBook = () => {
+        setCartItems([{
+            id: Date.now().toString(),
+            treatmentId: treatment.id,
+            title: treatment.title,
+            duration: selectedOption.duration,
+            price: parseInt(selectedOption.price.replace(/,/g, '') || '0'),
+            guests: 1
+        }]);
+        setIsSelectingMore(false);
+        setIsModalOpen(true);
     };
 
     const relatedTreatments = treatments.filter(t => t.id !== treatment.id).slice(0, 3);
@@ -117,7 +138,7 @@ export default function RitualsDetails() {
                                 </AnimatePresence>
                             </div>
                             <button 
-                                onClick={() => setIsModalOpen(true)}
+                                onClick={handleInitialBook}
                                 className="w-full bg-white text-primary px-6 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(255,255,255,0.15)] uppercase tracking-widest"
                             >
                                 Book an Appointment
@@ -219,53 +240,103 @@ export default function RitualsDetails() {
                                 <X className="w-4 h-4" />
                             </button>
                             
-                            <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
-                            <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
+                            {isSelectingMore ? (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 pb-4">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <button onClick={() => setIsSelectingMore(false)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
+                                        <h2 className="font-serif text-2xl text-primary">Select Treatment</h2>
+                                    </div>
+                                    
+                                    <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 pb-4 no-scrollbar">
+                                        {treatments.map(t => (
+                                            <div key={t.id} onClick={() => {
+                                                setCartItems([...cartItems, {
+                                                    id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                                                    treatmentId: t.id,
+                                                    title: t.title,
+                                                    duration: t.options[0]?.duration || '60',
+                                                    price: parseInt(t.options[0]?.price.replace(/,/g, '') || '0'),
+                                                    guests: 1
+                                                }]);
+                                                setIsSelectingMore(false);
+                                            }} className="bg-surface border border-border/50 rounded-2xl p-3 flex gap-4 shadow-sm hover:border-primary/20 hover:shadow-md transition-all cursor-pointer group">
+                                                {t.image && <img src={t.image} alt={t.title} className="w-20 h-20 rounded-xl object-cover" />}
+                                                <div className="flex-1 py-1">
+                                                    <div className="text-[9px] font-bold tracking-widest text-primary/50 uppercase mb-1">{t.category}</div>
+                                                    <h4 className="font-bold text-sm text-primary mb-1 line-clamp-1">{t.title}</h4>
+                                                    <div className="text-[10px] text-text-muted"><Clock className="w-3 h-3 inline mr-1" />{t.options[0]?.duration} Mins</div>
+                                                </div>
+                                                <div className="flex items-center pr-2">
+                                                    <div className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                                        <Plus className="w-4 h-4" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="animate-in fade-in slide-in-from-left-4 duration-300">
+                                    <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
+                                    <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
 
-                            {/* Treatment Summary Card */}
-                            <div className="bg-surface border border-border/50 rounded-2xl p-4 mb-3 shadow-sm">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div>
-                                        <h3 className="font-bold text-sm text-primary">{treatment.title}</h3>
-                                        <p className="text-xs text-text-muted flex items-center gap-1 mt-0.5">
-                                            <Clock className="w-3 h-3" /> {selectedOption.duration} Mins
-                                        </p>
+                                    {/* Cart Items List */}
+                                    <div className="space-y-3 mb-4 max-h-[40vh] overflow-y-auto pr-1 no-scrollbar">
+                                        {cartItems.map(item => (
+                                            <div key={item.id} className="bg-surface border border-border/50 rounded-2xl p-4 shadow-sm relative">
+                                                {cartItems.length > 1 && (
+                                                    <button 
+                                                        onClick={() => setCartItems(cartItems.filter(i => i.id !== item.id))}
+                                                        className="absolute top-3 right-3 text-text-muted hover:text-red-500 transition-colors p-1"
+                                                    >
+                                                        <X className="w-3.5 h-3.5" />
+                                                    </button>
+                                                )}
+                                                <div className="flex items-start justify-between mb-4 pr-6">
+                                                    <div>
+                                                        <h3 className="font-bold text-sm text-primary leading-tight">{item.title}</h3>
+                                                        <p className="text-xs text-text-muted flex items-center gap-1 mt-1">
+                                                            <Clock className="w-3 h-3" /> {item.duration} Mins
+                                                        </p>
+                                                    </div>
+                                                    <span className="font-serif text-primary font-medium text-right flex flex-col shrink-0">
+                                                        IDR {item.price.toLocaleString('en-US')}
+                                                        <span className="text-[9px] font-sans text-text-muted font-normal uppercase tracking-wider">Per Person</span>
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center justify-between pt-3 border-t border-border/50">
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Guests</span>
+                                                    <div className="flex items-center gap-3">
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setCartItems(cartItems.map(i => i.id === item.id ? { ...i, guests: Math.max(1, i.guests - 1) } : i))}
+                                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
+                                                        >
+                                                            <Minus className="w-3 h-3" />
+                                                        </button>
+                                                        <span className="font-bold text-sm text-primary w-4 text-center">{item.guests}</span>
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setCartItems(cartItems.map(i => i.id === item.id ? { ...i, guests: i.guests + 1 } : i))}
+                                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
+                                                        >
+                                                            <Plus className="w-3 h-3" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                    <span className="font-serif text-primary font-medium text-right flex flex-col">
-                                        IDR {parseInt(selectedOption.price.replace(/,/g, '') || '0').toLocaleString('en-US')}
-                                        <span className="text-[9px] font-sans text-text-muted font-normal uppercase tracking-wider">Per Person</span>
-                                    </span>
-                                </div>
-                                <div className="flex items-center justify-between pt-3 border-t border-border/50">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Guests</span>
-                                    <div className="flex items-center gap-3">
-                                        <button 
-                                            type="button"
-                                            onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
-                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
-                                        >
-                                            <Minus className="w-3 h-3" />
-                                        </button>
-                                        <span className="font-bold text-sm text-primary w-4 text-center">{guestCount}</span>
-                                        <button 
-                                            type="button"
-                                            onClick={() => setGuestCount(guestCount + 1)}
-                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
-                                        >
-                                            <Plus className="w-3 h-3" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            {/* Add another treatment button */}
-                            <button 
-                                type="button"
-                                onClick={() => setIsModalOpen(false)}
-                                className="w-full bg-transparent text-primary border border-border/50 px-6 py-3 rounded-xl text-xs font-bold hover:bg-surface transition-colors mb-6"
-                            >
-                                + Add another treatment
-                            </button>
+                                    
+                                    <button 
+                                        type="button"
+                                        onClick={() => setIsSelectingMore(true)}
+                                        className="w-full bg-transparent text-primary border border-border/50 px-6 py-3 rounded-xl text-xs font-bold hover:bg-surface transition-colors mb-6"
+                                    >
+                                        + Add another treatment
+                                    </button>
 
                             <form onSubmit={handleBooking} className="space-y-5 pb-8 md:pb-0">
                                 <div className="space-y-1.5">
@@ -306,6 +377,8 @@ export default function RitualsDetails() {
                                     </button>
                                 </div>
                             </form>
+                            </div>
+                            )}
                         </motion.div>
                     </motion.div>
                 )}
