@@ -54,6 +54,8 @@ export default function AdminDashboard() {
     const [productImage, setProductImage] = useState('');
     const [productStock, setProductStock] = useState(10);
     const [productDesc, setProductDesc] = useState('');
+    const [productHowToUse, setProductHowToUse] = useState('');
+    const [productIngredients, setProductIngredients] = useState('');
     const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
     const [listView, setListView] = useState<'campaign' | 'treatments' | 'store'>('campaign');
@@ -125,7 +127,9 @@ export default function AdminDashboard() {
                     price: productPrice,
                     image: productImage || 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
                     description: productDesc,
-                    stock: productStock
+                    stock: productStock,
+                    howToUse: productHowToUse,
+                    ingredients: productIngredients
                 };
                 if (editingProductId) {
                     setProducts(prev => prev.map(p => p.id === editingProductId ? newP : p));
@@ -139,6 +143,8 @@ export default function AdminDashboard() {
                 setProductImage('');
                 setProductStock(10);
                 setProductDesc('');
+                setProductHowToUse('');
+                setProductIngredients('');
             }
             setIsSubmitting(false);
             setSuccess(true);
@@ -188,6 +194,8 @@ export default function AdminDashboard() {
         setProductImage(p.image);
         setProductStock(p.stock || 10);
         setProductDesc(p.description);
+        setProductHowToUse(p.howToUse || '');
+        setProductIngredients(p.ingredients || '');
         setActiveTab('store');
     };
 
@@ -591,6 +599,26 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 required rows={4} placeholder="Write a captivating description about the product..." 
                                                 value={productDesc} onChange={e => setProductDesc(e.target.value)}
+                                                className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
+                                            />
+                                        </div>
+
+                                        {/* How to Use */}
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">How to Use</label>
+                                            <textarea 
+                                                rows={4} placeholder="Instructions on how to use..." 
+                                                value={productHowToUse} onChange={e => setProductHowToUse(e.target.value)}
+                                                className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
+                                            />
+                                        </div>
+
+                                        {/* Ingredients */}
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Ingredients</label>
+                                            <textarea 
+                                                rows={3} placeholder="Comma-separated ingredients..." 
+                                                value={productIngredients} onChange={e => setProductIngredients(e.target.value)}
                                                 className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
                                             />
                                         </div>

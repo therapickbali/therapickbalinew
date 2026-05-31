@@ -30,6 +30,8 @@ export type Product = {
     image: string;
     description: string;
     stock: number;
+    howToUse?: string;
+    ingredients?: string;
 };
 
 export type Campaign = {
@@ -105,7 +107,9 @@ const INITIAL_PRODUCTS: Product[] = [
         price: '350,000',
         image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
         description: 'A deeply nourishing blend of cold-pressed coconut oil, ylang-ylang, and sweet orange. Calms the mind and softens the skin.',
-        stock: 10
+        stock: 10,
+        howToUse: 'Warm a few drops in your palms and massage gently into the skin using sweeping motions. Best applied after a warm bath.',
+        ingredients: 'Cold-pressed Coconut Oil, Ylang-ylang Extract, Sweet Orange Essential Oil, Vitamin E.'
     },
     {
         id: 'p2',
@@ -114,7 +118,9 @@ const INITIAL_PRODUCTS: Product[] = [
         price: '280,000',
         image: 'https://images.pexels.com/photos/1012558/pexels-photo-1012558.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
         description: 'Hand-poured soy wax candle infused with pure lavender and chamomile essential oils. Burns for up to 40 hours.',
-        stock: 5
+        stock: 5,
+        howToUse: 'Trim the wick to 1/4 inch before each use. Burn for no longer than 4 hours at a time.',
+        ingredients: '100% Natural Soy Wax, Pure Lavender Essential Oil, Chamomile Essential Oil, Cotton Wick.'
     },
     {
         id: 'p3',
@@ -123,7 +129,9 @@ const INITIAL_PRODUCTS: Product[] = [
         price: '220,000',
         image: 'https://images.pexels.com/photos/4465831/pexels-photo-4465831.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
         description: 'Locally sourced organic Balinese coffee blended with sea salt and nourishing oils to rejuvenate your skin.',
-        stock: 20
+        stock: 20,
+        howToUse: 'Gently scrub over damp skin in circular motions, focusing on rough areas. Rinse thoroughly with warm water.',
+        ingredients: 'Organic Balinese Coffee Grounds, Sea Salt, Sweet Almond Oil, Jojoba Oil.'
     }
 ];
 

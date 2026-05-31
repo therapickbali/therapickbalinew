@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, Heart, Star, MapPin, ChevronRight, Menu } from 'lucide-react';
+import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, Heart, Star, MapPin, ChevronRight, Menu, Home } from 'lucide-react';
 import { useSpa, Product } from '@/context/SpaContext';
 
 export default function StorePage() {
@@ -73,9 +74,9 @@ export default function StorePage() {
             <div className="max-w-[1400px] mx-auto px-6 md:px-8">
                 {/* Header Nav */}
                 <div className="flex items-center justify-between mb-8">
-                    <button className="w-10 h-10 flex items-center justify-start text-[#2B2B2B]">
-                        <Menu size={24} strokeWidth={1.5} />
-                    </button>
+                    <Link href="/" className="w-10 h-10 flex items-center justify-start text-[#2B2B2B]">
+                        <Home size={24} strokeWidth={1.5} />
+                    </Link>
                     <div className="flex items-center gap-5">
                         <button className="text-[#2B2B2B] hover:opacity-70"><Search size={22} strokeWidth={1.5} /></button>
                         <div className="relative">
@@ -121,11 +122,11 @@ export default function StorePage() {
                                 className="cursor-pointer group flex flex-col" 
                                 onClick={() => product.stock > 0 && setSelectedProduct(product)}
                             >
-                                <div className="aspect-[4/5] bg-[#EDF0F2] rounded-3xl p-4 relative mb-4 flex items-center justify-center overflow-hidden">
+                                <div className="aspect-[4/5] bg-[#EDF0F2] rounded-3xl relative mb-4 flex items-center justify-center overflow-hidden">
                                     <button className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#9CA3AF] shadow-sm z-10 hover:scale-110 transition-transform">
                                         <Heart size={16} fill={i % 3 === 0 ? "#EF4444" : "none"} stroke={i % 3 === 0 ? "#EF4444" : "currentColor"} />
                                     </button>
-                                    <img src={product.image} alt={product.title} className="w-[85%] h-[85%] object-contain mix-blend-multiply drop-shadow-xl group-hover:scale-105 transition-transform duration-700" />
+                                    <img src={product.image} alt={product.title} className="w-full h-full object-cover mix-blend-multiply drop-shadow-xl group-hover:scale-105 transition-transform duration-700" />
                                 </div>
                                 <h4 className="font-bold text-[#2B2B2B] text-sm md:text-base mb-1 line-clamp-1">{product.title}</h4>
                                 <p className="text-xs text-[#9CA3AF] mb-2 line-clamp-1">{product.category}</p>
@@ -139,11 +140,11 @@ export default function StorePage() {
             {/* Product Details / Checkout Modal */}
             <AnimatePresence>
                 {selectedProduct && (
-                    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-6 bg-black/40 backdrop-blur-sm">
+                    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 bg-white md:bg-black/40 md:backdrop-blur-sm">
                         <motion.div 
                             initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="w-full md:max-w-md h-[95vh] md:h-[90vh] bg-white rounded-t-[40px] md:rounded-[40px] overflow-hidden flex flex-col relative shadow-2xl mx-auto"
+                            className="w-full h-[100dvh] md:max-w-md md:h-[90vh] bg-white rounded-none md:rounded-[40px] overflow-hidden flex flex-col relative shadow-2xl mx-auto"
                         >
                             {/* DETAILS VIEW */}
                             {!isCheckout && !isSuccess && (
@@ -159,13 +160,8 @@ export default function StorePage() {
                                     </div>
                                     
                                     {/* Image Section */}
-                                    <div className="h-[45%] bg-[#EDF0F2] relative flex items-center justify-center p-8 shrink-0">
-                                        <img src={selectedProduct.image} className="h-full object-contain mix-blend-multiply drop-shadow-2xl" />
-                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3">
-                                            {/* Mock Badges */}
-                                            <div className="w-10 h-10 bg-white rounded-full shadow-sm flex flex-col items-center justify-center text-[5px] font-bold text-center leading-[1.1] text-[#2B2B2B]">NATURAL<br/>INGREDIENTS</div>
-                                            <div className="w-10 h-10 bg-white rounded-full shadow-sm flex flex-col items-center justify-center text-[5px] font-bold text-center leading-[1.1] text-[#2B2B2B]">ORGANIC<br/>PRODUCT</div>
-                                        </div>
+                                    <div className="h-[45%] bg-[#EDF0F2] relative flex items-center justify-center shrink-0 overflow-hidden">
+                                        <img src={selectedProduct.image} className="w-full h-full object-cover mix-blend-multiply drop-shadow-2xl" />
                                         <div className="absolute bottom-4 flex gap-1.5">
                                             <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                                             <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>
@@ -177,13 +173,9 @@ export default function StorePage() {
                                     <div className="flex-1 overflow-y-auto px-6 py-6 pb-28">
                                         <div className="flex justify-between items-start mb-1">
                                             <h2 className="font-bold text-2xl text-[#2B2B2B] flex-1 pr-4">{selectedProduct.title}</h2>
-                                            <div className="flex items-center gap-1 text-[#F59E0B] shrink-0 mt-1">
-                                                <Star size={16} fill="currentColor" /><span className="text-[#2B2B2B] font-bold text-sm">4.5</span>
-                                            </div>
                                         </div>
                                         <p className="text-sm text-[#9CA3AF] mb-6">{selectedProduct.category} • 100ml</p>
 
-                                        {/* Tabs */}
                                         <div className="flex gap-6 border-b border-[#F3F4F6] mb-6">
                                             {['Description', 'How To Use', 'Ingredients'].map(tab => (
                                                 <button 
@@ -196,7 +188,11 @@ export default function StorePage() {
                                             ))}
                                         </div>
 
-                                        <p className="text-[#6B7280] text-sm leading-relaxed">{selectedProduct.description}</p>
+                                        <p className="text-[#6B7280] text-sm leading-relaxed whitespace-pre-wrap">
+                                            {activeTab === 'Description' && selectedProduct.description}
+                                            {activeTab === 'How To Use' && (selectedProduct.howToUse || 'No instructions provided.')}
+                                            {activeTab === 'Ingredients' && (selectedProduct.ingredients || 'No ingredients provided.')}
+                                        </p>
                                     </div>
 
                                     {/* Sticky Bottom */}

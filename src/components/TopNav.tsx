@@ -12,8 +12,8 @@ export default function TopNav() {
     const [isScrolled, setIsScrolled] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Hide TopNav on admin routes
-    if (pathname?.startsWith('/admin')) {
+    // Hide TopNav on admin and store routes
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/store')) {
         return null;
     }
     const navItems = [
