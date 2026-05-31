@@ -2,16 +2,16 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3 } from 'lucide-react';
 import Link from 'next/link';
-import { useSpa, SelectedCampaignTreatment } from '@/context/SpaContext';
+import { useSpa, SelectedCampaignTreatment, Treatment } from '@/context/SpaContext';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings'>('treatment');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
 
-    const { treatments, campaign, setCampaign } = useSpa();
+    const { treatments, setTreatments, campaign, setCampaign } = useSpa();
 
     // Campaign specific fields
     const [campaignTitle, setCampaignTitle] = useState(campaign?.title || '');
@@ -42,6 +42,11 @@ export default function AdminDashboard() {
     };
 
     // Dynamic fields for Treatment
+    const [treatmentTitle, setTreatmentTitle] = useState('');
+    const [treatmentCategory, setTreatmentCategory] = useState('massage');
+    const [treatmentDesc, setTreatmentDesc] = useState('');
+    const [editingTreatmentId, setEditingTreatmentId] = useState<string | null>(null);
+
     const [pricingOptions, setPricingOptions] = useState([{ duration: '', price: '' }]);
     const [benefits, setBenefits] = useState(['']);
 
@@ -83,11 +88,63 @@ export default function AdminDashboard() {
                     discountPercentage,
                     selectedTreatments: campaignTreatments
                 });
+            } else if (activeTab === 'treatment') {
+                const newT: Treatment = {
+                    id: editingTreatmentId || `t${Date.now()}`,
+                    title: treatmentTitle,
+                    category: treatmentCategory,
+                    desc: treatmentDesc,
+                    bgPattern: 'from-secondary/10 via-white to-white',
+                    options: pricingOptions.map(o => ({ duration: o.duration, price: o.price }))
+                };
+                if (editingTreatmentId) {
+                    setTreatments(prev => prev.map(t => t.id === editingTreatmentId ? newT : t));
+                } else {
+                    setTreatments(prev => [...prev, newT]);
+                }
+                setEditingTreatmentId(null);
+                setTreatmentTitle('');
+                setTreatmentDesc('');
+                setPricingOptions([{ duration: '', price: '' }]);
             }
             setIsSubmitting(false);
             setSuccess(true);
             setTimeout(() => setSuccess(false), 3000);
         }, 800);
+    };
+
+    const handleEditTreatment = (t: Treatment) => {
+        setEditingTreatmentId(t.id);
+        setTreatmentTitle(t.title);
+        setTreatmentCategory(t.category);
+        setTreatmentDesc(t.desc);
+        setPricingOptions(t.options.map(o => ({ duration: o.duration, price: o.price })));
+        setActiveTab('treatment');
+    };
+
+    const handleRemoveTreatment = (id: string) => {
+        setTreatments(prev => prev.filter(t => t.id !== id));
+        if (campaign) {
+            setCampaign({
+                ...campaign,
+                selectedTreatments: campaign.selectedTreatments.filter(t => t.treatmentId !== id)
+            });
+        }
+    };
+
+    const handleEditCampaign = () => {
+        if (!campaign) return;
+        setCampaignTitle(campaign.title);
+        setCampaignLabel(campaign.label);
+        setCampaignDesc(campaign.description);
+        setCampaignDuration(campaign.duration);
+        setDiscountPercentage(campaign.discountPercentage);
+        setCampaignTreatments(campaign.selectedTreatments);
+        setActiveTab('campaign');
+    };
+
+    const handleRemoveCampaign = () => {
+        setCampaign(null);
     };
 
     return (
@@ -154,10 +211,14 @@ export default function AdminDashboard() {
 
                     <header className="mb-10">
                         <h1 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">
-                            {activeTab === 'treatment' ? 'Create New Treatment' : 'Create Campaign Card'}
+                            {activeTab === 'treatment' ? (editingTreatmentId ? 'Edit Treatment' : 'Create New Treatment') : 
+                             activeTab === 'campaign' ? 'Create Campaign Card' : 
+                             activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
                         </h1>
                         <p className="text-text-muted text-sm">
-                            {activeTab === 'treatment' ? 'Add a new massage or ritual to your spa menu.' : 'Design a stunning new promotional banner for the homepage.'}
+                            {activeTab === 'treatment' ? 'Add or edit a massage or ritual to your spa menu.' : 
+                             activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
+                             activeTab === 'list' ? 'Manage your published treatments and active campaigns.' : ''}
                         </p>
                     </header>
 
@@ -180,16 +241,20 @@ export default function AdminDashboard() {
                                                 <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Treatment Title</label>
                                                 <input 
                                                     type="text" required placeholder="e.g. Deep Tissue Flow" 
+                                                    value={treatmentTitle} onChange={e => setTreatmentTitle(e.target.value)}
                                                     className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Category</label>
-                                                <select className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm appearance-none">
-                                                    <option value="massage">Massage</option>
-                                                    <option value="facial">Facial</option>
-                                                    <option value="package">Package</option>
-                                                    <option value="ritual">Ritual</option>
+                                                <select 
+                                                    value={treatmentCategory} onChange={e => setTreatmentCategory(e.target.value)}
+                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm appearance-none"
+                                                >
+                                                    <option value="Massage">Massage</option>
+                                                    <option value="Facial">Facial</option>
+                                                    <option value="Package">Package</option>
+                                                    <option value="Ritual">Ritual</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -232,6 +297,7 @@ export default function AdminDashboard() {
                                             <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Description</label>
                                             <textarea 
                                                 required rows={3} placeholder="Write a captivating description about the treatment..." 
+                                                value={treatmentDesc} onChange={e => setTreatmentDesc(e.target.value)}
                                                 className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
                                             />
                                         </div>
@@ -386,24 +452,119 @@ export default function AdminDashboard() {
                                 )}
 
                                 {activeTab === 'list' && (
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between mb-6">
-                                            <h2 className="text-lg font-bold text-primary">Published Treatments</h2>
-                                            <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">{treatments.length} Active</span>
-                                        </div>
-                                        {treatments.map((t) => (
-                                            <div key={t.id} className="flex items-center justify-between p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm">
-                                                <div>
-                                                    <h3 className="font-bold text-primary text-sm mb-1">{t.title}</h3>
-                                                    <p className="text-xs text-text-muted">{t.category}</p>
-                                                </div>
-                                                <div className="flex flex-col items-end gap-1">
-                                                    {t.options.map(opt => (
-                                                        <span key={opt.duration} className="text-[11px] font-semibold text-primary bg-primary/5 px-2 py-0.5 rounded-md">{opt.duration}: Rp {opt.price}</span>
-                                                    ))}
-                                                </div>
+                                    <div className="space-y-10">
+                                        {/* Campaigns Section */}
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <h2 className="text-lg font-bold text-primary flex items-center gap-2">
+                                                    <Megaphone size={20} className="text-accent" /> Active Campaign
+                                                </h2>
+                                                {campaign && (
+                                                    <span className="text-xs font-semibold text-accent bg-accent/10 px-3 py-1 rounded-full">Live on Homepage</span>
+                                                )}
                                             </div>
-                                        ))}
+                                            {campaign ? (
+                                                <div className="p-5 bg-gradient-to-br from-primary/5 to-white/60 border border-primary/20 rounded-2xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                    <div>
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <h3 className="font-bold text-primary text-base">{campaign.title}</h3>
+                                                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded">{campaign.label}</span>
+                                                        </div>
+                                                        <p className="text-xs text-text-muted mb-3 max-w-sm">{campaign.description}</p>
+                                                        <div className="flex items-center gap-3">
+                                                            <span className="text-[11px] font-bold text-accent">-{campaign.discountPercentage}% Discount</span>
+                                                            <span className="text-[11px] text-text-muted">{campaign.selectedTreatments.length} Treatments included</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-2 self-start md:self-center">
+                                                        <button 
+                                                            onClick={handleEditCampaign}
+                                                            type="button"
+                                                            className="w-10 h-10 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                        >
+                                                            <Edit3 size={16} />
+                                                        </button>
+                                                        <button 
+                                                            onClick={handleRemoveCampaign}
+                                                            type="button"
+                                                            className="w-10 h-10 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="p-8 text-center border-2 border-dashed border-border/50 rounded-2xl">
+                                                    <p className="text-sm text-text-muted mb-4">No active campaign running.</p>
+                                                    <button 
+                                                        onClick={() => setActiveTab('campaign')}
+                                                        type="button"
+                                                        className="text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
+                                                    >
+                                                        Create Campaign
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Treatments Section */}
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <h2 className="text-lg font-bold text-primary flex items-center gap-2">
+                                                    <Store size={20} className="text-secondary" /> Published Treatments
+                                                </h2>
+                                                <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">{treatments.length} Active</span>
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-1 gap-4">
+                                                {treatments.map((t) => (
+                                                    <div key={t.id} className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm gap-4">
+                                                        <div className="flex-1">
+                                                            <h3 className="font-bold text-primary text-sm mb-1">{t.title}</h3>
+                                                            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-widest mb-2">{t.category}</p>
+                                                            <p className="text-xs text-text-muted/80 line-clamp-1">{t.desc}</p>
+                                                        </div>
+                                                        <div className="flex items-center justify-between md:justify-end gap-6 md:w-[250px]">
+                                                            <div className="flex flex-col items-start md:items-end gap-1">
+                                                                {t.options.map(opt => (
+                                                                    <span key={opt.duration} className="text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded-md">
+                                                                        {opt.duration} • Rp {opt.price}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <button 
+                                                                    type="button"
+                                                                    onClick={() => handleEditTreatment(t)}
+                                                                    className="w-10 h-10 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                >
+                                                                    <Edit3 size={16} />
+                                                                </button>
+                                                                <button 
+                                                                    type="button"
+                                                                    onClick={() => handleRemoveTreatment(t.id)}
+                                                                    className="w-10 h-10 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                >
+                                                                    <Trash2 size={16} />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                                {treatments.length === 0 && (
+                                                    <div className="p-8 text-center border-2 border-dashed border-border/50 rounded-2xl">
+                                                        <p className="text-sm text-text-muted mb-4">No treatments added yet.</p>
+                                                        <button 
+                                                            onClick={() => setActiveTab('treatment')}
+                                                            type="button"
+                                                            className="text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
+                                                        >
+                                                            Create Treatment
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
 
@@ -422,7 +583,7 @@ export default function AdminDashboard() {
                                             animate={{ opacity: 1, x: 0 }}
                                             className="flex items-center gap-1.5 text-xs font-bold text-green-600 uppercase tracking-wider"
                                         >
-                                            <CheckCircle size={16} /> {activeTab === 'treatment' ? 'Treatment Created' : 'Campaign Published'}
+                                            <CheckCircle size={16} /> Saved Successfully
                                         </motion.span>
                                     )}
                                     <button 
@@ -437,7 +598,7 @@ export default function AdminDashboard() {
                                             </span>
                                         ) : (
                                             <span className="flex items-center gap-2">
-                                                <Sparkles size={16} /> {activeTab === 'treatment' ? 'Publish Treatment' : 'Launch Campaign'}
+                                                <Sparkles size={16} /> {activeTab === 'treatment' ? (editingTreatmentId ? 'Update Treatment' : 'Publish Treatment') : 'Launch Campaign'}
                                             </span>
                                         )}
                                     </button>

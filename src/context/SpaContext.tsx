@@ -33,6 +33,7 @@ export type Campaign = {
 
 type SpaContextType = {
     treatments: Treatment[];
+    setTreatments: React.Dispatch<React.SetStateAction<Treatment[]>>;
     campaign: Campaign | null;
     setCampaign: (c: Campaign | null) => void;
 };
@@ -87,11 +88,11 @@ const INITIAL_CAMPAIGN: Campaign = {
 const SpaContext = createContext<SpaContextType | undefined>(undefined);
 
 export function SpaProvider({ children }: { children: ReactNode }) {
-    const [treatments] = useState<Treatment[]>(INITIAL_TREATMENTS);
+    const [treatments, setTreatments] = useState<Treatment[]>(INITIAL_TREATMENTS);
     const [campaign, setCampaign] = useState<Campaign | null>(INITIAL_CAMPAIGN);
 
     return (
-        <SpaContext.Provider value={{ treatments, campaign, setCampaign }}>
+        <SpaContext.Provider value={{ treatments, setTreatments, campaign, setCampaign }}>
             {children}
         </SpaContext.Provider>
     );
