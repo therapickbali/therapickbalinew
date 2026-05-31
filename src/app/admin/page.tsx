@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3 } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa, SelectedCampaignTreatment, Treatment, Product } from '@/context/SpaContext';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store'>('treatment');
@@ -87,41 +88,48 @@ export default function AdminDashboard() {
         setBenefits(newBenefits);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Mock a network request
-        setTimeout(() => {
+        
+        try {
             if (activeTab === 'campaign') {
-                setCampaign({
+                const campaignData = {
                     title: campaignTitle,
                     label: campaignLabel,
                     description: campaignDesc,
                     duration: campaignDuration,
                     discountPercentage,
-                    selectedTreatments: campaignTreatments
-                });
+                    selectedTreatments: campaignTreatments,
+                    is_published: true
+                };
+                await supabase.from('campaigns').insert([campaignData]);
+                setCampaign(campaignData as any);
             } else if (activeTab === 'treatment') {
-                const newT: Treatment = {
-                    id: editingTreatmentId || `t${Date.now()}`,
+                const treatmentData = {
                     title: treatmentTitle,
                     category: treatmentCategory,
                     desc: treatmentDesc,
                     bgPattern: 'from-secondary/10 via-white to-white',
-                    options: pricingOptions.map(o => ({ duration: o.duration, price: o.price }))
+                    options: pricingOptions.map(o => ({ duration: o.duration, price: o.price })),
+                    is_published: true
                 };
+                
                 if (editingTreatmentId) {
-                    setTreatments(prev => prev.map(t => t.id === editingTreatmentId ? newT : t));
+                    await supabase.from('treatments').update(treatmentData).eq('id', editingTreatmentId);
+                    setTreatments(prev => prev.map(t => t.id === editingTreatmentId ? { ...t, ...treatmentData } : t));
                 } else {
-                    setTreatments(prev => [...prev, newT]);
+                    const { data } = await supabase.from('treatments').insert([treatmentData]).select();
+                    if (data && data.length > 0) {
+                        setTreatments(prev => [...prev, data[0] as Treatment]);
+                    }
                 }
                 setEditingTreatmentId(null);
                 setTreatmentTitle('');
                 setTreatmentDesc('');
                 setPricingOptions([{ duration: '', price: '' }]);
             } else if (activeTab === 'store') {
-                const newP: Product = {
-                    id: editingProductId || `p${Date.now()}`,
+                const productData = {
                     title: productTitle,
                     category: productCategory || 'Accessories',
                     price: productPrice,
@@ -129,12 +137,18 @@ export default function AdminDashboard() {
                     description: productDesc,
                     stock: productStock,
                     howToUse: productHowToUse,
-                    ingredients: productIngredients
+                    ingredients: productIngredients,
+                    is_published: true
                 };
+                
                 if (editingProductId) {
-                    setProducts(prev => prev.map(p => p.id === editingProductId ? newP : p));
+                    await supabase.from('products').update(productData).eq('id', editingProductId);
+                    setProducts(prev => prev.map(p => p.id === editingProductId ? { ...p, ...productData } : p));
                 } else {
-                    setProducts(prev => [...prev, newP]);
+                    const { data } = await supabase.from('products').insert([productData]).select();
+                    if (data && data.length > 0) {
+                        setProducts(prev => [...prev, data[0] as Product]);
+                    }
                 }
                 setEditingProductId(null);
                 setProductTitle('');
@@ -149,7 +163,10 @@ export default function AdminDashboard() {
             setIsSubmitting(false);
             setSuccess(true);
             setTimeout(() => setSuccess(false), 3000);
-        }, 800);
+        } catch (error) {
+            console.error("Error saving data:", error);
+            setIsSubmitting(false);
+        }
     };
 
     const handleEditTreatment = (t: Treatment) => {
