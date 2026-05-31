@@ -22,9 +22,14 @@ export default function Home() {
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
 
     return (
-        <div className="min-h-screen relative overflow-hidden bg-transparent font-sans text-text pb-24 md:pb-12">
+        <div className="min-h-screen bg-[#FDFBF7] relative overflow-hidden font-sans text-text pb-24 md:pb-12">
             
+            {/* Top Gradient Background */}
+            <div className="absolute top-0 left-0 right-0 h-[400px] md:h-[500px] bg-gradient-to-b from-[#D2F34C] to-[#FDFBF7] z-0 pointer-events-none"></div>
 
+            {/* Luxurious Ambient Background */}
+            <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] md:w-[800px] h-[600px] bg-secondary/30 blur-[120px] rounded-full z-0 pointer-events-none opacity-60 mix-blend-multiply" />
+            <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-accent/20 blur-[100px] rounded-full z-0 pointer-events-none opacity-50" />
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
