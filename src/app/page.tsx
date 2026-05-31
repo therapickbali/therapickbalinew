@@ -77,22 +77,23 @@ export default function Home() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                         
                         {/* Content Overlay */}
-                        <div className="absolute inset-0 p-6 md:p-12 flex flex-col justify-end z-10">
+                        <div className="absolute inset-0 p-6 md:p-12 flex flex-col justify-between z-10">
                             
+                            {/* Top Label */}
+                            <div className="flex justify-start">
+                                <motion.span 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2, duration: 0.6 }}
+                                    className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[8px] md:text-[9px] font-bold tracking-[0.2em] uppercase border border-white/30 text-white shadow-sm"
+                                >
+                                    {campaign.label}
+                                </motion.span>
+                            </div>
+
                             <div className="flex items-end justify-between">
-                                <div className="flex flex-col text-white overflow-hidden pr-4">
-                                    <div className="mb-3 md:mb-4">
-                                        <motion.span 
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: 0.2, duration: 0.6 }}
-                                            className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-white/30 text-white shadow-sm"
-                                        >
-                                            {campaign.label}
-                                        </motion.span>
-                                    </div>
-                                    
-                                    <h2 className="font-serif text-3xl md:text-6xl font-medium leading-tight tracking-tight mb-2 opacity-95 drop-shadow-lg mt-auto truncate">
+                                <div className="flex flex-col text-white pr-4">
+                                    <h2 className="font-serif text-4xl md:text-6xl font-medium leading-tight tracking-tight mb-2 opacity-95 drop-shadow-lg max-w-[220px] md:max-w-[500px]">
                                         {campaign.title}
                                     </h2>
                                     <p className="text-white/80 text-[13px] md:text-base hidden md:block max-w-md leading-relaxed font-light drop-shadow-md">
