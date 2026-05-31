@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle } from 'lucide-react';
+import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa } from '@/context/SpaContext';
 
@@ -23,29 +23,29 @@ export default function Home() {
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
     
     // Booking Form State for Campaign
-    const [campaignBookingData, setCampaignBookingData] = useState<{
-        campaignTitle: string;
-        treatmentTitle: string;
-        duration: string;
-        originalPrice: string;
-        discountedPriceNum: number;
-        discountPercentage: number;
-    } | null>(null);
-    const [guestCount, setGuestCount] = useState(1);
+    const [cartItems, setCartItems] = useState<any[]>([]);
+    const [isSelectingMore, setIsSelectingMore] = useState(false);
+    const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
     const [formData, setFormData] = useState({ name: '', location: '', room: '' });
 
     const handleCampaignBooking = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!campaignBookingData) return;
         
         const waNumber = '6285174119423';
-        const totalPrice = campaignBookingData.discountedPriceNum * guestCount;
+        const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0);
         
-        const message = `*New Campaign Booking Request*%0A%0A*Campaign:* ${campaignBookingData.campaignTitle}%0A*Treatment:* ${campaignBookingData.treatmentTitle}%0A*Duration:* ${campaignBookingData.duration} Mins%0A*Original Price:* Rp ${campaignBookingData.originalPrice}%0A*Discount:* ${campaignBookingData.discountPercentage}%25 OFF%0A*Guests:* ${guestCount}%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to book this special offer.`;
+        const treatmentsList = cartItems.map(item => {
+            if (item.isCampaign) {
+                return `- ${item.campaignTitle} (${item.title}) - ${item.duration} Mins x${item.guests} Guest(s) [${item.discountPercentage}% OFF]`;
+            }
+            return `- ${item.title} (${item.duration} Mins) x${item.guests} Guest(s)`;
+        }).join('%0A');
+        
+        const message = `*New Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
         
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
-        setCampaignBookingData(null);
-        setIsCampaignModalOpen(false);
+        setCartItems([]);
+        setIsBookingModalOpen(false);
     };
 
     return (
@@ -330,22 +330,25 @@ export default function Home() {
                                         
                                         return (
                                             <div key={`${treatment.id}-${duration}`} className="block group outline-none cursor-pointer" onClick={() => {
-                                                setCampaignBookingData({
+                                                setCartItems([{
+                                                    id: Date.now().toString(),
+                                                    treatmentId: treatment.id,
                                                     campaignTitle: campaign.title,
-                                                    treatmentTitle: treatment.title,
+                                                    title: treatment.title,
                                                     duration: duration,
-                                                    originalPrice: option.price,
-                                                    discountedPriceNum: discountedPriceNum,
+                                                    price: discountedPriceNum,
+                                                    guests: 1,
+                                                    isCampaign: true,
                                                     discountPercentage: campaign.discountPercentage
-                                                });
-                                                setIsCampaignModalOpen(false);
+                                                }]);
+                                                setIsBookingModalOpen(true);
                                             }}>
                                                 <div className="rounded-[32px] p-6 bg-white border border-border/40 shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
                                                     <div className="mb-4 flex items-start justify-between">
                                                         <div className="bg-primary/5 border border-primary/10 text-primary px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm">
                                                             {treatment.category}
                                                         </div>
-                                                        <div className="bg-accent/20 text-accent px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest">
+                                                        <div className="bg-primary text-white px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest shadow-sm">
                                                             -{campaign.discountPercentage}%
                                                         </div>
                                                     </div>
@@ -375,9 +378,9 @@ export default function Home() {
                 </div>
             )}
 
-            {/* Campaign Booking Modal */}
+            {/* Complete Booking Modal */}
             <AnimatePresence>
-                {campaignBookingData && (
+                {isBookingModalOpen && (
                     <motion.div 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -391,93 +394,156 @@ export default function Home() {
                             className="bg-white rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
                         >
                             <button 
-                                onClick={() => setCampaignBookingData(null)}
+                                onClick={() => setIsBookingModalOpen(false)}
                                 className="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface flex items-center justify-center text-text-muted hover:bg-border transition-colors z-10"
                             >
                                 <X className="w-4 h-4" />
                             </button>
                             
-                            <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
-                            <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
-
-                            {/* Treatment Summary Card */}
-                            <div className="bg-surface border border-border/50 rounded-2xl p-4 mb-6 shadow-sm">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div>
-                                        <div className="bg-accent/20 text-accent px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest inline-block mb-1.5">
-                                            {campaignBookingData.campaignTitle} (-{campaignBookingData.discountPercentage}%)
-                                        </div>
-                                        <h3 className="font-bold text-sm text-primary">{campaignBookingData.treatmentTitle}</h3>
-                                        <p className="text-xs text-text-muted flex items-center gap-1 mt-0.5">
-                                            <Clock className="w-3 h-3" /> {campaignBookingData.duration} Mins
-                                        </p>
-                                    </div>
-                                    <span className="font-serif text-primary font-medium text-right flex flex-col">
-                                        IDR {campaignBookingData.discountedPriceNum.toLocaleString('en-US')}
-                                        <span className="text-[9px] font-sans text-text-muted font-normal uppercase tracking-wider">Per Person</span>
-                                    </span>
-                                </div>
-                                <div className="flex items-center justify-between pt-3 border-t border-border/50">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Guests</span>
-                                    <div className="flex items-center gap-3">
-                                        <button 
-                                            type="button"
-                                            onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
-                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
-                                        >
-                                            <Minus className="w-3 h-3" />
+                            {isSelectingMore ? (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 pb-4">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <button onClick={() => setIsSelectingMore(false)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
                                         </button>
-                                        <span className="font-bold text-sm text-primary w-4 text-center">{guestCount}</span>
-                                        <button 
-                                            type="button"
-                                            onClick={() => setGuestCount(guestCount + 1)}
-                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
-                                        >
-                                            <Plus className="w-3 h-3" />
-                                        </button>
+                                        <h2 className="font-serif text-2xl text-primary">Select Treatment</h2>
+                                    </div>
+                                    
+                                    <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 pb-4 no-scrollbar">
+                                        {treatments.map(t => (
+                                            <div key={t.id} onClick={() => {
+                                                setCartItems([...cartItems, {
+                                                    id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                                                    treatmentId: t.id,
+                                                    title: t.title,
+                                                    duration: t.options[0]?.duration || '60',
+                                                    price: parseInt(t.options[0]?.price.replace(/,/g, '') || '0'),
+                                                    guests: 1,
+                                                    isCampaign: false
+                                                }]);
+                                                setIsSelectingMore(false);
+                                            }} className="bg-surface border border-border/50 rounded-2xl p-3 flex gap-4 shadow-sm hover:border-primary/20 hover:shadow-md transition-all cursor-pointer group">
+                                                <div className="flex-1 py-1 pl-2">
+                                                    <div className="text-[9px] font-bold tracking-widest text-primary/50 uppercase mb-1">{t.category}</div>
+                                                    <h4 className="font-bold text-sm text-primary mb-1 line-clamp-1">{t.title}</h4>
+                                                    <div className="text-[10px] text-text-muted"><Clock className="w-3 h-3 inline mr-1" />{t.options[0]?.duration} Mins</div>
+                                                </div>
+                                                <div className="flex items-center pr-2">
+                                                    <div className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                                        <Plus className="w-4 h-4" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="animate-in fade-in slide-in-from-left-4 duration-300">
+                                    <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
+                                    <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
 
-                            <form onSubmit={handleCampaignBooking} className="space-y-5 pb-8 md:pb-0">
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
-                                    <input 
-                                        type="text" required placeholder="John Doe"
-                                        value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
-                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Name</label>
-                                    <input 
-                                        type="text" required placeholder="e.g. Four Seasons Sayan"
-                                        value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
-                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Room Number (Optional)</label>
-                                    <input 
-                                        type="text" placeholder="e.g. Villa 12"
-                                        value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})}
-                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                    />
-                                </div>
-
-                                <div className="mt-8 pt-6 border-t border-border/50">
-                                    <div className="flex items-end justify-between mb-6">
-                                        <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
-                                        <span className="text-2xl font-serif text-primary">IDR {(campaignBookingData.discountedPriceNum * guestCount).toLocaleString('en-US')}</span>
+                                    {/* Cart Items List */}
+                                    <div className="space-y-3 mb-4 max-h-[40vh] overflow-y-auto pr-1 no-scrollbar">
+                                        {cartItems.map(item => (
+                                            <div key={item.id} className="bg-surface border border-border/50 rounded-2xl p-4 shadow-sm relative">
+                                                {cartItems.length > 1 && (
+                                                    <button 
+                                                        onClick={() => setCartItems(cartItems.filter(i => i.id !== item.id))}
+                                                        className="absolute top-3 right-3 text-text-muted hover:text-red-500 transition-colors p-1"
+                                                    >
+                                                        <X className="w-3.5 h-3.5" />
+                                                    </button>
+                                                )}
+                                                <div className="flex items-start justify-between mb-4 pr-6">
+                                                    <div>
+                                                        {item.isCampaign && (
+                                                            <div className="bg-primary text-white px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest inline-block mb-1.5 shadow-sm">
+                                                                {item.campaignTitle} (-{item.discountPercentage}%)
+                                                            </div>
+                                                        )}
+                                                        <h3 className="font-bold text-sm text-primary leading-tight">{item.title}</h3>
+                                                        <p className="text-xs text-text-muted flex items-center gap-1 mt-1">
+                                                            <Clock className="w-3 h-3" /> {item.duration} Mins
+                                                        </p>
+                                                    </div>
+                                                    <span className="font-serif text-primary font-medium text-right flex flex-col shrink-0">
+                                                        IDR {item.price.toLocaleString('en-US')}
+                                                        <span className="text-[9px] font-sans text-text-muted font-normal uppercase tracking-wider">Per Person</span>
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center justify-between pt-3 border-t border-border/50">
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Guests</span>
+                                                    <div className="flex items-center gap-3">
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setCartItems(cartItems.map(i => i.id === item.id ? { ...i, guests: Math.max(1, i.guests - 1) } : i))}
+                                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
+                                                        >
+                                                            <Minus className="w-3 h-3" />
+                                                        </button>
+                                                        <span className="font-bold text-sm text-primary w-4 text-center">{item.guests}</span>
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setCartItems(cartItems.map(i => i.id === item.id ? { ...i, guests: i.guests + 1 } : i))}
+                                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
+                                                        >
+                                                            <Plus className="w-3 h-3" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
+                                    
                                     <button 
-                                        type="submit"
-                                        className="w-full bg-[#25D366] text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(37,211,102,0.25)]"
+                                        type="button"
+                                        onClick={() => setIsSelectingMore(true)}
+                                        className="w-full bg-transparent text-primary border border-border/50 px-6 py-3 rounded-xl text-xs font-bold hover:bg-surface transition-colors mb-6 tracking-widest"
                                     >
-                                        Confirm on WhatsApp <MessageCircle className="w-4 h-4" />
+                                        + ADD ANOTHER TREATMENT
                                     </button>
+
+                                    <form onSubmit={handleCampaignBooking} className="space-y-5 pb-8 md:pb-0">
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
+                                            <input 
+                                                type="text" required placeholder="John Doe"
+                                                value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Name</label>
+                                            <input 
+                                                type="text" required placeholder="e.g. Four Seasons Sayan"
+                                                value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Room Number (Optional)</label>
+                                            <input 
+                                                type="text" placeholder="e.g. Villa 12"
+                                                value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+
+                                        <div className="mt-8 pt-6 border-t border-border/50">
+                                            <div className="flex items-end justify-between mb-6">
+                                                <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
+                                                <span className="text-2xl font-serif text-primary">IDR {cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0).toLocaleString('en-US')}</span>
+                                            </div>
+                                            <button 
+                                                type="submit"
+                                                className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest"
+                                            >
+                                                CONFIRM ON WHATSAPP
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                            )}
                         </motion.div>
                     </motion.div>
                 )}

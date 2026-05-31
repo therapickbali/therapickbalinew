@@ -262,8 +262,7 @@ export default function RitualsDetails() {
                                                 }]);
                                                 setIsSelectingMore(false);
                                             }} className="bg-surface border border-border/50 rounded-2xl p-3 flex gap-4 shadow-sm hover:border-primary/20 hover:shadow-md transition-all cursor-pointer group">
-                                                {t.image && <img src={t.image} alt={t.title} className="w-20 h-20 rounded-xl object-cover" />}
-                                                <div className="flex-1 py-1">
+                                                <div className="flex-1 py-1 pl-2">
                                                     <div className="text-[9px] font-bold tracking-widest text-primary/50 uppercase mb-1">{t.category}</div>
                                                     <h4 className="font-bold text-sm text-primary mb-1 line-clamp-1">{t.title}</h4>
                                                     <div className="text-[10px] text-text-muted"><Clock className="w-3 h-3 inline mr-1" />{t.options[0]?.duration} Mins</div>
@@ -333,9 +332,9 @@ export default function RitualsDetails() {
                                     <button 
                                         type="button"
                                         onClick={() => setIsSelectingMore(true)}
-                                        className="w-full bg-transparent text-primary border border-border/50 px-6 py-3 rounded-xl text-xs font-bold hover:bg-surface transition-colors mb-6"
+                                        className="w-full bg-transparent text-primary border border-border/50 px-6 py-3 rounded-xl text-xs font-bold hover:bg-surface transition-colors mb-6 tracking-widest"
                                     >
-                                        + Add another treatment
+                                        + ADD ANOTHER TREATMENT
                                     </button>
 
                             <form onSubmit={handleBooking} className="space-y-5 pb-8 md:pb-0">
@@ -371,9 +370,9 @@ export default function RitualsDetails() {
                                     </div>
                                     <button 
                                         type="submit"
-                                        className="w-full bg-[#25D366] text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(37,211,102,0.25)]"
+                                        className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest"
                                     >
-                                        Confirm on WhatsApp <MessageCircle className="w-4 h-4" />
+                                        CONFIRM ON WHATSAPP
                                     </button>
                                 </div>
                             </form>
