@@ -135,51 +135,46 @@ export default function StorePage() {
                                 exit={{ opacity: 0, scale: 0.95 }}
                                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                                 key={product.id} 
-                                onClick={() => product.stock > 0 && setSelectedProduct(product)}
-                                className={`group relative transition-all duration-500 flex flex-col ${product.stock > 0 ? 'cursor-pointer' : 'cursor-not-allowed opacity-80'}`}
-                            >
-                                    {/* Product Image Full Bleed Style */}
-                                    <div className="aspect-[3/4] relative overflow-hidden rounded-2xl md:rounded-[32px] bg-surface mb-4">
+                                >
+                                <div 
+                                    onClick={() => product.stock > 0 && setSelectedProduct(product)}
+                                    className={`group relative transition-all duration-500 flex flex-col bg-white border border-border/30 rounded-2xl md:rounded-[24px] shadow-sm hover:shadow-xl overflow-hidden ${product.stock > 0 ? 'cursor-pointer' : 'cursor-not-allowed opacity-80'}`}
+                                >
+                                    {/* Product Image Marketplace Style */}
+                                    <div className="aspect-square relative overflow-hidden bg-surface">
                                         <img 
                                             src={product.image} 
                                             alt={product.title} 
                                             className={`w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${product.stock > 0 ? 'group-hover:scale-105' : 'grayscale'}`}
                                         />
-                                        
-                                        {/* Glassmorphism Icon Button */}
-                                        {product.stock > 0 && (
-                                            <div className="absolute bottom-3 right-3 md:bottom-4 md:right-4 bg-white/80 backdrop-blur-md text-primary w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                                                <ShoppingBag size={18} strokeWidth={2} className="group-hover:opacity-0 transition-opacity duration-300 absolute" />
-                                                <ArrowRight size={18} strokeWidth={2} className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute" />
-                                            </div>
-                                        )}
-
-                                        {/* Category Pill */}
-                                        <div className="absolute top-3 left-3 md:top-4 md:left-4">
-                                            <span className="bg-white/80 backdrop-blur-md text-primary px-3 py-1.5 rounded-full text-[8px] md:text-[9px] font-bold tracking-widest uppercase shadow-sm">
-                                                {product.category}
-                                            </span>
-                                        </div>
 
                                         {/* Sold Out Overlay */}
                                         {product.stock === 0 && (
-                                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center backdrop-blur-sm">
-                                                <span className="bg-white text-primary px-5 py-2 rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase shadow-xl -rotate-6">Sold Out</span>
+                                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center backdrop-blur-[1px]">
+                                                <span className="bg-white text-primary px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase shadow-xl -rotate-6">Sold Out</span>
                                             </div>
                                         )}
                                     </div>
                                     
-                                    {/* Clean Typography Below Card */}
-                                    <div className="px-1 flex flex-col">
-                                        <div className="flex justify-between items-start gap-2 mb-1">
-                                            <h4 className="font-serif text-lg md:text-xl text-primary line-clamp-1 group-hover:text-primary/70 transition-colors flex-1">{product.title}</h4>
-                                            <span className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest whitespace-nowrap mt-1.5 ${product.stock > 0 ? 'text-primary/60' : 'text-red-500'}`}>
-                                                {product.stock > 0 ? `${product.stock} Left` : 'Out of Stock'}
-                                            </span>
+                                    {/* Marketplace Typography Below Image */}
+                                    <div className="p-3 md:p-4 flex flex-col flex-1">
+                                        <p className="text-[9px] md:text-[10px] font-bold text-text-muted uppercase tracking-widest mb-1.5">{product.category}</p>
+                                        <h4 className="font-sans font-medium text-sm md:text-base text-primary mb-1 line-clamp-2 leading-snug flex-1 group-hover:text-primary/70 transition-colors">{product.title}</h4>
+                                        <div className="flex items-center justify-between mt-3">
+                                            <div>
+                                                <span className="text-sm md:text-base font-bold text-accent block">Rp {product.price}</span>
+                                                <span className={`text-[9px] font-bold uppercase tracking-widest mt-0.5 block ${product.stock > 0 ? 'text-text-muted' : 'text-red-500'}`}>
+                                                    {product.stock > 0 ? `Stock: ${product.stock}` : 'Sold Out'}
+                                                </span>
+                                            </div>
+                                            {product.stock > 0 && (
+                                                <button className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors shrink-0 border border-primary/10 group-hover:border-primary">
+                                                    <Plus size={16} strokeWidth={2.5} />
+                                                </button>
+                                            )}
                                         </div>
-                                        <span className="text-sm font-semibold text-text-muted">Rp {product.price}</span>
                                     </div>
-                            </motion.div>
+                                </div></motion.div>
                         ))}
                     </AnimatePresence>
                 </div>
@@ -372,16 +367,13 @@ export default function StorePage() {
                                                 </ul>
                                             </div>
 
-                                            <div className="sticky -bottom-6 md:-bottom-12 left-0 right-0 bg-white pt-6 pb-6 md:pb-12 z-20 mt-8 border-t border-border/30">
+                                            <div className="sticky -bottom-6 md:-bottom-12 left-0 right-0 bg-white pt-3 pb-6 md:pb-12 z-20 mt-4">
                                                 <button 
                                                     onClick={() => setIsCheckout(true)}
-                                                    className="w-full bg-primary text-white px-6 py-4 md:py-5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-xl flex items-center justify-center gap-3"
+                                                    className="w-full bg-[#1A1A1A] text-white px-6 py-4 rounded-2xl text-[13px] font-bold uppercase tracking-widest hover:bg-black transition-all shadow-lg flex items-center justify-center gap-2"
                                                 >
-                                                    <ShoppingBag size={18} /> Purchase Now
+                                                    <ShoppingBag size={16} /> Purchase Now
                                                 </button>
-                                                <p className="text-center text-[10px] text-text-muted mt-4 uppercase tracking-widest font-bold">
-                                                    Delivery arranged via concierge
-                                                </p>
                                             </div>
                                         </motion.div>
                                     )}
