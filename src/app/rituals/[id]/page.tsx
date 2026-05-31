@@ -39,7 +39,7 @@ export default function RitualsDetails() {
     const handleBooking = (e: React.FormEvent) => {
         e.preventDefault();
         const waNumber = '6285174119423';
-        const treatmentsList = cartItems.map(item => `- ${item.title} (${item.duration} Mins) x${item.guests} Guest(s)`).join('%0A');
+        const treatmentsList = cartItems.map(item => `- ${item.title} (${item.duration} Mins) x${item.guests} Guest(s) - IDR ${(item.price * item.guests).toLocaleString('en-US')}`).join('%0A');
         const message = `*New Spa Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${formattedTotalPrice}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
         setIsModalOpen(false);

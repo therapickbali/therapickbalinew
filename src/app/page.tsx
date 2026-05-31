@@ -36,9 +36,9 @@ export default function Home() {
         
         const treatmentsList = cartItems.map(item => {
             if (item.isCampaign) {
-                return `- ${item.campaignTitle} (${item.title}) - ${item.duration} Mins x${item.guests} Guest(s) [${item.discountPercentage}% OFF]`;
+                return `- ${item.campaignTitle} (${item.title}) - ${item.duration} Mins x${item.guests} Guest(s) [${item.discountPercentage}% OFF] - IDR ${(item.price * item.guests).toLocaleString('en-US')}`;
             }
-            return `- ${item.title} (${item.duration} Mins) x${item.guests} Guest(s)`;
+            return `- ${item.title} (${item.duration} Mins) x${item.guests} Guest(s) - IDR ${(item.price * item.guests).toLocaleString('en-US')}`;
         }).join('%0A');
         
         const message = `*New Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
@@ -457,8 +457,9 @@ export default function Home() {
                                                 <div className="flex items-start justify-between mb-4 pr-6">
                                                     <div>
                                                         {item.isCampaign && (
-                                                            <div className="bg-primary text-white px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest inline-block mb-1.5 shadow-sm">
-                                                                {item.campaignTitle} (-{item.discountPercentage}%)
+                                                            <div className="bg-primary text-white px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest inline-flex items-center gap-1 whitespace-nowrap mb-1.5 shadow-sm">
+                                                                <span>{item.campaignTitle}</span>
+                                                                <span className="opacity-90">(-{item.discountPercentage}%)</span>
                                                             </div>
                                                         )}
                                                         <h3 className="font-bold text-sm text-primary leading-tight">{item.title}</h3>
