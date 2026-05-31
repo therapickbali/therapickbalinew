@@ -59,6 +59,7 @@ type SpaContextType = {
     addToCart: (product: Product, quantity: number) => void;
     updateCartQuantity: (productId: string, quantity: number) => void;
     removeFromCart: (productId: string) => void;
+    clearCart: () => void;
     savedProducts: string[];
     toggleSavedProduct: (productId: string) => void;
 };
