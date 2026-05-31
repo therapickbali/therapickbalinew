@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, Heart, Star, MapPin, ChevronRight, Menu, Home } from 'lucide-react';
+import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, Heart, Star, MapPin, ChevronRight, Menu, Home, Trash2 } from 'lucide-react';
 import { useSpa, Product } from '@/context/SpaContext';
 
 export default function StorePage() {
@@ -135,30 +135,23 @@ export default function StorePage() {
 
                 {/* Product Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                    <AnimatePresence mode="popLayout">
-                        {filteredProducts.map((product, i) => (
-                            <motion.div 
-                                layout
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                transition={{ duration: 0.3 }}
-                                key={product.id} 
-                                className="cursor-pointer group flex flex-col" 
-                                onClick={() => product.stock > 0 && setSelectedProduct(product)}
-                            >
-                                <div className="aspect-[4/5] bg-[#EDF0F2] rounded-[24px] relative mb-4 flex items-center justify-center overflow-hidden">
-                                    <button className="absolute top-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#9CA3AF] shadow-sm z-10 hover:scale-110 transition-transform">
-                                        <Heart size={16} fill={i % 3 === 0 ? "#EF4444" : "none"} stroke={i % 3 === 0 ? "#EF4444" : "currentColor"} />
-                                    </button>
-                                    <div className="absolute bottom-3 left-3 bg-white/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-[#2B2B2B] shadow-sm z-10">{product.category}</div>
-                                    <img src={product.image} alt={product.title} className="w-full h-full object-cover mix-blend-multiply drop-shadow-xl group-hover:scale-105 transition-transform duration-700" />
-                                </div>
-                                <h4 className="font-bold text-[#2B2B2B] text-sm md:text-base mb-1 line-clamp-1">{product.title}</h4>
-                                <span className="font-bold text-sm text-[#2B2B2B]">${product.price.replace(/,/g, '')}</span>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+                    {filteredProducts.map((product, i) => (
+                        <div 
+                            key={product.id} 
+                            className="cursor-pointer group flex flex-col" 
+                            onClick={() => product.stock > 0 && setSelectedProduct(product)}
+                        >
+                            <div className="aspect-[4/5] bg-[#EDF0F2] rounded-[24px] relative mb-4 flex items-center justify-center overflow-hidden">
+                                <button className="absolute top-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#9CA3AF] shadow-sm z-10 hover:scale-110 transition-transform">
+                                    <Heart size={16} fill={i % 3 === 0 ? "#EF4444" : "none"} stroke={i % 3 === 0 ? "#EF4444" : "currentColor"} />
+                                </button>
+                                <div className="absolute bottom-3 left-3 bg-white/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-[#2B2B2B] shadow-sm z-10">{product.category}</div>
+                                <img src={product.image} alt={product.title} className="w-full h-full object-cover mix-blend-multiply drop-shadow-xl group-hover:scale-105 transition-transform duration-700" />
+                            </div>
+                            <h4 className="font-bold text-[#2B2B2B] text-sm md:text-base mb-1 line-clamp-1">{product.title}</h4>
+                            <span className="font-bold text-sm text-[#2B2B2B]">${product.price.replace(/,/g, '')}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
 
@@ -281,7 +274,7 @@ export default function StorePage() {
                                                             </div>
                                                             <div className="flex flex-col items-end gap-2 shrink-0">
                                                                 <button onClick={() => removeFromCart(item.product.id)} className="text-[#9CA3AF] hover:text-[#EF4444] transition-colors p-1" title="Remove Item">
-                                                                    <X size={16} />
+                                                                    <Trash2 size={16} className="text-[#EF4444]" />
                                                                 </button>
                                                                 <div className="flex items-center gap-2 border border-[#E5E7EB] rounded-lg px-1 py-1">
                                                                     <button type="button" onClick={() => updateCartQuantity(item.product.id, Math.max(1, item.quantity - 1))} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded disabled:opacity-30" disabled={item.quantity <= 1}><Minus size={12} /></button>
