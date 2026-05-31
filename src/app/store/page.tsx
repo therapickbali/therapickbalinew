@@ -141,15 +141,15 @@ export default function StorePage() {
                             className="cursor-pointer outline-none h-full" 
                             onClick={() => product.stock > 0 && setSelectedProduct(product)}
                         >
-                            <div className="bg-white border border-[#E5E7EB] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group overflow-hidden">
+                            <div className="bg-white border border-[#E5E7EB] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
                                 
                                 {/* Image */}
-                                <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden rounded-t-[24px]">
+                                <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden rounded-[16px]">
                                     <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 </div>
                                 
                                 {/* Text Info */}
-                                <div className="flex flex-col flex-grow p-4 md:p-5">
+                                <div className="flex flex-col flex-grow px-2 md:px-3 pt-3 pb-2">
                                     <p className="text-gray-400 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Elexoir'}</p>
                                     <h4 className="font-bold text-gray-900 text-[13px] md:text-sm line-clamp-1 mb-4">{product.title}</h4>
                                     
@@ -174,7 +174,7 @@ export default function StorePage() {
                         <motion.div 
                             initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="w-full h-[100svh] md:max-w-md md:h-[90vh] bg-white rounded-none md:rounded-[40px] flex flex-col relative shadow-2xl mx-auto"
+                            className="w-full h-[100svh] md:max-w-md md:h-[90vh] bg-white rounded-none md:rounded-[40px] flex flex-col relative shadow-2xl mx-auto overflow-hidden"
                         >
                                     {/* Top Nav */}
                                     <div className="absolute top-6 left-6 right-6 flex justify-between z-20 pointer-events-none">
@@ -184,8 +184,8 @@ export default function StorePage() {
                                     </div>
                                     
                                     {/* Image Section */}
-                                    <div className="h-[45%] bg-[#FDFBF7] relative flex items-center justify-center shrink-0 overflow-hidden p-8">
-                                        <img src={selectedProduct.image} className="w-full h-full object-contain mix-blend-multiply drop-shadow-md" />
+                                    <div className="h-[45%] bg-[#F5F5F7] relative flex items-center justify-center shrink-0 overflow-hidden">
+                                        <img src={selectedProduct.image} className="w-full h-full object-cover mix-blend-multiply" />
                                     </div>
 
                                     {/* Content Section */}
