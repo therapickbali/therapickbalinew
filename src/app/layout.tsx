@@ -15,13 +15,18 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://elexoir-spa.com'),
+  metadataBase: new URL('https://www.elexoirhomespaubud.com'),
   title: {
     default: "Elexoir Home Spa | Luxury Mobile Spa & Massage in Ubud, Bali",
     template: "%s | Elexoir Home Spa Bali"
   },
-  description: "Experience the ultimate luxury mobile spa in Ubud, Bali. Elexoir Home Spa delivers premium massages, holistic rituals, and wellness treatments directly to your private villa or hotel. Book your sanctuary today.",
-  keywords: ["Ubud Spa", "Bali Massage", "Mobile Spa Ubud", "Home Spa Bali", "Luxury Massage Ubud", "In-Villa Spa Bali", "Best Spa in Ubud", "Wellness Retreat Bali", "Elexoir Spa"],
+  description: "Experience the ultimate luxury mobile spa in Ubud, Bali. Elexoir Home Spa delivers premium professional massages, holistic rituals, and wellness treatments directly to your private villa or hotel. Book your sanctuary today.",
+  keywords: [
+    "Home massage service in Ubud", "Ubud Spa", "Bali Massage", "Mobile Spa Ubud", "Home Spa Bali", 
+    "Luxury Massage Ubud", "In-Villa Spa Bali", "Best Spa in Ubud", "Wellness Retreat Bali", "Elexoir Spa",
+    "Professional Massage Bali", "Mobile massage Canggu", "Bali tourist places massage", "Mobile Spa Seminyak", 
+    "Premium spa delivery Bali", "Private massage Ubud", "Couples massage home Ubud"
+  ],
   authors: [{ name: "Elexoir Spa" }],
   creator: "Elexoir Spa",
   publisher: "Elexoir Spa",
@@ -30,17 +35,22 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
   openGraph: {
-    title: "Elexoir Home Spa | Premium Mobile Spa in Ubud",
-    description: "The most exclusive in-villa spa experience in Ubud, Bali. Elevate your relaxation with our signature massages and organic treatments.",
-    url: 'https://elexoir-spa.com',
+    title: "Elexoir Home Spa | Premium Mobile Spa in Ubud & Bali",
+    description: "The most exclusive in-villa spa experience in Ubud, Bali. Elevate your relaxation with our signature professional massages and organic treatments.",
+    url: 'https://www.elexoirhomespaubud.com',
     siteName: 'Elexoir Home Spa',
     images: [
       {
         url: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
         width: 1200,
         height: 630,
-        alt: 'Elexoir Luxury Home Spa Bali',
+        alt: 'Elexoir Home Spa - Luxury Mobile Spa & Massage in Ubud, Bali',
       },
     ],
     locale: 'en_US',
@@ -48,8 +58,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Elexoir Home Spa | Luxury Mobile Spa in Ubud",
-    description: "Experience the ultimate luxury mobile spa in Ubud, Bali. Premium in-villa massages and wellness rituals.",
+    title: 'Elexoir Home Spa | Luxury Mobile Spa & Massage in Ubud',
+    description: 'Experience premium mobile spa services directly to your villa in Ubud, Bali.',
     images: ['https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg'],
   },
   alternates: {
