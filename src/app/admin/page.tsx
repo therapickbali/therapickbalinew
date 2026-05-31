@@ -52,8 +52,11 @@ export default function AdminDashboard() {
     const [productCategory, setProductCategory] = useState('');
     const [productPrice, setProductPrice] = useState('');
     const [productImage, setProductImage] = useState('');
+    const [productStock, setProductStock] = useState(10);
     const [productDesc, setProductDesc] = useState('');
     const [editingProductId, setEditingProductId] = useState<string | null>(null);
+
+    const [listView, setListView] = useState<'campaign' | 'treatments' | 'store'>('campaign');
 
     const [pricingOptions, setPricingOptions] = useState([{ duration: '', price: '' }]);
     const [benefits, setBenefits] = useState(['']);
@@ -122,6 +125,7 @@ export default function AdminDashboard() {
                     price: productPrice,
                     image: productImage || 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
                     description: productDesc,
+                    stock: productStock
                 };
                 if (editingProductId) {
                     setProducts(prev => prev.map(p => p.id === editingProductId ? newP : p));
@@ -133,6 +137,7 @@ export default function AdminDashboard() {
                 setProductCategory('');
                 setProductPrice('');
                 setProductImage('');
+                setProductStock(10);
                 setProductDesc('');
             }
             setIsSubmitting(false);
@@ -181,12 +186,20 @@ export default function AdminDashboard() {
         setProductCategory(p.category);
         setProductPrice(p.price);
         setProductImage(p.image);
+        setProductStock(p.stock || 10);
         setProductDesc(p.description);
         setActiveTab('store');
     };
 
     const handleRemoveProduct = (id: string) => {
         setProducts(prev => prev.filter(p => p.id !== id));
+    };
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const url = URL.createObjectURL(e.target.files[0]);
+            setProductImage(url);
+        }
     };
 
     return (
@@ -527,7 +540,7 @@ export default function AdminDashboard() {
                                             </div>
                                         </div>
 
-                                        {/* Product Price & Image */}
+                                        {/* Product Price & Stock */}
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
                                                 <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Price (Rp)</label>
@@ -538,12 +551,37 @@ export default function AdminDashboard() {
                                                 />
                                             </div>
                                             <div className="space-y-2">
-                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Image URL</label>
+                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Stock Quantity</label>
                                                 <input 
-                                                    type="url" required placeholder="https://example.com/image.jpg" 
-                                                    value={productImage} onChange={e => setProductImage(e.target.value)}
+                                                    type="number" required min="0" placeholder="e.g. 10" 
+                                                    value={productStock} onChange={e => setProductStock(parseInt(e.target.value) || 0)}
                                                     className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
+                                            </div>
+                                        </div>
+
+                                        {/* Product Image */}
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Upload Image</label>
+                                            <div className="relative w-full h-48 bg-white/50 border-2 border-dashed border-border/50 rounded-2xl overflow-hidden hover:bg-white/80 transition-all flex flex-col items-center justify-center group cursor-pointer">
+                                                <input 
+                                                    type="file" accept="image/*" onChange={handleImageUpload}
+                                                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                                />
+                                                {productImage ? (
+                                                    <>
+                                                        <img src={productImage} alt="Preview" className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity" />
+                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                                            <span className="bg-primary/80 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase">Change Image</span>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <div className="text-center text-text-muted group-hover:text-primary transition-colors">
+                                                        <UploadCloud className="mx-auto mb-2 opacity-50 group-hover:opacity-100" size={24} />
+                                                        <p className="text-sm font-semibold">Click or drag image to upload</p>
+                                                        <p className="text-xs opacity-70 mt-1">PNG, JPG up to 5MB</p>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
 
@@ -560,175 +598,198 @@ export default function AdminDashboard() {
                                 )}
 
                                 {activeTab === 'list' && (
-                                    <div className="space-y-10">
-                                        {/* Campaigns Section */}
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <h2 className="text-lg font-bold text-primary flex items-center gap-2">
-                                                    <Megaphone size={20} className="text-accent" /> Active Campaign
-                                                </h2>
-                                                {campaign && (
-                                                    <span className="text-xs font-semibold text-accent bg-accent/10 px-3 py-1 rounded-full">Live on Homepage</span>
-                                                )}
-                                            </div>
-                                            {campaign ? (
-                                                <div className="p-5 bg-gradient-to-br from-primary/5 to-white/60 border border-primary/20 rounded-2xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                                    <div>
-                                                        <div className="flex items-center gap-2 mb-1">
-                                                            <h3 className="font-bold text-primary text-base">{campaign.title}</h3>
-                                                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded">{campaign.label}</span>
-                                                        </div>
-                                                        <p className="text-xs text-text-muted mb-3 max-w-sm">{campaign.description}</p>
-                                                        <div className="flex items-center gap-3">
-                                                            <span className="text-[11px] font-bold text-accent">-{campaign.discountPercentage}% Discount</span>
-                                                            <span className="text-[11px] text-text-muted">{campaign.selectedTreatments.length} Treatments included</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex items-center gap-2 self-start md:self-center">
-                                                        <button 
-                                                            onClick={handleEditCampaign}
-                                                            type="button"
-                                                            className="w-10 h-10 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
-                                                        >
-                                                            <Edit3 size={16} />
-                                                        </button>
-                                                        <button 
-                                                            onClick={handleRemoveCampaign}
-                                                            type="button"
-                                                            className="w-10 h-10 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
-                                                        >
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div className="p-8 text-center border-2 border-dashed border-border/50 rounded-2xl">
-                                                    <p className="text-sm text-text-muted mb-4">No active campaign running.</p>
-                                                    <button 
-                                                        onClick={() => setActiveTab('campaign')}
-                                                        type="button"
-                                                        className="text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
-                                                    >
-                                                        Create Campaign
-                                                    </button>
-                                                </div>
-                                            )}
+                                    <div className="space-y-8">
+                                        {/* Segmented Control for View Selection */}
+                                        <div className="flex bg-white/50 border border-border/50 p-1.5 rounded-2xl w-full max-w-xl shadow-sm mb-6">
+                                            {['campaign', 'treatments', 'store'].map((view) => (
+                                                <button
+                                                    key={view}
+                                                    onClick={() => setListView(view as 'campaign' | 'treatments' | 'store')}
+                                                    type="button"
+                                                    className={`flex-1 py-3 text-[10px] md:text-xs font-bold uppercase tracking-widest rounded-xl transition-all duration-300 ${listView === view ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:text-primary hover:bg-white/40'}`}
+                                                >
+                                                    {view === 'campaign' ? 'Active Campaign' : view === 'treatments' ? 'Treatments' : 'Elexoir Boutique'}
+                                                </button>
+                                            ))}
                                         </div>
 
-                                        {/* Treatments Section */}
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <h2 className="text-lg font-bold text-primary flex items-center gap-2">
-                                                    <Store size={20} className="text-secondary" /> Published Treatments
-                                                </h2>
-                                                <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">{treatments.length} Active</span>
-                                            </div>
-                                            
-                                            <div className="grid grid-cols-1 gap-4">
-                                                {treatments.map((t) => (
-                                                    <div key={t.id} className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm gap-4">
-                                                        <div className="flex-1">
-                                                            <h3 className="font-bold text-primary text-sm mb-1">{t.title}</h3>
-                                                            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-widest mb-2">{t.category}</p>
-                                                            <p className="text-xs text-text-muted/80 line-clamp-1">{t.desc}</p>
+                                        {listView === 'campaign' && (
+                                            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                                {/* Campaigns Section */}
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <h2 className="text-lg font-bold text-primary flex items-center gap-2">
+                                                        <Megaphone size={20} className="text-accent" /> Active Campaign
+                                                    </h2>
+                                                    {campaign && (
+                                                        <span className="text-xs font-semibold text-accent bg-accent/10 px-3 py-1 rounded-full">Live on Homepage</span>
+                                                    )}
+                                                </div>
+                                                {campaign ? (
+                                                    <div className="p-5 bg-gradient-to-br from-primary/5 to-white/60 border border-primary/20 rounded-2xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                        <div>
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <h3 className="font-bold text-primary text-base">{campaign.title}</h3>
+                                                                <span className="text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded">{campaign.label}</span>
+                                                            </div>
+                                                            <p className="text-xs text-text-muted mb-3 max-w-sm">{campaign.description}</p>
+                                                            <div className="flex items-center gap-3">
+                                                                <span className="text-[11px] font-bold text-accent">-{campaign.discountPercentage}% Discount</span>
+                                                                <span className="text-[11px] text-text-muted">{campaign.selectedTreatments.length} Treatments included</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="flex items-center justify-between md:justify-end gap-6 md:w-[250px]">
-                                                            <div className="flex flex-col items-start md:items-end gap-1">
-                                                                {t.options.map(opt => (
-                                                                    <span key={opt.duration} className="text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded-md">
-                                                                        {opt.duration} • Rp {opt.price}
-                                                                    </span>
-                                                                ))}
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <button 
-                                                                    type="button"
-                                                                    onClick={() => handleEditTreatment(t)}
-                                                                    className="w-10 h-10 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
-                                                                >
-                                                                    <Edit3 size={16} />
-                                                                </button>
-                                                                <button 
-                                                                    type="button"
-                                                                    onClick={() => handleRemoveTreatment(t.id)}
-                                                                    className="w-10 h-10 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
-                                                                >
-                                                                    <Trash2 size={16} />
-                                                                </button>
-                                                            </div>
+                                                        <div className="flex items-center gap-2 self-start md:self-center">
+                                                            <button 
+                                                                onClick={handleEditCampaign}
+                                                                type="button"
+                                                                className="w-10 h-10 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                            >
+                                                                <Edit3 size={16} />
+                                                            </button>
+                                                            <button 
+                                                                onClick={handleRemoveCampaign}
+                                                                type="button"
+                                                                className="w-10 h-10 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                            >
+                                                                <Trash2 size={16} />
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                ))}
-                                                {treatments.length === 0 && (
+                                                ) : (
                                                     <div className="p-8 text-center border-2 border-dashed border-border/50 rounded-2xl">
-                                                        <p className="text-sm text-text-muted mb-4">No treatments added yet.</p>
+                                                        <p className="text-sm text-text-muted mb-4">No active campaign running.</p>
                                                         <button 
-                                                            onClick={() => setActiveTab('treatment')}
+                                                            onClick={() => setActiveTab('campaign')}
                                                             type="button"
                                                             className="text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
                                                         >
-                                                            Create Treatment
+                                                            Create Campaign
                                                         </button>
                                                     </div>
                                                 )}
                                             </div>
-                                        </div>
+                                        )}
 
-                                        {/* Store Section */}
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <h2 className="text-lg font-bold text-primary flex items-center gap-2">
-                                                    <Store size={20} className="text-primary" /> Elexoir Boutique
-                                                </h2>
-                                                <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">{products.length} Products</span>
-                                            </div>
-                                            
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {products.map((p) => (
-                                                    <div key={p.id} className="flex flex-col p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm gap-4">
-                                                        <div className="flex items-start gap-4">
-                                                            <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-border/50 bg-surface">
-                                                                <img src={p.image} alt={p.title} className="w-full h-full object-cover" />
-                                                            </div>
+                                        {listView === 'treatments' && (
+                                            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                                {/* Treatments Section */}
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <h2 className="text-lg font-bold text-primary flex items-center gap-2">
+                                                        <Store size={20} className="text-secondary" /> Published Treatments
+                                                    </h2>
+                                                    <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">{treatments.length} Active</span>
+                                                </div>
+                                                
+                                                <div className="grid grid-cols-1 gap-4">
+                                                    {treatments.map((t) => (
+                                                        <div key={t.id} className="flex flex-col md:flex-row md:items-center justify-between p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm gap-4">
                                                             <div className="flex-1">
-                                                                <h3 className="font-bold text-primary text-sm mb-1 line-clamp-1">{p.title}</h3>
-                                                                <p className="text-[10px] font-semibold text-text-muted uppercase tracking-widest mb-1">{p.category}</p>
-                                                                <span className="text-xs font-bold text-accent">Rp {p.price}</span>
+                                                                <h3 className="font-bold text-primary text-sm mb-1">{t.title}</h3>
+                                                                <p className="text-[11px] font-semibold text-text-muted uppercase tracking-widest mb-2">{t.category}</p>
+                                                                <p className="text-xs text-text-muted/80 line-clamp-1">{t.desc}</p>
+                                                            </div>
+                                                            <div className="flex items-center justify-between md:justify-end gap-6 md:w-[250px]">
+                                                                <div className="flex flex-col items-start md:items-end gap-1">
+                                                                    {t.options.map(opt => (
+                                                                        <span key={opt.duration} className="text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded-md">
+                                                                            {opt.duration} • Rp {opt.price}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
+                                                                <div className="flex items-center gap-2">
+                                                                    <button 
+                                                                        type="button"
+                                                                        onClick={() => handleEditTreatment(t)}
+                                                                        className="w-10 h-10 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                    >
+                                                                        <Edit3 size={16} />
+                                                                    </button>
+                                                                    <button 
+                                                                        type="button"
+                                                                        onClick={() => handleRemoveTreatment(t.id)}
+                                                                        className="w-10 h-10 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                    >
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <p className="text-xs text-text-muted/80 line-clamp-2 mb-2">{p.description}</p>
-                                                        <div className="mt-auto flex items-center justify-end gap-2 pt-2 border-t border-border/30">
+                                                    ))}
+                                                    {treatments.length === 0 && (
+                                                        <div className="p-8 text-center border-2 border-dashed border-border/50 rounded-2xl">
+                                                            <p className="text-sm text-text-muted mb-4">No treatments added yet.</p>
                                                             <button 
+                                                                onClick={() => setActiveTab('treatment')}
                                                                 type="button"
-                                                                onClick={() => handleEditProduct(p)}
-                                                                className="w-8 h-8 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                className="text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
                                                             >
-                                                                <Edit3 size={14} />
-                                                            </button>
-                                                            <button 
-                                                                type="button"
-                                                                onClick={() => handleRemoveProduct(p.id)}
-                                                                className="w-8 h-8 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
-                                                            >
-                                                                <Trash2 size={14} />
+                                                                Create Treatment
                                                             </button>
                                                         </div>
-                                                    </div>
-                                                ))}
-                                                {products.length === 0 && (
-                                                    <div className="col-span-1 md:col-span-2 p-8 text-center border-2 border-dashed border-border/50 rounded-2xl">
-                                                        <p className="text-sm text-text-muted mb-4">No products in store.</p>
-                                                        <button 
-                                                            onClick={() => setActiveTab('store')}
-                                                            type="button"
-                                                            className="text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
-                                                        >
-                                                            Add Product
-                                                        </button>
-                                                    </div>
-                                                )}
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
+
+                                        {listView === 'store' && (
+                                            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                                {/* Store Section */}
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <h2 className="text-lg font-bold text-primary flex items-center gap-2">
+                                                        <Store size={20} className="text-primary" /> Elexoir Boutique
+                                                    </h2>
+                                                    <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">{products.length} Products</span>
+                                                </div>
+                                                
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {products.map((p) => (
+                                                        <div key={p.id} className="flex flex-col p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm gap-4">
+                                                            <div className="flex items-start gap-4">
+                                                                <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-border/50 bg-surface">
+                                                                    <img src={p.image} alt={p.title} className="w-full h-full object-cover" />
+                                                                </div>
+                                                                <div className="flex-1">
+                                                                    <div className="flex justify-between items-start">
+                                                                        <h3 className="font-bold text-primary text-sm mb-1 line-clamp-1">{p.title}</h3>
+                                                                        <span className="text-[10px] font-bold text-text-muted bg-surface px-2 py-0.5 rounded-full whitespace-nowrap">Stock: {p.stock || 0}</span>
+                                                                    </div>
+                                                                    <p className="text-[10px] font-semibold text-text-muted uppercase tracking-widest mb-1">{p.category}</p>
+                                                                    <span className="text-xs font-bold text-accent">Rp {p.price}</span>
+                                                                </div>
+                                                            </div>
+                                                            <p className="text-xs text-text-muted/80 line-clamp-2 mb-2">{p.description}</p>
+                                                            <div className="mt-auto flex items-center justify-end gap-2 pt-2 border-t border-border/30">
+                                                                <button 
+                                                                    type="button"
+                                                                    onClick={() => handleEditProduct(p)}
+                                                                    className="w-8 h-8 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                >
+                                                                    <Edit3 size={14} />
+                                                                </button>
+                                                                <button 
+                                                                    type="button"
+                                                                    onClick={() => handleRemoveProduct(p.id)}
+                                                                    className="w-8 h-8 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                >
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    {products.length === 0 && (
+                                                        <div className="col-span-1 md:col-span-2 p-8 text-center border-2 border-dashed border-border/50 rounded-2xl">
+                                                            <p className="text-sm text-text-muted mb-4">No products in store.</p>
+                                                            <button 
+                                                                onClick={() => setActiveTab('store')}
+                                                                type="button"
+                                                                className="text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
+                                                            >
+                                                                Add Product
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 

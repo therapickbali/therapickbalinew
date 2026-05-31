@@ -29,6 +29,7 @@ export type Product = {
     price: string;
     image: string;
     description: string;
+    stock: number;
 };
 
 export type Campaign = {
@@ -103,7 +104,8 @@ const INITIAL_PRODUCTS: Product[] = [
         category: 'Oils',
         price: '350,000',
         image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
-        description: 'A deeply nourishing blend of cold-pressed coconut oil, ylang-ylang, and sweet orange. Calms the mind and softens the skin.'
+        description: 'A deeply nourishing blend of cold-pressed coconut oil, ylang-ylang, and sweet orange. Calms the mind and softens the skin.',
+        stock: 10
     },
     {
         id: 'p2',
@@ -111,7 +113,8 @@ const INITIAL_PRODUCTS: Product[] = [
         category: 'Home Fragrance',
         price: '280,000',
         image: 'https://images.pexels.com/photos/1012558/pexels-photo-1012558.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
-        description: 'Hand-poured soy wax candle infused with pure lavender and chamomile essential oils. Burns for up to 40 hours.'
+        description: 'Hand-poured soy wax candle infused with pure lavender and chamomile essential oils. Burns for up to 40 hours.',
+        stock: 5
     },
     {
         id: 'p3',
@@ -119,7 +122,8 @@ const INITIAL_PRODUCTS: Product[] = [
         category: 'Body Care',
         price: '220,000',
         image: 'https://images.pexels.com/photos/4465831/pexels-photo-4465831.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
-        description: 'Locally sourced organic Balinese coffee blended with sea salt and nourishing oils to rejuvenate your skin.'
+        description: 'Locally sourced organic Balinese coffee blended with sea salt and nourishing oils to rejuvenate your skin.',
+        stock: 20
     }
 ];
 
