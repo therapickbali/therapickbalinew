@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Newsreader } from "next/font/google";
 import "./globals.css";
 import TopNav from "@/components/TopNav";
+import { SpaProvider } from "@/context/SpaContext";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -38,10 +39,12 @@ export default function RootLayout({
       <body
         className={`${jakarta.variable} ${newsreader.variable} font-sans bg-background text-text min-h-screen selection:bg-primary selection:text-white pb-20`}
       >
-        <TopNav />
-        <main className="w-full relative min-h-[100dvh] bg-background overflow-x-hidden">
-            {children}
-        </main>
+        <SpaProvider>
+          <TopNav />
+          <main className="w-full relative min-h-[100dvh] bg-background overflow-x-hidden">
+              {children}
+          </main>
+        </SpaProvider>
       </body>
     </html>
   );

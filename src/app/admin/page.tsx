@@ -4,26 +4,41 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone } from 'lucide-react';
 import Link from 'next/link';
+import { useSpa, SelectedCampaignTreatment } from '@/context/SpaContext';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings'>('treatment');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    const { treatments, campaign, setCampaign } = useSpa();
+
     // Campaign specific fields
-    const [campaignTreatments, setCampaignTreatments] = useState<string[]>([]);
-    const [campaignDuration, setCampaignDuration] = useState('');
+    const [campaignTitle, setCampaignTitle] = useState(campaign?.title || '');
+    const [campaignLabel, setCampaignLabel] = useState(campaign?.label || '');
+    const [campaignDesc, setCampaignDesc] = useState(campaign?.description || '');
+    const [campaignDuration, setCampaignDuration] = useState(campaign?.duration || '');
+    const [discountPercentage, setDiscountPercentage] = useState<number>(campaign?.discountPercentage || 20);
+    const [campaignTreatments, setCampaignTreatments] = useState<SelectedCampaignTreatment[]>(campaign?.selectedTreatments || []);
 
-    const availableTreatments = [
-        { id: 't1', title: 'Deep Tissue Flow', category: 'Massage' },
-        { id: 't2', title: 'Radiance Facial', category: 'Facial' },
-        { id: 't3', title: 'Couples Retreat', category: 'Package' },
-    ];
-
-    const toggleCampaignTreatment = (id: string) => {
-        setCampaignTreatments(prev => 
-            prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
-        );
+    const toggleCampaignTreatmentDuration = (treatmentId: string, duration: string) => {
+        setCampaignTreatments(prev => {
+            const existing = prev.find(t => t.treatmentId === treatmentId);
+            if (existing) {
+                // If duration already exists, remove it
+                if (existing.durations.includes(duration)) {
+                    const newDurations = existing.durations.filter(d => d !== duration);
+                    if (newDurations.length === 0) {
+                        return prev.filter(t => t.treatmentId !== treatmentId); // Remove treatment if no durations left
+                    }
+                    return prev.map(t => t.treatmentId === treatmentId ? { ...t, durations: newDurations } : t);
+                }
+                // Add duration
+                return prev.map(t => t.treatmentId === treatmentId ? { ...t, durations: [...t.durations, duration] } : t);
+            }
+            // Add new treatment with this duration
+            return [...prev, { treatmentId, durations: [duration] }];
+        });
     };
 
     // Dynamic fields for Treatment
@@ -59,10 +74,20 @@ export default function AdminDashboard() {
         setIsSubmitting(true);
         // Mock a network request
         setTimeout(() => {
+            if (activeTab === 'campaign') {
+                setCampaign({
+                    title: campaignTitle,
+                    label: campaignLabel,
+                    description: campaignDesc,
+                    duration: campaignDuration,
+                    discountPercentage,
+                    selectedTreatments: campaignTreatments
+                });
+            }
             setIsSubmitting(false);
             setSuccess(true);
             setTimeout(() => setSuccess(false), 3000);
-        }, 1500);
+        }, 800);
     };
 
     return (
@@ -244,6 +269,7 @@ export default function AdminDashboard() {
                                                 <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Campaign Title</label>
                                                 <input 
                                                     type="text" required placeholder="e.g. Summer Retreat" 
+                                                    value={campaignTitle} onChange={e => setCampaignTitle(e.target.value)}
                                                     className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
@@ -251,6 +277,7 @@ export default function AdminDashboard() {
                                                 <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Offer Label</label>
                                                 <input 
                                                     type="text" required placeholder="e.g. Limited Offer" 
+                                                    value={campaignLabel} onChange={e => setCampaignLabel(e.target.value)}
                                                     className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
@@ -273,12 +300,13 @@ export default function AdminDashboard() {
                                             <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Subtext / Description</label>
                                             <textarea 
                                                 required rows={3} placeholder="Enjoy up to 20% off all signature treatments this month..." 
+                                                value={campaignDesc} onChange={e => setCampaignDesc(e.target.value)}
                                                 className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
                                             />
                                         </div>
 
                                         {/* Campaign Duration */}
-                                        <div className="grid grid-cols-1 gap-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
                                                 <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Campaign Duration</label>
                                                 <div className="relative">
@@ -298,32 +326,56 @@ export default function AdminDashboard() {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Discount Percentage (%)</label>
+                                                <input 
+                                                    type="number" required min="1" max="100" placeholder="20" 
+                                                    value={discountPercentage} onChange={e => setDiscountPercentage(Number(e.target.value))}
+                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                />
+                                            </div>
                                         </div>
 
                                         {/* Treatments Selection for Campaign */}
                                         <div className="space-y-3 pt-2">
-                                            <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Select Treatments for Offer</label>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                {availableTreatments.map((t) => {
-                                                    const isSelected = campaignTreatments.includes(t.id);
+                                            <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Select Treatments & Durations for Offer</label>
+                                            <div className="grid grid-cols-1 gap-3">
+                                                {treatments.map((t) => {
+                                                    const selectedT = campaignTreatments.find(ct => ct.treatmentId === t.id);
+                                                    const isSelectedAny = !!selectedT;
                                                     return (
                                                         <div 
                                                             key={t.id} 
-                                                            onClick={() => toggleCampaignTreatment(t.id)}
-                                                            className={`cursor-pointer p-4 rounded-2xl border transition-all duration-300 flex items-center justify-between ${
-                                                                isSelected 
+                                                            className={`p-4 rounded-2xl border transition-all duration-300 flex flex-col gap-3 ${
+                                                                isSelectedAny 
                                                                 ? 'bg-primary/5 border-primary shadow-sm' 
-                                                                : 'bg-white/50 border-border/50 hover:bg-white'
+                                                                : 'bg-white/50 border-border/50'
                                                             }`}
                                                         >
-                                                            <div>
-                                                                <h4 className={`text-sm font-bold ${isSelected ? 'text-primary' : 'text-text-muted'}`}>{t.title}</h4>
-                                                                <p className="text-[10px] uppercase tracking-widest font-semibold text-text-muted/70">{t.category}</p>
+                                                            <div className="flex items-center justify-between">
+                                                                <div>
+                                                                    <h4 className={`text-sm font-bold ${isSelectedAny ? 'text-primary' : 'text-text-muted'}`}>{t.title}</h4>
+                                                                    <p className="text-[10px] uppercase tracking-widest font-semibold text-text-muted/70">{t.category}</p>
+                                                                </div>
                                                             </div>
-                                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
-                                                                isSelected ? 'bg-primary text-white' : 'bg-surface border border-border/50 text-transparent'
-                                                            }`}>
-                                                                <CheckCircle size={14} />
+                                                            <div className="flex flex-wrap gap-2 mt-1">
+                                                                {t.options.map((opt) => {
+                                                                    const isDurationSelected = selectedT?.durations.includes(opt.duration);
+                                                                    return (
+                                                                        <button
+                                                                            type="button"
+                                                                            key={opt.duration}
+                                                                            onClick={() => toggleCampaignTreatmentDuration(t.id, opt.duration)}
+                                                                            className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all flex items-center gap-1.5 ${
+                                                                                isDurationSelected 
+                                                                                ? 'bg-primary border-primary text-white shadow-sm scale-105' 
+                                                                                : 'bg-white border-border/60 text-text-muted hover:bg-surface'
+                                                                            }`}
+                                                                        >
+                                                                            {opt.duration} - Rp {opt.price}
+                                                                        </button>
+                                                                    );
+                                                                })}
                                                             </div>
                                                         </div>
                                                     );
@@ -337,18 +389,19 @@ export default function AdminDashboard() {
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between mb-6">
                                             <h2 className="text-lg font-bold text-primary">Published Treatments</h2>
-                                            <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">2 Active</span>
+                                            <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">{treatments.length} Active</span>
                                         </div>
-                                        {[
-                                            { title: 'Deep Tissue Flow', category: 'Massage', price: 'Rp 450,000' },
-                                            { title: 'Radiance Facial', category: 'Facial', price: 'Rp 350,000' }
-                                        ].map((t, i) => (
-                                            <div key={i} className="flex items-center justify-between p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm">
+                                        {treatments.map((t) => (
+                                            <div key={t.id} className="flex items-center justify-between p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm">
                                                 <div>
                                                     <h3 className="font-bold text-primary text-sm mb-1">{t.title}</h3>
                                                     <p className="text-xs text-text-muted">{t.category}</p>
                                                 </div>
-                                                <span className="text-sm font-semibold text-primary">{t.price}</span>
+                                                <div className="flex flex-col items-end gap-1">
+                                                    {t.options.map(opt => (
+                                                        <span key={opt.duration} className="text-[11px] font-semibold text-primary bg-primary/5 px-2 py-0.5 rounded-md">{opt.duration}: Rp {opt.price}</span>
+                                                    ))}
+                                                </div>
                                             </div>
                                         ))}
                                     </div>

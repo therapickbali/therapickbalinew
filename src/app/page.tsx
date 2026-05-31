@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X } from 'lucide-react';
 import Link from 'next/link';
+import { useSpa } from '@/context/SpaContext';
 
 // Dummy data for redesign structure
 const CATEGORIES = [
@@ -16,6 +17,7 @@ const CATEGORIES = [
 
 
 export default function Home() {
+    const { treatments, campaign } = useSpa();
     const [activeCategory, setActiveCategory] = useState('all');
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
 
@@ -55,6 +57,7 @@ export default function Home() {
                 </div>
 
                 {/* Cinematic Campaign Card (Below Search) */}
+                {campaign && (
                 <div onClick={() => setIsCampaignModalOpen(true)} className="block outline-none">
                     <motion.div 
                         initial={{ opacity: 0, scale: 0.98 }}
@@ -65,7 +68,7 @@ export default function Home() {
                         {/* Background Image */}
                         <img 
                             src="https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop&crop=center" 
-                            alt="Summer Retreat" 
+                            alt={campaign.title} 
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
                         />
                         
@@ -84,7 +87,7 @@ export default function Home() {
                                     transition={{ delay: 0.2, duration: 0.6 }}
                                     className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-2xl text-[9px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-white/40 text-white shadow-[0_4px_24px_rgb(0,0,0,0.12)]"
                                 >
-                                    Limited Offer
+                                    {campaign.label}
                                 </motion.span>
                             </div>
 
@@ -92,10 +95,10 @@ export default function Home() {
                                 <div className="flex flex-col text-white">
                                     
                                     <h2 className="font-serif text-4xl md:text-6xl font-medium leading-tight tracking-tight mb-2 opacity-95 drop-shadow-sm mt-auto">
-                                        Summer Retreat
+                                        {campaign.title}
                                     </h2>
                                     <p className="text-white/70 text-[13px] md:text-base hidden md:block max-w-md leading-relaxed font-light">
-                                        Rejuvenate your mind and body with our exclusive summer packages. Enjoy up to 20% off all signature treatments.
+                                        {campaign.description}
                                     </p>
                                 </div>
 
@@ -107,6 +110,7 @@ export default function Home() {
                         </div>
                     </motion.div>
                 </div>
+                )}
 
                 {/* Categories */}
                 <div className="mb-6">
@@ -134,33 +138,8 @@ export default function Home() {
                 {/* Popular Treatments Scroll */}
                 <div className="mb-24">
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
-                        {[
-                            { 
-                                title: 'Deep Tissue Flow', 
-                                category: 'Massage', 
-                                price: 'Rp 450,000', 
-                                time: '90 Min', 
-                                desc: 'Relieve deep-seated tension with firm pressure and focused strokes. Ideal for muscle recovery.',
-                                bgPattern: 'from-secondary/10 via-white to-white'
-                            },
-                            { 
-                                title: 'Radiance Facial', 
-                                category: 'Facial', 
-                                price: 'Rp 350,000', 
-                                time: '60 Min', 
-                                desc: 'Restore your natural glow with organic botanical extracts, gentle exfoliation, and a restorative mask.',
-                                bgPattern: 'from-accent/10 via-white to-white'
-                            },
-                            { 
-                                title: 'Couples Retreat', 
-                                category: 'Package', 
-                                price: 'Rp 1,200,000', 
-                                time: '120 Min', 
-                                desc: 'A synchronized full-body massage experience designed for ultimate shared relaxation and harmony.',
-                                bgPattern: 'from-primary/5 via-white to-white'
-                            },
-                        ].map((item, idx) => (
-                            <Link href="/rituals" key={idx} className="w-72 md:w-80 shrink-0 block group outline-none">
+                        {treatments.map((item, idx) => (
+                            <Link href="/rituals" key={item.id} className="w-72 md:w-80 shrink-0 block group outline-none">
                                 <div className={`rounded-[32px] md:rounded-[40px] bg-gradient-to-br ${item.bgPattern} border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6 md:p-8`}>
                                     
                                     {/* Subtle glowing orb for spa ambiance */}
@@ -178,10 +157,10 @@ export default function Home() {
                                         
                                         <div className="mt-auto pt-6 border-t border-border/50">
                                             <div className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">
-                                                <Clock className="w-3.5 h-3.5" /> {item.time}
+                                                <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration}
                                             </div>
                                             <div className="flex items-center justify-between">
-                                                <span className="font-serif text-2xl text-primary">{item.price}</span>
+                                                <span className="font-serif text-2xl text-primary">Rp {item.options[0]?.price}</span>
                                                 <button className="w-12 h-12 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
                                                     <ArrowRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
                                                 </button>
@@ -285,9 +264,9 @@ export default function Home() {
                         <div className="p-6 md:p-8 flex items-center justify-between border-b border-border/50 bg-white shrink-0">
                             <div>
                                 <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-[9px] font-bold tracking-widest uppercase text-primary mb-2">
-                                    Summer Retreat
+                                    {campaign?.title}
                                 </div>
-                                <h2 className="font-serif text-2xl text-primary">Exclusive Offers</h2>
+                                <h2 className="font-serif text-2xl text-primary">{campaign?.label}</h2>
                             </div>
                             <button 
                                 onClick={() => setIsCampaignModalOpen(false)}
@@ -299,55 +278,51 @@ export default function Home() {
                         
                         {/* Modal Content (Campaign Treatments) */}
                         <div className="p-6 md:p-8 overflow-y-auto bg-[#FDFBF7]">
-                            <p className="text-sm text-text-muted mb-6">Enjoy special discounts on our most popular treatments when you book during the Summer Retreat campaign.</p>
+                            <p className="text-sm text-text-muted mb-6">{campaign?.description}</p>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {[
-                                    { 
-                                        title: 'Radiance Facial', 
-                                        category: 'Facial', 
-                                        price: 'Rp 280,000', 
-                                        originalPrice: 'Rp 350,000',
-                                        time: '60 Min', 
-                                        desc: 'Restore your natural glow with organic botanical extracts and gentle exfoliation.',
-                                    },
-                                    { 
-                                        title: 'Couples Retreat', 
-                                        category: 'Package', 
-                                        price: 'Rp 950,000', 
-                                        originalPrice: 'Rp 1,200,000',
-                                        time: '120 Min', 
-                                        desc: 'A synchronized full-body massage experience designed for ultimate shared relaxation.',
-                                    },
-                                ].map((item, idx) => (
-                                    <Link href="/rituals" key={idx} className="block group outline-none" onClick={() => setIsCampaignModalOpen(false)}>
-                                        <div className="rounded-[32px] p-6 bg-white border border-border/40 shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
-                                            <div className="mb-4 flex items-start justify-between">
-                                                <div className="bg-primary/5 border border-primary/10 text-primary px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm">
-                                                    {item.category}
-                                                </div>
-                                                <div className="bg-accent/20 text-accent px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest">
-                                                    -20%
-                                                </div>
-                                            </div>
-                                            <h4 className="font-serif text-xl font-medium text-primary mb-2 leading-tight">{item.title}</h4>
-                                            <p className="text-xs text-text-muted leading-relaxed font-light mb-6 flex-grow">{item.desc}</p>
-                                            
-                                            <div className="mt-auto pt-4 border-t border-border/50">
-                                                <div className="flex items-center gap-1.5 text-[9px] font-bold text-text-muted mb-1.5 uppercase tracking-widest"><Clock className="w-3 h-3" /> {item.time}</div>
-                                                <div className="flex items-end justify-between">
-                                                    <div>
-                                                        <span className="text-[10px] text-text-muted line-through mr-2">{item.originalPrice}</span>
-                                                        <span className="font-serif text-lg text-primary">{item.price}</span>
+                                {campaign?.selectedTreatments.flatMap(ct => {
+                                    const treatment = treatments.find(t => t.id === ct.treatmentId);
+                                    if (!treatment) return [];
+                                    
+                                    return ct.durations.map(duration => {
+                                        const option = treatment.options.find(o => o.duration === duration);
+                                        if (!option) return null;
+                                        
+                                        const originalPriceNum = parseInt(option.price.replace(/,/g, ''));
+                                        const discountedPriceNum = originalPriceNum * (1 - (campaign.discountPercentage / 100));
+                                        
+                                        return (
+                                            <Link href="/rituals" key={`${treatment.id}-${duration}`} className="block group outline-none" onClick={() => setIsCampaignModalOpen(false)}>
+                                                <div className="rounded-[32px] p-6 bg-white border border-border/40 shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
+                                                    <div className="mb-4 flex items-start justify-between">
+                                                        <div className="bg-primary/5 border border-primary/10 text-primary px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm">
+                                                            {treatment.category}
+                                                        </div>
+                                                        <div className="bg-accent/20 text-accent px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest">
+                                                            -{campaign.discountPercentage}%
+                                                        </div>
                                                     </div>
-                                                    <button className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                                        <ArrowRight size={16} />
-                                                    </button>
+                                                    <h4 className="font-serif text-xl font-medium text-primary mb-2 leading-tight">{treatment.title}</h4>
+                                                    <p className="text-xs text-text-muted leading-relaxed font-light mb-6 flex-grow">{treatment.desc}</p>
+                                                    
+                                                    <div className="mt-auto pt-4 border-t border-border/50">
+                                                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-text-muted mb-1.5 uppercase tracking-widest"><Clock className="w-3 h-3" /> {duration}</div>
+                                                        <div className="flex items-end justify-between">
+                                                            <div>
+                                                                <span className="text-[10px] text-text-muted line-through mr-2">Rp {option.price}</span>
+                                                                <span className="font-serif text-lg text-primary">Rp {discountedPriceNum.toLocaleString('en-US')}</span>
+                                                            </div>
+                                                            <button className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                                                <ArrowRight size={16} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                ))}
+                                            </Link>
+                                        );
+                                    });
+                                })}
                             </div>
                         </div>
                     </motion.div>
