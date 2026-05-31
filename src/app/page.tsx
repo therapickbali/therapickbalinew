@@ -175,30 +175,50 @@ export default function Home() {
 
                 {/* The Elexoir Boutique Section */}
                 <div className="mb-32">
-                    <div className="flex flex-col md:flex-row gap-12 items-center bg-gradient-to-br from-surface to-white rounded-[40px] p-8 md:p-16 shadow-sm border border-border/50 relative overflow-hidden group">
-                        <div className="absolute -right-20 -top-20 w-64 h-64 bg-secondary/10 rounded-full blur-3xl pointer-events-none group-hover:bg-secondary/20 transition-colors duration-700"></div>
-                        <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-highlight/30 rounded-full blur-3xl pointer-events-none group-hover:bg-highlight/50 transition-colors duration-700"></div>
-                        
-                        <div className="flex-1 relative z-10">
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50 mb-4 block">Take the Spa Home</span>
-                            <h3 className="font-serif text-3xl md:text-5xl text-primary font-medium mb-6 leading-tight">The Elexoir Boutique</h3>
-                            <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8 max-w-md">
-                                Discover our exclusive collection of 100% organic, locally sourced essential oils and professional spa tools. Maintain your inner balance and perfect skin between treatments.
-                            </p>
-                            <Link href="/store" className="inline-flex items-center justify-center gap-2 bg-primary text-white px-8 py-4 rounded-xl text-sm font-medium hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-                                <ShoppingBag size={18} />
-                                Shop Now
-                            </Link>
+                    <div className="flex items-end justify-between mb-8 px-6 md:px-0">
+                        <div>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50 mb-2 block">Take the Spa Home</span>
+                            <h3 className="font-serif text-3xl md:text-5xl text-primary font-medium leading-tight">The Elexoir Boutique</h3>
                         </div>
-                        <div className="flex-1 w-full relative z-10 flex justify-center">
-                            <div className="relative w-full max-w-sm aspect-[4/5] rounded-[32px] overflow-hidden shadow-2xl rotate-3 group-hover:rotate-0 transition-transform duration-500">
-                                <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=1000&auto=format&fit=crop" alt="Elexoir Boutique Products" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
-                                    <span className="text-white font-serif text-2xl">Organic Oils</span>
-                                    <span className="text-white/80 text-xs">Explore the collection &rarr;</span>
+                        <a href="/store" className="hidden md:flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-70 transition-opacity">
+                            View All Products <ArrowRight size={16} />
+                        </a>
+                    </div>
+                    
+                    {/* Swipeable Products */}
+                    <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
+                        {products.map((product) => (
+                            <a href="/store" key={product.id} className="w-64 md:w-72 shrink-0 block group outline-none">
+                                <div className="rounded-[32px] md:rounded-[40px] bg-white border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full overflow-hidden group-hover:-translate-y-2 relative">
+                                    <div className="aspect-[4/5] overflow-hidden relative bg-surface">
+                                        <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase text-primary shadow-sm z-10">
+                                            {product.category}
+                                        </div>
+                                        <div className="absolute top-4 right-4 w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-primary/50 shadow-sm z-10 hover:text-red-500 transition-colors">
+                                            <Heart size={14} />
+                                        </div>
+                                    </div>
+                                    <div className="p-6 md:p-8 flex flex-col flex-grow bg-gradient-to-b from-white to-surface/30">
+                                        <h4 className="font-serif text-xl font-medium text-primary mb-2 line-clamp-1">{product.title}</h4>
+                                        <p className="text-xs text-text-muted leading-relaxed font-light mb-6 line-clamp-2 flex-grow">{product.description}</p>
+                                        
+                                        <div className="flex items-center justify-between mt-auto">
+                                            <span className="font-serif text-xl text-primary">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
+                                            <div className="w-10 h-10 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-500">
+                                                <ShoppingBag size={16} />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </a>
+                        ))}
+                    </div>
+                    
+                    <div className="mt-4 px-6 md:hidden flex justify-center">
+                        <a href="/store" className="w-full flex items-center justify-center gap-2 border border-primary/20 text-primary px-6 py-4 rounded-xl text-sm font-medium hover:bg-primary/5 transition-all">
+                            View All Products <ArrowRight size={16} />
+                        </a>
                     </div>
                 </div>
 
