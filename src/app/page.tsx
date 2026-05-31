@@ -185,6 +185,7 @@ export default function Home() {
                 </div>
 
                 {/* The Elexoir Boutique Section */}
+                {products.length > 0 && (
                 <div className="mb-32">
                     <div className="flex items-center justify-between mb-8 px-6 md:px-0">
                         <div>
@@ -197,17 +198,7 @@ export default function Home() {
                     </div>
                     
                     {/* Swipeable Products */}
-                    {products.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-24 text-center relative overflow-hidden rounded-[40px] bg-[#F5F5F7] mx-6 md:mx-0">
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 pointer-events-none"></div>
-                            <div className="relative z-10 flex flex-col items-center">
-                                <span className="bg-white/80 backdrop-blur-md border border-white/60 text-[#86868B] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm mb-4">Coming Soon</span>
-                                <h3 className="text-2xl md:text-3xl font-medium text-[#1D1D1F] tracking-tight mb-2">Spa Boutique</h3>
-                                <p className="text-[#86868B] max-w-sm mx-auto text-sm font-medium px-4">Our premium product collection is being curated.</p>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
+                    <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {products.map((product) => (
                             <a href="/store" key={product.id} className="w-48 md:w-52 shrink-0 block outline-none">
                                 <div className="bg-white border border-[#E5E7EB] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
@@ -234,9 +225,8 @@ export default function Home() {
                             </a>
                         ))}
                     </div>
-                    )}
-                    
                 </div>
+                )}
 
                 {/* About Us */}
                 <div className="mb-24 flex flex-col md:flex-row gap-12 md:gap-24 items-center">
