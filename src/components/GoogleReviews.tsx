@@ -57,7 +57,7 @@ export default function GoogleReviews() {
     }
 
     return (
-        <section className="py-20 md:py-28 bg-[#F5F5F7] overflow-hidden">
+        <section className="py-20 md:py-28 bg-transparent overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 md:px-8">
                 
                 {/* Apple-style minimalist header */}
@@ -86,7 +86,7 @@ export default function GoogleReviews() {
                     {data.reviews.map((review) => (
                         <div 
                             key={review.id} 
-                            className="bg-white rounded-3xl p-8 shadow-soft shrink-0 w-[85vw] md:w-[420px] snap-center flex flex-col justify-between border border-black/[0.04] transition-transform duration-300 hover:scale-[1.01]"
+                            className="bg-white rounded-3xl p-8 shadow-soft shrink-0 w-[92vw] md:w-[700px] snap-center flex flex-col justify-between border border-black/[0.04] transition-transform duration-300 hover:scale-[1.01]"
                         >
                             <div>
                                 <div className="flex gap-1 mb-6">
@@ -94,7 +94,7 @@ export default function GoogleReviews() {
                                         <Star key={i} className="w-4 h-4 fill-[#F5A623] text-[#F5A623]" />
                                     ))}
                                 </div>
-                                <p className="text-lg text-primary leading-relaxed font-sans mb-8">
+                                <p className="text-base md:text-lg text-primary leading-relaxed font-sans mb-8 whitespace-pre-wrap">
                                     "{review.text}"
                                 </p>
                             </div>
