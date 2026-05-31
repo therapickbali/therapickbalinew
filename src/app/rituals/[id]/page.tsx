@@ -130,8 +130,9 @@ export default function RitualsDetails() {
                 {/* Description */}
                 <div className="mb-14 bg-white/50 backdrop-blur-xl border border-white/60 p-6 md:p-8 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
                     <h3 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">About this Treatment</h3>
-                    <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8 uppercase">
-                        {treatment.desc}
+                    <h3 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">About this Treatment</h3>
+                    <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8">
+                        {treatment.desc.charAt(0).toUpperCase() + treatment.desc.slice(1).toLowerCase()}
                     </p>
                     
                     {treatment.benefits && treatment.benefits.length > 0 && (
@@ -141,7 +142,7 @@ export default function RitualsDetails() {
                                 {treatment.benefits.map((benefit, idx) => (
                                     <li key={idx} className="flex items-start gap-3">
                                         <div className="mt-1 w-1.5 h-1.5 rounded-full bg-primary/40 shrink-0"></div>
-                                        <span className="text-sm md:text-base text-text-muted font-light uppercase">{benefit}</span>
+                                        <span className="text-sm md:text-base text-text-muted font-light">{benefit.charAt(0).toUpperCase() + benefit.slice(1).toLowerCase()}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -159,17 +160,35 @@ export default function RitualsDetails() {
                     
                     <div className="flex overflow-x-auto pb-6 -mx-6 px-6 md:mx-0 md:px-0 gap-4 no-scrollbar">
                         {relatedTreatments.map((item, idx) => (
-                            <Link href={`/rituals/${item.id}`} key={idx} className="w-40 h-48 shrink-0 rounded-[28px] overflow-hidden relative group shadow-[0_8px_24px_rgb(0,0,0,0.04)] cursor-pointer block outline-none">
-                                <div className={`absolute inset-0 bg-gradient-to-br ${item.bgPattern || 'from-secondary/80 to-highlight/40'} transition-transform duration-500 group-hover:scale-110`}></div>
-                                <div className="absolute inset-0 bg-primary/5 group-hover:bg-transparent transition-colors duration-500"></div>
-                                
-                                <div className="absolute top-4 left-4">
-                                    <span className="px-2.5 py-1 bg-white/40 backdrop-blur-md rounded-lg text-[9px] font-bold text-primary tracking-widest uppercase shadow-sm">
-                                        {item.category}
-                                    </span>
-                                </div>
-                                <div className="absolute bottom-4 left-4 right-4">
-                                    <h4 className="text-sm font-serif font-medium text-primary leading-tight">{item.title}</h4>
+                            <Link href={`/rituals/${item.id}`} key={idx} className="w-72 shrink-0 block group outline-none">
+                                <div className={`rounded-[32px] bg-gradient-to-br ${item.bgPattern || 'from-secondary/80 to-highlight/40'} border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6`}>
+                                    
+                                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/60 blur-[30px] rounded-full pointer-events-none transition-transform duration-700 group-hover:scale-150"></div>
+
+                                    <div className="mb-6 flex items-start justify-between relative z-10">
+                                        <div className="bg-white/60 backdrop-blur-sm border border-primary/10 text-primary px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
+                                            {item.category}
+                                        </div>
+                                    </div>
+
+                                    <div className="relative z-10 flex-grow flex flex-col">
+                                        <h4 className="font-serif text-xl font-medium text-primary mb-2 leading-tight">{item.title}</h4>
+                                        <p className="text-xs text-text-muted leading-relaxed font-light mb-5 flex-grow line-clamp-3">
+                                            {item.desc.charAt(0).toUpperCase() + item.desc.slice(1).toLowerCase()}
+                                        </p>
+                                        
+                                        <div className="mt-auto pt-4 border-t border-border/50">
+                                            <div className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">
+                                                <Clock className="w-3.5 h-3.5" /> {item.options && item.options[0] ? item.options[0].duration : '60'} MINS
+                                            </div>
+                                            <div className="flex items-center justify-between bg-gray-50/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-gray-100">
+                                                <span className="font-semibold text-gray-900 text-[14px]">IDR {item.options && item.options[0] ? parseInt(item.options[0].price.replace(/,/g, '') || '0').toLocaleString('en-US') : '0'}</span>
+                                                <button className="w-10 h-10 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
+                                                    <Plus size={20} strokeWidth={2.5} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </Link>
                         ))}
