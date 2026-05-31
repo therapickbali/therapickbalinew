@@ -17,7 +17,7 @@ const CATEGORIES = [
 
 
 export default function Home() {
-    const { treatments, campaign, products } = useSpa();
+    const { treatments, campaign, products, savedProducts, toggleSavedProduct } = useSpa();
     const [activeCategory, setActiveCategory] = useState('all');
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
 
@@ -187,17 +187,22 @@ export default function Home() {
                     
                     {/* Swipeable Products */}
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
-                        {products.map((product) => (
+                        {products.map((product) => {
+                            const isSaved = savedProducts.includes(product.id);
+                            return (
                             <a href="/store" key={product.id} className="w-48 md:w-52 shrink-0 block outline-none">
                                 <div className="bg-white border border-[#E5E7EB] rounded-[24px] p-3 md:p-4 flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
                                     {/* Heart Icon */}
-                                    <div className="absolute top-4 right-4 z-10 text-gray-300 hover:text-[#65C466] transition-colors">
-                                        <Heart size={20} fill="currentColor" className="text-[#65C466]" />
+                                    <div 
+                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSavedProduct(product.id); }}
+                                        className={`absolute top-4 right-4 z-10 hover:text-[#65C466] transition-colors cursor-pointer ${isSaved ? 'text-[#65C466]' : 'text-gray-300'}`}
+                                    >
+                                        <Heart size={20} fill={isSaved ? "currentColor" : "none"} className={isSaved ? "text-[#65C466]" : ""} />
                                     </div>
                                     
                                     {/* Image */}
                                     <div className="aspect-[4/5] relative mb-3 bg-white flex items-center justify-center overflow-hidden">
-                                        <img src={product.image} alt={product.title} className="w-[90%] h-[90%] object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl" />
+                                        <img src={product.image} alt={product.title} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 rounded-xl" />
                                     </div>
                                     
                                     {/* Text Info */}
@@ -215,7 +220,7 @@ export default function Home() {
                                     </div>
                                 </div>
                             </a>
-                        ))}
+                        )})}
                     </div>
                     
                 </div>

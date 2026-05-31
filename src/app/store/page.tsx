@@ -7,7 +7,7 @@ import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, Heart, Star, MapPin,
 import { useSpa, Product } from '@/context/SpaContext';
 
 export default function StorePage() {
-    const { products, cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart } = useSpa();
+    const { products, cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart, savedProducts, toggleSavedProduct } = useSpa();
     const [activeCategory, setActiveCategory] = useState('All');
     
     // Modal & Checkout States
@@ -135,7 +135,9 @@ export default function StorePage() {
 
                 {/* Product Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
-                    {filteredProducts.map((product, i) => (
+                    {filteredProducts.map((product, i) => {
+                        const isSaved = savedProducts.includes(product.id);
+                        return (
                         <div 
                             key={product.id} 
                             className="cursor-pointer outline-none h-full" 
@@ -143,13 +145,16 @@ export default function StorePage() {
                         >
                             <div className="bg-white border border-[#E5E7EB] rounded-[24px] p-3 md:p-4 flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
                                 {/* Heart Icon */}
-                                <div className="absolute top-4 right-4 z-10 text-gray-300 hover:text-[#65C466] transition-colors">
-                                    <Heart size={20} fill="currentColor" className={i % 3 === 0 ? "text-[#65C466]" : "text-gray-200"} />
+                                <div 
+                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSavedProduct(product.id); }}
+                                    className={`absolute top-4 right-4 z-10 hover:text-[#65C466] transition-colors cursor-pointer ${isSaved ? 'text-[#65C466]' : 'text-gray-300'}`}
+                                >
+                                    <Heart size={20} fill={isSaved ? "currentColor" : "none"} className={isSaved ? "text-[#65C466]" : ""} />
                                 </div>
                                 
                                 {/* Image */}
                                 <div className="aspect-[4/5] relative mb-3 bg-white flex items-center justify-center overflow-hidden">
-                                    <img src={product.image} alt={product.title} className="w-[90%] h-[90%] object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl" />
+                                    <img src={product.image} alt={product.title} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 rounded-xl" />
                                 </div>
                                 
                                 {/* Text Info */}
@@ -167,7 +172,7 @@ export default function StorePage() {
                                 </div>
                             </div>
                         </div>
-                    ))}
+                    )})}
                 </div>
             </div>
 

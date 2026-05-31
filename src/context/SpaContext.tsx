@@ -59,7 +59,8 @@ type SpaContextType = {
     addToCart: (product: Product, quantity: number) => void;
     updateCartQuantity: (productId: string, quantity: number) => void;
     removeFromCart: (productId: string) => void;
-    clearCart: () => void;
+    savedProducts: string[];
+    toggleSavedProduct: (productId: string) => void;
 };
 
 // Initial static treatments
@@ -152,6 +153,13 @@ export function SpaProvider({ children }: { children: ReactNode }) {
     const [campaign, setCampaign] = useState<Campaign | null>(INITIAL_CAMPAIGN);
     const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [savedProducts, setSavedProducts] = useState<string[]>([]);
+
+    const toggleSavedProduct = (productId: string) => {
+        setSavedProducts(prev => 
+            prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
+        );
+    };
 
     const addToCart = (product: Product, quantity: number) => {
         setCartItems(prev => {
@@ -178,7 +186,8 @@ export function SpaProvider({ children }: { children: ReactNode }) {
     return (
         <SpaContext.Provider value={{ 
             treatments, setTreatments, campaign, setCampaign, products, setProducts,
-            cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart
+            cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart,
+            savedProducts, toggleSavedProduct
         }}>
             {children}
         </SpaContext.Provider>
