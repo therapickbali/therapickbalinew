@@ -218,19 +218,19 @@ export default function StorePage() {
                                     </div>
 
                                     {/* Sticky Bottom */}
-                                    <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[#F3F4F6] p-6 pb-8 md:pb-6 z-30">
-                                        <div className="flex justify-between items-center mb-4">
+                                    <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[#F3F4F6] p-4 pb-6 md:pb-4 z-30">
+                                        <div className="flex justify-between items-center mb-3">
                                             <div>
-                                                <p className="text-xs text-[#9CA3AF] mb-0.5">Price</p>
-                                                <p className="font-bold text-2xl text-[#2B2B2B]">${selectedProduct.price.replace(/,/g, '')}</p>
+                                                <p className="text-[10px] text-[#9CA3AF] mb-0.5">Price</p>
+                                                <p className="font-bold text-xl text-[#2B2B2B]">${selectedProduct.price.replace(/,/g, '')}</p>
                                             </div>
-                                            <div className="flex items-center gap-4 border border-[#E5E7EB] rounded-xl px-2 py-1.5">
-                                                <button onClick={() => handleQuantityChange('dec')} className="w-8 h-8 flex items-center justify-center text-[#2B2B2B] disabled:opacity-30 hover:bg-[#F3F4F6] rounded-lg transition-colors" disabled={quantity <= 1}><Minus size={16} /></button>
-                                                <span className="font-bold text-sm w-4 text-center">{quantity}</span>
-                                                <button onClick={() => handleQuantityChange('inc')} className="w-8 h-8 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded-lg transition-colors"><Plus size={16} /></button>
+                                            <div className="flex items-center gap-3 border border-[#E5E7EB] rounded-lg px-2 py-1">
+                                                <button onClick={() => handleQuantityChange('dec')} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] disabled:opacity-30 hover:bg-[#F3F4F6] rounded-md transition-colors" disabled={quantity <= 1}><Minus size={14} /></button>
+                                                <span className="font-bold text-xs w-4 text-center">{quantity}</span>
+                                                <button onClick={() => handleQuantityChange('inc')} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded-md transition-colors"><Plus size={14} /></button>
                                             </div>
                                         </div>
-                                        <button onClick={handleAddToCart} className="w-full bg-[#2B2B2B] text-white py-4 rounded-xl font-bold text-sm hover:bg-black transition-colors">
+                                        <button onClick={handleAddToCart} className="w-full bg-[#2B2B2B] text-white py-3 rounded-lg font-bold text-sm hover:bg-black transition-colors">
                                             Add to Cart
                                         </button>
                                     </div>
@@ -270,19 +270,24 @@ export default function StorePage() {
                                                 <>
                                                     {/* Cart Items */}
                                                     {cartItems.map((item) => (
-                                                        <div key={item.product.id} className="flex items-center gap-4 mb-4 bg-white p-3 rounded-2xl shadow-sm border border-[#F3F4F6]">
+                                                        <div key={item.product.id} className="flex items-center gap-4 mb-4 bg-white p-3 rounded-2xl shadow-sm border border-[#F3F4F6] relative">
                                                             <div className="w-20 h-20 bg-[#EDF0F2] rounded-xl flex items-center justify-center p-2 shrink-0">
                                                                 <img src={item.product.image} className="w-full h-full object-cover mix-blend-multiply" />
                                                             </div>
-                                                            <div className="flex-1 min-w-0">
+                                                            <div className="flex-1 min-w-0 pr-2">
                                                                 <h5 className="font-bold text-sm text-[#2B2B2B] truncate">{item.product.title}</h5>
                                                                 <p className="text-xs text-[#9CA3AF] mb-1 truncate">{item.product.category} • 100ml</p>
                                                                 <p className="font-bold text-[#2B2B2B]">${item.product.price.replace(/,/g, '')}</p>
                                                             </div>
-                                                            <div className="flex items-center gap-2 border border-[#E5E7EB] rounded-lg px-1 py-1 shrink-0">
-                                                                <button type="button" onClick={() => updateCartQuantity(item.product.id, Math.max(0, item.quantity - 1))} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded"><Minus size={12} /></button>
-                                                                <span className="font-bold text-xs w-3 text-center">{item.quantity}</span>
-                                                                <button type="button" onClick={() => updateCartQuantity(item.product.id, item.quantity + 1)} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded"><Plus size={12} /></button>
+                                                            <div className="flex flex-col items-end gap-2 shrink-0">
+                                                                <button onClick={() => removeFromCart(item.product.id)} className="text-[#9CA3AF] hover:text-[#EF4444] transition-colors p-1" title="Remove Item">
+                                                                    <X size={16} />
+                                                                </button>
+                                                                <div className="flex items-center gap-2 border border-[#E5E7EB] rounded-lg px-1 py-1">
+                                                                    <button type="button" onClick={() => updateCartQuantity(item.product.id, Math.max(1, item.quantity - 1))} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded disabled:opacity-30" disabled={item.quantity <= 1}><Minus size={12} /></button>
+                                                                    <span className="font-bold text-xs w-3 text-center">{item.quantity}</span>
+                                                                    <button type="button" onClick={() => updateCartQuantity(item.product.id, item.quantity + 1)} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded"><Plus size={12} /></button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     ))}
