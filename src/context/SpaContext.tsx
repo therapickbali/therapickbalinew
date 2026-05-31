@@ -34,6 +34,11 @@ export type Product = {
     ingredients?: string;
 };
 
+export type CartItem = {
+    product: Product;
+    quantity: number;
+};
+
 export type Campaign = {
     title: string;
     label: string;
@@ -50,6 +55,11 @@ type SpaContextType = {
     setCampaign: (c: Campaign | null) => void;
     products: Product[];
     setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+    cartItems: CartItem[];
+    addToCart: (product: Product, quantity: number) => void;
+    updateCartQuantity: (productId: string, quantity: number) => void;
+    removeFromCart: (productId: string) => void;
+    clearCart: () => void;
 };
 
 // Initial static treatments
@@ -141,9 +151,35 @@ export function SpaProvider({ children }: { children: ReactNode }) {
     const [treatments, setTreatments] = useState<Treatment[]>(INITIAL_TREATMENTS);
     const [campaign, setCampaign] = useState<Campaign | null>(INITIAL_CAMPAIGN);
     const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+    const addToCart = (product: Product, quantity: number) => {
+        setCartItems(prev => {
+            const existing = prev.find(item => item.product.id === product.id);
+            if (existing) {
+                return prev.map(item => item.product.id === product.id ? { ...item, quantity: item.quantity + quantity } : item);
+            }
+            return [...prev, { product, quantity }];
+        });
+    };
+
+    const updateCartQuantity = (productId: string, quantity: number) => {
+        setCartItems(prev => prev.map(item => item.product.id === productId ? { ...item, quantity } : item));
+    };
+
+    const removeFromCart = (productId: string) => {
+        setCartItems(prev => prev.filter(item => item.product.id !== productId));
+    };
+
+    const clearCart = () => {
+        setCartItems([]);
+    };
 
     return (
-        <SpaContext.Provider value={{ treatments, setTreatments, campaign, setCampaign, products, setProducts }}>
+        <SpaContext.Provider value={{ 
+            treatments, setTreatments, campaign, setCampaign, products, setProducts,
+            cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart
+        }}>
             {children}
         </SpaContext.Provider>
     );

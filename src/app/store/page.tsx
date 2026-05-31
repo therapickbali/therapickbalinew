@@ -7,7 +7,7 @@ import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, Heart, Star, MapPin,
 import { useSpa, Product } from '@/context/SpaContext';
 
 export default function StorePage() {
-    const { products } = useSpa();
+    const { products, cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart } = useSpa();
     const [activeCategory, setActiveCategory] = useState('All');
     
     // Modal & Checkout States
@@ -21,6 +21,17 @@ export default function StorePage() {
     const [formData, setFormData] = useState({
         name: '', email: '', phone: '', address: '', notes: ''
     });
+
+    const cartTotalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
+    const getGlobalCartTotal = () => {
+        let total = 0;
+        cartItems.forEach(item => {
+            const numericPrice = parseInt(item.product.price.replace(/,/g, ''), 10);
+            total += numericPrice * item.quantity;
+        });
+        return total.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    };
 
     const categories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
 
@@ -41,19 +52,31 @@ export default function StorePage() {
     const handleCheckoutSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // In a real app, send data to backend here.
-        setIsCheckout(false);
+        clearCart();
         setIsSuccess(true);
     };
 
     const closeModal = () => {
         setSelectedProduct(null);
         setTimeout(() => {
-            setIsCheckout(false);
-            setIsSuccess(false);
             setQuantity(1);
             setActiveTab('Description');
-            setFormData({ name: '', email: '', phone: '', address: '', notes: '' });
         }, 300); // Wait for exit animation
+    };
+
+    const closeCheckout = () => {
+        setIsCheckout(false);
+        setTimeout(() => {
+            setIsSuccess(false);
+            setFormData({ name: '', email: '', phone: '', address: '', notes: '' });
+        }, 300);
+    };
+
+    const handleAddToCart = () => {
+        if (selectedProduct) {
+            addToCart(selectedProduct, quantity);
+            closeModal();
+        }
     };
 
     const handleQuantityChange = (type: 'inc' | 'dec') => {
@@ -80,14 +103,16 @@ export default function StorePage() {
                     <div className="flex items-center gap-5">
                         <button className="text-[#2B2B2B] hover:opacity-70"><Search size={22} strokeWidth={1.5} /></button>
                         <div className="relative">
-                            <button className="text-[#2B2B2B] hover:opacity-70"><ShoppingBag size={22} strokeWidth={1.5} /></button>
-                            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#F8F9F9]"></span>
+                            <button onClick={() => setIsCheckout(true)} className="text-[#2B2B2B] hover:opacity-70"><ShoppingBag size={22} strokeWidth={1.5} /></button>
+                            {cartTotalQuantity > 0 && (
+                                <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full border border-[#F8F9F9] flex items-center justify-center text-[9px] font-bold text-white">{cartTotalQuantity}</span>
+                            )}
                         </div>
                     </div>
                 </div>
 
                 {/* Headline */}
-                <h1 className="font-serif text-3xl md:text-5xl text-[#2B2B2B] leading-[1.2] mb-8 max-w-[280px] md:max-w-md">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium text-[#2B2B2B] tracking-tight leading-[1.2] mb-6 max-w-[280px] md:max-w-md">
                     Find Your Inner Balance for Perfect Skin
                 </h1>
 
@@ -122,33 +147,30 @@ export default function StorePage() {
                                 className="cursor-pointer group flex flex-col" 
                                 onClick={() => product.stock > 0 && setSelectedProduct(product)}
                             >
-                                <div className="aspect-[4/5] bg-[#EDF0F2] rounded-3xl relative mb-4 flex items-center justify-center overflow-hidden">
-                                    <button className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#9CA3AF] shadow-sm z-10 hover:scale-110 transition-transform">
+                                <div className="aspect-[4/5] bg-[#EDF0F2] rounded-[24px] relative mb-4 flex items-center justify-center overflow-hidden">
+                                    <button className="absolute top-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#9CA3AF] shadow-sm z-10 hover:scale-110 transition-transform">
                                         <Heart size={16} fill={i % 3 === 0 ? "#EF4444" : "none"} stroke={i % 3 === 0 ? "#EF4444" : "currentColor"} />
                                     </button>
+                                    <div className="absolute bottom-3 left-3 bg-white/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-[#2B2B2B] shadow-sm z-10">{product.category}</div>
                                     <img src={product.image} alt={product.title} className="w-full h-full object-cover mix-blend-multiply drop-shadow-xl group-hover:scale-105 transition-transform duration-700" />
                                 </div>
                                 <h4 className="font-bold text-[#2B2B2B] text-sm md:text-base mb-1 line-clamp-1">{product.title}</h4>
-                                <p className="text-xs text-[#9CA3AF] mb-2 line-clamp-1">{product.category}</p>
-                                <span className="font-bold text-sm md:text-base text-[#2B2B2B]">${product.price.replace(/,/g, '')}</span>
+                                <span className="font-bold text-sm text-[#2B2B2B]">${product.price.replace(/,/g, '')}</span>
                             </motion.div>
                         ))}
                     </AnimatePresence>
                 </div>
             </div>
 
-            {/* Product Details / Checkout Modal */}
+            {/* Product Details Modal */}
             <AnimatePresence>
                 {selectedProduct && (
                     <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 bg-white md:bg-black/40 md:backdrop-blur-sm">
                         <motion.div 
                             initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="w-full h-[100dvh] md:max-w-md md:h-[90vh] bg-white rounded-none md:rounded-[40px] overflow-hidden flex flex-col relative shadow-2xl mx-auto"
+                            className="w-full h-[100svh] md:max-w-md md:h-[90vh] bg-white rounded-none md:rounded-[40px] flex flex-col relative shadow-2xl mx-auto"
                         >
-                            {/* DETAILS VIEW */}
-                            {!isCheckout && !isSuccess && (
-                                <>
                                     {/* Top Nav */}
                                     <div className="absolute top-6 left-6 right-6 flex justify-between z-20">
                                         <button onClick={closeModal} className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#2B2B2B] shadow-sm hover:scale-105 transition-transform">
@@ -208,46 +230,68 @@ export default function StorePage() {
                                                 <button onClick={() => handleQuantityChange('inc')} className="w-8 h-8 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded-lg transition-colors"><Plus size={16} /></button>
                                             </div>
                                         </div>
-                                        <button onClick={() => setIsCheckout(true)} className="w-full bg-[#2B2B2B] text-white py-4 rounded-xl font-bold text-sm hover:bg-black transition-colors">
+                                        <button onClick={handleAddToCart} className="w-full bg-[#2B2B2B] text-white py-4 rounded-xl font-bold text-sm hover:bg-black transition-colors">
                                             Add to Cart
                                         </button>
                                     </div>
-                                </>
-                            )}
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
-                            {/* CHECKOUT VIEW */}
-                            {isCheckout && !isSuccess && (
-                                <div className="flex flex-col h-full bg-[#F8F9F9]">
+            {/* Cart / Checkout Modal */}
+            <AnimatePresence>
+                {isCheckout && (
+                    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 bg-white md:bg-black/40 md:backdrop-blur-sm">
+                        <motion.div 
+                            initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="w-full h-[100svh] md:max-w-md md:h-[90vh] bg-[#F8F9F9] rounded-none md:rounded-[40px] flex flex-col relative shadow-2xl mx-auto overflow-hidden"
+                        >
                                     {/* Top Nav */}
                                     <div className="flex items-center justify-between px-6 py-6 border-b border-[#E5E7EB] bg-white shrink-0">
-                                        <button onClick={() => setIsCheckout(false)} className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-[#E5E7EB] text-[#2B2B2B] hover:bg-[#F3F4F6]">
+                                        <button onClick={closeCheckout} className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-[#E5E7EB] text-[#2B2B2B] hover:bg-[#F3F4F6]">
                                             <ChevronRight className="rotate-180" size={20} />
                                         </button>
                                         <h3 className="font-bold text-base text-[#2B2B2B]">Order Details</h3>
                                         <div className="w-10"></div>
                                     </div>
 
-                                    <div className="flex-1 overflow-y-auto px-6 py-6 pb-40">
-                                        <h4 className="font-medium text-sm text-[#2B2B2B] mb-4">My Cart</h4>
-                                        
-                                        {/* Cart Item */}
-                                        <div className="flex items-center gap-4 mb-8 bg-white p-3 rounded-2xl shadow-sm border border-[#F3F4F6]">
-                                            <div className="w-20 h-20 bg-[#EDF0F2] rounded-xl flex items-center justify-center p-2 shrink-0">
-                                                <img src={selectedProduct.image} className="w-full h-full object-contain mix-blend-multiply" />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <h5 className="font-bold text-sm text-[#2B2B2B] truncate">{selectedProduct.title}</h5>
-                                                <p className="text-xs text-[#9CA3AF] mb-1 truncate">{selectedProduct.category} • 100ml</p>
-                                                <p className="font-bold text-[#2B2B2B]">${selectedProduct.price.replace(/,/g, '')}</p>
-                                            </div>
-                                            <div className="flex items-center gap-2 border border-[#E5E7EB] rounded-lg px-1 py-1 shrink-0">
-                                                <button type="button" onClick={() => handleQuantityChange('dec')} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] disabled:opacity-30 hover:bg-[#F3F4F6] rounded" disabled={quantity <= 1}><Minus size={12} /></button>
-                                                <span className="font-bold text-xs w-3 text-center">{quantity}</span>
-                                                <button type="button" onClick={() => handleQuantityChange('inc')} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded"><Plus size={12} /></button>
-                                            </div>
-                                        </div>
+                                    {!isSuccess ? (
+                                        <div className="flex-1 overflow-y-auto px-6 py-6 pb-40">
+                                            <h4 className="font-medium text-sm text-[#2B2B2B] mb-4">My Cart</h4>
+                                            
+                                            {cartItems.length === 0 ? (
+                                                <div className="text-center py-8">
+                                                    <p className="text-[#9CA3AF] mb-4">Your cart is empty.</p>
+                                                    <button onClick={closeCheckout} className="bg-[#2B2B2B] text-white px-6 py-3 rounded-xl font-bold text-sm">Continue Shopping</button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    {/* Cart Items */}
+                                                    {cartItems.map((item) => (
+                                                        <div key={item.product.id} className="flex items-center gap-4 mb-4 bg-white p-3 rounded-2xl shadow-sm border border-[#F3F4F6]">
+                                                            <div className="w-20 h-20 bg-[#EDF0F2] rounded-xl flex items-center justify-center p-2 shrink-0">
+                                                                <img src={item.product.image} className="w-full h-full object-cover mix-blend-multiply" />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <h5 className="font-bold text-sm text-[#2B2B2B] truncate">{item.product.title}</h5>
+                                                                <p className="text-xs text-[#9CA3AF] mb-1 truncate">{item.product.category} • 100ml</p>
+                                                                <p className="font-bold text-[#2B2B2B]">${item.product.price.replace(/,/g, '')}</p>
+                                                            </div>
+                                                            <div className="flex items-center gap-2 border border-[#E5E7EB] rounded-lg px-1 py-1 shrink-0">
+                                                                <button type="button" onClick={() => updateCartQuantity(item.product.id, Math.max(0, item.quantity - 1))} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded"><Minus size={12} /></button>
+                                                                <span className="font-bold text-xs w-3 text-center">{item.quantity}</span>
+                                                                <button type="button" onClick={() => updateCartQuantity(item.product.id, item.quantity + 1)} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] hover:bg-[#F3F4F6] rounded"><Plus size={12} /></button>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    
+                                                    <button onClick={closeCheckout} className="w-full py-3 mb-8 border-2 border-dashed border-[#E5E7EB] rounded-xl font-bold text-sm text-[#2B2B2B] hover:bg-white transition-colors flex items-center justify-center gap-2">
+                                                        <Plus size={16} /> Add More Products
+                                                    </button>
 
-                                        <h4 className="font-medium text-sm text-[#2B2B2B] mb-4">Delivery Address</h4>
+                                                    <h4 className="font-medium text-sm text-[#2B2B2B] mb-4">Delivery Address</h4>
                                         <form id="checkout-form" onSubmit={handleCheckoutSubmit} className="space-y-3 mb-8">
                                             <div className="relative shadow-sm">
                                                 <MapPin className="absolute left-4 top-3.5 text-[#2B2B2B]" size={18} />
@@ -264,41 +308,40 @@ export default function StorePage() {
 
                                         <div className="space-y-3 pt-6 border-t border-dashed border-[#E5E7EB]">
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-[#9CA3AF]">Total items ({quantity})</span>
-                                                <span className="text-[#9CA3AF]">${getTotalPrice(selectedProduct.price, quantity)}</span>
-                                            </div>
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-[#9CA3AF]">Shipping</span>
-                                                <span className="text-[#9CA3AF]">$0.00</span>
-                                            </div>
-                                            <div className="flex justify-between text-base font-bold text-[#2B2B2B] pt-3">
-                                                <span>Total payment</span>
-                                                <span>${getTotalPrice(selectedProduct.price, quantity)}</span>
-                                            </div>
+                                                <span className="text-[#9CA3AF]">Total items ({cartTotalQuantity})</span>
+                                                        <span className="text-[#9CA3AF]">${getGlobalCartTotal()}</span>
+                                                    </div>
+                                                    <div className="flex justify-between text-sm">
+                                                        <span className="text-[#9CA3AF]">Shipping</span>
+                                                        <span className="text-[#9CA3AF]">$0.00</span>
+                                                    </div>
+                                                    <div className="flex justify-between text-base font-bold text-[#2B2B2B] pt-3">
+                                                        <span>Total payment</span>
+                                                        <span>${getGlobalCartTotal()}</span>
+                                                    </div>
+                                                </div>
+                                            </>
+                                            )}
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div className="flex flex-col h-full items-center justify-center p-8 text-center bg-white flex-1">
+                                            <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center text-green-500 mb-6 border border-green-100">
+                                                <CheckCircle2 size={40} />
+                                            </div>
+                                            <h3 className="font-bold text-2xl text-[#2B2B2B] mb-2">Order Confirmed</h3>
+                                            <p className="text-sm text-[#6B7280] mb-8 leading-relaxed">Your order has been received. We will contact you shortly.</p>
+                                            <button onClick={closeCheckout} className="w-full max-w-xs bg-[#2B2B2B] text-white py-4 rounded-xl font-bold text-sm hover:bg-black transition-colors shadow-lg">Back to Store</button>
+                                        </div>
+                                    )}
 
                                     {/* Sticky Checkout Bottom */}
-                                    <div className="absolute bottom-0 left-0 right-0 bg-[#F8F9F9] p-6 pb-8 md:pb-6 pt-4 border-t border-[#E5E7EB]">
-                                        <button type="submit" form="checkout-form" className="w-full bg-[#2B2B2B] text-white py-4 rounded-xl font-bold text-sm hover:bg-black transition-colors shadow-lg">
-                                            Place Order
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* SUCCESS */}
-                            {isSuccess && (
-                                <div className="flex flex-col h-full items-center justify-center p-8 text-center bg-white">
-                                    <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center text-green-500 mb-6 border border-green-100">
-                                        <CheckCircle2 size={40} />
-                                    </div>
-                                    <h3 className="font-bold text-2xl text-[#2B2B2B] mb-2">Order Confirmed</h3>
-                                    <p className="text-sm text-[#6B7280] mb-8 leading-relaxed">Your order for {quantity}x {selectedProduct.title} has been received. We will contact you shortly.</p>
-                                    <button onClick={closeModal} className="w-full max-w-xs bg-[#2B2B2B] text-white py-4 rounded-xl font-bold text-sm hover:bg-black transition-colors shadow-lg">Back to Store</button>
-                                </div>
-                            )}
-
+                                    {!isSuccess && cartItems.length > 0 && (
+                                        <div className="absolute bottom-0 left-0 right-0 bg-[#F8F9F9] p-6 pb-8 md:pb-6 pt-4 border-t border-[#E5E7EB]">
+                                            <button type="submit" form="checkout-form" className="w-full bg-[#2B2B2B] text-white py-4 rounded-xl font-bold text-sm hover:bg-black transition-colors shadow-lg">
+                                                Place Order
+                                            </button>
+                                        </div>
+                                    )}
                         </motion.div>
                     </div>
                 )}
