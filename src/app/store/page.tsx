@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, ArrowLeft, Heart } from 'lucide-react';
 import { useSpa, Product } from '@/context/SpaContext';
 
 export default function StorePage() {
@@ -74,115 +74,118 @@ export default function StorePage() {
     };
 
     return (
-        <div className="min-h-screen bg-background pt-24 pb-32">
-            {/* Cinematic Header */}
-            <div className="relative overflow-hidden mb-12">
-                <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 pt-10 md:pt-16 pb-8">
-                    <div className="max-w-2xl">
-                        <span className="text-xs font-bold uppercase tracking-widest text-primary/50 mb-3 block">Elexoir Boutique</span>
-                        <h1 className="font-serif text-4xl md:text-6xl text-primary font-medium mb-4 leading-tight">
-                            Bring the <span className="italic text-primary/80">sanctuary home.</span>
-                        </h1>
-                        <p className="text-text-muted leading-relaxed font-light text-sm md:text-base max-w-lg">
-                            Curated luxury wellness products, organic oils, and signature blends used in our exclusive in-villa treatments.
-                        </p>
-                    </div>
-                </div>
-                {/* Decorative Background Elements */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none translate-x-1/3 -translate-y-1/3"></div>
-                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-highlight/20 rounded-full blur-[100px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
-            </div>
-
+        <div className="min-h-screen bg-white pt-24 pb-32">
             <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-                {/* Toolbar: Search and Filter */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 relative z-10 border-b border-border/50 pb-6">
-                    <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide w-full md:w-auto mask-fade-edges">
+                {/* Header Section */}
+                <div className="flex items-center justify-between mb-8">
+                    <div>
+                        <p className="text-sm text-text-muted font-medium">Welcome back,</p>
+                        <h1 className="text-2xl md:text-3xl font-bold text-primary">Olivia</h1>
+                    </div>
+                    <button className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center text-primary hover:bg-surface transition-colors">
+                        <Search size={20} strokeWidth={1.5} />
+                    </button>
+                </div>
+
+                {/* Hero Banner (First Product) */}
+                {products.length > 0 && (
+                    <div className="relative w-full rounded-[32px] overflow-hidden bg-gradient-to-br from-[#77CD41] to-[#4A991E] p-6 md:p-10 mb-10 flex flex-row items-center cursor-pointer hover:shadow-xl transition-all shadow-lg" onClick={() => setSelectedProduct(products[0])}>
+                        <div className="w-3/5 z-10 pr-4">
+                            <span className="text-white/90 font-medium text-xs md:text-sm mb-2 block">{products[0].category}</span>
+                            <h2 className="text-2xl md:text-4xl font-bold text-white mb-2 md:mb-3 leading-tight line-clamp-2 md:line-clamp-3">{products[0].title}</h2>
+                            <p className="text-white/80 text-[10px] md:text-xs mb-6 line-clamp-2 md:line-clamp-3 max-w-[80%]">{products[0].description}</p>
+                            <button className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white border border-white/40 px-4 md:px-6 py-2.5 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all">
+                                20% OFF | BUY NOW
+                            </button>
+                        </div>
+                        <div className="w-2/5 relative h-full min-h-[150px] md:min-h-[250px]">
+                            <img src={products[0].image} alt="Featured" className="absolute right-[-20%] md:right-[-10%] top-1/2 -translate-y-1/2 w-[140%] md:w-[120%] object-cover drop-shadow-2xl mix-blend-multiply" />
+                        </div>
+                    </div>
+                )}
+
+                {/* Categories Section */}
+                <div className="mb-8">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-medium text-primary">Categories</h3>
+                        <button className="text-text-muted/60 hover:text-primary text-sm font-medium transition-colors">See all</button>
+                    </div>
+                    <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide w-full mask-fade-edges">
                         {categories.map(cat => (
                             <button
                                 key={cat}
                                 onClick={() => setActiveCategory(cat)}
-                                className={`px-5 py-2 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${
+                                className={`px-6 py-2.5 rounded-full text-[13px] font-medium whitespace-nowrap transition-all duration-300 border ${
                                     activeCategory === cat 
-                                        ? 'bg-primary text-white shadow-md' 
-                                        : 'bg-transparent border border-border/50 text-text-muted hover:border-primary/30 hover:text-primary'
+                                        ? 'bg-primary text-white border-primary shadow-sm' 
+                                        : 'bg-transparent border-border/50 text-text-muted hover:border-primary/30 hover:text-primary'
                                 }`}
                             >
                                 {cat}
                             </button>
                         ))}
                     </div>
-
-                    <div className="relative w-full md:w-64 shrink-0">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted/60" size={16} />
-                        <input 
-                            type="text" 
-                            placeholder="Search..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/40 border border-border/50 rounded-full pl-10 pr-4 py-2.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
-                        />
-                    </div>
                 </div>
 
-                {/* Denser, Modern Product Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8">
-                    <AnimatePresence mode="popLayout">
-                        {filteredProducts.map((product) => (
-                            <motion.div 
-                                layout
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                                key={product.id} 
-                                >
-                                <div 
-                                    onClick={() => product.stock > 0 && setSelectedProduct(product)}
-                                    className={`group relative transition-all duration-500 flex flex-col bg-white border border-border/10 rounded-3xl md:rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden ${product.stock > 0 ? 'cursor-pointer' : 'cursor-not-allowed opacity-80'}`}
-                                >
-                                    {/* Product Image Marketplace Style */}
-                                    <div className="aspect-[4/5] md:aspect-square relative overflow-hidden bg-surface">
-                                        <img 
-                                            src={product.image} 
-                                            alt={product.title} 
-                                            className={`w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${product.stock > 0 ? 'group-hover:scale-110' : 'grayscale'}`}
-                                        />
-
-                                        {/* Category Pill */}
-                                        <div className="absolute top-4 left-4 z-10">
-                                            <span className="bg-white/90 backdrop-blur-md text-primary px-3 py-1.5 rounded-full text-[9px] md:text-[10px] font-bold tracking-widest uppercase shadow-sm">
-                                                {product.category}
-                                            </span>
-                                        </div>
-
-                                        {/* Sold Out Overlay */}
-                                        {product.stock === 0 && (
-                                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center backdrop-blur-[1px]">
-                                                <span className="bg-white text-primary px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase shadow-xl -rotate-6">Sold Out</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    
-                                    {/* Modern Professional Typography Below Image */}
-                                    <div className="p-4 md:p-5 flex flex-col flex-1 bg-white">
-                                        <h4 className="font-sans font-semibold text-base md:text-lg text-primary mb-2 line-clamp-1 group-hover:text-primary/70 transition-colors">{product.title}</h4>
-                                        <div className="flex items-end justify-between mt-auto pt-2">
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-sm md:text-base font-bold text-accent">Rp {product.price}</span>
-                                                <span className={`text-[10px] font-semibold tracking-wide ${product.stock > 0 ? 'text-text-muted/60' : 'text-red-500'}`}>
-                                                    {product.stock > 0 ? `${product.stock} in stock` : 'Sold Out'}
+                {/* New Arrivals (Product Grid) */}
+                <div>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-medium text-primary">New arrivals</h3>
+                        <button className="text-text-muted/60 hover:text-primary text-sm font-medium transition-colors">See all</button>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                        <AnimatePresence mode="popLayout">
+                            {filteredProducts.map((product) => (
+                                <motion.div 
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                                    key={product.id} 
+                                    >
+                                    <div 
+                                        onClick={() => product.stock > 0 && setSelectedProduct(product)}
+                                        className={`group relative transition-all duration-500 flex flex-col bg-white border border-border/30 rounded-[24px] overflow-hidden h-full ${product.stock > 0 ? 'cursor-pointer hover:shadow-lg' : 'cursor-not-allowed opacity-80'}`}
+                                    >
+                                        <div className="aspect-square relative p-4 md:p-6 pb-2">
+                                            {/* Tag */}
+                                            <div className="absolute top-4 left-4 z-10">
+                                                <span className="bg-black text-white px-3 py-1 rounded-full text-[7px] md:text-[8px] font-bold tracking-widest uppercase">
+                                                    LIMITED EDITION
                                                 </span>
                                             </div>
-                                            {product.stock > 0 && (
-                                                <button className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center group-hover:scale-105 transition-transform shrink-0 shadow-md">
-                                                    <Plus size={18} strokeWidth={2.5} />
-                                                </button>
-                                            )}
+                                            
+                                            {/* Heart Icon */}
+                                            <button className="absolute top-3 right-3 md:top-4 md:right-4 z-10 w-8 h-8 flex items-center justify-center text-text-muted hover:text-red-500 transition-colors">
+                                                <Heart size={18} strokeWidth={2} />
+                                            </button>
+
+                                            <img 
+                                                src={product.image} 
+                                                alt={product.title} 
+                                                className={`w-full h-full object-contain p-2 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${product.stock > 0 ? 'group-hover:scale-105' : 'grayscale'}`}
+                                            />
+                                        </div>
+                                        
+                                        <div className="p-4 pt-0 flex flex-col flex-1">
+                                            <p className="text-[10px] md:text-xs font-medium text-text-muted/60 mb-0.5 truncate">{product.category}</p>
+                                            <h4 className="font-sans font-medium text-sm md:text-base text-primary mb-2 line-clamp-1">{product.title}</h4>
+                                            
+                                            <div className="flex items-center justify-between mt-auto">
+                                                <span className="text-sm md:text-base font-semibold text-text-muted/80">${product.price.replace(/,/g, '')} USD</span>
+                                                {product.stock > 0 && (
+                                                    <button className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center shrink-0">
+                                                        <Plus size={16} strokeWidth={2.5} />
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div></motion.div>
-                        ))}
-                    </AnimatePresence>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </div>
                 </div>
 
                 {/* Empty State */}
