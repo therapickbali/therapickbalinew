@@ -302,7 +302,11 @@ export default function Home() {
                                         const discountedPriceNum = originalPriceNum * (1 - (campaign.discountPercentage / 100));
                                         
                                         return (
-                                            <Link href="/rituals" key={`${treatment.id}-${duration}`} className="block group outline-none" onClick={() => setIsCampaignModalOpen(false)}>
+                                            <div key={`${treatment.id}-${duration}`} className="block group outline-none cursor-pointer" onClick={() => {
+                                                const message = `Hello Elexoir Spa, I would like to book a Campaign Special:\n\nCampaign: ${campaign.title}\nTreatment: ${treatment.title}\nDuration: ${duration} MINS\nOriginal Price: Rp ${option.price}\nDiscount: ${campaign.discountPercentage}% OFF\nSpecial Price: Rp ${discountedPriceNum.toLocaleString('en-US')}\n\nCould you please let me know the available time slots?`;
+                                                window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(message)}`, '_blank');
+                                                setIsCampaignModalOpen(false);
+                                            }}>
                                                 <div className="rounded-[32px] p-6 bg-white border border-border/40 shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
                                                     <div className="mb-4 flex items-start justify-between">
                                                         <div className="bg-primary/5 border border-primary/10 text-primary px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm">
@@ -316,7 +320,7 @@ export default function Home() {
                                                     <p className="text-xs text-text-muted leading-relaxed font-light mb-6 flex-grow">{treatment.desc}</p>
                                                     
                                                     <div className="mt-auto pt-4 border-t border-border/50">
-                                                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-text-muted mb-1.5 uppercase tracking-widest"><Clock className="w-3 h-3" /> {duration}</div>
+                                                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-text-muted mb-2.5 uppercase tracking-widest"><Clock className="w-3.5 h-3.5" /> {duration} MINS</div>
                                                         <div className="flex items-end justify-between">
                                                             <div>
                                                                 <span className="text-[10px] text-text-muted line-through mr-2">Rp {option.price}</span>
@@ -328,7 +332,7 @@ export default function Home() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </Link>
+                                            </div>
                                         );
                                     });
                                 })}
