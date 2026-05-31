@@ -16,6 +16,9 @@ export type Treatment = {
     desc: string;
     options: TreatmentOption[];
     bgPattern: string;
+    is_published?: boolean;
+    created_at?: string;
+    updated_at?: string;
 };
 
 export type SelectedCampaignTreatment = {
@@ -33,6 +36,9 @@ export type Product = {
     stock: number;
     howToUse?: string;
     ingredients?: string;
+    is_published?: boolean;
+    created_at?: string;
+    updated_at?: string;
 };
 
 export type CartItem = {
@@ -41,12 +47,16 @@ export type CartItem = {
 };
 
 export type Campaign = {
+    id?: string;
     title: string;
     label: string;
     description: string;
     duration: string; // e.g., "1_month"
     discountPercentage: number;
     selectedTreatments: SelectedCampaignTreatment[];
+    is_published?: boolean;
+    created_at?: string;
+    updated_at?: string;
 };
 
 type SpaContextType = {
@@ -80,9 +90,9 @@ export function SpaProvider({ children }: { children: ReactNode }) {
         async function loadData() {
             try {
                 const [treatmentsRes, productsRes, campaignsRes] = await Promise.all([
-                    supabase.from('treatments').select('*'),
-                    supabase.from('products').select('*'),
-                    supabase.from('campaigns').select('*')
+                    supabase.from('treatments').select('*').eq('is_published', true),
+                    supabase.from('products').select('*').eq('is_published', true),
+                    supabase.from('campaigns').select('*').eq('is_published', true)
                 ]);
 
                 if (treatmentsRes.data && treatmentsRes.data.length > 0) setTreatments(treatmentsRes.data);

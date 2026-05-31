@@ -137,6 +137,13 @@ export default function Home() {
 
                 {/* Popular Treatments Scroll */}
                 <div className="mb-24">
+                    {treatments.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-16 text-center bg-white border border-[#E5E7EB] rounded-[32px] mx-6 md:mx-0">
+                            <span className="text-3xl mb-4">🌿</span>
+                            <h3 className="text-lg font-bold text-[#2B2B2B] mb-2">Treatments Available Soon</h3>
+                            <p className="text-sm text-[#6B7280] px-4">We are crafting exclusive experiences for you.</p>
+                        </div>
+                    ) : (
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {treatments.map((item, idx) => (
                             <Link href="/rituals" key={item.id} className="w-72 md:w-80 shrink-0 block group outline-none">
@@ -171,6 +178,7 @@ export default function Home() {
                             </Link>
                         ))}
                     </div>
+                    )}
                 </div>
 
                 {/* The Elexoir Boutique Section */}
@@ -186,7 +194,14 @@ export default function Home() {
                     </div>
                     
                     {/* Swipeable Products */}
-                    <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
+                    {products.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-16 text-center bg-white border border-[#E5E7EB] rounded-[32px]">
+                            <span className="text-3xl mb-4">✨</span>
+                            <h3 className="text-lg font-bold text-[#2B2B2B] mb-2">Boutique Available Soon</h3>
+                            <p className="text-sm text-[#6B7280]">We are curating our exclusive product collection.</p>
+                        </div>
+                    ) : (
+                        <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {products.map((product) => (
                             <a href="/store" key={product.id} className="w-48 md:w-52 shrink-0 block outline-none">
                                 <div className="bg-white border border-[#E5E7EB] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
@@ -213,6 +228,7 @@ export default function Home() {
                             </a>
                         ))}
                     </div>
+                    )}
                     
                 </div>
 

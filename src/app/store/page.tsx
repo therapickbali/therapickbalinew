@@ -134,7 +134,16 @@ export default function StorePage() {
                 </div>
 
                 {/* Product Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
+                {filteredProducts.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-center col-span-full">
+                        <div className="w-16 h-16 bg-white border border-[#E5E7EB] rounded-full flex items-center justify-center mb-6 shadow-sm">
+                            <span className="text-2xl">✨</span>
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-serif text-[#2B2B2B] mb-2">Boutique Available Soon</h3>
+                        <p className="text-[#6B7280] max-w-sm mx-auto text-sm md:text-base">We are curating an exclusive collection of spa products. Please check back shortly.</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
                     {filteredProducts.map((product, i) => (
                         <div 
                             key={product.id} 
@@ -165,6 +174,7 @@ export default function StorePage() {
                         </div>
                     ))}
                 </div>
+                )}
             </div>
 
             {/* Product Details Modal */}
