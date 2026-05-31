@@ -144,7 +144,7 @@ export default function StorePage() {
                             <div className="bg-white border border-[#E5E7EB] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group overflow-hidden">
                                 
                                 {/* Image */}
-                                <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden">
+                                <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden rounded-t-[24px]">
                                     <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 </div>
                                 

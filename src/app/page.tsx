@@ -25,7 +25,7 @@ export default function Home() {
         <div className="min-h-screen bg-[#FDFBF7] relative overflow-hidden font-sans text-text pb-24 md:pb-12">
             
             {/* Top Gradient Background */}
-            <div className="absolute top-0 left-0 right-0 h-[400px] md:h-[500px] bg-gradient-to-b from-[#FDFBF7] to-[#FDFBF7] z-0 pointer-events-none"></div>
+            <div className="absolute top-0 left-0 right-0 h-[400px] md:h-[500px] bg-gradient-to-b from-[#D2F34C] to-[#FDFBF7] z-0 pointer-events-none"></div>
 
             {/* Luxurious Ambient Background */}
             <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] md:w-[800px] h-[600px] bg-secondary/30 blur-[120px] rounded-full z-0 pointer-events-none opacity-60 mix-blend-multiply" />
@@ -159,10 +159,10 @@ export default function Home() {
                                             <div className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">
                                                 <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration}
                                             </div>
-                                            <div className="flex items-center justify-between">
-                                                <span className="font-serif text-2xl text-primary">Rp {item.options[0]?.price}</span>
-                                                <button className="w-12 h-12 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                                                    <ArrowRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
+                                            <div className="flex items-center justify-between bg-gray-50/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-gray-100">
+                                                <span className="font-semibold text-gray-900 text-[15px]">Rp {item.options[0]?.price}</span>
+                                                <button className="w-10 h-10 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
+                                                    <Plus size={20} strokeWidth={2.5} />
                                                 </button>
                                             </div>
                                         </div>
@@ -192,7 +192,7 @@ export default function Home() {
                                 <div className="bg-white border border-[#E5E7EB] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group overflow-hidden">
                                     
                                     {/* Image */}
-                                    <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden">
+                                    <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden rounded-t-[24px]">
                                         <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     </div>
                                     
