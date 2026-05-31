@@ -133,7 +133,7 @@ export default function Home() {
 
                 {/* Popular Treatments Scroll */}
                 <div className="mb-24">
-                    <div className="flex overflow-x-auto pb-8 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
+                    <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {[
                             { 
                                 title: 'Deep Tissue Flow', 
@@ -141,6 +141,7 @@ export default function Home() {
                                 price: 'Rp 450,000', 
                                 time: '90 Min', 
                                 desc: 'Relieve deep-seated tension with firm pressure and focused strokes. Ideal for muscle recovery.',
+                                bgPattern: 'from-secondary/10 via-white to-white'
                             },
                             { 
                                 title: 'Radiance Facial', 
@@ -148,6 +149,7 @@ export default function Home() {
                                 price: 'Rp 350,000', 
                                 time: '60 Min', 
                                 desc: 'Restore your natural glow with organic botanical extracts, gentle exfoliation, and a restorative mask.',
+                                bgPattern: 'from-accent/10 via-white to-white'
                             },
                             { 
                                 title: 'Couples Retreat', 
@@ -155,25 +157,35 @@ export default function Home() {
                                 price: 'Rp 1,200,000', 
                                 time: '120 Min', 
                                 desc: 'A synchronized full-body massage experience designed for ultimate shared relaxation and harmony.',
+                                bgPattern: 'from-primary/5 via-white to-white'
                             },
                         ].map((item, idx) => (
                             <Link href="/rituals" key={idx} className="w-72 md:w-80 shrink-0 block group outline-none">
-                                <div className="rounded-[40px] p-6 md:p-8 bg-white border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2">
-                                    <div className="mb-6 flex items-start justify-between">
-                                        <div className="bg-primary/5 border border-primary/10 text-primary px-4 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
+                                <div className={`rounded-[32px] md:rounded-[40px] bg-gradient-to-br ${item.bgPattern} border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6 md:p-8`}>
+                                    
+                                    {/* Subtle glowing orb for spa ambiance */}
+                                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/60 blur-[30px] rounded-full pointer-events-none transition-transform duration-700 group-hover:scale-150"></div>
+
+                                    <div className="mb-8 flex items-start justify-between relative z-10">
+                                        <div className="bg-white/60 backdrop-blur-sm border border-primary/10 text-primary px-4 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
                                             {item.category}
                                         </div>
                                     </div>
-                                    <h4 className="font-serif text-2xl font-medium text-primary mb-3 leading-tight">{item.title}</h4>
-                                    <p className="text-sm text-text-muted leading-relaxed font-light mb-8 flex-grow">{item.desc}</p>
-                                    
-                                    <div className="mt-auto pt-4 border-t border-border/50">
-                                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted mb-2 uppercase tracking-widest"><Clock className="w-3 h-3" /> {item.time}</div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-serif text-xl text-primary">{item.price}</span>
-                                            <button className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                                <ArrowRight size={20} />
-                                            </button>
+
+                                    <div className="relative z-10 flex-grow flex flex-col">
+                                        <h4 className="font-serif text-3xl font-medium text-primary mb-4 leading-tight">{item.title}</h4>
+                                        <p className="text-sm text-text-muted leading-relaxed font-light mb-8 flex-grow">{item.desc}</p>
+                                        
+                                        <div className="mt-auto pt-6 border-t border-border/50">
+                                            <div className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">
+                                                <Clock className="w-3.5 h-3.5" /> {item.time}
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-serif text-2xl text-primary">{item.price}</span>
+                                                <button className="w-12 h-12 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                                                    <ArrowRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
