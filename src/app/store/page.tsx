@@ -207,7 +207,9 @@ export default function StorePage() {
                             animate={{ opacity: 1, y: 0 }} 
                             exit={{ opacity: 0, y: '100%' }}
                             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                            className="relative w-full h-full md:h-auto md:max-h-[90vh] md:max-w-5xl bg-white md:rounded-[40px] overflow-hidden shadow-2xl flex flex-col md:flex-row z-10"
+                            className={`relative w-full h-full md:h-auto md:max-h-[90vh] bg-white md:rounded-[40px] overflow-hidden shadow-2xl flex flex-col md:flex-row z-10 transition-all duration-500 mx-auto
+                                ${(!isCheckout && !isSuccess) ? 'md:max-w-5xl' : 'md:max-w-2xl'}
+                            `}
                         >
                             <button 
                                 onClick={closeModal}
@@ -217,24 +219,29 @@ export default function StorePage() {
                             </button>
 
                             {/* Left Side: Image (Hero on Mobile) */}
-                            <div className="w-full md:w-1/2 h-[40vh] md:h-full relative shrink-0">
-                                <img 
-                                    src={selectedProduct.image} 
-                                    alt={selectedProduct.title} 
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 md:bg-none pointer-events-none"></div>
-                                {!isCheckout && !isSuccess && (
+                            {(!isCheckout && !isSuccess) && (
+                                <div className="w-full md:w-1/2 h-[40vh] md:h-full relative shrink-0">
+                                    <img 
+                                        src={selectedProduct.image} 
+                                        alt={selectedProduct.title} 
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 md:bg-none pointer-events-none"></div>
                                     <div className="absolute top-6 left-6 z-20">
                                         <span className="bg-white/90 backdrop-blur-md text-primary px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
                                             {selectedProduct.category}
                                         </span>
                                     </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
 
                             {/* Right Side: Content */}
-                            <div className="w-full md:w-1/2 h-[60vh] md:h-auto overflow-y-auto bg-white rounded-t-[32px] md:rounded-none -mt-8 md:mt-0 relative z-20 p-6 md:p-12 flex flex-col">
+                            <div className={`w-full md:h-auto overflow-y-auto bg-white relative z-20 flex flex-col transition-all duration-500
+                                ${(!isCheckout && !isSuccess) 
+                                    ? 'md:w-1/2 h-[60vh] rounded-t-[32px] md:rounded-none -mt-8 md:mt-0 p-6 md:p-12' 
+                                    : 'h-full mt-0 rounded-none p-6 pt-16 md:p-12'
+                                }
+                            `}>
                                 <AnimatePresence mode="wait">
                                     
                                     {/* STATE: SUCCESS */}
@@ -267,8 +274,8 @@ export default function StorePage() {
                                             initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                                             className="flex flex-col h-full"
                                         >
-                                            <div className="mb-6 md:mb-8">
-                                                <button onClick={() => setIsCheckout(false)} className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-text-muted hover:text-primary transition-colors flex items-center gap-1 mb-4">
+                                            <div className="mb-6 md:mb-8 text-center flex flex-col items-center">
+                                                <button onClick={() => setIsCheckout(false)} className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-text-muted hover:text-primary transition-colors flex items-center justify-center gap-1 mb-4">
                                                     &larr; Back to Details
                                                 </button>
                                                 <h3 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">Delivery Details</h3>
