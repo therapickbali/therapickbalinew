@@ -59,6 +59,7 @@ export default function AdminDashboard() {
     const [productHowToUse, setProductHowToUse] = useState('');
     const [productIngredients, setProductIngredients] = useState('');
     const [editingProductId, setEditingProductId] = useState<string | null>(null);
+    const [editingCampaignId, setEditingCampaignId] = useState<string | null>(null);
 
     const [listView, setListView] = useState<'campaign' | 'treatments' | 'store'>('campaign');
 
@@ -105,8 +106,18 @@ export default function AdminDashboard() {
                     selectedTreatments: campaignTreatments,
                     is_published: true
                 };
-                await supabase.from('campaigns').insert([campaignData]);
-                setCampaign(campaignData as any);
+                if (editingCampaignId) {
+                    await supabase.from('campaigns').update(campaignData).eq('id', editingCampaignId);
+                    setCampaign({ ...campaignData, id: editingCampaignId } as any);
+                } else {
+                    const { data } = await supabase.from('campaigns').insert([campaignData]).select();
+                    if (data && data.length > 0) {
+                        setCampaign(data[0] as any);
+                    } else {
+                        setCampaign(campaignData as any);
+                    }
+                }
+                setEditingCampaignId(null);
             } else if (activeTab === 'treatment') {
                 const treatmentData = {
                     title: treatmentTitle,
@@ -195,6 +206,7 @@ export default function AdminDashboard() {
 
     const handleEditCampaign = () => {
         if (!campaign) return;
+        setEditingCampaignId(campaign.id || null);
         setCampaignTitle(campaign.title);
         setCampaignLabel(campaign.label);
         setCampaignDesc(campaign.description);
