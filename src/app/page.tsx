@@ -5,8 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa } from '@/context/SpaContext';
-import GoogleReviews from '@/components/GoogleReviews';
-
 // Dummy data for redesign structure
 const CATEGORIES = [
     { id: 'all', label: 'All' },
@@ -229,8 +227,6 @@ export default function Home() {
                     </div>
                     )}
                 </div>
-                
-                <GoogleReviews />
 
                 {/* The Elexoir Boutique Section */}
                 {products.length > 0 && (
