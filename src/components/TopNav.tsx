@@ -11,10 +11,7 @@ export default function TopNav() {
     const [isScrolled, setIsScrolled] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Hide TopNav on admin and store routes
-    if (pathname?.startsWith('/admin') || pathname?.startsWith('/store')) {
-        return null;
-    }
+
     const navItems = [
         { href: '/', label: 'HOME' },
         { href: '/store', label: 'STORE' },
@@ -43,6 +40,11 @@ export default function TopNav() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    // Hide TopNav on admin and store routes
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/store')) {
+        return null;
+    }
 
     return (
         <div 
