@@ -130,8 +130,8 @@ export default function RitualsDetails() {
                 {/* Description */}
                 <div className="mb-14 bg-white/50 backdrop-blur-xl border border-white/60 p-6 md:p-8 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
                     <h3 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">About this Treatment</h3>
-                    <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8">
-                        {treatment.desc.charAt(0).toUpperCase() + treatment.desc.slice(1).toLowerCase()}
+                    <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8 whitespace-pre-wrap">
+                        {treatment.desc}
                     </p>
                     
                     {treatment.benefits && treatment.benefits.length > 0 && (
@@ -141,7 +141,7 @@ export default function RitualsDetails() {
                                 {treatment.benefits.map((benefit, idx) => (
                                     <li key={idx} className="flex items-start gap-3">
                                         <div className="mt-1 w-1.5 h-1.5 rounded-full bg-primary/40 shrink-0"></div>
-                                        <span className="text-sm md:text-base text-text-muted font-light">{benefit.charAt(0).toUpperCase() + benefit.slice(1).toLowerCase()}</span>
+                                        <span className="text-sm md:text-base text-text-muted font-light">{benefit}</span>
                                     </li>
                                 ))}
                             </ul>
