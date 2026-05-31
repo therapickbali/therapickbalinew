@@ -505,6 +505,60 @@ export default function AdminDashboard() {
                                     </>
                                 )}
 
+                                {activeTab === 'store' && (
+                                    <>
+                                        {/* Product Title & Category */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Product Title</label>
+                                                <input 
+                                                    type="text" required placeholder="e.g. Signature Massage Oil" 
+                                                    value={productTitle} onChange={e => setProductTitle(e.target.value)}
+                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Category</label>
+                                                <input 
+                                                    type="text" required placeholder="e.g. Oils" 
+                                                    value={productCategory} onChange={e => setProductCategory(e.target.value)}
+                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Product Price & Image */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Price (Rp)</label>
+                                                <input 
+                                                    type="text" required placeholder="e.g. 350,000" 
+                                                    value={productPrice} onChange={e => setProductPrice(e.target.value)}
+                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Image URL</label>
+                                                <input 
+                                                    type="url" required placeholder="https://example.com/image.jpg" 
+                                                    value={productImage} onChange={e => setProductImage(e.target.value)}
+                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Description */}
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Description</label>
+                                            <textarea 
+                                                required rows={4} placeholder="Write a captivating description about the product..." 
+                                                value={productDesc} onChange={e => setProductDesc(e.target.value)}
+                                                className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
+                                            />
+                                        </div>
+                                    </>
+                                )}
+
                                 {activeTab === 'list' && (
                                     <div className="space-y-10">
                                         {/* Campaigns Section */}
