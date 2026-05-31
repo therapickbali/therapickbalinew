@@ -175,13 +175,12 @@ export default function Home() {
 
                 {/* The Elexoir Boutique Section */}
                 <div className="mb-32">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 px-6 md:px-0 gap-4">
+                    <div className="flex items-center justify-between mb-8 px-6 md:px-0">
                         <div>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50 mb-2 block">Take the Spa Home</span>
-                            <h3 className="font-serif text-3xl md:text-5xl text-primary font-medium leading-tight">The Elexoir Boutique</h3>
+                            <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-primary/50 mb-1 block">Take the Spa Home</span>
+                            <h3 className="font-serif text-2xl md:text-3xl text-primary font-medium leading-tight">Spa Boutique</h3>
                         </div>
-                        <a href="/store" className="inline-flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 md:px-8 md:py-4 rounded-xl text-sm font-medium hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 whitespace-nowrap self-start md:self-auto">
-                            <ShoppingBag size={18} />
+                        <a href="/store" className="inline-flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-full text-xs font-medium hover:bg-primary/90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 whitespace-nowrap shrink-0">
                             Shop Now
                         </a>
                     </div>
