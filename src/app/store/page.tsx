@@ -124,8 +124,8 @@ export default function StorePage() {
                     </div>
                 </div>
 
-                {/* Denser, Modern Product Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8">
+                {/* Shopify Spa Aesthetic Product Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-10 md:gap-y-16">
                     <AnimatePresence mode="popLayout">
                         {filteredProducts.map((product) => (
                             <motion.div 
@@ -133,45 +133,38 @@ export default function StorePage() {
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
-                                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                                 key={product.id} 
                                 >
                                 <div 
                                     onClick={() => product.stock > 0 && setSelectedProduct(product)}
-                                    className={`group relative transition-all duration-500 flex flex-col bg-white border border-border/30 rounded-2xl md:rounded-[24px] shadow-sm hover:shadow-xl overflow-hidden ${product.stock > 0 ? 'cursor-pointer' : 'cursor-not-allowed opacity-80'}`}
+                                    className={`group relative transition-all duration-500 flex flex-col ${product.stock > 0 ? 'cursor-pointer' : 'cursor-not-allowed opacity-80'}`}
                                 >
-                                    {/* Product Image Marketplace Style */}
-                                    <div className="aspect-square relative overflow-hidden bg-surface">
+                                    {/* Product Image Shopify Style */}
+                                    <div className="aspect-[4/5] relative overflow-hidden bg-surface/50 rounded-lg md:rounded-xl mb-4">
                                         <img 
                                             src={product.image} 
                                             alt={product.title} 
-                                            className={`w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${product.stock > 0 ? 'group-hover:scale-105' : 'grayscale'}`}
+                                            className={`w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${product.stock > 0 ? 'group-hover:scale-105' : 'grayscale'}`}
                                         />
 
                                         {/* Sold Out Overlay */}
                                         {product.stock === 0 && (
-                                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center backdrop-blur-[1px]">
-                                                <span className="bg-white text-primary px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase shadow-xl -rotate-6">Sold Out</span>
+                                            <div className="absolute inset-0 bg-white/40 flex items-center justify-center backdrop-blur-[2px]">
+                                                <span className="bg-primary text-white px-5 py-2 rounded-none text-[10px] md:text-xs font-bold tracking-widest uppercase">Sold Out</span>
                                             </div>
                                         )}
                                     </div>
                                     
-                                    {/* Marketplace Typography Below Image */}
-                                    <div className="p-3 md:p-4 flex flex-col flex-1">
-                                        <p className="text-[9px] md:text-[10px] font-bold text-text-muted uppercase tracking-widest mb-1.5">{product.category}</p>
-                                        <h4 className="font-sans font-medium text-sm md:text-base text-primary mb-1 line-clamp-2 leading-snug flex-1 group-hover:text-primary/70 transition-colors">{product.title}</h4>
-                                        <div className="flex items-center justify-between mt-3">
-                                            <div>
-                                                <span className="text-sm md:text-base font-bold text-accent block">Rp {product.price}</span>
-                                                <span className={`text-[9px] font-bold uppercase tracking-widest mt-0.5 block ${product.stock > 0 ? 'text-text-muted' : 'text-red-500'}`}>
-                                                    {product.stock > 0 ? `Stock: ${product.stock}` : 'Sold Out'}
-                                                </span>
-                                            </div>
-                                            {product.stock > 0 && (
-                                                <button className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors shrink-0 border border-primary/10 group-hover:border-primary">
-                                                    <Plus size={16} strokeWidth={2.5} />
-                                                </button>
-                                            )}
+                                    {/* Shopify Minimalist Typography Below Image */}
+                                    <div className="px-1 flex flex-col items-center text-center">
+                                        <p className="text-[9px] md:text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">{product.category}</p>
+                                        <h4 className="font-serif text-base md:text-lg text-primary mb-2 line-clamp-2 leading-snug group-hover:text-primary/70 transition-colors">{product.title}</h4>
+                                        <div className="flex flex-col items-center gap-1">
+                                            <span className="text-sm font-light text-primary tracking-wide">Rp {product.price}</span>
+                                            <span className={`text-[9px] uppercase tracking-widest font-medium ${product.stock > 0 ? 'text-text-muted/60' : 'text-primary'}`}>
+                                                {product.stock > 0 ? `${product.stock} in stock` : 'Out of Stock'}
+                                            </span>
                                         </div>
                                     </div>
                                 </div></motion.div>
@@ -269,7 +262,7 @@ export default function StorePage() {
                                             </p>
                                             <button 
                                                 onClick={closeModal}
-                                                className="w-full max-w-xs bg-surface text-primary px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-border/50 transition-colors"
+                                                className="w-full max-w-xs bg-primary text-white px-8 py-4 rounded-none text-xs font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors"
                                             >
                                                 Continue Shopping
                                             </button>
@@ -285,9 +278,9 @@ export default function StorePage() {
                                         >
                                             <button 
                                                 onClick={() => setIsCheckout(false)} 
-                                                className="absolute -top-2 left-0 md:-top-4 md:-left-4 w-10 h-10 rounded-full flex items-center justify-center text-text-muted hover:text-primary hover:bg-surface transition-colors shadow-sm border border-border/50 bg-white"
+                                                className="absolute -top-2 left-0 md:-top-4 md:-left-4 w-10 h-10 rounded-full flex items-center justify-center text-text-muted hover:text-primary transition-colors bg-transparent"
                                             >
-                                                <ArrowLeft size={18} strokeWidth={2.5} />
+                                                <ArrowLeft size={20} strokeWidth={1.5} />
                                             </button>
                                             <div className="mb-6 md:mb-8 text-center flex flex-col items-center mt-10 md:mt-2">
                                                 <h3 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">Delivery Details</h3>
@@ -295,48 +288,47 @@ export default function StorePage() {
                                             </div>
 
                                             <form onSubmit={handleCheckoutSubmit} className="space-y-4 flex-1 flex flex-col">
-                                                {/* Quantity Selector inside Checkout */}
-                                                <div className="flex items-center justify-between p-3 md:p-4 bg-surface rounded-2xl mb-2 gap-4">
+                                                <div className="flex items-center justify-between py-4 border-b border-border/50 mb-4 gap-4">
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-text-muted mb-0.5">Quantity</p>
-                                                        <p className="font-serif text-base md:text-lg text-primary truncate pr-2" title={selectedProduct.title}>{selectedProduct.title}</p>
+                                                        <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-text-muted mb-1">Quantity</p>
+                                                        <p className="font-serif text-lg md:text-xl text-primary truncate pr-2" title={selectedProduct.title}>{selectedProduct.title}</p>
                                                     </div>
-                                                    <div className="flex items-center gap-2 md:gap-3 bg-white px-1.5 py-1 rounded-full border border-border/50 shadow-sm shrink-0">
-                                                        <button type="button" onClick={() => handleQuantityChange('dec')} className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-primary hover:bg-surface transition-colors disabled:opacity-30" disabled={quantity <= 1}>
-                                                            <Minus size={12} />
+                                                    <div className="flex items-center gap-4 shrink-0">
+                                                        <button type="button" onClick={() => handleQuantityChange('dec')} className="w-8 h-8 flex items-center justify-center text-primary hover:opacity-70 transition-opacity disabled:opacity-30" disabled={quantity <= 1}>
+                                                            <Minus size={16} strokeWidth={1.5} />
                                                         </button>
-                                                        <span className="font-bold text-xs md:text-sm w-4 text-center">{quantity}</span>
-                                                        <button type="button" onClick={() => handleQuantityChange('inc')} className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-primary hover:bg-surface transition-colors">
-                                                            <Plus size={12} />
+                                                        <span className="font-sans text-base w-4 text-center">{quantity}</span>
+                                                        <button type="button" onClick={() => handleQuantityChange('inc')} className="w-8 h-8 flex items-center justify-center text-primary hover:opacity-70 transition-opacity">
+                                                            <Plus size={16} strokeWidth={1.5} />
                                                         </button>
                                                     </div>
                                                 </div>
 
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div className="space-y-1.5">
-                                                        <label className="text-[10px] font-bold uppercase tracking-widest text-text-muted ml-1">Full Name *</label>
-                                                        <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all" />
+                                                <div className="grid grid-cols-2 gap-6">
+                                                    <div className="space-y-2">
+                                                        <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Full Name *</label>
+                                                        <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-transparent border-b border-border/50 rounded-none px-0 py-2 text-sm md:text-base focus:outline-none focus:border-primary transition-colors" />
                                                     </div>
-                                                    <div className="space-y-1.5">
-                                                        <label className="text-[10px] font-bold uppercase tracking-widest text-text-muted ml-1">Phone Number *</label>
-                                                        <input required type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all" />
+                                                    <div className="space-y-2">
+                                                        <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Phone Number *</label>
+                                                        <input required type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-transparent border-b border-border/50 rounded-none px-0 py-2 text-sm md:text-base focus:outline-none focus:border-primary transition-colors" />
                                                     </div>
                                                 </div>
-                                                <div className="space-y-1.5">
-                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-text-muted ml-1">Email Address</label>
-                                                    <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all" />
+                                                <div className="space-y-2 mt-4">
+                                                    <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Email Address</label>
+                                                    <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-transparent border-b border-border/50 rounded-none px-0 py-2 text-sm md:text-base focus:outline-none focus:border-primary transition-colors" />
                                                 </div>
-                                                <div className="space-y-1.5">
-                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-text-muted ml-1">Villa / Hotel / Address *</label>
-                                                    <textarea required rows={2} value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all resize-none" />
+                                                <div className="space-y-2 mt-4">
+                                                    <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Villa / Hotel / Address *</label>
+                                                    <textarea required rows={1} value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full bg-transparent border-b border-border/50 rounded-none px-0 py-2 text-sm md:text-base focus:outline-none focus:border-primary transition-colors resize-none" />
                                                 </div>
-                                                <div className="space-y-1.5">
-                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-text-muted ml-1">Special Instructions</label>
-                                                    <textarea rows={2} value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})} className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all resize-none" />
+                                                <div className="space-y-2 mt-4">
+                                                    <label className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Special Instructions</label>
+                                                    <textarea rows={1} value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})} className="w-full bg-transparent border-b border-border/50 rounded-none px-0 py-2 text-sm md:text-base focus:outline-none focus:border-primary transition-colors resize-none" />
                                                 </div>
                                                 
                                                 <div className="mt-auto pt-8 pb-4 md:pb-0">
-                                                    <button type="submit" className="w-full bg-primary text-white px-6 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-xl flex items-center justify-between">
+                                                    <button type="submit" className="w-full bg-primary text-white px-6 py-4 rounded-none text-xs font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors flex items-center justify-between">
                                                         <span>Submit Order</span>
                                                         <span className="font-serif text-sm">Rp {getTotalPrice(selectedProduct.price, quantity)}</span>
                                                     </button>
@@ -352,27 +344,27 @@ export default function StorePage() {
                                             initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                                             className="flex flex-col h-full"
                                         >
-                                            <h2 className="font-serif text-3xl md:text-5xl text-primary font-medium mb-3 md:mb-4 pr-10">{selectedProduct.title}</h2>
-                                            <span className="font-serif text-xl md:text-3xl text-accent mb-6 block">Rp {selectedProduct.price}</span>
+                                            <h2 className="font-serif text-4xl md:text-5xl text-primary font-medium mb-2 pr-8">{selectedProduct.title}</h2>
+                                            <span className="font-sans text-lg md:text-xl text-primary/80 mb-8 block">Rp {selectedProduct.price}</span>
                                             
-                                            <div className="prose prose-sm text-text-muted leading-relaxed font-light mb-8 flex-1">
-                                                <p>{selectedProduct.description}</p>
-                                                <p className="mt-4">
+                                            <div className="text-sm md:text-base text-text-muted leading-loose font-light mb-8 flex-1">
+                                                <p className="mb-6">{selectedProduct.description}</p>
+                                                <p className="mb-8">
                                                     Experience the true essence of Bali with this signature product. Crafted from organic ingredients and designed to bring tranquility directly to your sanctuary.
                                                 </p>
-                                                <ul className="mt-6 space-y-2 border-t border-border/50 pt-6">
-                                                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary"></div>100% Organic & Locally Sourced</li>
-                                                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary"></div>Premium Spa Quality</li>
-                                                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary"></div>Same-day Villa Delivery Available</li>
+                                                <ul className="space-y-3 border-t border-border/30 pt-6">
+                                                    <li className="flex items-start gap-3"><div className="w-1 h-1 rounded-full bg-primary mt-2.5 shrink-0"></div><span>100% Organic & Locally Sourced</span></li>
+                                                    <li className="flex items-start gap-3"><div className="w-1 h-1 rounded-full bg-primary mt-2.5 shrink-0"></div><span>Premium Spa Quality</span></li>
+                                                    <li className="flex items-start gap-3"><div className="w-1 h-1 rounded-full bg-primary mt-2.5 shrink-0"></div><span>Same-day Villa Delivery Available</span></li>
                                                 </ul>
                                             </div>
 
-                                            <div className="sticky -bottom-6 md:-bottom-12 left-0 right-0 bg-white pt-3 pb-6 md:pb-12 z-20 mt-4">
+                                            <div className="sticky -bottom-6 md:-bottom-12 left-0 right-0 bg-white pt-2 pb-6 md:pb-12 z-20 mt-4">
                                                 <button 
                                                     onClick={() => setIsCheckout(true)}
-                                                    className="w-full bg-[#1A1A1A] text-white px-6 py-4 rounded-2xl text-[13px] font-bold uppercase tracking-widest hover:bg-black transition-all shadow-lg flex items-center justify-center gap-2"
+                                                    className="w-full bg-[#1A1A1A] text-white px-6 py-4 rounded-none text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-black transition-colors flex items-center justify-center gap-2"
                                                 >
-                                                    <ShoppingBag size={16} /> Purchase Now
+                                                    Purchase Now
                                                 </button>
                                             </div>
                                         </motion.div>
