@@ -25,8 +25,18 @@ export default function Home() {
     // Booking Form State for Campaign
     const [cartItems, setCartItems] = useState<any[]>([]);
     const [isSelectingMore, setIsSelectingMore] = useState(false);
+    const [expandedTreatmentId, setExpandedTreatmentId] = useState<string | null>(null);
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-    const [formData, setFormData] = useState({ name: '', location: '', room: '', date: '', time: '' });
+    
+    // Initialize date and time
+    const getInitialDateTime = () => {
+        const now = new Date();
+        const date = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+        const time = now.toTimeString().split(' ')[0].substring(0, 5);
+        return { date, time };
+    };
+    
+    const [formData, setFormData] = useState({ name: '', location: '', room: '', ...getInitialDateTime() });
 
     const handleCampaignBooking = (e: React.FormEvent) => {
         e.preventDefault();
@@ -44,7 +54,7 @@ export default function Home() {
             return `${item.title.toUpperCase()}%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON IDR ${price}`;
         }).join('%0A%0A');
         
-        const message = `*New Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Date & Time: ${formData.date} at ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
+        const message = `*New Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Date and Time: ${formData.date} at ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
         
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
         setCartItems([]);
@@ -388,7 +398,7 @@ export default function Home() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[110] flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm"
+                        className="fixed inset-0 z-[110] flex items-center justify-center px-0 md:px-4 bg-black/40 backdrop-blur-sm"
                     >
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -412,30 +422,71 @@ export default function Home() {
                                         <h2 className="font-serif text-2xl text-primary">Select Treatment</h2>
                                     </div>
                                     
-                                    <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 pb-4 no-scrollbar">
+                                    <div 
+                                        className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 pb-4 no-scrollbar"
+                                        onScroll={() => setExpandedTreatmentId(null)}
+                                    >
                                         {treatments.map(t => (
-                                            <div key={t.id} onClick={() => {
-                                                setCartItems([...cartItems, {
-                                                    id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
-                                                    treatmentId: t.id,
-                                                    title: t.title,
-                                                    duration: t.options[0]?.duration || '60',
-                                                    price: parseInt(t.options[0]?.price.replace(/,/g, '') || '0'),
-                                                    guests: 1,
-                                                    isCampaign: false
-                                                }]);
-                                                setIsSelectingMore(false);
-                                            }} className="bg-surface border border-border/50 rounded-2xl p-3 flex gap-4 shadow-sm hover:border-primary/20 hover:shadow-md transition-all cursor-pointer group">
-                                                <div className="flex-1 py-1 pl-2">
-                                                    <div className="text-[9px] font-bold tracking-widest text-primary/50 uppercase mb-1">{t.category}</div>
-                                                    <h4 className="font-bold text-sm text-primary mb-1 line-clamp-1">{t.title}</h4>
-                                                    <div className="text-[10px] text-text-muted"><Clock className="w-3 h-3 inline mr-1" />{t.options[0]?.duration} Mins</div>
-                                                </div>
-                                                <div className="flex items-center pr-2">
-                                                    <div className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                                        <Plus className="w-4 h-4" />
+                                            <div 
+                                                key={t.id} 
+                                                className={`bg-surface border ${expandedTreatmentId === t.id ? 'border-primary' : 'border-border/50'} rounded-2xl overflow-hidden shadow-sm transition-all`}
+                                            >
+                                                <div 
+                                                    onClick={() => setExpandedTreatmentId(expandedTreatmentId === t.id ? null : t.id)}
+                                                    className="p-3 flex gap-4 hover:bg-black/[0.02] cursor-pointer group"
+                                                >
+                                                    <div className="flex-1 py-1 pl-2">
+                                                        <div className="text-[9px] font-bold tracking-widest text-primary/50 uppercase mb-1">{t.category}</div>
+                                                        <h4 className="font-bold text-sm text-primary mb-1 line-clamp-1">{t.title}</h4>
+                                                        <div className="text-[10px] text-text-muted"><Clock className="w-3 h-3 inline mr-1" />{t.options.length} Options</div>
+                                                    </div>
+                                                    <div className="flex items-center pr-2">
+                                                        <div className={`w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary transition-all duration-300 ${expandedTreatmentId === t.id ? 'rotate-45 bg-primary text-white' : 'group-hover:bg-primary group-hover:text-white'}`}>
+                                                            <Plus className="w-4 h-4" />
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                
+                                                <AnimatePresence>
+                                                    {expandedTreatmentId === t.id && (
+                                                        <motion.div
+                                                            initial={{ height: 0, opacity: 0 }}
+                                                            animate={{ height: 'auto', opacity: 1 }}
+                                                            exit={{ height: 0, opacity: 0 }}
+                                                            className="border-t border-border/50 bg-[#FDFBF7]"
+                                                        >
+                                                            <div className="p-4 space-y-4">
+                                                                <p className="text-xs text-text-muted leading-relaxed">{t.desc}</p>
+                                                                <div className="space-y-2">
+                                                                    <div className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-2">Select Duration</div>
+                                                                    {t.options.map((opt, idx) => (
+                                                                        <button
+                                                                            key={idx}
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                setCartItems([...cartItems, {
+                                                                                    id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                                                                                    treatmentId: t.id,
+                                                                                    title: t.title,
+                                                                                    duration: opt.duration,
+                                                                                    price: parseInt(opt.price.replace(/,/g, '') || '0'),
+                                                                                    guests: 1,
+                                                                                    isCampaign: false
+                                                                                }]);
+                                                                                setExpandedTreatmentId(null);
+                                                                                setIsSelectingMore(false);
+                                                                            }}
+                                                                            className="w-full flex items-center justify-between p-3 rounded-xl border border-border hover:border-primary/50 hover:bg-primary/5 transition-all group"
+                                                                        >
+                                                                            <span className="text-sm font-bold text-primary group-hover:text-primary transition-colors">{opt.duration} Mins</span>
+                                                                            <span className="text-sm font-serif text-primary">IDR {opt.price}</span>
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
                                             </div>
                                         ))}
                                     </div>
