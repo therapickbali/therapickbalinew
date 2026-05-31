@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag } from 'lucide-react';
+import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa } from '@/context/SpaContext';
 
@@ -188,25 +188,28 @@ export default function Home() {
                     {/* Swipeable Products */}
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {products.map((product) => (
-                            <a href="/store" key={product.id} className="w-48 md:w-56 shrink-0 block group outline-none">
-                                <div className="rounded-[24px] md:rounded-[32px] bg-white border border-border/40 shadow-sm hover:shadow-[0_16px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full overflow-hidden group-hover:-translate-y-2 relative">
-                                    <div className="aspect-square overflow-hidden relative bg-surface">
-                                        <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[8px] font-bold tracking-widest uppercase text-primary shadow-sm z-10">
-                                            {product.category}
-                                        </div>
-                                        <div className="absolute top-3 right-3 w-7 h-7 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-primary/50 shadow-sm z-10 hover:text-red-500 transition-colors">
-                                            <Heart size={12} />
-                                        </div>
+                            <a href="/store" key={product.id} className="w-48 md:w-52 shrink-0 block outline-none">
+                                <div className="bg-white border border-[#E5E7EB] rounded-[24px] p-3 md:p-4 flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
+                                    {/* Heart Icon */}
+                                    <div className="absolute top-4 right-4 z-10 text-gray-300 hover:text-[#65C466] transition-colors">
+                                        <Heart size={20} fill="currentColor" className="text-[#65C466]" />
                                     </div>
-                                    <div className="p-4 md:p-5 flex flex-col flex-grow bg-gradient-to-b from-white to-surface/30">
-                                        <h4 className="font-serif text-base font-medium text-primary mb-1 line-clamp-1">{product.title}</h4>
-                                        <p className="text-[10px] text-text-muted leading-relaxed font-light mb-4 line-clamp-2 flex-grow">{product.description}</p>
+                                    
+                                    {/* Image */}
+                                    <div className="aspect-[4/5] relative mb-3 bg-white flex items-center justify-center overflow-hidden">
+                                        <img src={product.image} alt={product.title} className="w-[90%] h-[90%] object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl" />
+                                    </div>
+                                    
+                                    {/* Text Info */}
+                                    <div className="flex flex-col flex-grow px-1">
+                                        <p className="text-gray-400 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Elexoir'}</p>
+                                        <h4 className="font-bold text-gray-900 text-sm line-clamp-1 mb-3">{product.title}</h4>
                                         
-                                        <div className="flex items-center justify-between mt-auto">
-                                            <span className="font-serif text-base text-primary">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
-                                            <div className="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-500">
-                                                <ShoppingBag size={14} />
+                                        {/* Price and Add Button */}
+                                        <div className="flex items-center justify-between bg-gray-50 rounded-full p-1 pl-3 mt-auto">
+                                            <span className="font-semibold text-gray-900 text-[13px]">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
+                                            <div className="w-8 h-8 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0">
+                                                <Plus size={16} strokeWidth={2.5} />
                                             </div>
                                         </div>
                                     </div>

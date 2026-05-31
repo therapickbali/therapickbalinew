@@ -138,30 +138,31 @@ export default function StorePage() {
                     {filteredProducts.map((product, i) => (
                         <div 
                             key={product.id} 
-                            className="cursor-pointer group flex flex-col outline-none h-full" 
+                            className="cursor-pointer outline-none h-full" 
                             onClick={() => product.stock > 0 && setSelectedProduct(product)}
                         >
-                            <div className="flex flex-col h-full bg-transparent">
-                                {/* Cinematic Image */}
-                                <div className="aspect-[3/4] relative overflow-hidden bg-neutral-900 shadow-sm transition-shadow duration-500 group-hover:shadow-lg">
-                                    <img src={product.image} alt={product.title} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.04] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]" />
-                                    
-                                    {/* Vignette Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" />
-                                    
-                                    {/* Floating Action */}
-                                    <div className="absolute top-2.5 right-2.5 w-7 h-7 md:w-8 md:h-8 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 transition-all duration-300 hover:bg-white hover:text-black">
-                                        <ShoppingBag size={14} strokeWidth={1.5} />
-                                    </div>
+                            <div className="bg-white border border-[#E5E7EB] rounded-[24px] p-3 md:p-4 flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
+                                {/* Heart Icon */}
+                                <div className="absolute top-4 right-4 z-10 text-gray-300 hover:text-[#65C466] transition-colors">
+                                    <Heart size={20} fill="currentColor" className={i % 3 === 0 ? "text-[#65C466]" : "text-gray-200"} />
                                 </div>
                                 
-                                {/* Info Section */}
-                                <div className="pt-3 flex flex-col flex-grow">
-                                    <h4 className="font-serif text-primary text-sm md:text-base font-medium leading-snug line-clamp-1">{product.title}</h4>
+                                {/* Image */}
+                                <div className="aspect-[4/5] relative mb-3 bg-white flex items-center justify-center overflow-hidden">
+                                    <img src={product.image} alt={product.title} className="w-[90%] h-[90%] object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl" />
+                                </div>
+                                
+                                {/* Text Info */}
+                                <div className="flex flex-col flex-grow px-1">
+                                    <p className="text-gray-400 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Elexoir'}</p>
+                                    <h4 className="font-bold text-gray-900 text-[13px] md:text-sm line-clamp-1 mb-3">{product.title}</h4>
                                     
-                                    <div className="flex items-center justify-between mt-1">
-                                        <span className="font-medium text-primary/60 text-[10px] md:text-[11px] uppercase tracking-widest">IDR</span>
-                                        <span className="font-serif text-primary text-sm md:text-base whitespace-nowrap">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
+                                    {/* Price and Add Button */}
+                                    <div className="flex items-center justify-between bg-gray-50 rounded-full p-1 pl-3 mt-auto">
+                                        <span className="font-semibold text-gray-900 text-[13px] md:text-sm">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
+                                        <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0">
+                                            <Plus size={18} strokeWidth={2.5} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
