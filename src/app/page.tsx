@@ -54,7 +54,7 @@ export default function Home() {
             return `${item.title.toUpperCase()}%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON IDR ${price}`;
         }).join('%0A%0A');
         
-        const message = `*New Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Date and Time: ${formData.date} at ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
+        const message = `*New Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Date: ${formData.date}%0A- Time: ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
         
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
         setCartItems([]);
@@ -422,10 +422,7 @@ export default function Home() {
                                         <h2 className="font-serif text-2xl text-primary">Select Treatment</h2>
                                     </div>
                                     
-                                    <div 
-                                        className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 pb-4 no-scrollbar"
-                                        onScroll={() => setExpandedTreatmentId(null)}
-                                    >
+                                    <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 pb-4 no-scrollbar">
                                         {treatments.map(t => (
                                             <div 
                                                 key={t.id} 
