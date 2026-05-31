@@ -47,18 +47,15 @@ export default function TopNav() {
     }
 
     return (
-        <div 
-            className={`fixed z-50 w-full flex justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
-                ${isScrolled ? 'top-4 px-4 md:top-6 md:px-0' : 'top-0 px-0'}
-            `}
-        >
+        <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
             <header 
-                className={`flex items-center justify-between relative transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] w-full
+                className={`pointer-events-auto flex items-center justify-between relative transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border will-change-auto
                     ${isScrolled 
-                        ? 'bg-white/60 saturate-[1.8] backdrop-blur-[24px] border border-white/60 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] px-4 py-2 md:bg-white/80 md:border-white/80 md:max-w-[800px]' 
-                        : 'bg-transparent border-transparent shadow-none rounded-none px-4 py-4 md:py-8 md:px-12 max-w-7xl'}
+                        ? 'translate-y-4 md:translate-y-6 w-[calc(100%-32px)] md:w-[800px] bg-white/70 saturate-[1.8] backdrop-blur-xl border-white/60 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 py-2' 
+                        : 'translate-y-0 w-full max-w-7xl bg-transparent border-transparent shadow-none rounded-none px-4 md:px-12 py-4 md:py-8'}
                 `} 
                 ref={dropdownRef}
+                style={{ transformOrigin: 'top center' }}
             >
                 
                 {/* Brand / Store (Left) */}
