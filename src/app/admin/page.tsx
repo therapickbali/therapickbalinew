@@ -110,6 +110,7 @@ export default function AdminDashboard() {
                     title: treatmentTitle,
                     category: treatmentCategory,
                     desc: treatmentDesc,
+                    benefits: benefits.filter(b => b.trim() !== ''),
                     bgPattern: 'from-secondary/10 via-white to-white',
                     options: pricingOptions.map(o => ({ duration: o.duration, price: o.price })),
                     is_published: true
@@ -127,6 +128,7 @@ export default function AdminDashboard() {
                 setEditingTreatmentId(null);
                 setTreatmentTitle('');
                 setTreatmentDesc('');
+                setBenefits(['']);
                 setPricingOptions([{ duration: '', price: '' }]);
             } else if (activeTab === 'store') {
                 const productData = {
@@ -174,6 +176,7 @@ export default function AdminDashboard() {
         setTreatmentTitle(t.title);
         setTreatmentCategory(t.category);
         setTreatmentDesc(t.desc);
+        setBenefits(t.benefits && t.benefits.length > 0 ? t.benefits : ['']);
         setPricingOptions(t.options.map(o => ({ duration: o.duration, price: o.price })));
         setActiveTab('treatment');
     };

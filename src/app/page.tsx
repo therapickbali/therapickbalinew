@@ -162,7 +162,7 @@ export default function Home() {
                                     </div>
 
                                     <div className="relative z-10 flex-grow flex flex-col">
-                                        <h4 className="font-serif text-xl font-medium text-primary mb-3 leading-tight capitalize">{item.title.toLowerCase()}</h4>
+                                        <h4 className="font-serif text-xl font-medium text-primary mb-3 leading-tight">{item.title}</h4>
                                         <p className="text-xs text-text-muted leading-relaxed font-light mb-6 flex-grow line-clamp-4">{item.desc}</p>
                                         
                                         <div className="mt-auto pt-5 border-t border-border/50">
