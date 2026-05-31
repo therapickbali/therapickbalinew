@@ -7,7 +7,7 @@ import { ShoppingBag, Search, X, Plus, Minus, CheckCircle2, Heart, Star, MapPin,
 import { useSpa, Product } from '@/context/SpaContext';
 
 export default function StorePage() {
-    const { products, cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart, savedProducts, toggleSavedProduct } = useSpa();
+    const { products, cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart } = useSpa();
     const [activeCategory, setActiveCategory] = useState('All');
     
     // Modal & Checkout States
@@ -135,44 +135,35 @@ export default function StorePage() {
 
                 {/* Product Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
-                    {filteredProducts.map((product, i) => {
-                        const isSaved = savedProducts.includes(product.id);
-                        return (
+                    {filteredProducts.map((product, i) => (
                         <div 
                             key={product.id} 
                             className="cursor-pointer outline-none h-full" 
                             onClick={() => product.stock > 0 && setSelectedProduct(product)}
                         >
-                            <div className="bg-white border border-[#E5E7EB] rounded-[24px] p-3 md:p-4 flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
-                                {/* Heart Icon */}
-                                <div 
-                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSavedProduct(product.id); }}
-                                    className={`absolute top-4 right-4 z-10 hover:text-[#65C466] transition-colors cursor-pointer ${isSaved ? 'text-[#65C466]' : 'text-gray-300'}`}
-                                >
-                                    <Heart size={20} fill={isSaved ? "currentColor" : "none"} className={isSaved ? "text-[#65C466]" : ""} />
-                                </div>
+                            <div className="bg-white border border-[#E5E7EB] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group overflow-hidden">
                                 
                                 {/* Image */}
-                                <div className="aspect-[4/5] relative mb-3 bg-white flex items-center justify-center overflow-hidden">
-                                    <img src={product.image} alt={product.title} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 rounded-xl" />
+                                <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden">
+                                    <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 </div>
                                 
                                 {/* Text Info */}
-                                <div className="flex flex-col flex-grow px-1">
+                                <div className="flex flex-col flex-grow p-4 md:p-5">
                                     <p className="text-gray-400 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Elexoir'}</p>
-                                    <h4 className="font-bold text-gray-900 text-[13px] md:text-sm line-clamp-1 mb-3">{product.title}</h4>
+                                    <h4 className="font-bold text-gray-900 text-[13px] md:text-sm line-clamp-1 mb-4">{product.title}</h4>
                                     
                                     {/* Price and Add Button */}
-                                    <div className="flex items-center justify-between bg-gray-50 rounded-full p-1 pl-3 mt-auto">
+                                    <div className="flex items-center justify-between bg-gray-50 rounded-full p-1 pl-3 mt-auto border border-gray-100">
                                         <span className="font-semibold text-gray-900 text-[13px] md:text-sm">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
-                                        <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0">
+                                        <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                                             <Plus size={18} strokeWidth={2.5} />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    )})}
+                    ))}
                 </div>
             </div>
 
