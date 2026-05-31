@@ -86,51 +86,51 @@ export default function GoogleReviews() {
 
                 <div className="relative">
                     {/* Decorative quotes */}
-                    <Quote className="absolute -top-6 -left-6 md:-top-10 md:-left-10 w-20 h-20 text-primary/5 -z-10 rotate-180" />
-                    <Quote className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 w-20 h-20 text-primary/5 -z-10" />
+                    <Quote className="absolute -top-6 -left-6 md:-top-10 md:-left-10 w-20 h-20 text-primary/10 -z-10 rotate-180" />
+                    <Quote className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 w-20 h-20 text-primary/10 -z-10" />
                     
-                    <div className="bg-white rounded-[32px] p-8 md:p-12 shadow-sm border border-border/50 text-center min-h-[300px] flex flex-col justify-center relative transition-all">
+                    <div className="bg-primary rounded-[32px] p-8 md:p-12 shadow-soft-lg text-center min-h-[300px] flex flex-col justify-center relative transition-all duration-500 ease-in-out transform hover:scale-[1.02]">
                         <div className="mb-8">
                             <div className="flex justify-center mb-6">
                                 <div className="flex gap-1 text-yellow-500">
                                     {[...Array(review.rating)].map((_, i) => (
-                                        <Star key={i} className="w-5 h-5 fill-current" />
+                                        <Star key={i} className="w-5 h-5 fill-secondary text-secondary" />
                                     ))}
                                 </div>
                             </div>
-                            <p className="text-lg md:text-2xl text-primary leading-relaxed font-serif italic max-w-2xl mx-auto line-clamp-6">
+                            <p className="text-lg md:text-2xl text-white leading-relaxed font-serif italic max-w-2xl mx-auto line-clamp-6">
                                 "{review.text}"
                             </p>
                         </div>
                         
                         <div className="flex flex-col items-center justify-center mt-auto">
                             {review.authorPhotoUri ? (
-                                <img src={review.authorPhotoUri} alt={review.authorName} className="w-12 h-12 rounded-full mb-3 shadow-sm border border-border/50" />
+                                <img src={review.authorPhotoUri} alt={review.authorName} className="w-14 h-14 rounded-full mb-4 shadow-md ring-2 ring-secondary/50" />
                             ) : (
-                                <div className="w-12 h-12 rounded-full bg-surface text-primary flex items-center justify-center mb-3 shadow-sm border border-border/50">
-                                    <User className="w-5 h-5" />
+                                <div className="w-14 h-14 rounded-full bg-white/10 text-secondary flex items-center justify-center mb-4 shadow-md ring-2 ring-secondary/50">
+                                    <User className="w-6 h-6" />
                                 </div>
                             )}
-                            <h4 className="font-bold text-primary text-sm">{review.authorName}</h4>
-                            <span className="text-xs text-text-muted mt-1">{review.relativePublishTimeDescription}</span>
+                            <h4 className="font-bold text-white text-base tracking-wide">{review.authorName}</h4>
+                            <span className="text-xs text-secondary/80 mt-1 uppercase tracking-wider">{review.relativePublishTimeDescription}</span>
                         </div>
                     </div>
 
                     {/* Navigation Buttons */}
-                    <div className="flex justify-center gap-4 mt-8">
+                    <div className="flex justify-center gap-6 mt-10">
                         <button 
                             onClick={prevReview}
-                            className="w-12 h-12 rounded-full bg-white border border-border/50 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
+                            className="w-14 h-14 rounded-full bg-transparent border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors duration-300 shadow-sm"
                             aria-label="Previous Review"
                         >
-                            <ChevronLeft className="w-5 h-5" />
+                            <ChevronLeft className="w-6 h-6" />
                         </button>
                         <button 
                             onClick={nextReview}
-                            className="w-12 h-12 rounded-full bg-white border border-border/50 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
+                            className="w-14 h-14 rounded-full bg-transparent border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors duration-300 shadow-sm"
                             aria-label="Next Review"
                         >
-                            <ChevronRight className="w-5 h-5" />
+                            <ChevronRight className="w-6 h-6" />
                         </button>
                     </div>
                 </div>
