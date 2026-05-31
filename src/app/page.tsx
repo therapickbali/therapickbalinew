@@ -26,7 +26,7 @@ export default function Home() {
     const [cartItems, setCartItems] = useState<any[]>([]);
     const [isSelectingMore, setIsSelectingMore] = useState(false);
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-    const [formData, setFormData] = useState({ name: '', location: '', room: '' });
+    const [formData, setFormData] = useState({ name: '', location: '', room: '', date: '', time: '' });
 
     const handleCampaignBooking = (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,13 +35,16 @@ export default function Home() {
         const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0);
         
         const treatmentsList = cartItems.map(item => {
+            const price = (item.price * item.guests).toLocaleString('en-US');
             if (item.isCampaign) {
-                return `- ${item.campaignTitle} (${item.title}) - ${item.duration} Mins x${item.guests} Guest(s) [${item.discountPercentage}% OFF] - IDR ${(item.price * item.guests).toLocaleString('en-US')}`;
+                const originalPriceNum = item.price / (1 - (item.discountPercentage / 100));
+                const originalPrice = (originalPriceNum * item.guests).toLocaleString('en-US');
+                return `${item.campaignTitle}%0A${item.title.toUpperCase()}%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON [${item.discountPercentage}% OFF]%0AIDR ${price} ~IDR ${originalPrice}~`;
             }
-            return `- ${item.title} (${item.duration} Mins) x${item.guests} Guest(s) - IDR ${(item.price * item.guests).toLocaleString('en-US')}`;
-        }).join('%0A');
+            return `${item.title.toUpperCase()}%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON IDR ${price}`;
+        }).join('%0A%0A');
         
-        const message = `*New Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
+        const message = `*New Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Date & Time: ${formData.date} at ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
         
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
         setCartItems([]);
@@ -512,6 +515,24 @@ export default function Home() {
                                                 value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
                                                 className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Date</label>
+                                                <input 
+                                                    type="date" required 
+                                                    value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
+                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                />
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
+                                                <input 
+                                                    type="time" required 
+                                                    value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
+                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                />
+                                            </div>
                                         </div>
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Name</label>

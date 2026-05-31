@@ -24,7 +24,7 @@ export default function RitualsDetails() {
     }[]>([]);
     const [isSelectingMore, setIsSelectingMore] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState({ name: '', location: '', room: '' });
+    const [formData, setFormData] = useState({ name: '', location: '', room: '', date: '', time: '' });
 
     if (!treatment) {
         return <div className="min-h-screen bg-background flex items-center justify-center font-serif text-2xl text-primary">Loading...</div>;
@@ -39,8 +39,11 @@ export default function RitualsDetails() {
     const handleBooking = (e: React.FormEvent) => {
         e.preventDefault();
         const waNumber = '6285174119423';
-        const treatmentsList = cartItems.map(item => `- ${item.title} (${item.duration} Mins) x${item.guests} Guest(s) - IDR ${(item.price * item.guests).toLocaleString('en-US')}`).join('%0A');
-        const message = `*New Spa Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${formattedTotalPrice}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
+        const treatmentsList = cartItems.map(item => {
+            const price = (item.price * item.guests).toLocaleString('en-US');
+            return `${item.title.toUpperCase()}%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON IDR ${price}`;
+        }).join('%0A%0A');
+        const message = `*New Spa Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${formattedTotalPrice}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Date & Time: ${formData.date} at ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
         setIsModalOpen(false);
     };
@@ -345,6 +348,24 @@ export default function RitualsDetails() {
                                         value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
                                         className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                     />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Date</label>
+                                        <input 
+                                            type="date" required 
+                                            value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
+                                            className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
+                                        <input 
+                                            type="time" required 
+                                            value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
+                                            className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Name</label>
