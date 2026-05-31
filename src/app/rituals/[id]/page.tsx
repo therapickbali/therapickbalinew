@@ -63,9 +63,6 @@ export default function RitualsDetails() {
                     <h1 className="font-serif text-4xl md:text-6xl text-primary leading-[1.1] mb-4 tracking-tight">
                         {treatment.title}
                     </h1>
-                    <div className="inline-flex items-center bg-white/60 backdrop-blur-sm border border-primary/10 text-primary px-4 py-2 rounded-full text-xs font-bold shadow-sm mb-2">
-                        Premium Mobile Spa Service
-                    </div>
                 </div>
 
                 {/* Smart Pricing & Duration Bento Grid */}
@@ -121,7 +118,7 @@ export default function RitualsDetails() {
                             </div>
                             <button 
                                 onClick={() => setIsModalOpen(true)}
-                                className="w-full bg-white text-primary px-6 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(255,255,255,0.15)]"
+                                className="w-full bg-white text-primary px-6 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(255,255,255,0.15)] uppercase tracking-widest"
                             >
                                 Book an Appointment
                             </button>
@@ -132,19 +129,19 @@ export default function RitualsDetails() {
 
                 {/* Description */}
                 <div className="mb-14 bg-white/50 backdrop-blur-xl border border-white/60 p-6 md:p-8 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-                    <h3 className="text-sm font-bold tracking-widest text-primary mb-4">About this Treatment</h3>
+                    <h3 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">About this Treatment</h3>
                     <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8">
-                        {treatment.desc}
+                        {treatment.desc.charAt(0).toUpperCase() + treatment.desc.slice(1).toLowerCase()}
                     </p>
                     
                     {treatment.benefits && treatment.benefits.length > 0 && (
                         <>
-                            <h3 className="text-sm font-bold tracking-widest text-primary mb-4">Key Benefits</h3>
+                            <h3 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">Key Benefits</h3>
                             <ul className="space-y-3">
                                 {treatment.benefits.map((benefit, idx) => (
                                     <li key={idx} className="flex items-start gap-3">
                                         <div className="mt-1 w-1.5 h-1.5 rounded-full bg-primary/40 shrink-0"></div>
-                                        <span className="text-sm md:text-base text-text-muted font-light">{benefit}</span>
+                                        <span className="text-sm md:text-base text-text-muted font-light">{benefit.charAt(0).toUpperCase() + benefit.slice(1).toLowerCase()}</span>
                                     </li>
                                 ))}
                             </ul>
