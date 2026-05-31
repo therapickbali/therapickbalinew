@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Store } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -61,12 +60,12 @@ export default function TopNav() {
             >
                 
                 {/* Brand / Store (Left) */}
-                <Link href="/store" className="flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 shadow-sm rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-primary shrink-0">
+                <a href="/store" className="flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 shadow-sm rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-primary shrink-0">
                     <Store size={16} strokeWidth={2.5} />
                     <span className="text-[10px] md:text-[11px] font-bold tracking-widest uppercase mt-0.5">
                         STORE
                     </span>
-                </Link>
+                </a>
 
                 {/* Location (Center) */}
                 <div className="absolute left-1/2 -translate-x-1/2 flex items-center cursor-pointer group">
@@ -80,7 +79,7 @@ export default function TopNav() {
                     {navItems.map((item) => {
                         const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                         return (
-                            <Link 
+                            <a 
                                 key={item.href}
                                 href={item.href} 
                                 className={`text-[13px] font-semibold tracking-wider transition-colors ${
@@ -88,7 +87,7 @@ export default function TopNav() {
                                 }`}
                             >
                                 {item.label}
-                            </Link>
+                            </a>
                         );
                     })}
                 </nav>
@@ -115,7 +114,7 @@ export default function TopNav() {
                             {navItems.map((item) => {
                                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                                 return (
-                                    <Link 
+                                    <a 
                                         key={item.href}
                                         href={item.href}
                                         onClick={() => setIsOpen(false)}
@@ -126,7 +125,7 @@ export default function TopNav() {
                                         }`}
                                     >
                                         {item.label}
-                                    </Link>
+                                    </a>
                                 );
                             })}
                         </motion.div>

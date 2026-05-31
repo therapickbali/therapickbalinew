@@ -30,7 +30,7 @@ export default function StorePage() {
             const numericPrice = parseInt(item.product.price.replace(/,/g, ''), 10);
             total += numericPrice * item.quantity;
         });
-        return total.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        return `Rp ${total.toLocaleString('id-ID')}`;
     };
 
     const categories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
@@ -97,9 +97,9 @@ export default function StorePage() {
             <div className="max-w-[1400px] mx-auto px-6 md:px-8">
                 {/* Header Nav */}
                 <div className="flex items-center justify-between mb-8">
-                    <Link href="/" className="w-10 h-10 flex items-center justify-start text-[#2B2B2B]">
+                    <a href="/" className="w-10 h-10 flex items-center justify-start text-[#2B2B2B]">
                         <Home size={24} strokeWidth={1.5} />
-                    </Link>
+                    </a>
                     <div className="flex items-center gap-5">
                         <button className="text-[#2B2B2B] hover:opacity-70"><Search size={22} strokeWidth={1.5} /></button>
                         <div className="relative">
@@ -113,7 +113,7 @@ export default function StorePage() {
 
                 {/* Headline */}
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium text-[#2B2B2B] tracking-tight leading-[1.2] mb-6 max-w-[280px] md:max-w-md">
-                    Find Your Inner Balance for Perfect Skin
+                    Elexoir Signature Collection
                 </h1>
 
                 {/* Categories */}
@@ -149,7 +149,7 @@ export default function StorePage() {
                                 <img src={product.image} alt={product.title} className="w-full h-full object-cover mix-blend-multiply drop-shadow-xl group-hover:scale-105 transition-transform duration-700" />
                             </div>
                             <h4 className="font-bold text-[#2B2B2B] text-sm md:text-base mb-1 line-clamp-1">{product.title}</h4>
-                            <span className="font-bold text-sm text-[#2B2B2B]">${product.price.replace(/,/g, '')}</span>
+                            <span className="font-bold text-sm text-[#2B2B2B]">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
                         </div>
                     ))}
                 </div>
@@ -215,7 +215,7 @@ export default function StorePage() {
                                         <div className="flex justify-between items-center mb-3">
                                             <div>
                                                 <p className="text-[10px] text-[#9CA3AF] mb-0.5">Price</p>
-                                                <p className="font-bold text-xl text-[#2B2B2B]">${selectedProduct.price.replace(/,/g, '')}</p>
+                                                <p className="font-bold text-xl text-[#2B2B2B]">Rp {parseInt(selectedProduct.price.replace(/,/g, '')).toLocaleString('id-ID')}</p>
                                             </div>
                                             <div className="flex items-center gap-3 border border-[#E5E7EB] rounded-lg px-2 py-1">
                                                 <button onClick={() => handleQuantityChange('dec')} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] disabled:opacity-30 hover:bg-[#F3F4F6] rounded-md transition-colors" disabled={quantity <= 1}><Minus size={14} /></button>
@@ -270,7 +270,7 @@ export default function StorePage() {
                                                             <div className="flex-1 min-w-0 pr-2">
                                                                 <h5 className="font-bold text-sm text-[#2B2B2B] truncate">{item.product.title}</h5>
                                                                 <p className="text-xs text-[#9CA3AF] mb-1 truncate">{item.product.category} • 100ml</p>
-                                                                <p className="font-bold text-[#2B2B2B]">${item.product.price.replace(/,/g, '')}</p>
+                                                                <p className="font-bold text-[#2B2B2B]">Rp {parseInt(item.product.price.replace(/,/g, '')).toLocaleString('id-ID')}</p>
                                                             </div>
                                                             <div className="flex flex-col items-end gap-2 shrink-0">
                                                                 <button onClick={() => removeFromCart(item.product.id)} className="text-[#9CA3AF] hover:text-[#EF4444] transition-colors p-1" title="Remove Item">
@@ -307,15 +307,15 @@ export default function StorePage() {
                                         <div className="space-y-3 pt-6 border-t border-dashed border-[#E5E7EB]">
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-[#9CA3AF]">Total items ({cartTotalQuantity})</span>
-                                                        <span className="text-[#9CA3AF]">${getGlobalCartTotal()}</span>
+                                                        <span className="text-[#9CA3AF]">{getGlobalCartTotal()}</span>
                                                     </div>
                                                     <div className="flex justify-between text-sm">
                                                         <span className="text-[#9CA3AF]">Shipping</span>
-                                                        <span className="text-[#9CA3AF]">$0.00</span>
+                                                        <span className="text-[#9CA3AF]">Rp 0</span>
                                                     </div>
                                                     <div className="flex justify-between text-base font-bold text-[#2B2B2B] pt-3">
                                                         <span>Total payment</span>
-                                                        <span>${getGlobalCartTotal()}</span>
+                                                        <span>{getGlobalCartTotal()}</span>
                                                     </div>
                                                 </div>
                                             </>
