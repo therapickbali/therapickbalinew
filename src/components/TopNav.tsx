@@ -16,9 +16,9 @@ export default function TopNav() {
     if (pathname?.startsWith('/admin')) {
         return null;
     }
-
     const navItems = [
         { href: '/', label: 'HOME' },
+        { href: '/store', label: 'STORE' },
         { href: '/rituals', label: 'TREATMENT' },
         { href: '/review', label: 'REVIEW' },
         { href: '/contact', label: 'CONTACT' },
@@ -61,7 +61,7 @@ export default function TopNav() {
             >
                 
                 {/* Brand / Store (Left) */}
-                <Link href="/" className="flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 shadow-sm rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-primary shrink-0">
+                <Link href="/store" className="flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 shadow-sm rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-primary shrink-0">
                     <Store size={16} strokeWidth={2.5} />
                     <span className="text-[10px] md:text-[11px] font-bold tracking-widest uppercase mt-0.5">
                         STORE

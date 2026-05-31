@@ -223,59 +223,6 @@ export default function Home() {
                     </div>
                 </div>
 
-
-                {/* Elexoir Boutique (Store) */}
-                {products && products.length > 0 && (
-                    <div className="mb-32">
-                        <div className="flex items-center justify-between mb-8">
-                            <div>
-                                <h3 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">Elexoir Boutique</h3>
-                                <p className="text-sm text-text-muted">Take the spa experience home with you.</p>
-                            </div>
-                            <div className="hidden md:flex">
-                                <button className="text-primary text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-70 transition-opacity">
-                                    View All Products <ArrowRight size={16} />
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {products.map(product => (
-                                <div key={product.id} className="group relative bg-white rounded-[32px] overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] border border-border/40 transition-all duration-700 flex flex-col h-[420px]">
-                                    {/* Product Image area */}
-                                    <div className="h-56 relative overflow-hidden bg-surface">
-                                        <img 
-                                            src={product.image} 
-                                            alt={product.title} 
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                                        />
-                                        <div className="absolute top-4 left-4">
-                                            <span className="bg-white/80 backdrop-blur-md text-primary px-3 py-1 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm border border-white/50">
-                                                {product.category}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    
-                                    {/* Product Info */}
-                                    <div className="p-6 md:p-8 flex flex-col flex-1">
-                                        <h4 className="font-serif text-2xl font-medium text-primary mb-2 line-clamp-1">{product.title}</h4>
-                                        <p className="text-sm text-text-muted leading-relaxed font-light line-clamp-2 mb-4 flex-1">
-                                            {product.description}
-                                        </p>
-                                        
-                                        <div className="mt-auto flex items-center justify-between pt-4 border-t border-border/50">
-                                            <span className="font-serif text-xl text-primary">Rp {product.price}</span>
-                                            <button className="px-4 py-2 rounded-full bg-primary/5 text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-colors duration-300">
-                                                Add to Bag
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
                 {/* About Us */}
                 <div className="mb-24 flex flex-col md:flex-row gap-12 md:gap-24 items-center">
                     <div className="flex-1">
