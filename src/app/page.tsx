@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa } from '@/context/SpaContext';
 
@@ -18,8 +18,35 @@ const CATEGORIES = [
 
 export default function Home() {
     const { treatments, campaign, products, isLoading } = useSpa();
+
     const [activeCategory, setActiveCategory] = useState('all');
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
+    
+    // Booking Form State for Campaign
+    const [campaignBookingData, setCampaignBookingData] = useState<{
+        campaignTitle: string;
+        treatmentTitle: string;
+        duration: string;
+        originalPrice: string;
+        discountedPriceNum: number;
+        discountPercentage: number;
+    } | null>(null);
+    const [guestCount, setGuestCount] = useState(1);
+    const [formData, setFormData] = useState({ name: '', location: '', room: '' });
+
+    const handleCampaignBooking = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!campaignBookingData) return;
+        
+        const waNumber = '6285174119423';
+        const totalPrice = campaignBookingData.discountedPriceNum * guestCount;
+        
+        const message = `*New Campaign Booking Request*%0A%0A*Campaign:* ${campaignBookingData.campaignTitle}%0A*Treatment:* ${campaignBookingData.treatmentTitle}%0A*Duration:* ${campaignBookingData.duration} Mins%0A*Original Price:* Rp ${campaignBookingData.originalPrice}%0A*Discount:* ${campaignBookingData.discountPercentage}%25 OFF%0A*Guests:* ${guestCount}%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to book this special offer.`;
+        
+        window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
+        setCampaignBookingData(null);
+        setIsCampaignModalOpen(false);
+    };
 
     return (
         <div className="min-h-screen bg-[#FDFBF7] relative overflow-hidden font-sans text-text pb-24 md:pb-12">
@@ -303,8 +330,14 @@ export default function Home() {
                                         
                                         return (
                                             <div key={`${treatment.id}-${duration}`} className="block group outline-none cursor-pointer" onClick={() => {
-                                                const message = `Hello Elexoir Spa, I would like to book a Campaign Special:\n\nCampaign: ${campaign.title}\nTreatment: ${treatment.title}\nDuration: ${duration} MINS\nOriginal Price: Rp ${option.price}\nDiscount: ${campaign.discountPercentage}% OFF\nSpecial Price: Rp ${discountedPriceNum.toLocaleString('en-US')}\n\nCould you please let me know the available time slots?`;
-                                                window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(message)}`, '_blank');
+                                                setCampaignBookingData({
+                                                    campaignTitle: campaign.title,
+                                                    treatmentTitle: treatment.title,
+                                                    duration: duration,
+                                                    originalPrice: option.price,
+                                                    discountedPriceNum: discountedPriceNum,
+                                                    discountPercentage: campaign.discountPercentage
+                                                });
                                                 setIsCampaignModalOpen(false);
                                             }}>
                                                 <div className="rounded-[32px] p-6 bg-white border border-border/40 shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
@@ -341,6 +374,114 @@ export default function Home() {
                     </motion.div>
                 </div>
             )}
+
+            {/* Campaign Booking Modal */}
+            <AnimatePresence>
+                {campaignBookingData && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[110] flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm"
+                    >
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="bg-white rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
+                        >
+                            <button 
+                                onClick={() => setCampaignBookingData(null)}
+                                className="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface flex items-center justify-center text-text-muted hover:bg-border transition-colors z-10"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                            
+                            <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
+                            <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
+
+                            {/* Treatment Summary Card */}
+                            <div className="bg-surface border border-border/50 rounded-2xl p-4 mb-6 shadow-sm">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div>
+                                        <div className="bg-accent/20 text-accent px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest inline-block mb-1.5">
+                                            {campaignBookingData.campaignTitle} (-{campaignBookingData.discountPercentage}%)
+                                        </div>
+                                        <h3 className="font-bold text-sm text-primary">{campaignBookingData.treatmentTitle}</h3>
+                                        <p className="text-xs text-text-muted flex items-center gap-1 mt-0.5">
+                                            <Clock className="w-3 h-3" /> {campaignBookingData.duration} Mins
+                                        </p>
+                                    </div>
+                                    <span className="font-serif text-primary font-medium text-right flex flex-col">
+                                        IDR {campaignBookingData.discountedPriceNum.toLocaleString('en-US')}
+                                        <span className="text-[9px] font-sans text-text-muted font-normal uppercase tracking-wider">Per Person</span>
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between pt-3 border-t border-border/50">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Guests</span>
+                                    <div className="flex items-center gap-3">
+                                        <button 
+                                            type="button"
+                                            onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
+                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
+                                        >
+                                            <Minus className="w-3 h-3" />
+                                        </button>
+                                        <span className="font-bold text-sm text-primary w-4 text-center">{guestCount}</span>
+                                        <button 
+                                            type="button"
+                                            onClick={() => setGuestCount(guestCount + 1)}
+                                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
+                                        >
+                                            <Plus className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form onSubmit={handleCampaignBooking} className="space-y-5 pb-8 md:pb-0">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
+                                    <input 
+                                        type="text" required placeholder="John Doe"
+                                        value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
+                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Name</label>
+                                    <input 
+                                        type="text" required placeholder="e.g. Four Seasons Sayan"
+                                        value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
+                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Room Number (Optional)</label>
+                                    <input 
+                                        type="text" placeholder="e.g. Villa 12"
+                                        value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})}
+                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    />
+                                </div>
+
+                                <div className="mt-8 pt-6 border-t border-border/50">
+                                    <div className="flex items-end justify-between mb-6">
+                                        <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
+                                        <span className="text-2xl font-serif text-primary">IDR {(campaignBookingData.discountedPriceNum * guestCount).toLocaleString('en-US')}</span>
+                                    </div>
+                                    <button 
+                                        type="submit"
+                                        className="w-full bg-[#25D366] text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(37,211,102,0.25)]"
+                                    >
+                                        Confirm on WhatsApp <MessageCircle className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
