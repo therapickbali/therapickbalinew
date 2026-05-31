@@ -63,10 +63,9 @@ export default function RitualsDetails() {
                     <h1 className="font-serif text-4xl md:text-6xl text-primary leading-[1.1] mb-4 tracking-tight">
                         {treatment.title}
                     </h1>
-                    <p className="flex items-center gap-1.5 text-sm md:text-base text-text-muted font-medium">
-                        <MapPin className="w-4 h-4" />
+                    <div className="inline-flex items-center bg-white/60 backdrop-blur-sm border border-primary/10 text-primary px-4 py-2 rounded-full text-xs font-bold shadow-sm mb-2">
                         Premium Mobile Spa Service
-                    </p>
+                    </div>
                 </div>
 
                 {/* Smart Pricing & Duration Bento Grid */}
@@ -133,14 +132,14 @@ export default function RitualsDetails() {
 
                 {/* Description */}
                 <div className="mb-14 bg-white/50 backdrop-blur-xl border border-white/60 p-6 md:p-8 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-4">About this Treatment</h3>
+                    <h3 className="text-sm font-bold tracking-widest text-primary mb-4">About this Treatment</h3>
                     <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8">
                         {treatment.desc}
                     </p>
                     
                     {treatment.benefits && treatment.benefits.length > 0 && (
                         <>
-                            <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Key Benefits</h3>
+                            <h3 className="text-sm font-bold tracking-widest text-primary mb-4">Key Benefits</h3>
                             <ul className="space-y-3">
                                 {treatment.benefits.map((benefit, idx) => (
                                     <li key={idx} className="flex items-start gap-3">
