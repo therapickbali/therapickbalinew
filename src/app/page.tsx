@@ -73,38 +73,36 @@ export default function Home() {
                         />
                         
                         {/* Cinematic Vignette & Gradients (Apple-like depth) */}
-                        <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-1000"></div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/40 to-transparent"></div>
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-1000"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                         
                         {/* Content Overlay */}
-                        <div className="absolute inset-0 p-6 md:p-12 flex flex-col justify-between z-10">
+                        <div className="absolute inset-0 p-6 md:p-12 flex flex-col justify-end z-10">
                             
-                            {/* Top Label */}
-                            <div className="flex justify-start">
-                                <motion.span 
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.2, duration: 0.6 }}
-                                    className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-2xl text-[9px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-white/40 text-white shadow-[0_4px_24px_rgb(0,0,0,0.12)]"
-                                >
-                                    {campaign.label}
-                                </motion.span>
-                            </div>
-
                             <div className="flex items-end justify-between">
-                                <div className="flex flex-col text-white">
+                                <div className="flex flex-col text-white overflow-hidden pr-4">
+                                    <div className="mb-3 md:mb-4">
+                                        <motion.span 
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.2, duration: 0.6 }}
+                                            className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-white/30 text-white shadow-sm"
+                                        >
+                                            {campaign.label}
+                                        </motion.span>
+                                    </div>
                                     
-                                    <h2 className="font-serif text-4xl md:text-6xl font-medium leading-tight tracking-tight mb-2 opacity-95 drop-shadow-sm mt-auto">
+                                    <h2 className="font-serif text-3xl md:text-6xl font-medium leading-tight tracking-tight mb-2 opacity-95 drop-shadow-lg mt-auto truncate">
                                         {campaign.title}
                                     </h2>
-                                    <p className="text-white/70 text-[13px] md:text-base hidden md:block max-w-md leading-relaxed font-light">
+                                    <p className="text-white/80 text-[13px] md:text-base hidden md:block max-w-md leading-relaxed font-light drop-shadow-md">
                                         {campaign.description}
                                     </p>
                                 </div>
 
                                 {/* Minimal Apple-style Frosted Button */}
-                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 backdrop-blur-2xl border border-white/20 text-white flex items-center justify-center shrink-0 shadow-[0_8px_32px_rgb(0,0,0,0.12)] group-hover:bg-white/20 group-hover:scale-105 group-active:scale-95 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                                    <ArrowRight size={20} strokeWidth={2} />
+                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 text-white flex items-center justify-center shrink-0 shadow-[0_8px_32px_rgb(0,0,0,0.15)] group-hover:bg-white/30 group-hover:scale-105 group-active:scale-95 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                                    <ArrowRight size={20} strokeWidth={2.5} />
                                 </div>
                             </div>
                         </div>
