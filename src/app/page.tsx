@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X } from 'lucide-react';
+import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa } from '@/context/SpaContext';
 
@@ -173,50 +173,29 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* The Elexoir Experience (Next Level Section) */}
+                {/* The Elexoir Boutique Section */}
                 <div className="mb-32">
-                    <div className="flex items-center justify-between mb-8">
-                        <div>
-                            <h3 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">The Elexoir Experience</h3>
-                            <p className="text-sm text-text-muted">Elevating your wellness journey in Bali.</p>
+                    <div className="flex flex-col md:flex-row gap-12 items-center bg-gradient-to-br from-surface to-white rounded-[40px] p-8 md:p-16 shadow-sm border border-border/50 relative overflow-hidden group">
+                        <div className="absolute -right-20 -top-20 w-64 h-64 bg-secondary/10 rounded-full blur-3xl pointer-events-none group-hover:bg-secondary/20 transition-colors duration-700"></div>
+                        <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-highlight/30 rounded-full blur-3xl pointer-events-none group-hover:bg-highlight/50 transition-colors duration-700"></div>
+                        
+                        <div className="flex-1 relative z-10">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50 mb-4 block">Take the Spa Home</span>
+                            <h3 className="font-serif text-3xl md:text-5xl text-primary font-medium mb-6 leading-tight">The Elexoir Boutique</h3>
+                            <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8 max-w-md">
+                                Discover our exclusive collection of 100% organic, locally sourced essential oils and professional spa tools. Maintain your inner balance and perfect skin between treatments.
+                            </p>
+                            <Link href="/store" className="inline-flex items-center justify-center gap-2 bg-primary text-white px-8 py-4 rounded-xl text-sm font-medium hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                                <ShoppingBag size={18} />
+                                Shop Now
+                            </Link>
                         </div>
-                        <div className="hidden md:flex">
-                            <button className="text-primary text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-70 transition-opacity">
-                                Read Our Story <ArrowRight size={16} />
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                        {/* Big Cinematic Card */}
-                        <div className="md:col-span-2 rounded-[32px] overflow-hidden relative h-64 md:h-96 shadow-soft group bg-gradient-to-br from-[#1C1F1D] via-[#2A2E2C] to-[#1C1F1D] p-8 md:p-12 flex flex-col justify-between">
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_50%)] pointer-events-none transition-transform duration-1000 group-hover:scale-110"></div>
-                            <div className="relative z-10">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Signature Quality</span>
-                            </div>
-                            <div className="relative z-10">
-                                <h4 className="font-serif text-4xl md:text-5xl font-medium mb-4 text-white leading-tight">Expert<br/>Therapists</h4>
-                                <p className="text-sm text-white/70 max-w-sm leading-relaxed font-light">Certified Balinese healers bringing centuries of traditional wellness techniques directly to your villa.</p>
-                            </div>
-                        </div>
-
-                        {/* Two Small Cards */}
-                        <div className="flex flex-col gap-4 md:gap-6">
-                            <div className="flex-1 bg-gradient-to-br from-surface to-white rounded-[32px] p-6 md:p-8 shadow-sm border border-border/50 relative overflow-hidden flex flex-col justify-between group">
-                                <div className="absolute -right-8 -top-8 w-32 h-32 bg-secondary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-secondary/20 transition-colors duration-700"></div>
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-primary/40 block mb-4 relative z-10">Pure Ingredients</span>
-                                <div className="relative z-10">
-                                    <h4 className="font-serif text-2xl text-primary font-medium mb-2">100% Organic Oils</h4>
-                                    <p className="text-xs text-text-muted leading-relaxed font-light">Locally sourced, cold-pressed essential oils.</p>
-                                </div>
-                            </div>
-                            
-                            <div className="flex-1 bg-gradient-to-br from-primary to-primary/90 rounded-[32px] p-6 md:p-8 shadow-sm relative overflow-hidden text-white flex flex-col justify-between group">
-                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_70%)] pointer-events-none group-hover:opacity-70 transition-opacity duration-700"></div>
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-4 relative z-10">Ancient Wisdom</span>
-                                <div className="relative z-10">
-                                    <h4 className="font-serif text-2xl font-medium mb-2">Holistic Healing</h4>
-                                    <p className="text-xs text-white/70 leading-relaxed font-light">Restoring the vital balance of body and spirit.</p>
+                        <div className="flex-1 w-full relative z-10 flex justify-center">
+                            <div className="relative w-full max-w-sm aspect-[4/5] rounded-[32px] overflow-hidden shadow-2xl rotate-3 group-hover:rotate-0 transition-transform duration-500">
+                                <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=1000&auto=format&fit=crop" alt="Elexoir Boutique Products" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
+                                    <span className="text-white font-serif text-2xl">Organic Oils</span>
+                                    <span className="text-white/80 text-xs">Explore the collection &rarr;</span>
                                 </div>
                             </div>
                         </div>
