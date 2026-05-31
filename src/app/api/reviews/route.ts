@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-    const apiKey = process.env.GOOGLE_PLACES_API_KEY || 'AIzaSyBjSx_DiGeZHDUYxiP_jSUNdeJg3AFUZT0';
+    const apiKey = process.env.GOOGLE_PLACES_API_KEY;
     const placeId = 'ChIJaUfu4AA90i0Ram4ReFIGUyM'; // Exlexoir Home Spa Ubud Place ID
     
     if (!apiKey) {
