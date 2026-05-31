@@ -134,26 +134,34 @@ export default function StorePage() {
                 </div>
 
                 {/* Product Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
                     {filteredProducts.map((product, i) => (
                         <div 
                             key={product.id} 
                             className="cursor-pointer group flex flex-col outline-none h-full" 
                             onClick={() => product.stock > 0 && setSelectedProduct(product)}
                         >
-                            <div className="bg-white rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] border border-black/[0.03] transition-all duration-500 flex flex-col h-full overflow-hidden hover:-translate-y-1">
-                                <div className="aspect-square sm:aspect-[4/5] overflow-hidden relative bg-[#F5F5F7] flex items-center justify-center">
-                                    <img src={product.image} alt={product.title} className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-                                </div>
-                                <div className="p-6 md:p-8 flex flex-col flex-grow bg-white">
-                                    <h4 className="font-semibold text-[#1D1D1F] text-lg md:text-xl mb-2 line-clamp-1 tracking-tight">{product.title}</h4>
-                                    <p className="text-[#86868B] text-sm leading-relaxed font-normal mb-6 line-clamp-2 flex-grow">{product.description}</p>
+                            <div className="flex flex-col h-full bg-transparent">
+                                {/* Cinematic Image */}
+                                <div className="aspect-[3/4] relative overflow-hidden bg-neutral-900 shadow-sm transition-shadow duration-500 group-hover:shadow-lg">
+                                    <img src={product.image} alt={product.title} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.04] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]" />
                                     
-                                    <div className="flex items-center justify-between mt-auto">
-                                        <span className="font-medium text-[#1D1D1F] text-lg">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
-                                        <div className="w-10 h-10 rounded-full bg-[#F5F5F7] text-[#1D1D1F] flex items-center justify-center group-hover:bg-[#1D1D1F] group-hover:text-white transition-colors duration-300">
-                                            <ShoppingBag size={18} strokeWidth={1.5} />
-                                        </div>
+                                    {/* Vignette Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" />
+                                    
+                                    {/* Floating Action */}
+                                    <div className="absolute top-2.5 right-2.5 w-7 h-7 md:w-8 md:h-8 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 transition-all duration-300 hover:bg-white hover:text-black">
+                                        <ShoppingBag size={14} strokeWidth={1.5} />
+                                    </div>
+                                </div>
+                                
+                                {/* Info Section */}
+                                <div className="pt-3 flex flex-col flex-grow">
+                                    <h4 className="font-serif text-primary text-sm md:text-base font-medium leading-snug line-clamp-1">{product.title}</h4>
+                                    
+                                    <div className="flex items-center justify-between mt-1">
+                                        <span className="font-medium text-primary/60 text-[10px] md:text-[11px] uppercase tracking-widest">IDR</span>
+                                        <span className="font-serif text-primary text-sm md:text-base whitespace-nowrap">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
                                     </div>
                                 </div>
                             </div>
