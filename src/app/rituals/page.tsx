@@ -35,7 +35,7 @@ export default function RitualsDetails() {
     };
 
     return (
-        <div className="min-h-screen bg-background relative overflow-hidden font-sans text-text pb-24 md:pb-12 pt-16 md:pt-24">
+        <div className="min-h-screen bg-transparent relative overflow-hidden font-sans text-text pb-24 md:pb-12 pt-16 md:pt-24">
             
             <div className="max-w-3xl mx-auto px-6 md:px-8">
                 

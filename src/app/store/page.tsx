@@ -93,7 +93,7 @@ export default function StorePage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8F9F9] pt-6 md:pt-12 pb-32 font-sans">
+        <div className="min-h-screen bg-transparent pt-6 md:pt-12 pb-32 font-sans">
             <div className="max-w-[1400px] mx-auto px-6 md:px-8">
                 {/* Header Nav */}
                 <div className="flex items-center justify-between mb-8">

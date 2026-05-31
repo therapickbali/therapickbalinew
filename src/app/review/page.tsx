@@ -13,7 +13,7 @@ const IMAGES = [
 
 export default function GalleryPage() {
     return (
-        <div className="min-h-screen bg-background pb-24">
+        <div className="min-h-screen bg-transparent pb-24">
             {/* Mobile Header */}
             <div className="pt-14 pb-4 px-6 bg-surface/90 backdrop-blur-md sticky top-0 z-30 border-b border-border/60">
                 <h1 className="font-serif text-3xl text-primary">Atmosphere</h1>
