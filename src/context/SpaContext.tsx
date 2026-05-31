@@ -22,6 +22,15 @@ export type SelectedCampaignTreatment = {
     durations: string[]; // which durations are discounted
 };
 
+export type Product = {
+    id: string;
+    title: string;
+    category: string;
+    price: string;
+    image: string;
+    description: string;
+};
+
 export type Campaign = {
     title: string;
     label: string;
@@ -36,6 +45,8 @@ type SpaContextType = {
     setTreatments: React.Dispatch<React.SetStateAction<Treatment[]>>;
     campaign: Campaign | null;
     setCampaign: (c: Campaign | null) => void;
+    products: Product[];
+    setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 };
 
 // Initial static treatments
@@ -85,14 +96,42 @@ const INITIAL_CAMPAIGN: Campaign = {
     ]
 };
 
+const INITIAL_PRODUCTS: Product[] = [
+    {
+        id: 'p1',
+        title: 'Signature Massage Oil',
+        category: 'Oils',
+        price: '350,000',
+        image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
+        description: 'A deeply nourishing blend of cold-pressed coconut oil, ylang-ylang, and sweet orange. Calms the mind and softens the skin.'
+    },
+    {
+        id: 'p2',
+        title: 'Serenity Aromatherapy Candle',
+        category: 'Home Fragrance',
+        price: '280,000',
+        image: 'https://images.pexels.com/photos/1012558/pexels-photo-1012558.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
+        description: 'Hand-poured soy wax candle infused with pure lavender and chamomile essential oils. Burns for up to 40 hours.'
+    },
+    {
+        id: 'p3',
+        title: 'Exfoliating Coffee Scrub',
+        category: 'Body Care',
+        price: '220,000',
+        image: 'https://images.pexels.com/photos/4465831/pexels-photo-4465831.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
+        description: 'Locally sourced organic Balinese coffee blended with sea salt and nourishing oils to rejuvenate your skin.'
+    }
+];
+
 const SpaContext = createContext<SpaContextType | undefined>(undefined);
 
 export function SpaProvider({ children }: { children: ReactNode }) {
     const [treatments, setTreatments] = useState<Treatment[]>(INITIAL_TREATMENTS);
     const [campaign, setCampaign] = useState<Campaign | null>(INITIAL_CAMPAIGN);
+    const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
 
     return (
-        <SpaContext.Provider value={{ treatments, setTreatments, campaign, setCampaign }}>
+        <SpaContext.Provider value={{ treatments, setTreatments, campaign, setCampaign, products, setProducts }}>
             {children}
         </SpaContext.Provider>
     );

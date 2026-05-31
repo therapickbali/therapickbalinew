@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3 } from 'lucide-react';
 import Link from 'next/link';
-import { useSpa, SelectedCampaignTreatment, Treatment } from '@/context/SpaContext';
+import { useSpa, SelectedCampaignTreatment, Treatment, Product } from '@/context/SpaContext';
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings'>('treatment');
+    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store'>('treatment');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
 
-    const { treatments, setTreatments, campaign, setCampaign } = useSpa();
+    const { treatments, setTreatments, campaign, setCampaign, products, setProducts } = useSpa();
 
     // Campaign specific fields
     const [campaignTitle, setCampaignTitle] = useState(campaign?.title || '');
@@ -46,6 +46,14 @@ export default function AdminDashboard() {
     const [treatmentCategory, setTreatmentCategory] = useState('massage');
     const [treatmentDesc, setTreatmentDesc] = useState('');
     const [editingTreatmentId, setEditingTreatmentId] = useState<string | null>(null);
+
+    // Dynamic fields for Store
+    const [productTitle, setProductTitle] = useState('');
+    const [productCategory, setProductCategory] = useState('');
+    const [productPrice, setProductPrice] = useState('');
+    const [productImage, setProductImage] = useState('');
+    const [productDesc, setProductDesc] = useState('');
+    const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
     const [pricingOptions, setPricingOptions] = useState([{ duration: '', price: '' }]);
     const [benefits, setBenefits] = useState(['']);
@@ -106,6 +114,26 @@ export default function AdminDashboard() {
                 setTreatmentTitle('');
                 setTreatmentDesc('');
                 setPricingOptions([{ duration: '', price: '' }]);
+            } else if (activeTab === 'store') {
+                const newP: Product = {
+                    id: editingProductId || `p${Date.now()}`,
+                    title: productTitle,
+                    category: productCategory || 'Accessories',
+                    price: productPrice,
+                    image: productImage || 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
+                    description: productDesc,
+                };
+                if (editingProductId) {
+                    setProducts(prev => prev.map(p => p.id === editingProductId ? newP : p));
+                } else {
+                    setProducts(prev => [...prev, newP]);
+                }
+                setEditingProductId(null);
+                setProductTitle('');
+                setProductCategory('');
+                setProductPrice('');
+                setProductImage('');
+                setProductDesc('');
             }
             setIsSubmitting(false);
             setSuccess(true);
@@ -147,6 +175,20 @@ export default function AdminDashboard() {
         setCampaign(null);
     };
 
+    const handleEditProduct = (p: Product) => {
+        setEditingProductId(p.id);
+        setProductTitle(p.title);
+        setProductCategory(p.category);
+        setProductPrice(p.price);
+        setProductImage(p.image);
+        setProductDesc(p.description);
+        setActiveTab('store');
+    };
+
+    const handleRemoveProduct = (id: string) => {
+        setProducts(prev => prev.filter(p => p.id !== id));
+    };
+
     return (
         <div className="min-h-screen bg-[#FDFBF7] flex overflow-hidden font-sans text-text">
             
@@ -174,7 +216,17 @@ export default function AdminDashboard() {
                         <Megaphone size={18} />
                         Create Campaign
                     </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 text-text-muted hover:bg-surface/50 hover:text-primary rounded-xl text-sm font-semibold transition-colors">
+                    <button 
+                        onClick={() => setActiveTab('store')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${activeTab === 'store' ? 'bg-surface/80 text-primary' : 'text-text-muted hover:bg-surface/50 hover:text-primary'}`}
+                    >
+                        <Store size={18} />
+                        Store Product
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('list')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${activeTab === 'list' ? 'bg-surface/80 text-primary' : 'text-text-muted hover:bg-surface/50 hover:text-primary'}`}
+                    >
                         <LayoutDashboard size={18} />
                         Overview
                     </button>
@@ -213,12 +265,14 @@ export default function AdminDashboard() {
                         <h1 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">
                             {activeTab === 'treatment' ? (editingTreatmentId ? 'Edit Treatment' : 'Create New Treatment') : 
                              activeTab === 'campaign' ? 'Create Campaign Card' : 
+                             activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') :
                              activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
                         </h1>
                         <p className="text-text-muted text-sm">
                             {activeTab === 'treatment' ? 'Add or edit a massage or ritual to your spa menu.' : 
                              activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
-                             activeTab === 'list' ? 'Manage your published treatments and active campaigns.' : ''}
+                             activeTab === 'store' ? 'Add physical products like oils or candles to the Elexoir Boutique.' :
+                             activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : ''}
                         </p>
                     </header>
 
@@ -565,6 +619,62 @@ export default function AdminDashboard() {
                                                 )}
                                             </div>
                                         </div>
+
+                                        {/* Store Section */}
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <h2 className="text-lg font-bold text-primary flex items-center gap-2">
+                                                    <Store size={20} className="text-primary" /> Elexoir Boutique
+                                                </h2>
+                                                <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">{products.length} Products</span>
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {products.map((p) => (
+                                                    <div key={p.id} className="flex flex-col p-5 bg-white/60 border border-border/50 rounded-2xl shadow-sm gap-4">
+                                                        <div className="flex items-start gap-4">
+                                                            <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-border/50 bg-surface">
+                                                                <img src={p.image} alt={p.title} className="w-full h-full object-cover" />
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <h3 className="font-bold text-primary text-sm mb-1 line-clamp-1">{p.title}</h3>
+                                                                <p className="text-[10px] font-semibold text-text-muted uppercase tracking-widest mb-1">{p.category}</p>
+                                                                <span className="text-xs font-bold text-accent">Rp {p.price}</span>
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-xs text-text-muted/80 line-clamp-2 mb-2">{p.description}</p>
+                                                        <div className="mt-auto flex items-center justify-end gap-2 pt-2 border-t border-border/30">
+                                                            <button 
+                                                                type="button"
+                                                                onClick={() => handleEditProduct(p)}
+                                                                className="w-8 h-8 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                            >
+                                                                <Edit3 size={14} />
+                                                            </button>
+                                                            <button 
+                                                                type="button"
+                                                                onClick={() => handleRemoveProduct(p.id)}
+                                                                className="w-8 h-8 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                            >
+                                                                <Trash2 size={14} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                                {products.length === 0 && (
+                                                    <div className="col-span-1 md:col-span-2 p-8 text-center border-2 border-dashed border-border/50 rounded-2xl">
+                                                        <p className="text-sm text-text-muted mb-4">No products in store.</p>
+                                                        <button 
+                                                            onClick={() => setActiveTab('store')}
+                                                            type="button"
+                                                            className="text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
+                                                        >
+                                                            Add Product
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
 
@@ -598,7 +708,9 @@ export default function AdminDashboard() {
                                             </span>
                                         ) : (
                                             <span className="flex items-center gap-2">
-                                                <Sparkles size={16} /> {activeTab === 'treatment' ? (editingTreatmentId ? 'Update Treatment' : 'Publish Treatment') : 'Launch Campaign'}
+                                                <Sparkles size={16} /> {activeTab === 'treatment' ? (editingTreatmentId ? 'Update Treatment' : 'Publish Treatment') : 
+                                                                        activeTab === 'campaign' ? 'Launch Campaign' :
+                                                                        activeTab === 'store' ? (editingProductId ? 'Update Product' : 'Add Product') : 'Save'}
                                             </span>
                                         )}
                                     </button>
@@ -615,9 +727,9 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between h-full max-w-md mx-auto">
                     {[
                         { id: 'treatment', icon: PlusCircle, label: 'Add' },
+                        { id: 'store', icon: Store, label: 'Store' },
                         { id: 'campaign', icon: Megaphone, label: 'Promo' },
                         { id: 'list', icon: LayoutDashboard, label: 'Menu' },
-                        { id: 'settings', icon: Settings, label: 'Settings' },
                     ].map((tab) => {
                         const isActive = activeTab === tab.id;
                         const Icon = tab.icon;

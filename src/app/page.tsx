@@ -17,7 +17,7 @@ const CATEGORIES = [
 
 
 export default function Home() {
-    const { treatments, campaign } = useSpa();
+    const { treatments, campaign, products } = useSpa();
     const [activeCategory, setActiveCategory] = useState('all');
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
 
@@ -189,40 +189,92 @@ export default function Home() {
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                         {/* Big Cinematic Card */}
-                        <div className="md:col-span-2 rounded-[32px] overflow-hidden relative h-64 md:h-96 shadow-soft group bg-gradient-to-br from-[#1C1F1D] via-[#2A2E2C] to-[#1C1F1D]">
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_50%)] pointer-events-none"></div>
-                            <div className="absolute bottom-8 left-8 right-8 text-white">
-                                <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center mb-4">
-                                    <User className="w-5 h-5 text-white" />
-                                </div>
-                                <h4 className="font-serif text-3xl font-medium mb-2">Expert Therapists</h4>
-                                <p className="text-sm text-white/70 max-w-sm leading-relaxed">Certified Balinese healers bringing centuries of traditional wellness techniques directly to your villa.</p>
+                        <div className="md:col-span-2 rounded-[32px] overflow-hidden relative h-64 md:h-96 shadow-soft group bg-gradient-to-br from-[#1C1F1D] via-[#2A2E2C] to-[#1C1F1D] p-8 md:p-12 flex flex-col justify-between">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_50%)] pointer-events-none transition-transform duration-1000 group-hover:scale-110"></div>
+                            <div className="relative z-10">
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Signature Quality</span>
+                            </div>
+                            <div className="relative z-10">
+                                <h4 className="font-serif text-4xl md:text-5xl font-medium mb-4 text-white leading-tight">Expert<br/>Therapists</h4>
+                                <p className="text-sm text-white/70 max-w-sm leading-relaxed font-light">Certified Balinese healers bringing centuries of traditional wellness techniques directly to your villa.</p>
                             </div>
                         </div>
 
                         {/* Two Small Cards */}
                         <div className="flex flex-col gap-4 md:gap-6">
-                            <div className="flex-1 bg-surface rounded-[32px] p-6 md:p-8 shadow-sm border border-border/50 relative overflow-hidden flex flex-col justify-end">
-                                <div className="w-10 h-10 rounded-full bg-primary/5 border border-primary/10 flex items-center justify-center mb-4 text-primary">
-                                    <Droplet className="w-4 h-4" />
+                            <div className="flex-1 bg-gradient-to-br from-surface to-white rounded-[32px] p-6 md:p-8 shadow-sm border border-border/50 relative overflow-hidden flex flex-col justify-between group">
+                                <div className="absolute -right-8 -top-8 w-32 h-32 bg-secondary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-secondary/20 transition-colors duration-700"></div>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-primary/40 block mb-4 relative z-10">Pure Ingredients</span>
+                                <div className="relative z-10">
+                                    <h4 className="font-serif text-2xl text-primary font-medium mb-2">100% Organic Oils</h4>
+                                    <p className="text-xs text-text-muted leading-relaxed font-light">Locally sourced, cold-pressed essential oils.</p>
                                 </div>
-                                <h4 className="font-serif text-xl text-primary font-medium mb-2">100% Organic Oils</h4>
-                                <p className="text-xs text-text-muted leading-relaxed">Locally sourced, cold-pressed essential oils.</p>
                             </div>
                             
-                            <div className="flex-1 bg-primary rounded-[32px] p-6 md:p-8 shadow-sm relative overflow-hidden text-white flex flex-col justify-end">
-                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_70%)] pointer-events-none"></div>
+                            <div className="flex-1 bg-gradient-to-br from-primary to-primary/90 rounded-[32px] p-6 md:p-8 shadow-sm relative overflow-hidden text-white flex flex-col justify-between group">
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_70%)] pointer-events-none group-hover:opacity-70 transition-opacity duration-700"></div>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-4 relative z-10">Ancient Wisdom</span>
                                 <div className="relative z-10">
-                                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center mb-4">
-                                        <Flame className="w-4 h-4 text-white" />
-                                    </div>
-                                    <h4 className="font-serif text-xl font-medium mb-2">Holistic Healing</h4>
-                                    <p className="text-xs text-white/70 leading-relaxed">Restoring the vital balance of body and spirit.</p>
+                                    <h4 className="font-serif text-2xl font-medium mb-2">Holistic Healing</h4>
+                                    <p className="text-xs text-white/70 leading-relaxed font-light">Restoring the vital balance of body and spirit.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+                {/* Elexoir Boutique (Store) */}
+                {products && products.length > 0 && (
+                    <div className="mb-32">
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h3 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">Elexoir Boutique</h3>
+                                <p className="text-sm text-text-muted">Take the spa experience home with you.</p>
+                            </div>
+                            <div className="hidden md:flex">
+                                <button className="text-primary text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-70 transition-opacity">
+                                    View All Products <ArrowRight size={16} />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {products.map(product => (
+                                <div key={product.id} className="group relative bg-white rounded-[32px] overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] border border-border/40 transition-all duration-700 flex flex-col h-[420px]">
+                                    {/* Product Image area */}
+                                    <div className="h-56 relative overflow-hidden bg-surface">
+                                        <img 
+                                            src={product.image} 
+                                            alt={product.title} 
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                                        />
+                                        <div className="absolute top-4 left-4">
+                                            <span className="bg-white/80 backdrop-blur-md text-primary px-3 py-1 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm border border-white/50">
+                                                {product.category}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Product Info */}
+                                    <div className="p-6 md:p-8 flex flex-col flex-1">
+                                        <h4 className="font-serif text-2xl font-medium text-primary mb-2 line-clamp-1">{product.title}</h4>
+                                        <p className="text-sm text-text-muted leading-relaxed font-light line-clamp-2 mb-4 flex-1">
+                                            {product.description}
+                                        </p>
+                                        
+                                        <div className="mt-auto flex items-center justify-between pt-4 border-t border-border/50">
+                                            <span className="font-serif text-xl text-primary">Rp {product.price}</span>
+                                            <button className="px-4 py-2 rounded-full bg-primary/5 text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-colors duration-300">
+                                                Add to Bag
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* About Us */}
                 <div className="mb-24 flex flex-col md:flex-row gap-12 md:gap-24 items-center">
