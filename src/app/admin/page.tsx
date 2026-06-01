@@ -242,45 +242,66 @@ export default function AdminDashboard() {
         setProducts(prev => prev.filter(p => p.id !== id));
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string>>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
+    const resizeImage = (file: File): Promise<string> => {
+        return new Promise((resolve) => {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setter(reader.result as string);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let { width, height } = img;
+                    const MAX_WIDTH = 800;
+                    const MAX_HEIGHT = 800;
+                    
+                    if (width > height && width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    } else if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx?.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.8));
+                };
+                img.src = e.target?.result as string;
             };
             reader.readAsDataURL(file);
+        });
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string>>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            const resizedUrl = await resizeImage(file);
+            setter(resizedUrl);
         }
     };
 
     const handlePinImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0] && pendingPinId) {
             const file = e.target.files[0];
-            const reader = new FileReader();
-            
-            reader.onloadend = async () => {
-                const dataUrl = reader.result as string;
+            try {
+                const dataUrl = await resizeImage(file);
                 
                 // Optimistic update
                 setTreatments(prev => prev.map(trt => trt.id === pendingPinId ? { ...trt, is_pinned: true, pinned_image: dataUrl } : trt));
                 
-                try {
-                    const { error } = await supabase.from('treatments').update({ is_pinned: true, pinned_image: dataUrl }).eq('id', pendingPinId);
-                    if (error) throw error;
-                } catch (err) {
-                    console.error("Failed to pin with image:", err);
-                    setTreatments(prev => prev.map(trt => trt.id === pendingPinId ? { ...trt, is_pinned: false, pinned_image: undefined } : trt));
-                    alert("Failed to save pinned image to database. Have you run the SQL command to add the pinned_image column?");
-                }
-                setPendingPinId(null);
-                
-                // Reset file input
-                if (pinImageInputRef.current) {
-                    pinImageInputRef.current.value = '';
-                }
-            };
+                const { error } = await supabase.from('treatments').update({ is_pinned: true, pinned_image: dataUrl }).eq('id', pendingPinId);
+                if (error) throw error;
+            } catch (err) {
+                console.error("Failed to pin with image:", err);
+                setTreatments(prev => prev.map(trt => trt.id === pendingPinId ? { ...trt, is_pinned: false, pinned_image: undefined } : trt));
+                alert("Failed to save pinned image. It might be too large, or you haven't run the SQL command to add the pinned_image column.");
+            }
             
-            reader.readAsDataURL(file);
+            setPendingPinId(null);
+            if (pinImageInputRef.current) {
+                pinImageInputRef.current.value = '';
+            }
         }
     };
 

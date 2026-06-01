@@ -131,15 +131,15 @@ export function SpaProvider({ children }: { children: ReactNode }) {
 
                 if (treatmentsRes.data && treatmentsRes.data.length > 0) {
                     setTreatments(treatmentsRes.data);
-                    localStorage.setItem('spa_treatments', JSON.stringify(treatmentsRes.data));
+                    try { localStorage.setItem('spa_treatments', JSON.stringify(treatmentsRes.data)); } catch(e) { console.warn("Cache full"); }
                 }
                 if (productsRes.data && productsRes.data.length > 0) {
                     setProducts(productsRes.data);
-                    localStorage.setItem('spa_products', JSON.stringify(productsRes.data));
+                    try { localStorage.setItem('spa_products', JSON.stringify(productsRes.data)); } catch(e) { console.warn("Cache full"); }
                 }
                 if (campaignsRes.data && campaignsRes.data.length > 0) {
                     setCampaign(campaignsRes.data[0]);
-                    localStorage.setItem('spa_campaign', JSON.stringify(campaignsRes.data[0]));
+                    try { localStorage.setItem('spa_campaign', JSON.stringify(campaignsRes.data[0])); } catch(e) { console.warn("Cache full"); }
                 }
             } catch (error) {
                 console.error("Error fetching data from Supabase:", error);
