@@ -30,8 +30,8 @@ export default function Home() {
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
     const [showStory, setShowStory] = useState(false);
     
-    // TODO: Connect this to SQL database for Pinned Treatments
-    const showPinnedTreatments = false; 
+    // Show only if there is at least one pinned treatment in the database
+    const showPinnedTreatments = treatments.some(t => t.is_pinned);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     
     const scrollLeft = () => {

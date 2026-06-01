@@ -777,8 +777,19 @@ export default function AdminDashboard() {
                                                                 <div className="flex items-center gap-2">
                                                                     <button 
                                                                         type="button"
-                                                                        onClick={() => console.log('TODO: Connect Pin to SQL database for', t.id)}
-                                                                        title="Pin Treatment"
+                                                                        onClick={async () => {
+                                                                            const newStatus = !t.is_pinned;
+                                                                            // Optimistic update
+                                                                            setTreatments(prev => prev.map(trt => trt.id === t.id ? { ...trt, is_pinned: newStatus } : trt));
+                                                                            try {
+                                                                                await supabase.from('treatments').update({ is_pinned: newStatus }).eq('id', t.id);
+                                                                            } catch (e) {
+                                                                                console.error("Failed to update pin status:", e);
+                                                                                // Revert
+                                                                                setTreatments(prev => prev.map(trt => trt.id === t.id ? { ...trt, is_pinned: !newStatus } : trt));
+                                                                            }
+                                                                        }}
+                                                                        title={t.is_pinned ? "Unpin Treatment" : "Pin Treatment"}
                                                                         className={`w-10 h-10 rounded-full border border-border/50 flex items-center justify-center transition-colors ${t.is_pinned ? 'bg-primary text-white border-primary' : 'bg-white text-text-muted hover:text-primary hover:bg-surface'}`}
                                                                     >
                                                                         <Pin size={16} className={t.is_pinned ? 'fill-current' : ''} />
