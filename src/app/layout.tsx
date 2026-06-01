@@ -17,15 +17,16 @@ const newsreader = Newsreader({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.elexoirhomespaubud.com'),
   title: {
-    default: "Elexoir Home Spa | Luxury Mobile Spa & Massage in Ubud, Bali",
+    default: "Elexoir Home Spa | Luxury Mobile Spa & Massage in Bali",
     template: "%s | Elexoir Home Spa Bali"
   },
-  description: "Experience the ultimate luxury mobile spa in Ubud, Bali. Elexoir Home Spa delivers premium professional massages, holistic rituals, and wellness treatments directly to your private villa or hotel. Book your sanctuary today.",
+  description: "Experience the ultimate luxury mobile spa in Bali. Elexoir Home Spa delivers premium professional massages, holistic rituals, and wellness treatments directly to your private villa or hotel in Ubud, Canggu, Seminyak, and Uluwatu. Book your 5-star sanctuary today.",
   keywords: [
-    "Home massage service in Ubud", "Ubud Spa", "Bali Massage", "Mobile Spa Ubud", "Home Spa Bali", 
-    "Luxury Massage Ubud", "In-Villa Spa Bali", "Best Spa in Ubud", "Wellness Retreat Bali", "Elexoir Spa",
-    "Professional Massage Bali", "Mobile massage Canggu", "Bali tourist places massage", "Mobile Spa Seminyak", 
-    "Premium spa delivery Bali", "Private massage Ubud", "Couples massage home Ubud"
+    "Home Spa Bali", "Mobile Spa Bali", "Luxury Home Spa Bali", "In Villa Massage Bali", 
+    "Massage Bali", "Balinese Massage Bali", "Deep Tissue Massage Bali", "Couples Massage Bali", 
+    "Wellness Bali", "Spa Treatment Bali", "Massage Service Bali", "Ubud Home Spa", 
+    "Canggu Home Spa", "Seminyak Home Spa", "Uluwatu Home Spa", "Sanur Home Spa", "Nusa Dua Home Spa",
+    "Private Massage Ubud", "Luxury Spa Delivery", "Professional Massage Bali"
   ],
   authors: [{ name: "Elexoir Spa" }],
   creator: "Elexoir Spa",
@@ -41,16 +42,16 @@ export const metadata: Metadata = {
     apple: '/icon.png',
   },
   openGraph: {
-    title: "Elexoir Home Spa | Premium Mobile Spa in Ubud & Bali",
-    description: "The most exclusive in-villa spa experience in Ubud, Bali. Elevate your relaxation with our signature professional massages and organic treatments.",
+    title: "Elexoir Home Spa | Premium Mobile Spa & In-Villa Massage Bali",
+    description: "The most exclusive in-villa spa experience in Bali. Elevate your relaxation with our signature professional massages, couples treatments, and organic holistic rituals delivered to your door.",
     url: 'https://www.elexoirhomespaubud.com',
-    siteName: 'Elexoir Home Spa',
+    siteName: 'Elexoir Home Spa Bali',
     images: [
       {
         url: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
         width: 1200,
         height: 630,
-        alt: 'Elexoir Home Spa - Luxury Mobile Spa & Massage in Ubud, Bali',
+        alt: 'Elexoir Home Spa - Luxury Mobile Spa & Massage in Bali',
       },
     ],
     locale: 'en_US',
@@ -58,8 +59,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Elexoir Home Spa | Luxury Mobile Spa & Massage in Ubud',
-    description: 'Experience premium mobile spa services directly to your villa in Ubud, Bali.',
+    title: 'Elexoir Home Spa | Luxury Mobile Spa & Massage in Bali',
+    description: 'Experience premium mobile spa services directly to your villa in Ubud, Canggu, Seminyak, and Uluwatu. Book professional massages today.',
     images: ['https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg'],
   },
   alternates: {
@@ -87,7 +88,7 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'HealthAndBeautyBusiness',
+  '@type': ['HealthAndBeautyBusiness', 'DaySpa'],
   name: 'Elexoir Home Spa',
   image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
   '@id': 'https://www.elexoirhomespaubud.com',
@@ -107,31 +108,27 @@ const jsonLd = {
     longitude: 115.2625
   },
   areaServed: [
-    "Ubud",
-    "Canggu",
-    "Seminyak",
-    "Kuta",
-    "Jimbaran",
-    "Uluwatu"
+    { '@type': 'City', name: 'Ubud' },
+    { '@type': 'City', name: 'Canggu' },
+    { '@type': 'City', name: 'Seminyak' },
+    { '@type': 'City', name: 'Uluwatu' },
+    { '@type': 'City', name: 'Sanur' },
+    { '@type': 'City', name: 'Nusa Dua' },
+    { '@type': 'City', name: 'Jimbaran' },
+    { '@type': 'City', name: 'Kuta' }
   ],
   priceRange: "$$$",
   openingHoursSpecification: {
     '@type': 'OpeningHoursSpecification',
     dayOfWeek: [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday'
+      'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
     ],
     opens: '09:00',
     closes: '22:00'
   },
   aggregateRating: {
     '@type': 'AggregateRating',
-    ratingValue: '5',
+    ratingValue: '5.0',
     reviewCount: '154',
     bestRating: '5',
     worstRating: '1'
@@ -139,16 +136,17 @@ const jsonLd = {
   sameAs: [
     'https://instagram.com/elexoirspa'
   ],
-  description: 'Bali\'s premier mobile spa. 5-star professional massage treatments brought directly to your private villa or hotel in Ubud, Canggu, Seminyak, Kuta, Jimbaran & Uluwatu.'
+  description: 'Bali\'s premier mobile spa. 5-star professional massage treatments, deep tissue, and couples massages brought directly to your private villa or hotel in Ubud, Canggu, Seminyak, and beyond.'
 };
 
 const serviceJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
-  serviceType: 'Mobile Massage Service',
+  serviceType: 'Luxury Mobile Massage and Home Spa Service',
   provider: {
     '@type': 'LocalBusiness',
-    name: 'Elexoir Home Spa'
+    name: 'Elexoir Home Spa',
+    image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg'
   },
   areaServed: {
     '@type': 'GeoCircle',
@@ -157,14 +155,54 @@ const serviceJsonLd = {
       latitude: '-8.5069',
       longitude: '115.2625'
     },
-    geoRadius: '25000'
+    geoRadius: '50000'
   },
   offers: {
-    '@type': 'Offer',
+    '@type': 'AggregateOffer',
     priceCurrency: 'IDR',
-    price: '350000',
-    availability: 'https://schema.org/InStock'
+    lowPrice: '250000',
+    highPrice: '1500000',
+    offerCount: '20'
   }
+};
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the best home spa in Bali?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Elexoir Home Spa is highly rated as one of the best luxury mobile spas in Bali, offering 5-star professional treatments directly to your villa or hotel.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you provide massage in villas?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, we specialize in in-villa massages and home spa services across Bali, including Ubud, Canggu, Seminyak, and Uluwatu.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you offer couples massage?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely. Our couples massage packages are perfect for honeymooners and partners wanting to relax together in the comfort of their own accommodation.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can therapists come to hotels?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, our certified professional therapists can provide mobile massage services directly to your hotel room or private villa.'
+      }
+    }
+  ]
 };
 
 export const viewport: Viewport = {
@@ -191,6 +229,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       </head>
       <body

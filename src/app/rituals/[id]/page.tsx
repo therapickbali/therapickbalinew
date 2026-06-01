@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Share, MapPin, Clock, Calendar, Sparkles, Plus, Minus, X, MessageCircle } from 'lucide-react';
+import { ChevronLeft, Share, MapPin, Clock, Calendar, Sparkles, Plus, Minus, X, MessageCircle, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useSpa } from '@/context/SpaContext';
@@ -161,9 +161,9 @@ export default function RitualsDetails() {
 
                 </div>
 
-                {/* Description */}
+                {/* Description & SEO Content */}
                 <div className="mb-14 bg-white/50 backdrop-blur-xl border border-white/60 p-6 md:p-8 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-                    <h3 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">About this Treatment</h3>
+                    <h2 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">About this Treatment</h2>
                     <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8 whitespace-pre-wrap">
                         {treatment.desc}
                     </p>
@@ -171,7 +171,7 @@ export default function RitualsDetails() {
                     {treatment.benefits && treatment.benefits.length > 0 && (
                         <>
                             <h3 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">Key Benefits</h3>
-                            <ul className="space-y-3">
+                            <ul className="space-y-3 mb-8">
                                 {treatment.benefits.map((benefit, idx) => (
                                     <li key={idx} className="flex items-start gap-3">
                                         <div className="mt-1 w-1.5 h-1.5 rounded-full bg-primary/40 shrink-0"></div>
@@ -181,6 +181,25 @@ export default function RitualsDetails() {
                             </ul>
                         </>
                     )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-border/30">
+                        <div>
+                            <h3 className="text-sm font-bold tracking-widest text-primary mb-3 uppercase flex items-center gap-2">
+                                <Sparkles className="w-4 h-4" /> Recommended For
+                            </h3>
+                            <p className="text-sm text-text-muted leading-relaxed font-light">
+                                Perfect for those experiencing muscle tension, travel fatigue, or seeking profound relaxation during their Bali holiday. Ideal for couples, honeymooners, and wellness enthusiasts looking for an authentic, premium mobile spa experience.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-bold tracking-widest text-primary mb-3 uppercase flex items-center gap-2">
+                                <Heart className="w-4 h-4" /> Expected Results
+                            </h3>
+                            <p className="text-sm text-text-muted leading-relaxed font-light">
+                                Immediate relief from physical stress and mental fatigue. Promotes improved blood circulation, deeper sleep, restored energy levels, and a lasting sense of holistic wellbeing perfectly aligned with the tranquil spirit of Bali.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Related (Dynamic from Supabase) */}

@@ -21,7 +21,7 @@ const CATEGORIES = [
 ];
 
 
-export default function Home() {
+export default function LocationClient({ locationName, locationSlug }: { locationName: string, locationSlug: string }) {
     const { treatments, campaign, products, isLoading } = useSpa();
 
     const [activeCategory, setActiveCategory] = useState('all');
@@ -124,8 +124,8 @@ export default function Home() {
                 {/* Slogan */}
                 <div className="md:hidden mt-4 mb-6 px-2">
                     <h1 className="font-serif text-3xl text-primary font-medium tracking-tight">
-                        The Art of <br/>
-                        <span className="italic opacity-80">Wellbeing</span>
+                        Home Spa in <br/>
+                        <span className="italic opacity-80">{locationName}</span>
                     </h1>
                 </div>
 
