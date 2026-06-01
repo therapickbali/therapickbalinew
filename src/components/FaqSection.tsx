@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 
 export default function FaqSection() {
-  const [openIdx, setOpenIdx] = useState<number | null>(0);
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   const faqs = [
     {
@@ -35,23 +35,23 @@ export default function FaqSection() {
 
   return (
     <section className="mb-24">
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
+      <div className="max-w-5xl mx-auto px-4 md:px-0">
+        <div className="text-center mb-10">
           <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-3 block">FAQ</span>
           <h2 className="font-serif text-3xl md:text-4xl text-primary leading-tight">Frequently Asked Questions</h2>
         </div>
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {faqs.map((faq, idx) => (
             <div 
               key={idx} 
-              className={`bg-white border ${openIdx === idx ? 'border-primary/30 shadow-[0_10px_30px_rgb(0,0,0,0.04)]' : 'border-border/50'} rounded-3xl overflow-hidden transition-all duration-300`}
+              className={`bg-white border h-max ${openIdx === idx ? 'border-primary/30 shadow-[0_10px_30px_rgb(0,0,0,0.04)]' : 'border-border/50'} rounded-3xl overflow-hidden transition-all duration-300`}
             >
               <button 
                 onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none"
+                className="w-full flex items-center justify-between p-5 text-left focus:outline-none"
               >
-                <h3 className="font-bold text-sm md:text-base text-primary pr-8">{faq.q}</h3>
+                <h3 className="font-bold text-sm text-primary pr-4 leading-snug">{faq.q}</h3>
                 <div className={`w-8 h-8 shrink-0 rounded-full border flex items-center justify-center transition-colors duration-300 ${openIdx === idx ? 'bg-primary text-white border-primary' : 'bg-surface text-primary border-border'}`}>
                   {openIdx === idx ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </div>
@@ -65,8 +65,8 @@ export default function FaqSection() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                   >
-                    <div className="px-6 md:px-8 pb-6 md:pb-8 pt-0">
-                      <p className="text-sm md:text-base text-text-muted font-light leading-relaxed">
+                    <div className="px-5 pb-5 pt-0">
+                      <p className="text-sm text-text-muted font-light leading-relaxed">
                         {faq.a}
                       </p>
                     </div>
