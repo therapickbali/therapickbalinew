@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3 } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa, SelectedCampaignTreatment, Treatment, Product } from '@/context/SpaContext';
 import { supabase } from '@/lib/supabase';
@@ -775,6 +775,14 @@ export default function AdminDashboard() {
                                                                     ))}
                                                                 </div>
                                                                 <div className="flex items-center gap-2">
+                                                                    <button 
+                                                                        type="button"
+                                                                        onClick={() => console.log('TODO: Connect Pin to SQL database for', t.id)}
+                                                                        title="Pin Treatment"
+                                                                        className={`w-10 h-10 rounded-full border border-border/50 flex items-center justify-center transition-colors ${t.is_pinned ? 'bg-primary text-white border-primary' : 'bg-white text-text-muted hover:text-primary hover:bg-surface'}`}
+                                                                    >
+                                                                        <Pin size={16} className={t.is_pinned ? 'fill-current' : ''} />
+                                                                    </button>
                                                                     <button 
                                                                         type="button"
                                                                         onClick={() => handleEditTreatment(t)}

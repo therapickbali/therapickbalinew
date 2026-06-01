@@ -29,6 +29,9 @@ export default function Home() {
     const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
     const [showStory, setShowStory] = useState(false);
+    
+    // TODO: Connect this to SQL database for Pinned Treatments
+    const showPinnedTreatments = false; 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     
     const scrollLeft = () => {
@@ -234,6 +237,36 @@ export default function Home() {
                         </div>
                     </motion.div>
                 </div>
+                )}
+
+                {/* Pinned / Most Booked Treatments (Mobile Only, Hidden until DB connected) */}
+                {showPinnedTreatments && (
+                    <div className="md:hidden mb-8 w-full relative z-20">
+                        <h3 className="text-xs font-semibold text-text-muted mb-3 uppercase tracking-wider">Most Booked</h3>
+                        <div className="flex overflow-x-auto gap-4 no-scrollbar -mx-6 px-6 pb-4 snap-x snap-mandatory">
+                            {treatments.filter(t => t.is_pinned).map(treatment => (
+                                <a href={`/rituals/${treatment.id}`} key={treatment.id} className="w-[65vw] sm:w-[220px] shrink-0 snap-center outline-none">
+                                    <div className="bg-white border border-[#E5E7EB] rounded-[24px] p-2 flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
+                                        <div className="aspect-[4/3] relative bg-[#F5F5F7] overflow-hidden rounded-[16px]">
+                                            <div className={`w-full h-full bg-gradient-to-br ${treatment.bgPattern} opacity-30 group-hover:opacity-50 transition-opacity duration-500`}></div>
+                                        </div>
+                                        <div className="flex flex-col flex-grow px-2 pt-3 pb-2">
+                                            <p className="text-gray-400 text-[10px] font-bold mb-1 line-clamp-1 uppercase tracking-widest">{treatment.category}</p>
+                                            <h4 className="font-bold text-gray-900 text-[13px] line-clamp-1 mb-3">{treatment.title}</h4>
+                                            <div className="flex items-center justify-between bg-gray-50 rounded-full p-1 pl-3 mt-auto border border-gray-100">
+                                                <span className="font-semibold text-gray-900 text-[12px]">
+                                                    Rp {treatment.options[0]?.price || '0'}
+                                                </span>
+                                                <div className="w-7 h-7 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
+                                                    <Plus size={14} strokeWidth={2.5} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
                 )}
 
                 {/* Search & Categories Row */}

@@ -18,6 +18,7 @@ export type Treatment = {
     benefits?: string[];
     bgPattern: string;
     is_published?: boolean;
+    is_pinned?: boolean;
     created_at?: string;
     updated_at?: string;
 };
