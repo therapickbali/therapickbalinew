@@ -35,24 +35,23 @@ export default function FaqSection() {
 
   return (
     <section className="mb-24">
-      <div className="max-w-5xl mx-auto px-4 md:px-0">
-        <div className="text-center mb-10">
+      <div className="max-w-3xl mx-auto px-4 md:px-0">
+        <div className="text-center mb-12">
           <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-3 block">FAQ</span>
           <h2 className="font-serif text-3xl md:text-4xl text-primary leading-tight">Frequently Asked Questions</h2>
         </div>
 
-        {/* Desktop Grid Layout (Hidden on Mobile) */}
-        <div className="hidden md:grid md:grid-cols-2 gap-4">
+        <div className="space-y-4">
           {faqs.map((faq, idx) => (
             <div 
               key={idx} 
-              className={`bg-white border h-max ${openIdx === idx ? 'border-primary/30 shadow-[0_10px_30px_rgb(0,0,0,0.04)]' : 'border-border/50'} rounded-3xl overflow-hidden transition-all duration-300`}
+              className={`bg-white border ${openIdx === idx ? 'border-primary/30 shadow-[0_10px_30px_rgb(0,0,0,0.04)]' : 'border-border/50'} rounded-3xl overflow-hidden transition-all duration-300`}
             >
               <button 
                 onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-5 text-left focus:outline-none"
+                className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none"
               >
-                <h3 className="font-bold text-sm text-primary pr-4 leading-snug">{faq.q}</h3>
+                <h3 className="font-bold text-sm md:text-base text-primary pr-8">{faq.q}</h3>
                 <div className={`w-8 h-8 shrink-0 rounded-full border flex items-center justify-center transition-colors duration-300 ${openIdx === idx ? 'bg-primary text-white border-primary' : 'bg-surface text-primary border-border'}`}>
                   {openIdx === idx ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </div>
@@ -66,8 +65,8 @@ export default function FaqSection() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                   >
-                    <div className="px-5 pb-5 pt-0">
-                      <p className="text-sm text-text-muted font-light leading-relaxed">
+                    <div className="px-6 md:px-8 pb-6 md:pb-8 pt-0">
+                      <p className="text-sm md:text-base text-text-muted font-light leading-relaxed">
                         {faq.a}
                       </p>
                     </div>
@@ -76,56 +75,6 @@ export default function FaqSection() {
               </AnimatePresence>
             </div>
           ))}
-        </div>
-
-        {/* Mobile Stacked Layout (Hidden on Desktop) */}
-        <div className="md:hidden flex flex-col items-center w-[calc(100vw-2rem)] mx-auto pt-2 pb-8">
-          {faqs.map((faq, idx) => {
-            const isActive = openIdx === idx;
-            const distance = openIdx === null ? 0 : Math.abs(idx - openIdx);
-            
-            // Smoothly scale and fade inactive items based on distance
-            const scale = openIdx === null ? 1 : Math.max(0.9, 1 - (distance * 0.05));
-            const opacity = openIdx === null ? 1 : Math.max(0.5, 1 - (distance * 0.2));
-            
-            return (
-              <motion.div
-                key={idx}
-                layout
-                animate={{ scale, opacity }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className={`w-full bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-black/5 overflow-hidden cursor-pointer ${idx !== 0 ? '-mt-4' : ''} ${isActive ? 'shadow-[0_20px_40px_rgb(0,0,0,0.12)]' : ''}`}
-                style={{ 
-                  zIndex: isActive ? 20 : 10 - distance,
-                  position: 'relative'
-                }}
-                onClick={() => setOpenIdx(isActive ? null : idx)}
-              >
-                <div className="p-6 flex items-center justify-center">
-                  <h3 className={`font-bold text-center text-[13px] tracking-wide transition-colors duration-300 ${isActive ? 'text-primary' : 'text-text-muted'}`}>
-                    {faq.q}
-                  </h3>
-                </div>
-                
-                <AnimatePresence>
-                  {isActive && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      <div className="px-6 pb-6 text-center">
-                        <p className="text-xs text-text-muted font-light leading-relaxed">
-                          {faq.a}
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
         </div>
       </div>
     </section>
