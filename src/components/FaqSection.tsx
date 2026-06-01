@@ -34,14 +34,14 @@ export default function FaqSection() {
   ];
 
   return (
-    <section className="mb-24">
+    <section className="mb-12 md:mb-24">
       <div className="max-w-3xl mx-auto px-4 md:px-0">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-3 block">FAQ</span>
           <h2 className="font-serif text-3xl md:text-4xl text-primary leading-tight">Frequently Asked Questions</h2>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {faqs.map((faq, idx) => (
             <div 
               key={idx} 
@@ -49,9 +49,9 @@ export default function FaqSection() {
             >
               <button 
                 onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none"
+                className="w-full flex items-center justify-between p-5 md:p-8 text-left focus:outline-none"
               >
-                <h3 className="font-bold text-sm md:text-base text-primary pr-8">{faq.q}</h3>
+                <h3 className="font-bold text-sm md:text-base text-primary pr-6 md:pr-8">{faq.q}</h3>
                 <div className={`w-8 h-8 shrink-0 rounded-full border flex items-center justify-center transition-colors duration-300 ${openIdx === idx ? 'bg-primary text-white border-primary' : 'bg-surface text-primary border-border'}`}>
                   {openIdx === idx ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </div>
@@ -65,7 +65,7 @@ export default function FaqSection() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                   >
-                    <div className="px-6 md:px-8 pb-6 md:pb-8 pt-0">
+                    <div className="px-5 md:px-8 pb-5 md:pb-8 pt-0">
                       <p className="text-sm md:text-base text-text-muted font-light leading-relaxed">
                         {faq.a}
                       </p>

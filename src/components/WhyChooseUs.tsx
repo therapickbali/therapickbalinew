@@ -45,7 +45,7 @@ export default function WhyChooseUs() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {reasons.map((item, idx) => (
-            <motion.div variants={itemVariants} key={idx} className="flex gap-5 group">
+            <motion.div variants={itemVariants} key={idx} className="flex gap-5 group bg-white md:bg-transparent p-6 md:p-0 rounded-[24px] md:rounded-none shadow-sm md:shadow-none border border-black/5 md:border-transparent">
               <div>
                 <h3 className="font-bold text-sm text-primary mb-2 uppercase tracking-wider">{item.title}</h3>
                 <p className="text-xs md:text-sm text-text-muted leading-relaxed font-light">{item.desc}</p>
