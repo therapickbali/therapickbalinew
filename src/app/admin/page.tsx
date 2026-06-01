@@ -839,9 +839,9 @@ export default function AdminDashboard() {
                                                                             
                                                                             if (t.is_pinned) {
                                                                                 // Unpin
-                                                                                setTreatments(prev => prev.map(trt => trt.id === t.id ? { ...trt, is_pinned: false } : trt));
+                                                                                setTreatments(prev => prev.map(trt => trt.id === t.id ? { ...trt, is_pinned: false, pinned_image: undefined } : trt));
                                                                                 try {
-                                                                                    const { error } = await supabase.from('treatments').update({ is_pinned: false }).eq('id', t.id);
+                                                                                    const { error } = await supabase.from('treatments').update({ is_pinned: false, pinned_image: null }).eq('id', t.id);
                                                                                     if (error) throw error;
                                                                                 } catch (err) {
                                                                                     console.error("Failed to unpin:", err);
