@@ -1,6 +1,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { MapPin } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the map to avoid SSR issues with Leaflet
+const ServiceMap = dynamic(() => import('./ServiceMap'), { 
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-surface/50 rounded-3xl border border-border/40 flex items-center justify-center animate-pulse">
+      <span className="text-xs font-bold uppercase tracking-widest text-primary/40">Loading Map...</span>
+    </div>
+  )
+});
 
 export default function ServiceAreas() {
   const areas = [
@@ -16,7 +27,7 @@ export default function ServiceAreas() {
 
   return (
     <section className="mb-24">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
         <div className="max-w-2xl">
           <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-3 block">Service Areas</span>
           <h2 className="font-serif text-3xl md:text-4xl text-primary leading-tight mb-4">We Come to Your Sanctuary</h2>
@@ -24,6 +35,11 @@ export default function ServiceAreas() {
             Elexoir Home Spa provides luxury mobile massage and wellness services directly to private villas, estates, and hotels across Bali's most prestigious locations.
           </p>
         </div>
+      </div>
+
+      {/* Mobile Map Integration */}
+      <div className="md:hidden w-full h-[280px] mb-6 px-2">
+        <ServiceMap />
       </div>
 
       <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar snap-x snap-mandatory">
