@@ -71,6 +71,27 @@ export default function RitualsDetails() {
         setIsModalOpen(true);
     };
 
+
+
+    const handleShare = async () => {
+        const shareData = {
+            title: `${treatment.title} - Elexoir Home Spa`,
+            text: `Book the ${treatment.title} at Elexoir Home Spa Ubud!`,
+            url: window.location.href,
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+            }
+        } catch (err) {
+            console.error('Error sharing:', err);
+        }
+    };
+
     const relatedTreatments = treatments.filter(t => t.id !== treatment.id).slice(0, 3);
 
     return (
@@ -86,7 +107,10 @@ export default function RitualsDetails() {
                         </button>
                     </Link>
                     <div className="flex items-center gap-4">
-                        <button className="w-12 h-12 rounded-full bg-white/50 backdrop-blur-sm border border-border/30 flex items-center justify-center text-primary hover:bg-white hover:scale-105 transition-all shadow-[0_8px_20px_rgb(0,0,0,0.02)]">
+                        <button 
+                            onClick={handleShare}
+                            className="w-12 h-12 rounded-full bg-white/50 backdrop-blur-sm border border-border/30 flex items-center justify-center text-primary hover:bg-white hover:scale-105 transition-all shadow-[0_8px_20px_rgb(0,0,0,0.02)]"
+                        >
                             <Share className="w-5 h-5" strokeWidth={2} />
                         </button>
                     </div>
