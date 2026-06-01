@@ -165,7 +165,13 @@ export default function RitualsDetails() {
                 <div className="mb-14 bg-white/50 backdrop-blur-xl border border-white/60 p-6 md:p-8 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
                     <h2 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">About this Treatment</h2>
                     <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8 whitespace-pre-wrap">
-                        {treatment.desc}
+                        {treatment.desc.split(/(What's Included\s*?:?)/i).map((part, i) => 
+                            part.toLowerCase().includes("what's included") ? (
+                                <span key={i} className="font-bold uppercase text-primary tracking-widest block mt-6 mb-2">{part}</span>
+                            ) : (
+                                <span key={i}>{part}</span>
+                            )
+                        )}
                     </p>
                     
                     {treatment.benefits && treatment.benefits.length > 0 && (
@@ -184,16 +190,16 @@ export default function RitualsDetails() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-border/30">
                         <div>
-                            <h3 className="text-sm font-bold tracking-widest text-primary mb-3 uppercase flex items-center gap-2">
-                                <Sparkles className="w-4 h-4" /> Recommended For
+                            <h3 className="text-sm font-bold tracking-widest text-primary mb-3 uppercase">
+                                Recommended For
                             </h3>
                             <p className="text-sm text-text-muted leading-relaxed font-light">
                                 Perfect for those experiencing muscle tension, travel fatigue, or seeking profound relaxation during their Bali holiday. Ideal for couples, honeymooners, and wellness enthusiasts looking for an authentic, premium mobile spa experience.
                             </p>
                         </div>
                         <div>
-                            <h3 className="text-sm font-bold tracking-widest text-primary mb-3 uppercase flex items-center gap-2">
-                                <Heart className="w-4 h-4" /> Expected Results
+                            <h3 className="text-sm font-bold tracking-widest text-primary mb-3 uppercase">
+                                Expected Results
                             </h3>
                             <p className="text-sm text-text-muted leading-relaxed font-light">
                                 Immediate relief from physical stress and mental fatigue. Promotes improved blood circulation, deeper sleep, restored energy levels, and a lasting sense of holistic wellbeing perfectly aligned with the tranquil spirit of Bali.

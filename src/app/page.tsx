@@ -9,7 +9,6 @@ import SeoExpandedContent from '@/components/SeoExpandedContent';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import ServiceAreas from '@/components/ServiceAreas';
 import FaqSection from '@/components/FaqSection';
-import Footer from '@/components/Footer';
 
 // Dummy data for redesign structure
 const CATEGORIES = [
@@ -777,8 +776,6 @@ export default function Home() {
                 <ServiceAreas />
                 <FaqSection />
             </div>
-
-            <Footer />
         </div>
     );
 }
