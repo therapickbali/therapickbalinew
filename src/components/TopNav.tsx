@@ -66,7 +66,7 @@ export default function TopNav() {
                 </a>
 
                 {/* Location (Center) */}
-                <div className="absolute left-1/2 -translate-x-1/2 flex items-center cursor-pointer group hidden md:flex">
+                <div className="absolute left-1/2 -translate-x-1/2 flex items-center cursor-pointer group">
                     <span className="text-[9px] md:text-[11px] font-bold uppercase tracking-[0.15em] text-primary">
                         BALI, INDONESIA
                     </span>
