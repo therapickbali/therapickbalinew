@@ -11,7 +11,15 @@ export default function TopNav() {
     const [isScrolled, setIsScrolled] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const navItems = [
+    const desktopNavItems = [
+        { href: '/', label: 'HOME' },
+        { href: '/store', label: 'STORE' },
+        { href: '/rituals', label: 'TREATMENT' },
+        { href: '/review', label: 'REVIEW' },
+        { href: '/contact', label: 'CONTACT' },
+    ];
+
+    const mobileNavItems = [
         { href: '/', label: 'HOME' },
         { href: '/philosophy', label: 'PHILOSOPHY' },
         { href: '/why-choose-us', label: 'WHY CHOOSE US' },
@@ -76,7 +84,7 @@ export default function TopNav() {
 
                 {/* Desktop Inline Links (Always visible on desktop) */}
                 <nav className={`hidden md:flex items-center gap-4 md:gap-8`}>
-                    {navItems.map((item) => {
+                    {desktopNavItems.map((item) => {
                         const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                         return (
                             <a 
@@ -111,7 +119,7 @@ export default function TopNav() {
                             transition={{ duration: 0.2 }}
                             className={`absolute top-[120%] right-0 w-48 shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col p-2 bg-white/95 backdrop-blur-3xl border border-border/30 rounded-2xl z-50 md:hidden`}
                         >
-                            {navItems.map((item) => {
+                            {mobileNavItems.map((item) => {
                                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                                 return (
                                     <a 
