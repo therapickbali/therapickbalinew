@@ -13,8 +13,10 @@ export default function TopNav() {
 
     const navItems = [
         { href: '/', label: 'HOME' },
-        { href: '/store', label: 'STORE' },
-        { href: '/rituals', label: 'TREATMENT' },
+        { href: '/philosophy', label: 'PHILOSOPHY' },
+        { href: '/why-choose-us', label: 'WHY CHOOSE US' },
+        { href: '/service-areas', label: 'SERVICE AREAS' },
+        { href: '/faq', label: 'FAQ' },
         { href: '/review', label: 'REVIEW' },
         { href: '/contact', label: 'CONTACT' },
     ];
