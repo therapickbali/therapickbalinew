@@ -23,10 +23,10 @@ export default function TopNav() {
     }
 
     return (
-        <div className="fixed top-4 md:top-6 left-0 right-0 z-50 flex justify-center pointer-events-none px-4">
+        <div className="fixed top-4 md:top-6 left-0 right-0 z-50 flex justify-center pointer-events-none px-4 md:px-0">
             <header 
                 className={`pointer-events-auto flex items-center justify-between relative transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border will-change-auto
-                    w-full md:w-[800px] bg-white/70 saturate-[1.8] backdrop-blur-xl border-white/60 rounded-[32px] md:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 py-2
+                    w-full md:w-[calc(100%-64px)] max-w-6xl bg-white/70 saturate-[1.8] backdrop-blur-xl border-white/60 rounded-[32px] md:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 md:px-8 py-2 md:py-3
                 `} 
                 style={{ transformOrigin: 'top center' }}
             >
