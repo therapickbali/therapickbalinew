@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle, ChevronLeft } from 'lucide-react';
+import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle, ChevronLeft, ArrowUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa } from '@/context/SpaContext';
 // Dummy data for redesign structure
@@ -19,6 +19,8 @@ export default function Home() {
     const { treatments, campaign, products, isLoading } = useSpa();
 
     const [activeCategory, setActiveCategory] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortByPrice, setSortByPrice] = useState(false);
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
     
     // Booking Form State for Campaign
@@ -36,6 +38,26 @@ export default function Home() {
     };
     
     const [formData, setFormData] = useState({ name: '', location: '', room: '', ...getInitialDateTime() });
+
+    const filteredAndSortedTreatments = React.useMemo(() => {
+        let result = treatments.filter(t => {
+            const matchesCategory = activeCategory === 'all' || t.category.toLowerCase() === activeCategory.toLowerCase();
+            const matchesSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase());
+            return matchesCategory && matchesSearch;
+        });
+
+        if (sortByPrice) {
+            result.sort((a, b) => {
+                const getLowestPrice = (options: any[]) => {
+                    if (!options || options.length === 0) return 0;
+                    return Math.min(...options.map(o => parseInt(o.price.replace(/,/g, '') || '0')));
+                };
+                return getLowestPrice(a.options) - getLowestPrice(b.options);
+            });
+        }
+
+        return result;
+    }, [treatments, activeCategory, searchQuery, sortByPrice]);
 
     const handleCampaignBooking = (e: React.FormEvent) => {
         e.preventDefault();
@@ -80,18 +102,24 @@ export default function Home() {
                     </h1>
                 </div>
 
-                {/* Mobile Search */}
-                <div className="md:hidden relative mb-8">
+                {/* Search Bar */}
+                <div className="relative mb-8">
                     <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                         <Search className="h-5 w-5 text-text-muted" />
                     </div>
                     <input 
                         type="text" 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search your favourite treatment..." 
                         className="w-full bg-white/70 backdrop-blur-md border border-white/50 rounded-2xl py-4 pl-12 pr-12 text-sm text-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-secondary/50 placeholder:text-text-muted"
                     />
-                    <button className="absolute inset-y-2 right-2 w-10 bg-secondary/30 rounded-xl flex items-center justify-center text-primary hover:bg-secondary/50 transition-colors">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <button 
+                        onClick={() => setSortByPrice(!sortByPrice)}
+                        title="Sort by price"
+                        className={`absolute inset-y-2 right-2 w-10 rounded-xl flex items-center justify-center transition-colors ${sortByPrice ? 'bg-primary text-white shadow-md' : 'bg-secondary/30 text-primary hover:bg-secondary/50'}`}
+                    >
+                        <ArrowUpDown size={18} />
                     </button>
                 </div>
 
@@ -192,7 +220,7 @@ export default function Home() {
                         </div>
                     ) : (
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
-                        {treatments.filter(t => activeCategory === 'all' || t.category.toLowerCase() === activeCategory.toLowerCase()).map((item, idx) => (
+                        {filteredAndSortedTreatments.map((item, idx) => (
                             <Link href={`/rituals/${item.id}`} key={item.id} className="w-72 md:w-80 shrink-0 block group outline-none">
                                 <div className={`rounded-[32px] md:rounded-[40px] bg-gradient-to-br ${item.bgPattern} border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6 md:p-8`}>
                                     
