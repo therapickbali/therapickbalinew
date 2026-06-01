@@ -250,8 +250,8 @@ export default function AdminDashboard() {
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     let { width, height } = img;
-                    const MAX_WIDTH = 800;
-                    const MAX_HEIGHT = 800;
+                    const MAX_WIDTH = 600;
+                    const MAX_HEIGHT = 600;
                     
                     if (width > height && width > MAX_WIDTH) {
                         height *= MAX_WIDTH / width;
@@ -292,10 +292,10 @@ export default function AdminDashboard() {
                 
                 const { error } = await supabase.from('treatments').update({ is_pinned: true, pinned_image: dataUrl }).eq('id', pendingPinId);
                 if (error) throw error;
-            } catch (err) {
+            } catch (err: any) {
                 console.error("Failed to pin with image:", err);
                 setTreatments(prev => prev.map(trt => trt.id === pendingPinId ? { ...trt, is_pinned: false, pinned_image: undefined } : trt));
-                alert("Failed to save pinned image. It might be too large, or you haven't run the SQL command to add the pinned_image column.");
+                alert(`Error saving image: ${err.message || 'Unknown error'}. Try using a smaller photo.`);
             }
             
             setPendingPinId(null);
@@ -851,6 +851,9 @@ export default function AdminDashboard() {
                                                                             } else {
                                                                                 // Start Pin process (requires image)
                                                                                 setPendingPinId(t.id);
+                                                                                if (pinImageInputRef.current) {
+                                                                                    pinImageInputRef.current.value = '';
+                                                                                }
                                                                                 pinImageInputRef.current?.click();
                                                                             }
                                                                         }}
