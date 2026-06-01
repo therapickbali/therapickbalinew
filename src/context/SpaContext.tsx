@@ -92,6 +92,34 @@ export function SpaProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         async function loadData() {
+            // Optimistically load from localStorage
+            try {
+                const cachedTreatments = localStorage.getItem('spa_treatments');
+                const cachedProducts = localStorage.getItem('spa_products');
+                const cachedCampaign = localStorage.getItem('spa_campaign');
+
+                let hasCache = false;
+
+                if (cachedTreatments) {
+                    setTreatments(JSON.parse(cachedTreatments));
+                    hasCache = true;
+                }
+                if (cachedProducts) {
+                    setProducts(JSON.parse(cachedProducts));
+                    hasCache = true;
+                }
+                if (cachedCampaign) {
+                    setCampaign(JSON.parse(cachedCampaign));
+                    hasCache = true;
+                }
+
+                if (hasCache) {
+                    setIsLoading(false); // Hide skeleton if we have cached data
+                }
+            } catch (e) {
+                console.error("Error reading from localStorage", e);
+            }
+
             try {
                 const [treatmentsRes, productsRes, campaignsRes] = await Promise.all([
                     supabase.from('treatments').select('*').eq('is_published', true).order('created_at', { ascending: false }),
@@ -99,9 +127,18 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                     supabase.from('campaigns').select('*').eq('is_published', true).order('created_at', { ascending: false })
                 ]);
 
-                if (treatmentsRes.data && treatmentsRes.data.length > 0) setTreatments(treatmentsRes.data);
-                if (productsRes.data && productsRes.data.length > 0) setProducts(productsRes.data);
-                if (campaignsRes.data && campaignsRes.data.length > 0) setCampaign(campaignsRes.data[0]);
+                if (treatmentsRes.data && treatmentsRes.data.length > 0) {
+                    setTreatments(treatmentsRes.data);
+                    localStorage.setItem('spa_treatments', JSON.stringify(treatmentsRes.data));
+                }
+                if (productsRes.data && productsRes.data.length > 0) {
+                    setProducts(productsRes.data);
+                    localStorage.setItem('spa_products', JSON.stringify(productsRes.data));
+                }
+                if (campaignsRes.data && campaignsRes.data.length > 0) {
+                    setCampaign(campaignsRes.data[0]);
+                    localStorage.setItem('spa_campaign', JSON.stringify(campaignsRes.data[0]));
+                }
             } catch (error) {
                 console.error("Error fetching data from Supabase:", error);
             } finally {
