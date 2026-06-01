@@ -2,11 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Store } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-
+import { Store } from 'lucide-react';
 export default function TopNav() {
-    const pathname = usePathname();
     const pathname = usePathname();
 
 
