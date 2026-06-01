@@ -165,13 +165,14 @@ export default function RitualsDetails() {
                 <div className="mb-14 bg-white/50 backdrop-blur-xl border border-white/60 p-6 md:p-8 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
                     <h2 className="text-sm font-bold tracking-widest text-primary mb-4 uppercase">About this Treatment</h2>
                     <p className="text-sm md:text-base text-text-muted leading-relaxed font-light mb-8 whitespace-pre-wrap">
-                        {treatment.desc.split(/(What's Included\s*?:?)/i).map((part, i) => 
-                            part.toLowerCase().includes("what's included") ? (
-                                <span key={i} className="font-bold uppercase text-primary tracking-widest block mt-6 mb-2">{part}</span>
-                            ) : (
-                                <span key={i}>{part}</span>
+                        {treatment.desc.replace(/What's Included\s*:?\s*/gi, "WHAT'S_INCLUDED_SPLIT").split("WHAT'S_INCLUDED_SPLIT").map((part, i) => (
+                            i === 0 ? <span key={i}>{part}</span> : (
+                                <React.Fragment key={i}>
+                                    <span className="font-bold uppercase text-primary tracking-widest block mt-8 mb-3">WHAT'S INCLUDED</span>
+                                    <span>{part.replace(/^[:\s]+/, '')}</span>
+                                </React.Fragment>
                             )
-                        )}
+                        ))}
                     </p>
                     
                     {treatment.benefits && treatment.benefits.length > 0 && (

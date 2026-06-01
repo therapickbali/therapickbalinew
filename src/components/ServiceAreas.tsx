@@ -26,17 +26,17 @@ export default function ServiceAreas() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar snap-x snap-mandatory">
         {areas.map((area, idx) => (
-          <Link href={`/locations/${area.slug}`} key={idx} className="group block outline-none">
-            <div className="bg-white border border-border/40 rounded-3xl p-6 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] hover:border-primary/20 hover:-translate-y-1">
+          <Link href={`/locations/${area.slug}`} key={idx} className="group block outline-none shrink-0 w-[260px] md:w-auto snap-center">
+            <div className="bg-white border border-border/40 rounded-3xl p-6 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] hover:border-primary/20 hover:-translate-y-1 h-full flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-serif text-xl text-primary font-medium">{area.name}</h3>
                 <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <MapPin className="w-4 h-4" />
                 </div>
               </div>
-              <p className="text-xs text-text-muted leading-relaxed font-light">{area.desc}</p>
+              <p className="text-xs text-text-muted leading-relaxed font-light flex-1">{area.desc}</p>
             </div>
           </Link>
         ))}
