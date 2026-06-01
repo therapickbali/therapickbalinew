@@ -23,6 +23,19 @@ export default function Home() {
     const [maxPrice, setMaxPrice] = useState(1500000); // default max price
     const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    
+    const scrollLeft = () => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollBy({ left: -350, behavior: 'smooth' });
+        }
+    };
+    
+    const scrollRight = () => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollBy({ left: 350, behavior: 'smooth' });
+        }
+    };
     
     // Booking Form State for Campaign
     const [cartItems, setCartItems] = useState<any[]>([]);
@@ -168,8 +181,8 @@ export default function Home() {
                 )}
 
                 {/* Search & Categories Row */}
-                <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-4 relative z-20">
-                    <div className="flex-1 max-w-full overflow-hidden">
+                <div className="mb-6 flex flex-col md:flex-row md:items-end justify-start gap-6 md:gap-4 relative z-20">
+                    <div className="max-w-full overflow-hidden">
                         <h3 className="text-xs font-semibold text-text-muted mb-3 uppercase tracking-wider">Popular Category</h3>
                         <div className="flex overflow-x-auto pb-4 -mx-6 px-6 md:mx-0 md:px-0 gap-3 no-scrollbar">
                             {CATEGORIES.map((cat) => {
@@ -244,7 +257,21 @@ export default function Home() {
                 </div>
 
                 {/* Popular Treatments Scroll */}
-                <div className="mb-24">
+                <div className="mb-24 relative group">
+                    {/* Navigation Buttons (Desktop only) */}
+                    <button 
+                        onClick={scrollLeft}
+                        className="hidden md:flex absolute left-[-20px] lg:left-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white border border-border/50 rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button 
+                        onClick={scrollRight}
+                        className="hidden md:flex absolute right-[-20px] lg:right-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white border border-border/50 rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+
                     {isLoading ? (
                         <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                             {[1,2,3].map((skeleton) => (
@@ -261,7 +288,7 @@ export default function Home() {
                             </div>
                         </div>
                     ) : (
-                    <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
+                    <div ref={scrollContainerRef} className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar scroll-smooth">
                         {filteredAndSortedTreatments.map((item, idx) => (
                             <Link href={`/rituals/${item.id}`} key={item.id} className="w-72 md:w-80 shrink-0 block group outline-none">
                                 <div className={`rounded-[32px] md:rounded-[40px] bg-gradient-to-br ${item.bgPattern} border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6 md:p-8`}>
