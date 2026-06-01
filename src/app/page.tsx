@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle, ChevronLeft, ArrowUpDown } from 'lucide-react';
+import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa } from '@/context/SpaContext';
 // Dummy data for redesign structure
@@ -20,7 +20,8 @@ export default function Home() {
 
     const [activeCategory, setActiveCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
-    const [sortByPrice, setSortByPrice] = useState(false);
+    const [maxPrice, setMaxPrice] = useState(1500000); // default max price
+    const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
     
     // Booking Form State for Campaign
@@ -43,21 +44,28 @@ export default function Home() {
         let result = treatments.filter(t => {
             const matchesCategory = activeCategory === 'all' || t.category.toLowerCase() === activeCategory.toLowerCase();
             const matchesSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase());
-            return matchesCategory && matchesSearch;
+            
+            const getLowestPrice = (options: any[]) => {
+                if (!options || options.length === 0) return 0;
+                return Math.min(...options.map(o => parseInt(o.price.replace(/,/g, '') || '0')));
+            };
+            
+            const matchesPrice = getLowestPrice(t.options) <= maxPrice;
+            
+            return matchesCategory && matchesSearch && matchesPrice;
         });
 
-        if (sortByPrice) {
-            result.sort((a, b) => {
-                const getLowestPrice = (options: any[]) => {
-                    if (!options || options.length === 0) return 0;
-                    return Math.min(...options.map(o => parseInt(o.price.replace(/,/g, '') || '0')));
-                };
-                return getLowestPrice(a.options) - getLowestPrice(b.options);
-            });
-        }
+        // Always sort from lowest to highest naturally
+        result.sort((a, b) => {
+            const getLowestPrice = (options: any[]) => {
+                if (!options || options.length === 0) return 0;
+                return Math.min(...options.map(o => parseInt(o.price.replace(/,/g, '') || '0')));
+            };
+            return getLowestPrice(a.options) - getLowestPrice(b.options);
+        });
 
         return result;
-    }, [treatments, activeCategory, searchQuery, sortByPrice]);
+    }, [treatments, activeCategory, searchQuery, maxPrice]);
 
     const handleCampaignBooking = (e: React.FormEvent) => {
         e.preventDefault();
@@ -103,8 +111,8 @@ export default function Home() {
                 </div>
 
                 {/* Search Bar */}
-                <div className="relative mb-8">
-                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                <div className="relative mb-8 z-20">
+                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none h-[54px]">
                         <Search className="h-5 w-5 text-text-muted" />
                     </div>
                     <input 
@@ -112,15 +120,45 @@ export default function Home() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search your favourite treatment..." 
-                        className="w-full bg-white/70 backdrop-blur-md border border-white/50 rounded-2xl py-4 pl-12 pr-12 text-sm text-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-secondary/50 placeholder:text-text-muted"
+                        className="w-full bg-white/70 backdrop-blur-md border border-white/50 rounded-2xl h-[54px] pl-12 pr-12 text-sm text-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-secondary/50 placeholder:text-text-muted"
                     />
                     <button 
-                        onClick={() => setSortByPrice(!sortByPrice)}
-                        title="Sort by price"
-                        className={`absolute inset-y-2 right-2 w-10 rounded-xl flex items-center justify-center transition-colors ${sortByPrice ? 'bg-primary text-white shadow-md' : 'bg-secondary/30 text-primary hover:bg-secondary/50'}`}
+                        onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
+                        title="Filter by price"
+                        className={`absolute top-2 right-2 w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isPriceFilterOpen ? 'bg-primary text-white shadow-md' : 'bg-secondary/30 text-primary hover:bg-secondary/50'}`}
                     >
-                        <ArrowUpDown size={18} />
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     </button>
+
+                    {/* Price Filter Dropdown */}
+                    <AnimatePresence>
+                        {isPriceFilterOpen && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="absolute top-full right-0 mt-3 w-64 md:w-72 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl p-5 shadow-[0_20px_40px_rgb(0,0,0,0.12)] z-30"
+                            >
+                                <div className="flex items-center justify-between mb-4">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Max Price</span>
+                                    <span className="text-sm font-serif text-primary font-medium">Rp {maxPrice.toLocaleString('en-US')}</span>
+                                </div>
+                                <input 
+                                    type="range" 
+                                    min="150000" 
+                                    max="1500000" 
+                                    step="50000"
+                                    value={maxPrice}
+                                    onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                                    className="w-full accent-primary h-1.5 bg-secondary rounded-lg appearance-none cursor-pointer"
+                                />
+                                <div className="flex justify-between text-[10px] text-text-muted mt-2 font-medium tracking-wider">
+                                    <span>150k</span>
+                                    <span>1.5m</span>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
 
                 {/* Cinematic Campaign Card (Below Search) */}
