@@ -38,11 +38,12 @@ export default function ServiceAreas() {
       </div>
 
       {/* Mobile Map Integration */}
-      <div className="md:hidden w-full h-[280px] mb-6 px-2">
+      <div className="md:hidden w-full h-[450px] mb-6 px-2">
         <ServiceMap />
       </div>
 
-      <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar snap-x snap-mandatory">
+      {/* Desktop Grid Cards (Hidden on Mobile) */}
+      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 pb-6 md:pb-0">
         {areas.map((area, idx) => (
           <Link href={`/locations/${area.slug}`} key={idx} className="group block outline-none shrink-0 w-[260px] md:w-auto snap-center">
             <div className="bg-white border border-border/40 rounded-3xl p-6 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] hover:border-primary/20 hover:-translate-y-1 h-full flex flex-col">

@@ -56,22 +56,14 @@ export default function ServiceMap() {
         />
         {locations.map((loc, idx) => (
           <Marker key={idx} position={loc.coords} icon={createCustomIcon(loc.name)}>
-            <Popup className="custom-popup">
+            <Popup className="custom-popup" closeButton={false}>
               <div className="text-center p-1">
-                <h4 className="font-serif font-medium text-primary text-sm m-0 mb-1">{loc.name}</h4>
-                <p className="text-[10px] text-text-muted m-0">{loc.desc}</p>
+                <h4 className="font-serif font-medium text-primary text-sm m-0">{loc.name}</h4>
               </div>
             </Popup>
           </Marker>
         ))}
       </MapContainer>
-      
-      {/* Interaction Overlay Hint */}
-      <div className="absolute bottom-3 left-0 right-0 flex justify-center pointer-events-none z-10">
-        <div className="bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm border border-white/50">
-          <span className="text-[9px] font-bold tracking-widest uppercase text-primary/70">Tap pins to explore</span>
-        </div>
-      </div>
     </div>
   );
 }

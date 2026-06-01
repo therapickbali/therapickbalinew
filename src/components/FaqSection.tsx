@@ -41,7 +41,8 @@ export default function FaqSection() {
           <h2 className="font-serif text-3xl md:text-4xl text-primary leading-tight">Frequently Asked Questions</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Desktop Grid Layout (Hidden on Mobile) */}
+        <div className="hidden md:grid md:grid-cols-2 gap-4">
           {faqs.map((faq, idx) => (
             <div 
               key={idx} 
@@ -75,6 +76,56 @@ export default function FaqSection() {
               </AnimatePresence>
             </div>
           ))}
+        </div>
+
+        {/* Mobile Stacked Layout (Hidden on Desktop) */}
+        <div className="md:hidden flex flex-col items-center w-full px-2 pt-2 pb-8">
+          {faqs.map((faq, idx) => {
+            const isActive = openIdx === idx;
+            const distance = openIdx === null ? 0 : Math.abs(idx - openIdx);
+            
+            // Smoothly scale and fade inactive items based on distance
+            const scale = openIdx === null ? 1 : Math.max(0.9, 1 - (distance * 0.05));
+            const opacity = openIdx === null ? 1 : Math.max(0.5, 1 - (distance * 0.2));
+            
+            return (
+              <motion.div
+                key={idx}
+                layout
+                animate={{ scale, opacity }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className={`w-full bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-black/5 overflow-hidden cursor-pointer ${idx !== 0 ? '-mt-4' : ''} ${isActive ? 'shadow-[0_20px_40px_rgb(0,0,0,0.12)]' : ''}`}
+                style={{ 
+                  zIndex: isActive ? 20 : 10 - distance,
+                  position: 'relative'
+                }}
+                onClick={() => setOpenIdx(isActive ? null : idx)}
+              >
+                <div className="p-6 flex items-center justify-center">
+                  <h3 className={`font-bold text-center text-[13px] tracking-wide transition-colors duration-300 ${isActive ? 'text-primary' : 'text-text-muted'}`}>
+                    {faq.q}
+                  </h3>
+                </div>
+                
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <div className="px-6 pb-6 text-center">
+                        <p className="text-xs text-text-muted font-light leading-relaxed">
+                          {faq.a}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
