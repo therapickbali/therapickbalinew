@@ -19,6 +19,7 @@ export type Treatment = {
     bgPattern: string;
     is_published?: boolean;
     is_pinned?: boolean;
+    pinned_image?: string;
     created_at?: string;
     updated_at?: string;
 };

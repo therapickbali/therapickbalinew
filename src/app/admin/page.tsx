@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin } from 'lucide-react';
 import Link from 'next/link';
@@ -11,6 +11,10 @@ export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store'>('treatment');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+    
+    // File input ref for pinning treatments
+    const pinImageInputRef = useRef<HTMLInputElement>(null);
+    const [pendingPinId, setPendingPinId] = useState<string | null>(null);
 
     const { treatments, setTreatments, campaign, setCampaign, products, setProducts } = useSpa();
 
@@ -245,6 +249,37 @@ export default function AdminDashboard() {
             reader.onloadend = () => {
                 setter(reader.result as string);
             };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handlePinImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0] && pendingPinId) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onloadend = async () => {
+                const dataUrl = reader.result as string;
+                
+                // Optimistic update
+                setTreatments(prev => prev.map(trt => trt.id === pendingPinId ? { ...trt, is_pinned: true, pinned_image: dataUrl } : trt));
+                
+                try {
+                    const { error } = await supabase.from('treatments').update({ is_pinned: true, pinned_image: dataUrl }).eq('id', pendingPinId);
+                    if (error) throw error;
+                } catch (err) {
+                    console.error("Failed to pin with image:", err);
+                    setTreatments(prev => prev.map(trt => trt.id === pendingPinId ? { ...trt, is_pinned: false, pinned_image: undefined } : trt));
+                    alert("Failed to save pinned image to database. Have you run the SQL command to add the pinned_image column?");
+                }
+                setPendingPinId(null);
+                
+                // Reset file input
+                if (pinImageInputRef.current) {
+                    pinImageInputRef.current.value = '';
+                }
+            };
+            
             reader.readAsDataURL(file);
         }
     };
@@ -780,20 +815,25 @@ export default function AdminDashboard() {
                                                                         onClick={async (e) => {
                                                                             e.preventDefault();
                                                                             e.stopPropagation();
-                                                                            const newStatus = !t.is_pinned;
-                                                                            // Optimistic update
-                                                                            setTreatments(prev => prev.map(trt => trt.id === t.id ? { ...trt, is_pinned: newStatus } : trt));
-                                                                            try {
-                                                                                const { error } = await supabase.from('treatments').update({ is_pinned: newStatus }).eq('id', t.id);
-                                                                                if (error) throw error;
-                                                                            } catch (err) {
-                                                                                console.error("Failed to update pin status:", err);
-                                                                                // Revert
-                                                                                setTreatments(prev => prev.map(trt => trt.id === t.id ? { ...trt, is_pinned: !newStatus } : trt));
-                                                                                alert("Failed to save to database. Have you run the SQL command in Supabase yet?");
+                                                                            
+                                                                            if (t.is_pinned) {
+                                                                                // Unpin
+                                                                                setTreatments(prev => prev.map(trt => trt.id === t.id ? { ...trt, is_pinned: false } : trt));
+                                                                                try {
+                                                                                    const { error } = await supabase.from('treatments').update({ is_pinned: false }).eq('id', t.id);
+                                                                                    if (error) throw error;
+                                                                                } catch (err) {
+                                                                                    console.error("Failed to unpin:", err);
+                                                                                    setTreatments(prev => prev.map(trt => trt.id === t.id ? { ...trt, is_pinned: true } : trt));
+                                                                                    alert("Failed to update database.");
+                                                                                }
+                                                                            } else {
+                                                                                // Start Pin process (requires image)
+                                                                                setPendingPinId(t.id);
+                                                                                pinImageInputRef.current?.click();
                                                                             }
                                                                         }}
-                                                                        title={t.is_pinned ? "Unpin Treatment" : "Pin Treatment"}
+                                                                        title={t.is_pinned ? "Unpin Treatment" : "Pin Treatment (Requires Cover Image)"}
                                                                         className={`w-10 h-10 rounded-full border border-border/50 flex items-center justify-center transition-colors relative z-10 cursor-pointer ${t.is_pinned ? 'bg-primary text-white border-primary' : 'bg-white text-text-muted hover:text-primary hover:bg-surface'}`}
                                                                     >
                                                                         <Pin size={16} className={t.is_pinned ? 'fill-current' : ''} />
@@ -969,6 +1009,15 @@ export default function AdminDashboard() {
                     })}
                 </div>
             </div>
+
+            {/* Hidden File Input for Pinning Images */}
+            <input 
+                type="file" 
+                accept="image/*" 
+                ref={pinImageInputRef} 
+                onChange={handlePinImageUpload} 
+                className="hidden" 
+            />
         </div>
     );
 }
