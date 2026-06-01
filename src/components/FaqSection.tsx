@@ -79,7 +79,7 @@ export default function FaqSection() {
         </div>
 
         {/* Mobile Stacked Layout (Hidden on Desktop) */}
-        <div className="md:hidden flex flex-col items-center w-full px-2 pt-2 pb-8">
+        <div className="md:hidden flex flex-col items-center w-[calc(100vw-2rem)] mx-auto pt-2 pb-8">
           {faqs.map((faq, idx) => {
             const isActive = openIdx === idx;
             const distance = openIdx === null ? 0 : Math.abs(idx - openIdx);

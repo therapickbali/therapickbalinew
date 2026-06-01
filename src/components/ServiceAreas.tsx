@@ -38,7 +38,7 @@ export default function ServiceAreas() {
       </div>
 
       {/* Mobile Map Integration */}
-      <div className="md:hidden w-full h-[450px] mb-6 px-2">
+      <div className="md:hidden w-screen -ml-4 sm:-ml-6 h-[500px] mb-8">
         <ServiceMap />
       </div>
 

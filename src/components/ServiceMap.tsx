@@ -38,7 +38,7 @@ const locations = [
 
 export default function ServiceMap() {
   return (
-    <div className="w-full h-full relative rounded-3xl overflow-hidden border border-border/40 shadow-inner">
+    <div className="w-full h-full relative overflow-hidden border-y border-border/40 shadow-inner bg-[#f5f5f3]">
       <MapContainer 
         center={[-8.68, 115.18]} 
         zoom={10} 
