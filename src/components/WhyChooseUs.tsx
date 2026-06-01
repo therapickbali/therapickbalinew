@@ -43,9 +43,9 @@ export default function WhyChooseUs() {
           <h2 className="font-serif text-3xl md:text-4xl text-primary leading-tight">Why Choose Our Mobile Spa</h2>
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar snap-x snap-mandatory">
           {reasons.map((item, idx) => (
-            <motion.div variants={itemVariants} key={idx} className="flex gap-5 group bg-white md:bg-transparent p-6 md:p-0 rounded-[24px] md:rounded-none shadow-sm md:shadow-none border border-black/5 md:border-transparent">
+            <motion.div variants={itemVariants} key={idx} className="flex-shrink-0 w-[85vw] sm:w-[300px] md:w-auto snap-center flex gap-5 group bg-white md:bg-transparent p-6 md:p-0 rounded-[24px] md:rounded-none shadow-sm md:shadow-none border border-black/5 md:border-transparent">
               <div>
                 <h3 className="font-bold text-sm text-primary mb-2 uppercase tracking-wider">{item.title}</h3>
                 <p className="text-xs md:text-sm text-text-muted leading-relaxed font-light">{item.desc}</p>

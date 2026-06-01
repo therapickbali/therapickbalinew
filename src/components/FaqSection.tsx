@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 export default function FaqSection() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
@@ -41,19 +41,19 @@ export default function FaqSection() {
           <h2 className="font-serif text-3xl md:text-4xl text-primary leading-tight">Frequently Asked Questions</h2>
         </div>
 
-        <div className="space-y-3 md:space-y-4">
+        <div className="bg-white rounded-[24px] md:rounded-[32px] overflow-hidden shadow-sm border border-black/5">
           {faqs.map((faq, idx) => (
             <div 
               key={idx} 
-              className={`bg-white border ${openIdx === idx ? 'border-primary/30 shadow-[0_10px_30px_rgb(0,0,0,0.04)]' : 'border-border/50'} rounded-3xl overflow-hidden transition-all duration-300`}
+              className={`transition-colors duration-300 ${idx !== faqs.length - 1 ? 'border-b border-gray-100/80' : ''}`}
             >
               <button 
                 onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-5 md:p-8 text-left focus:outline-none"
+                className={`w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none transition-colors ${openIdx === idx ? 'bg-black/[0.02]' : 'hover:bg-black/[0.02]'}`}
               >
-                <h3 className="font-bold text-sm md:text-base text-primary pr-6 md:pr-8">{faq.q}</h3>
-                <div className={`w-8 h-8 shrink-0 rounded-full border flex items-center justify-center transition-colors duration-300 ${openIdx === idx ? 'bg-primary text-white border-primary' : 'bg-surface text-primary border-border'}`}>
-                  {openIdx === idx ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                <h3 className="font-medium text-[15px] text-primary pr-4">{faq.q}</h3>
+                <div className="shrink-0 flex items-center justify-center text-gray-400">
+                  <ChevronRight className={`w-5 h-5 transition-transform duration-300 ${openIdx === idx ? 'rotate-90 text-primary' : ''}`} />
                 </div>
               </button>
               
@@ -64,9 +64,10 @@ export default function FaqSection() {
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="bg-black/[0.01]"
                   >
-                    <div className="px-5 md:px-8 pb-5 md:pb-8 pt-0">
-                      <p className="text-sm md:text-base text-text-muted font-light leading-relaxed">
+                    <div className="px-5 md:px-6 pb-5 pt-1">
+                      <p className="text-[14px] text-text-muted font-light leading-relaxed">
                         {faq.a}
                       </p>
                     </div>
