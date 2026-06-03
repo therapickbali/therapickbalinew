@@ -65,6 +65,7 @@ export type Campaign = {
 
 export type TherapistFee = {
     id: string;
+    treatment_id: string;
     duration: string;
     fee: string;
     created_at?: string;
