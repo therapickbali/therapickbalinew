@@ -1154,6 +1154,7 @@ export default function AdminDashboard() {
                         { id: 'treatment', icon: PlusCircle, label: 'Add' },
                         { id: 'store', icon: Store, label: 'Store' },
                         { id: 'campaign', icon: Megaphone, label: 'Promo' },
+                        { id: 'fees', icon: Settings, label: 'Fees' },
                         { id: 'list', icon: LayoutDashboard, label: 'Menu' },
                     ].map((tab) => {
                         const isActive = activeTab === tab.id;

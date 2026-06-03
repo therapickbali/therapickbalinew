@@ -77,7 +77,7 @@ export default function RitualsDetails() {
             title: treatment.title,
             duration: selectedOption.duration,
             price: parseInt(selectedOption.price.replace(/,/g, '') || '0'),
-            guests: 1
+            guests: isCoupleTreatment ? 2 : 1
         }]);
         setIsSelectingMore(false);
         setIsModalOpen(true);
