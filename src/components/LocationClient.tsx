@@ -107,7 +107,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
             if (item.isCampaign) {
                 const originalPriceNum = item.price / (1 - (item.discountPercentage / 100));
                 const originalPrice = (originalPriceNum * item.guests).toLocaleString('en-US');
-                return `*${item.campaignTitle}*%0A*${item.title.toUpperCase()}*%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON [${item.discountPercentage}% OFF]%0AIDR ${price} ~IDR ${originalPrice}~${whatsIncludedText}`;
+                return `*${item.campaignTitle.trim().toUpperCase()}*%0A*${item.title.toUpperCase()}*%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON [${item.discountPercentage}% OFF]%0AIDR ${price} ~IDR ${originalPrice}~${whatsIncludedText}`;
             }
             return `*${item.title.toUpperCase()}*%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
         }).join('%0A%0A------------------------%0A%0A');
