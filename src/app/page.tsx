@@ -116,7 +116,7 @@ export default function Home() {
             return `*${item.title.toUpperCase()}*%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
         }).join('%0A%0A------------------------%0A%0A');
         
-        const message = `*New Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Date: ${formData.date}%0A- Time: ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
+        const message = `*NEW SPA BOOKING*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${totalPrice.toLocaleString('en-US')}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Date: ${formData.date}%0A- Time: ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
         
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
         setCartItems([]);
