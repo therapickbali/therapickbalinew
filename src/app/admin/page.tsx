@@ -203,6 +203,7 @@ export default function AdminDashboard() {
                 setProductDesc('');
                 setProductHowToUse('');
                 setProductIngredients('');
+            }
 
             setIsSubmitting(false);
             setSuccess(true);
@@ -451,8 +452,8 @@ export default function AdminDashboard() {
                         <h1 className="font-serif text-3xl md:text-4xl text-primary font-medium mb-2">
                             {activeTab === 'treatment' ? (editingTreatmentId ? 'Edit Treatment' : 'Create New Treatment') : 
                              activeTab === 'campaign' ? 'Create Campaign Card' : 
-                             activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') :
-                             activeTab === 'fees' ? (editingFeeId ? 'Edit Therapist Fee' : 'Set Therapist Fee') :
+                             activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') : 
+                             activeTab === 'fees' ? 'Set Therapist Fee' :
                              activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
                         </h1>
                         <p className="text-text-muted text-sm">
@@ -1121,8 +1122,7 @@ export default function AdminDashboard() {
                                             <span className="flex items-center gap-2">
                                                 <Sparkles size={16} /> {activeTab === 'treatment' ? (editingTreatmentId ? 'Update Treatment' : 'Publish Treatment') : 
                                                                         activeTab === 'campaign' ? 'Launch Campaign' :
-                                                                        activeTab === 'store' ? (editingProductId ? 'Update Product' : 'Add Product') : 
-                                                                        activeTab === 'fees' ? (editingFeeId ? 'Update Fee' : 'Save Fee') : 'Save'}
+                                                                        activeTab === 'store' ? (editingProductId ? 'Update Product' : 'Add Product') : 'Save'}
                                             </span>
                                         )}
                                     </button>
