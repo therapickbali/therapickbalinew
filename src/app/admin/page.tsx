@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin } from 'lucide-react';
 import Link from 'next/link';
@@ -16,7 +16,20 @@ export default function AdminDashboard() {
     const pinImageInputRef = useRef<HTMLInputElement>(null);
     const [pendingPinId, setPendingPinId] = useState<string | null>(null);
 
-    const { treatments, setTreatments, campaign, setCampaign, products, setProducts, therapistFees, setTherapistFees } = useSpa();
+    const { treatments, setTreatments, campaign, setCampaign, products, setProducts } = useSpa();
+
+    // Local state for Therapist Fees (private to admin dashboard)
+    const [therapistFees, setTherapistFees] = useState<TherapistFee[]>([]);
+
+    useEffect(() => {
+        async function fetchFees() {
+            const { data } = await supabase.from('therapist_fees').select('*').order('created_at', { ascending: false });
+            if (data) {
+                setTherapistFees(data);
+            }
+        }
+        fetchFees();
+    }, []);
 
     // Campaign specific fields
     const [campaignTitle, setCampaignTitle] = useState(campaign?.title || '');
