@@ -44,14 +44,20 @@ export default function RitualsDetails() {
     const isCoupleTreatment = ['couple', 'honeymoon', 'rejuvenation'].some(k => treatment.title.toLowerCase().includes(k));
 
     // Calculate smart price
-    const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0);
+    const totalPrice = cartItems.reduce((acc, item) => {
+        const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+        const multiplier = isCouple ? (item.guests / 2) : item.guests;
+        return acc + (item.price * multiplier);
+    }, 0);
     const formattedTotalPrice = totalPrice.toLocaleString('en-US');
 
     const handleBooking = (e: React.FormEvent) => {
         e.preventDefault();
         const waNumber = '6285174119423';
         const treatmentsList = cartItems.map(item => {
-            const price = (item.price * item.guests).toLocaleString('en-US');
+            const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+            const multiplier = isCouple ? (item.guests / 2) : item.guests;
+            const price = (item.price * multiplier).toLocaleString('en-US');
             const itemTreatment = treatments.find(t => t.id === item.treatmentId);
             
             let whatsIncludedText = '';
@@ -417,7 +423,9 @@ export default function RitualsDetails() {
                                                     </div>
                                                     <span className="font-serif text-primary font-medium text-right flex flex-col shrink-0">
                                                         IDR {item.price.toLocaleString('en-US')}
-                                                        <span className="text-[9px] font-sans text-text-muted font-normal uppercase tracking-wider">Per Person</span>
+                                                        <span className="text-[9px] font-sans text-text-muted font-normal uppercase tracking-wider">
+                                                            {['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
+                                                        </span>
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center justify-between pt-3 border-t border-border/50">
@@ -425,7 +433,12 @@ export default function RitualsDetails() {
                                                     <div className="flex items-center gap-3">
                                                         <button 
                                                             type="button"
-                                                            onClick={() => setCartItems(cartItems.map(i => i.id === item.id ? { ...i, guests: Math.max(1, i.guests - 1) } : i))}
+                                                            onClick={() => setCartItems(cartItems.map(i => {
+                                                                if (i.id !== item.id) return i;
+                                                                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => i.title.toLowerCase().includes(k));
+                                                                const step = isCouple ? 2 : 1;
+                                                                return { ...i, guests: Math.max(step, i.guests - step) };
+                                                            }))}
                                                             className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
                                                         >
                                                             <Minus className="w-3 h-3" />
@@ -433,7 +446,12 @@ export default function RitualsDetails() {
                                                         <span className="font-bold text-sm text-primary w-4 text-center">{item.guests}</span>
                                                         <button 
                                                             type="button"
-                                                            onClick={() => setCartItems(cartItems.map(i => i.id === item.id ? { ...i, guests: i.guests + 1 } : i))}
+                                                            onClick={() => setCartItems(cartItems.map(i => {
+                                                                if (i.id !== item.id) return i;
+                                                                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => i.title.toLowerCase().includes(k));
+                                                                const step = isCouple ? 2 : 1;
+                                                                return { ...i, guests: i.guests + step };
+                                                            }))}
                                                             className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center text-primary hover:bg-border transition-colors shadow-sm"
                                                         >
                                                             <Plus className="w-3 h-3" />
