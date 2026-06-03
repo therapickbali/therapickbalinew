@@ -51,8 +51,19 @@ export default function RitualsDetails() {
         const waNumber = '6285174119423';
         const treatmentsList = cartItems.map(item => {
             const price = (item.price * item.guests).toLocaleString('en-US');
-            return `${item.title.toUpperCase()}%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON IDR ${price}`;
-        }).join('%0A%0A');
+            const itemTreatment = treatments.find(t => t.id === item.treatmentId);
+            
+            let whatsIncludedText = '';
+            if (itemTreatment && itemTreatment.desc) {
+                const parts = itemTreatment.desc.split(/What's Included\s*:?\s*/i);
+                if (parts.length > 1) {
+                    const cleanIncluded = parts[1].trim().replace(/\n/g, '%0A');
+                    whatsIncludedText = `%0A%0A*What's Included:*%0A${cleanIncluded}`;
+                }
+            }
+
+            return `*${item.title.toUpperCase()}*%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
+        }).join('%0A%0A------------------------%0A%0A');
         const message = `*New Spa Booking Request*%0A%0A*Treatments:*%0A${treatmentsList}%0A%0A*Total Price:* IDR ${formattedTotalPrice}%0A%0A*Client Details:*%0A- Name: ${formData.name}%0A- Date: ${formData.date}%0A- Time: ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
         window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
         setIsModalOpen(false);
