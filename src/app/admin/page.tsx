@@ -80,6 +80,7 @@ export default function AdminDashboard() {
 
     // Dynamic fields for Therapist Fees
     const [feeInputs, setFeeInputs] = useState<{ [key: string]: string }>({});
+    const [feeSearch, setFeeSearch] = useState('');
     
     // Initialize feeInputs from therapistFees whenever therapistFees load
     useEffect(() => {
@@ -807,15 +808,26 @@ export default function AdminDashboard() {
 
                                 {activeTab === 'fees' && (
                                     <div className="space-y-6">
-                                        <div className="flex items-center justify-between mb-4">
+                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                                             <h2 className="text-lg font-bold text-primary flex items-center gap-2">
                                                 <Store size={20} className="text-secondary" /> Therapist Fees Setup
                                             </h2>
-                                            <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full">{treatments.length} Treatments</span>
+                                            <div className="flex items-center gap-4">
+                                                <input 
+                                                    type="text"
+                                                    placeholder="Search treatments..."
+                                                    value={feeSearch}
+                                                    onChange={(e) => setFeeSearch(e.target.value)}
+                                                    className="w-full md:w-64 bg-white/50 border border-border/50 rounded-xl px-4 py-2 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                                                />
+                                                <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full whitespace-nowrap">
+                                                    {treatments.filter(t => t.title.toLowerCase().includes(feeSearch.toLowerCase()) || t.category.toLowerCase().includes(feeSearch.toLowerCase())).length} Treatments
+                                                </span>
+                                            </div>
                                         </div>
 
                                         <div className="grid grid-cols-1 gap-6">
-                                            {treatments.map((t) => (
+                                            {treatments.filter(t => t.title.toLowerCase().includes(feeSearch.toLowerCase()) || t.category.toLowerCase().includes(feeSearch.toLowerCase())).map((t) => (
                                                 <div key={t.id} className="p-6 bg-white/60 border border-border/50 rounded-2xl shadow-sm">
                                                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                                                         <div className="flex-1">

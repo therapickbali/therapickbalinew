@@ -41,6 +41,7 @@ export default function RitualsDetails() {
     }
 
     const selectedOption = treatment.options[selectedOptionIdx] || treatment.options[0];
+    const isCoupleTreatment = ['couple', 'honeymoon', 'rejuvenation'].some(k => treatment.title.toLowerCase().includes(k));
 
     // Calculate smart price
     const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0);
@@ -171,7 +172,9 @@ export default function RitualsDetails() {
                         
                         <div className="relative z-10 flex flex-col h-full justify-between gap-6">
                             <div className="flex flex-col">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Price per person</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
+                                    {isCoupleTreatment ? 'Price for 2 persons' : 'Price per person'}
+                                </span>
                                 <AnimatePresence mode="popLayout">
                                     <motion.div 
                                         key={selectedOption.price}
