@@ -64,15 +64,15 @@ export default function RitualsDetails() {
             if (itemTreatment && itemTreatment.desc) {
                 const parts = itemTreatment.desc.split(/What's Included\s*:?\s*/i);
                 if (parts.length > 1) {
-                    const cleanIncluded = parts[1].trim().replace(/\n/g, '%0A');
-                    whatsIncludedText = `%0A%0A*WHAT'S INCLUDED:*%0A${cleanIncluded}`;
+                    const cleanIncluded = parts[1].trim();
+                    whatsIncludedText = `\n\n*WHAT'S INCLUDED:*\n${cleanIncluded}`;
                 }
             }
 
-            return `*${item.title.toUpperCase()}*%0ADURATION ${item.duration} MINS%0A${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
-        }).join('%0A%0A------------------------%0A%0A');
-        const message = `*NEW SPA BOOKING*%0A%0A*TREATMENTS:*%0A${treatmentsList}%0A%0A*TOTAL PRICE:* IDR ${formattedTotalPrice}%0A%0A*CLIENT DETAILS:*%0A- Name: ${formData.name}%0A- Date: ${formData.date}%0A- Time: ${formData.time}%0A- Location/Villa: ${formData.location}%0A- Room Number: ${formData.room || 'N/A'}%0A%0AHello! I would like to confirm this booking.`;
-        window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
+            return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
+        }).join('\n\n------------------------\n\n');
+        const message = `*NEW SPA BOOKING*\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.`;
+        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
         setIsModalOpen(false);
     };
 
