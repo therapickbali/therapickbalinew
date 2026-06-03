@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin, ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee } from '@/context/SpaContext';
 import { supabase } from '@/lib/supabase';
@@ -81,6 +81,7 @@ export default function AdminDashboard() {
     // Dynamic fields for Therapist Fees
     const [feeInputs, setFeeInputs] = useState<{ [key: string]: string }>({});
     const [feeSearch, setFeeSearch] = useState('');
+    const [expandedFees, setExpandedFees] = useState<{ [key: string]: boolean }>({});
     
     // Initialize feeInputs from therapistFees whenever therapistFees load
     useEffect(() => {
@@ -829,49 +830,77 @@ export default function AdminDashboard() {
                                         </div>
 
                                         <div className="grid grid-cols-1 gap-6">
-                                            {treatments.filter(t => t.title.toLowerCase().includes(feeSearch.toLowerCase()) || t.category.toLowerCase().includes(feeSearch.toLowerCase())).map((t) => (
-                                                <div key={t.id} className="p-6 bg-white/60 border border-border/50 rounded-2xl shadow-sm">
-                                                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                                            {treatments.filter(t => t.title.toLowerCase().includes(feeSearch.toLowerCase()) || t.category.toLowerCase().includes(feeSearch.toLowerCase())).map((t) => {
+                                                const isExpanded = expandedFees[t.id] || false;
+                                                return (
+                                                <div key={t.id} className="bg-white/60 border border-border/50 rounded-2xl shadow-sm overflow-hidden transition-all duration-300 hover:border-primary/20">
+                                                    {/* Header Section (Always Visible) */}
+                                                    <div 
+                                                        className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:bg-white/40 transition-colors"
+                                                        onClick={() => setExpandedFees(prev => ({...prev, [t.id]: !isExpanded}))}
+                                                    >
                                                         <div className="flex-1">
-                                                            <h3 className="font-bold text-primary text-base mb-1">{t.title}</h3>
-                                                            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-widest mb-3">{t.category}</p>
-                                                            <div className="space-y-3">
-                                                                {t.options.map(opt => (
-                                                                    <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-border/50 rounded-xl gap-4">
-                                                                        <div className="flex items-center justify-between sm:justify-start gap-4">
-                                                                            <span className="text-sm font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-md">{opt.duration}</span>
-                                                                            <span className="text-xs font-semibold text-text-muted">Cust. Price: Rp {opt.price}</span>
-                                                                        </div>
-                                                                        <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto border-t border-border/30 pt-3 sm:border-0 sm:pt-0">
-                                                                            <label className="text-xs font-bold text-text-muted">Therapist Fee:</label>
-                                                                            <div className="relative">
-                                                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-xs font-bold">Rp.</span>
-                                                                                <input 
-                                                                                    type="text"
-                                                                                    placeholder="0"
-                                                                                    value={feeInputs[`${t.id}-${opt.duration}`] || ''}
-                                                                                    onChange={(e) => handleFeeChange(t.id, opt.duration, e.target.value)}
-                                                                                    className="w-32 bg-surface border border-border/50 rounded-lg pl-9 pr-3 py-2 text-sm font-bold text-primary placeholder:text-text-muted/50 focus:outline-none focus:border-primary/30 transition-colors text-right"
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                ))}
+                                                            <div className="flex items-center gap-3 mb-1">
+                                                                <h3 className="font-bold text-primary text-base">{t.title}</h3>
+                                                                <span className="text-[10px] font-bold text-text-muted bg-surface px-2 py-0.5 rounded-md uppercase tracking-widest">{t.category}</span>
                                                             </div>
+                                                            <p className="text-xs text-text-muted">{t.options.length} duration options</p>
                                                         </div>
-                                                        <div className="self-end md:self-end mt-4 md:mt-0">
-                                                            <button 
-                                                                type="button"
-                                                                onClick={(e) => { e.preventDefault(); handleSaveFees(t.id, t.options); }}
-                                                                className="flex items-center gap-2 px-6 py-2.5 bg-primary text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-primary/90 transition-all shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                                disabled={isSubmitting}
-                                                            >
-                                                                <CheckCircle size={14} /> Save
-                                                            </button>
+                                                        <div className="flex items-center justify-between md:justify-end gap-6">
+                                                            {isExpanded ? <ChevronUp className="text-text-muted" size={20}/> : <ChevronDown className="text-text-muted" size={20}/>}
                                                         </div>
                                                     </div>
+
+                                                    {/* Expanded Content */}
+                                                    <AnimatePresence>
+                                                        {isExpanded && (
+                                                            <motion.div 
+                                                                initial={{ height: 0, opacity: 0 }}
+                                                                animate={{ height: 'auto', opacity: 1 }}
+                                                                exit={{ height: 0, opacity: 0 }}
+                                                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                                className="overflow-hidden"
+                                                            >
+                                                                <div className="p-5 pt-0 border-t border-border/20 mt-2 space-y-4">
+                                                                    <div className="space-y-3">
+                                                                        {t.options.map(opt => (
+                                                                            <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-border/50 rounded-xl gap-4 hover:border-primary/20 transition-colors">
+                                                                                <div className="flex items-center justify-between sm:justify-start gap-4">
+                                                                                    <span className="text-sm font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-md">{opt.duration}</span>
+                                                                                    <span className="text-xs font-semibold text-text-muted">Cust. Price: Rp {opt.price}</span>
+                                                                                </div>
+                                                                                <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto border-t border-border/30 pt-3 sm:border-0 sm:pt-0">
+                                                                                    <label className="text-xs font-bold text-text-muted">Therapist Fee:</label>
+                                                                                    <div className="relative">
+                                                                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-xs font-bold">Rp.</span>
+                                                                                        <input 
+                                                                                            type="text"
+                                                                                            placeholder="0"
+                                                                                            value={feeInputs[`${t.id}-${opt.duration}`] || ''}
+                                                                                            onChange={(e) => handleFeeChange(t.id, opt.duration, e.target.value)}
+                                                                                            className="w-32 bg-surface border border-border/50 rounded-lg pl-9 pr-3 py-2 text-sm font-bold text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-right"
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                    <div className="flex justify-end pt-2">
+                                                                        <button 
+                                                                            type="button"
+                                                                            onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleSaveFees(t.id, t.options); }}
+                                                                            className="flex items-center gap-2 px-6 py-2.5 bg-primary text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-primary/90 transition-all shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                            disabled={isSubmitting}
+                                                                        >
+                                                                            <CheckCircle size={14} /> Save {t.title} Fees
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
                                                 </div>
-                                            ))}
+                                            )})}
                                         </div>
                                     </div>
                                 )}
