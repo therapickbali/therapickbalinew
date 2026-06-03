@@ -63,6 +63,14 @@ export type Campaign = {
     updated_at?: string;
 };
 
+export type TherapistFee = {
+    id: string;
+    duration: string;
+    fee: string;
+    created_at?: string;
+    updated_at?: string;
+};
+
 type SpaContextType = {
     treatments: Treatment[];
     setTreatments: React.Dispatch<React.SetStateAction<Treatment[]>>;
@@ -70,6 +78,8 @@ type SpaContextType = {
     setCampaign: (c: Campaign | null) => void;
     products: Product[];
     setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+    therapistFees: TherapistFee[];
+    setTherapistFees: React.Dispatch<React.SetStateAction<TherapistFee[]>>;
     cartItems: CartItem[];
     addToCart: (product: Product, quantity: number) => void;
     updateCartQuantity: (productId: string, quantity: number) => void;
@@ -88,6 +98,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
     const [treatments, setTreatments] = useState<Treatment[]>([]);
     const [campaign, setCampaign] = useState<Campaign | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
+    const [therapistFees, setTherapistFees] = useState<TherapistFee[]>([]);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [savedProducts, setSavedProducts] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -99,6 +110,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 const cachedTreatments = localStorage.getItem('spa_treatments');
                 const cachedProducts = localStorage.getItem('spa_products');
                 const cachedCampaign = localStorage.getItem('spa_campaign');
+                const cachedFees = localStorage.getItem('spa_fees');
 
                 let hasCache = false;
 
@@ -114,6 +126,10 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                     setCampaign(JSON.parse(cachedCampaign));
                     hasCache = true;
                 }
+                if (cachedFees) {
+                    setTherapistFees(JSON.parse(cachedFees));
+                    hasCache = true;
+                }
 
                 if (hasCache) {
                     setIsLoading(false); // Hide skeleton if we have cached data
@@ -123,10 +139,11 @@ export function SpaProvider({ children }: { children: ReactNode }) {
             }
 
             try {
-                const [treatmentsRes, productsRes, campaignsRes] = await Promise.all([
+                const [treatmentsRes, productsRes, campaignsRes, feesRes] = await Promise.all([
                     supabase.from('treatments').select('*').eq('is_published', true).order('created_at', { ascending: false }),
                     supabase.from('products').select('*').eq('is_published', true).order('created_at', { ascending: false }),
-                    supabase.from('campaigns').select('*').eq('is_published', true).order('created_at', { ascending: false })
+                    supabase.from('campaigns').select('*').eq('is_published', true).order('created_at', { ascending: false }),
+                    supabase.from('therapist_fees').select('*').order('created_at', { ascending: false })
                 ]);
 
                 if (treatmentsRes.data && treatmentsRes.data.length > 0) {
@@ -140,6 +157,10 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 if (campaignsRes.data && campaignsRes.data.length > 0) {
                     setCampaign(campaignsRes.data[0]);
                     try { localStorage.setItem('spa_campaign', JSON.stringify(campaignsRes.data[0])); } catch(e) { console.warn("Cache full"); }
+                }
+                if (feesRes.data && feesRes.data.length > 0) {
+                    setTherapistFees(feesRes.data);
+                    try { localStorage.setItem('spa_fees', JSON.stringify(feesRes.data)); } catch(e) { console.warn("Cache full"); }
                 }
             } catch (error) {
                 console.error("Error fetching data from Supabase:", error);
@@ -181,6 +202,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
     return (
         <SpaContext.Provider value={{ 
             treatments, setTreatments, campaign, setCampaign, products, setProducts,
+            therapistFees, setTherapistFees,
             cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart,
             savedProducts, toggleSavedProduct,
             isLoading

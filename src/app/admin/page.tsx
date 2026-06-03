@@ -4,11 +4,11 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin } from 'lucide-react';
 import Link from 'next/link';
-import { useSpa, SelectedCampaignTreatment, Treatment, Product } from '@/context/SpaContext';
+import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee } from '@/context/SpaContext';
 import { supabase } from '@/lib/supabase';
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store'>('treatment');
+    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store' | 'fees'>('treatment');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
     
@@ -16,7 +16,7 @@ export default function AdminDashboard() {
     const pinImageInputRef = useRef<HTMLInputElement>(null);
     const [pendingPinId, setPendingPinId] = useState<string | null>(null);
 
-    const { treatments, setTreatments, campaign, setCampaign, products, setProducts } = useSpa();
+    const { treatments, setTreatments, campaign, setCampaign, products, setProducts, therapistFees, setTherapistFees } = useSpa();
 
     // Campaign specific fields
     const [campaignTitle, setCampaignTitle] = useState(campaign?.title || '');
@@ -65,7 +65,12 @@ export default function AdminDashboard() {
     const [editingProductId, setEditingProductId] = useState<string | null>(null);
     const [editingCampaignId, setEditingCampaignId] = useState<string | null>(null);
 
-    const [listView, setListView] = useState<'campaign' | 'treatments' | 'store'>('campaign');
+    // Dynamic fields for Therapist Fees
+    const [feeDuration, setFeeDuration] = useState('');
+    const [feeAmount, setFeeAmount] = useState('');
+    const [editingFeeId, setEditingFeeId] = useState<string | null>(null);
+
+    const [listView, setListView] = useState<'campaign' | 'treatments' | 'store' | 'fees'>('campaign');
 
     const [pricingOptions, setPricingOptions] = useState([{ duration: '', price: '' }]);
     const [benefits, setBenefits] = useState(['']);
@@ -178,6 +183,24 @@ export default function AdminDashboard() {
                 setProductDesc('');
                 setProductHowToUse('');
                 setProductIngredients('');
+            } else if (activeTab === 'fees') {
+                const feeData = {
+                    duration: feeDuration,
+                    fee: feeAmount
+                };
+                
+                if (editingFeeId) {
+                    await supabase.from('therapist_fees').update(feeData).eq('id', editingFeeId);
+                    setTherapistFees(prev => prev.map(f => f.id === editingFeeId ? { ...f, ...feeData } : f));
+                } else {
+                    const { data } = await supabase.from('therapist_fees').insert([feeData]).select();
+                    if (data && data.length > 0) {
+                        setTherapistFees(prev => [data[0] as TherapistFee, ...prev]);
+                    }
+                }
+                setEditingFeeId(null);
+                setFeeDuration('');
+                setFeeAmount('');
             }
             setIsSubmitting(false);
             setSuccess(true);
@@ -240,6 +263,20 @@ export default function AdminDashboard() {
 
     const handleRemoveProduct = (id: string) => {
         setProducts(prev => prev.filter(p => p.id !== id));
+    };
+
+    const handleEditFee = (f: TherapistFee) => {
+        setEditingFeeId(f.id);
+        setFeeDuration(f.duration);
+        setFeeAmount(f.fee);
+        setActiveTab('fees');
+    };
+
+    const handleRemoveFee = async (id: string) => {
+        if(confirm('Delete this fee?')) {
+            await supabase.from('therapist_fees').delete().eq('id', id);
+            setTherapistFees(prev => prev.filter(f => f.id !== id));
+        }
     };
 
     const resizeImage = (file: File): Promise<string> => {
@@ -340,6 +377,13 @@ export default function AdminDashboard() {
                         Store Product
                     </button>
                     <button 
+                        onClick={() => setActiveTab('fees')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${activeTab === 'fees' ? 'bg-surface/80 text-primary' : 'text-text-muted hover:bg-surface/50 hover:text-primary'}`}
+                    >
+                        <Settings size={18} />
+                        Therapist Fees
+                    </button>
+                    <button 
                         onClick={() => setActiveTab('list')}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${activeTab === 'list' ? 'bg-surface/80 text-primary' : 'text-text-muted hover:bg-surface/50 hover:text-primary'}`}
                     >
@@ -382,12 +426,14 @@ export default function AdminDashboard() {
                             {activeTab === 'treatment' ? (editingTreatmentId ? 'Edit Treatment' : 'Create New Treatment') : 
                              activeTab === 'campaign' ? 'Create Campaign Card' : 
                              activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') :
+                             activeTab === 'fees' ? (editingFeeId ? 'Edit Therapist Fee' : 'Set Therapist Fee') :
                              activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
                         </h1>
                         <p className="text-text-muted text-sm">
                             {activeTab === 'treatment' ? 'Add or edit a massage or ritual to your spa menu.' : 
                              activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
                              activeTab === 'store' ? 'Add physical products like oils or candles to the Elexoir Boutique.' :
+                             activeTab === 'fees' ? 'Configure fees paid to therapists based on the duration of the treatment.' :
                              activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : ''}
                         </p>
                     </header>
@@ -732,6 +778,57 @@ export default function AdminDashboard() {
                                     </>
                                 )}
 
+                                {activeTab === 'fees' && (
+                                    <>
+                                        {/* Fees Title & Amount */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Treatment Duration</label>
+                                                <input 
+                                                    type="text" required placeholder="e.g. 60 Min" 
+                                                    value={feeDuration} onChange={e => setFeeDuration(e.target.value)}
+                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Therapist Fee (Rp)</label>
+                                                <input 
+                                                    type="text" required placeholder="e.g. 50,000" 
+                                                    value={feeAmount} onChange={e => setFeeAmount(e.target.value)}
+                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Fees List */}
+                                        <div className="mt-12 space-y-4">
+                                            <h2 className="text-sm font-bold uppercase tracking-widest text-text-muted mb-4 border-b pb-2">Existing Fees</h2>
+                                            {therapistFees.length === 0 ? (
+                                                <p className="text-sm text-text-muted">No fees set yet.</p>
+                                            ) : (
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {therapistFees.map((f) => (
+                                                        <div key={f.id} className="p-4 rounded-2xl border border-border/50 bg-white/50 flex items-center justify-between shadow-sm">
+                                                            <div>
+                                                                <h4 className="text-sm font-bold text-primary">{f.duration}</h4>
+                                                                <p className="text-xs text-text-muted mt-1">Rp {f.fee}</p>
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <button type="button" onClick={() => handleEditFee(f)} className="p-2 text-text-muted hover:text-primary transition-colors bg-white rounded-full border shadow-sm">
+                                                                    <Edit3 size={14} />
+                                                                </button>
+                                                                <button type="button" onClick={() => handleRemoveFee(f.id)} className="p-2 text-red-400 hover:text-red-600 transition-colors bg-white rounded-full border shadow-sm">
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+
                                 {activeTab === 'list' && (
                                     <div className="space-y-8">
                                         {/* Segmented Control for View Selection */}
@@ -991,7 +1088,8 @@ export default function AdminDashboard() {
                                             <span className="flex items-center gap-2">
                                                 <Sparkles size={16} /> {activeTab === 'treatment' ? (editingTreatmentId ? 'Update Treatment' : 'Publish Treatment') : 
                                                                         activeTab === 'campaign' ? 'Launch Campaign' :
-                                                                        activeTab === 'store' ? (editingProductId ? 'Update Product' : 'Add Product') : 'Save'}
+                                                                        activeTab === 'store' ? (editingProductId ? 'Update Product' : 'Add Product') : 
+                                                                        activeTab === 'fees' ? (editingFeeId ? 'Update Fee' : 'Save Fee') : 'Save'}
                                             </span>
                                         )}
                                     </button>

@@ -14,9 +14,9 @@ import FaqSection from '@/components/FaqSection';
 const CATEGORIES = [
     { id: 'all', label: 'All' },
     { id: 'massage', label: 'Massage' },
+    { id: 'package', label: 'Package' },
     { id: 'facial', label: 'Facial' },
     { id: 'treatment', label: 'Treatment' },
-    { id: 'package', label: 'Package' },
 ];
 
 
