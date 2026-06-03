@@ -278,9 +278,11 @@ export default function AdminDashboard() {
     };
 
     const handleFeeChange = (treatmentId: string, duration: string, value: string) => {
+        const numericValue = value.replace(/\D/g, '');
+        const formattedValue = numericValue ? parseInt(numericValue).toLocaleString('en-US') : '';
         setFeeInputs(prev => ({
             ...prev,
-            [`${treatmentId}-${duration}`]: value
+            [`${treatmentId}-${duration}`]: formattedValue
         }));
     };
 
@@ -835,21 +837,21 @@ export default function AdminDashboard() {
                                                             <p className="text-[11px] font-semibold text-text-muted uppercase tracking-widest mb-3">{t.category}</p>
                                                             <div className="space-y-3">
                                                                 {t.options.map(opt => (
-                                                                    <div key={opt.duration} className="flex items-center justify-between p-3 bg-white border border-border/50 rounded-xl">
-                                                                        <div className="flex items-center gap-3">
-                                                                            <span className="text-sm font-bold text-primary bg-primary/5 px-2 py-1 rounded-md">{opt.duration}</span>
-                                                                            <span className="text-xs text-text-muted">Cust. Price: Rp {opt.price}</span>
+                                                                    <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-border/50 rounded-xl gap-4">
+                                                                        <div className="flex items-center justify-between sm:justify-start gap-4">
+                                                                            <span className="text-sm font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-md">{opt.duration}</span>
+                                                                            <span className="text-xs font-semibold text-text-muted">Cust. Price: Rp {opt.price}</span>
                                                                         </div>
-                                                                        <div className="flex items-center gap-3">
-                                                                            <label className="text-xs font-bold text-text-muted hidden md:block">Therapist Fee:</label>
+                                                                        <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto border-t border-border/30 pt-3 sm:border-0 sm:pt-0">
+                                                                            <label className="text-xs font-bold text-text-muted">Therapist Fee:</label>
                                                                             <div className="relative">
-                                                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-xs font-bold">Rp</span>
+                                                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-xs font-bold">Rp.</span>
                                                                                 <input 
                                                                                     type="text"
                                                                                     placeholder="0"
                                                                                     value={feeInputs[`${t.id}-${opt.duration}`] || ''}
                                                                                     onChange={(e) => handleFeeChange(t.id, opt.duration, e.target.value)}
-                                                                                    className="w-32 bg-surface border border-border/50 rounded-lg pl-8 pr-3 py-1.5 text-sm font-bold text-primary placeholder:text-text-muted/50 focus:outline-none focus:border-primary/30 transition-colors"
+                                                                                    className="w-32 bg-surface border border-border/50 rounded-lg pl-9 pr-3 py-2 text-sm font-bold text-primary placeholder:text-text-muted/50 focus:outline-none focus:border-primary/30 transition-colors text-right"
                                                                                 />
                                                                             </div>
                                                                         </div>
