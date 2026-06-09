@@ -98,6 +98,9 @@ export default function Home() {
             return;
         }
 
+        // Open window synchronously to bypass popup blockers
+        const newWindow = window.open('', '_blank');
+
         setIsProcessing(true);
         
         try {
@@ -161,12 +164,19 @@ export default function Home() {
             }).join('\n\n------------------------\n\n');
             
             const message = `*NEW SPA BOOKING*\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.${cryptoPaymentNote}`;
+            const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
             
-            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
+            if (newWindow) {
+                newWindow.location.href = waUrl;
+            } else {
+                window.location.href = waUrl; // Fallback if popup blocker blocked the initial window
+            }
+            
             setCartItems([]);
             setIsBookingModalOpen(false);
         } catch (error) {
             console.error(error);
+            if (newWindow) newWindow.close();
             alert('An error occurred while generating the booking message. Please try again.');
         } finally {
             setIsProcessing(false);
