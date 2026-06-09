@@ -51,7 +51,7 @@ export default function Home() {
     const [isSelectingMore, setIsSelectingMore] = useState(false);
     const [expandedTreatmentId, setExpandedTreatmentId] = useState<string | null>(null);
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-    const [isProcessingCrypto, setIsProcessingCrypto] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
     
     // Initialize date and time
     const getInitialDateTime = () => {
@@ -90,65 +90,26 @@ export default function Home() {
         return result;
     }, [treatments, activeCategory, searchQuery, maxPrice]);
 
-    const handleCampaignBooking = (e: React.FormEvent) => {
+    const handleCampaignBooking = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        const waNumber = '6285174119423';
-        const totalPrice = cartItems.reduce((acc, item) => {
-            const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
-            const multiplier = isCouple ? (item.guests / 2) : item.guests;
-            return acc + (item.price * multiplier);
-        }, 0);
-        
-        const treatmentsList = cartItems.map(item => {
-            const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
-            const multiplier = isCouple ? (item.guests / 2) : item.guests;
-            const price = (item.price * multiplier).toLocaleString('en-US');
-            const itemTreatment = treatments.find(t => t.id === item.treatmentId);
-            
-            let whatsIncludedText = '';
-            if (itemTreatment && itemTreatment.desc) {
-                const parts = itemTreatment.desc.split(/What's Included\s*:?\s*/i);
-                if (parts.length > 1) {
-                    const cleanIncluded = parts[1].trim();
-                    whatsIncludedText = `\n\n*WHAT'S INCLUDED:*\n${cleanIncluded}`;
-                }
-            }
-
-            if (item.isCampaign) {
-                const originalPriceNum = item.price / (1 - (item.discountPercentage / 100));
-                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
-                const multiplier = isCouple ? (item.guests / 2) : item.guests;
-                const originalPrice = (originalPriceNum * multiplier).toLocaleString('en-US');
-                return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nIDR ${price} ~IDR ${originalPrice}~${whatsIncludedText}`;
-            }
-            return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
-        }).join('\n\n------------------------\n\n');
-        
-        const message = `*NEW SPA BOOKING*\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.`;
-        
-        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
-        setCartItems([]);
-        setIsBookingModalOpen(false);
-    };
-
-    const handleCryptoPaymentCampaign = async () => {
         if (!formData.name || !formData.date || !formData.time || !formData.location) {
             alert('Please fill in all required fields (Name, Date, Time, Location).');
             return;
         }
+
+        setIsProcessing(true);
         
         try {
-            setIsProcessingCrypto(true);
-            
             const totalPrice = cartItems.reduce((acc, item) => {
                 const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
                 const multiplier = isCouple ? (item.guests / 2) : item.guests;
                 return acc + (item.price * multiplier);
             }, 0);
 
-            const treatmentsList = cartItems.map(item => `${item.title} (${item.duration} MINS)`).join(', ');
+            const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration} MINS)`).join(', ');
 
+            // Generate NowPayments invoice
             const response = await fetch('/api/checkout/nowpayments', {
                 method: 'POST',
                 headers: {
@@ -158,24 +119,57 @@ export default function Home() {
                     price_amount: totalPrice,
                     price_currency: 'idr',
                     order_id: 'CAMPAIGN-' + Date.now().toString(),
-                    order_description: `Campaign Booking for ${formData.name}: ${treatmentsList}`,
+                    order_description: `Campaign Booking for ${formData.name}: ${treatmentsListStr}`,
                     success_url: window.location.origin + '/payment/success',
                     cancel_url: window.location.href,
                 }),
             });
 
-            const data = await response.json();
-
-            if (data.invoice_url) {
-                window.location.href = data.invoice_url;
-            } else {
-                alert('Failed to initialize payment. Please try again later.');
-                setIsProcessingCrypto(false);
+            let cryptoPaymentNote = '';
+            if (response.ok) {
+                const data = await response.json();
+                if (data.invoice_url) {
+                    cryptoPaymentNote = `\n\n💳 *TO PAY WITH CRYPTO, PLEASE CLICK HERE:*\n${data.invoice_url}`;
+                }
             }
+
+            const waNumber = '6285174119423';
+            
+            const treatmentsList = cartItems.map(item => {
+                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+                const multiplier = isCouple ? (item.guests / 2) : item.guests;
+                const price = (item.price * multiplier).toLocaleString('en-US');
+                const itemTreatment = treatments.find(t => t.id === item.treatmentId);
+                
+                let whatsIncludedText = '';
+                if (itemTreatment && itemTreatment.desc) {
+                    const parts = itemTreatment.desc.split(/What's Included\s*:?\s*/i);
+                    if (parts.length > 1) {
+                        const cleanIncluded = parts[1].trim();
+                        whatsIncludedText = `\n\n*WHAT'S INCLUDED:*\n${cleanIncluded}`;
+                    }
+                }
+
+                if (item.isCampaign) {
+                    const originalPriceNum = item.price / (1 - (item.discountPercentage / 100));
+                    const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+                    const multiplier = isCouple ? (item.guests / 2) : item.guests;
+                    const originalPrice = (originalPriceNum * multiplier).toLocaleString('en-US');
+                    return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nIDR ${price} ~IDR ${originalPrice}~${whatsIncludedText}`;
+                }
+                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
+            }).join('\n\n------------------------\n\n');
+            
+            const message = `*NEW SPA BOOKING*\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.${cryptoPaymentNote}`;
+            
+            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
+            setCartItems([]);
+            setIsBookingModalOpen(false);
         } catch (error) {
             console.error(error);
-            alert('An error occurred during checkout.');
-            setIsProcessingCrypto(false);
+            alert('An error occurred while generating the booking message. Please try again.');
+        } finally {
+            setIsProcessing(false);
         }
     };
 
@@ -907,27 +901,18 @@ export default function Home() {
                                                 <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
                                                 <span className="text-2xl font-serif text-primary">IDR {cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0).toLocaleString('en-US')}</span>
                                             </div>
-                                            <div className="flex flex-col gap-3">
-                                                <button 
-                                                    type="submit"
-                                                    className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest"
-                                                >
-                                                    CONFIRM ON WHATSAPP
-                                                </button>
-                                                <button 
-                                                    type="button"
-                                                    onClick={handleCryptoPaymentCampaign}
-                                                    disabled={isProcessingCrypto}
-                                                    className="w-full bg-[#1C1F1D] text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-black hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
-                                                >
-                                                    {isProcessingCrypto ? (
-                                                        <span className="flex items-center gap-2">
-                                                            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                                            PROCESSING...
-                                                        </span>
-                                                    ) : 'PAY WITH CRYPTO'}
-                                                </button>
-                                            </div>
+                                            <button 
+                                                type="submit"
+                                                disabled={isProcessing}
+                                                className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
+                                            >
+                                                {isProcessing ? (
+                                                    <span className="flex items-center gap-2">
+                                                        <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                                        PROCESSING...
+                                                    </span>
+                                                ) : 'CONFIRM ON WHATSAPP'}
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
