@@ -132,7 +132,7 @@ export default function Home() {
             if (response.ok) {
                 const data = await response.json();
                 if (data.invoice_url) {
-                    cryptoPaymentNote = `\n\n💳 *TO PAY WITH CRYPTO, PLEASE CLICK HERE:*\n${data.invoice_url}`;
+                    cryptoPaymentNote = `\n\n*=== SECURE CRYPTO PAYMENT ===*\n\nYou can now securely pay for your booking using Cryptocurrency!\nPlease use the secure link below to complete your payment:\n${data.invoice_url}\n\n*==============================*`;
                 }
             }
 
