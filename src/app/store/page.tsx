@@ -49,11 +49,49 @@ export default function StorePage() {
         return () => { document.body.style.overflow = 'unset'; };
     }, [selectedProduct]);
 
-    const handleCheckoutSubmit = (e: React.FormEvent) => {
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const handleCheckoutSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // In a real app, send data to backend here.
-        clearCart();
-        setIsSuccess(true);
+        
+        try {
+            setIsProcessing(true);
+            
+            let total = 0;
+            cartItems.forEach(item => {
+                const numericPrice = parseInt(item.product.price.replace(/,/g, ''), 10);
+                total += numericPrice * item.quantity;
+            });
+
+            const response = await fetch('/api/checkout/nowpayments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    price_amount: total,
+                    price_currency: 'idr',
+                    order_id: 'STORE-' + Date.now().toString(),
+                    order_description: `Store Order for ${formData.name}`,
+                    success_url: window.location.origin + '/payment/success',
+                    cancel_url: window.location.href,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.invoice_url) {
+                clearCart();
+                window.location.href = data.invoice_url;
+            } else {
+                alert('Failed to initialize payment. Please try again later.');
+                setIsProcessing(false);
+            }
+        } catch (error) {
+            console.error(error);
+            alert('An error occurred during checkout.');
+            setIsProcessing(false);
+        }
     };
 
     const closeModal = () => {
@@ -350,8 +388,13 @@ export default function StorePage() {
                                     {/* Sticky Checkout Bottom */}
                                     {!isSuccess && cartItems.length > 0 && (
                                         <div className="absolute bottom-0 left-0 right-0 bg-[#F8F9F9] p-6 pb-8 md:pb-6 pt-4 border-t border-[#E5E7EB]">
-                                            <button type="submit" form="checkout-form" className="w-full bg-[#2B2B2B] text-white py-4 rounded-xl font-bold text-sm hover:bg-black transition-colors shadow-lg">
-                                                Place Order
+                                            <button type="submit" form="checkout-form" disabled={isProcessing} className="w-full bg-[#2B2B2B] text-white py-4 rounded-xl font-bold text-sm hover:bg-black transition-colors shadow-lg disabled:opacity-70 flex items-center justify-center">
+                                                {isProcessing ? (
+                                                    <span className="flex items-center gap-2">
+                                                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                                        Processing...
+                                                    </span>
+                                                ) : 'Place Order'}
                                             </button>
                                         </div>
                                     )}
