@@ -47,6 +47,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
     const [isSelectingMore, setIsSelectingMore] = useState(false);
     const [expandedTreatmentId, setExpandedTreatmentId] = useState<string | null>(null);
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
     
     // Initialize date and time
     const getInitialDateTime = () => {
@@ -85,38 +86,101 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
         return result;
     }, [treatments, activeCategory, searchQuery, maxPrice]);
 
-    const handleCampaignBooking = (e: React.FormEvent) => {
+    const handleCampaignBooking = async (e: React.FormEvent, paymentMethod: 'crypto' | 'whatsapp') => {
         e.preventDefault();
         
-        const waNumber = '6285174119423';
-        const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0);
+        if (!formData.name || !formData.date || !formData.time || !formData.location) {
+            alert('Please fill in all required fields (Name, Date, Time, Location).');
+            return;
+        }
+
+        const newWindow = window.open('', '_blank');
+        setIsProcessing(true);
         
-        const treatmentsList = cartItems.map(item => {
-            const price = (item.price * item.guests).toLocaleString('en-US');
-            const itemTreatment = treatments.find(t => t.id === item.treatmentId);
+        try {
+            const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0);
             
-            let whatsIncludedText = '';
-            if (itemTreatment && itemTreatment.desc) {
-                const parts = itemTreatment.desc.split(/What's Included\s*:?\s*/i);
-                if (parts.length > 1) {
-                    const cleanIncluded = parts[1].trim();
-                    whatsIncludedText = `\n\n*WHAT'S INCLUDED:*\n${cleanIncluded}`;
+            const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration} MINS)`).join(', ');
+
+            let invoiceUrl = '';
+            
+            // Generate NowPayments invoice
+            const response = await fetch('/api/checkout/nowpayments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    price_amount: totalPrice,
+                    price_currency: 'idr',
+                    order_id: 'LOCATION-' + Date.now().toString(),
+                    order_description: `Location Booking for ${formData.name}: ${treatmentsListStr}`,
+                    success_url: window.location.origin + '/payment/success',
+                    cancel_url: window.location.href,
+                }),
+            });
+
+            let cryptoPaymentNote = '';
+            if (response.ok) {
+                const data = await response.json();
+                if (data.invoice_url) {
+                    invoiceUrl = data.invoice_url;
+                    cryptoPaymentNote = `\n\n*SECURE CRYPTO PAYMENT*\n\nYou can now securely pay for your booking using Cryptocurrency!\nPlease use the secure link below to complete your payment:\n${data.invoice_url}`;
                 }
             }
 
-            if (item.isCampaign) {
-                const originalPriceNum = item.price / (1 - (item.discountPercentage / 100));
-                const originalPrice = (originalPriceNum * item.guests).toLocaleString('en-US');
-                return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nIDR ${price} ~IDR ${originalPrice}~${whatsIncludedText}`;
+            const waNumber = '6285174119423';
+            
+            const treatmentsList = cartItems.map(item => {
+                const price = (item.price * item.guests).toLocaleString('en-US');
+                const itemTreatment = treatments.find(t => t.id === item.treatmentId);
+                
+                let whatsIncludedText = '';
+                if (itemTreatment && itemTreatment.desc) {
+                    const parts = itemTreatment.desc.split(/What's Included\s*:?\s*/i);
+                    if (parts.length > 1) {
+                        const cleanIncluded = parts[1].trim();
+                        whatsIncludedText = `\n\n*WHAT'S INCLUDED:*\n${cleanIncluded}`;
+                    }
+                }
+
+                if (item.isCampaign) {
+                    const originalPriceNum = item.price / (1 - (item.discountPercentage / 100));
+                    const originalPrice = (originalPriceNum * item.guests).toLocaleString('en-US');
+                    return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nIDR ${price} ~IDR ${originalPrice}~${whatsIncludedText}`;
+                }
+                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
+            }).join('\n\n------------------------\n\n');
+            
+            const baseMessage = `*NEW SPA BOOKING*\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.`;
+            
+            if (paymentMethod === 'crypto' && invoiceUrl) {
+                localStorage.setItem('pendingBookingMessage', baseMessage);
+                
+                if (newWindow) {
+                    newWindow.location.href = invoiceUrl;
+                } else {
+                    window.location.href = invoiceUrl;
+                }
+            } else {
+                const fullMessage = baseMessage + cryptoPaymentNote;
+                const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(fullMessage)}`;
+                if (newWindow) {
+                    newWindow.location.href = waUrl;
+                } else {
+                    window.location.href = waUrl;
+                }
             }
-            return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
-        }).join('\n\n------------------------\n\n');
-        
-        const message = `*NEW SPA BOOKING*\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.`;
-        
-        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
-        setCartItems([]);
-        setIsBookingModalOpen(false);
+            
+            setCartItems([]);
+            setIsBookingModalOpen(false);
+        } catch (error) {
+            console.error(error);
+            if (newWindow) newWindow.close();
+            alert('An error occurred while processing the booking.');
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     return (
@@ -667,7 +731,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                         + ADD ANOTHER TREATMENT
                                     </button>
 
-                                    <form onSubmit={handleCampaignBooking} className="space-y-5 pb-8 md:pb-0">
+                                    <form className="space-y-5 pb-8 md:pb-0">
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
                                             <input 
@@ -716,12 +780,29 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                 <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
                                                 <span className="text-2xl font-serif text-primary">IDR {cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0).toLocaleString('en-US')}</span>
                                             </div>
-                                            <button 
-                                                type="submit"
-                                                className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest"
-                                            >
-                                                CONFIRM ON WHATSAPP
-                                            </button>
+                                            <div className="flex flex-col gap-3">
+                                                <button 
+                                                    type="button"
+                                                    onClick={(e) => handleCampaignBooking(e, 'crypto')}
+                                                    disabled={isProcessing}
+                                                    className="w-full bg-black text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-black/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
+                                                >
+                                                    {isProcessing ? (
+                                                        <span className="flex items-center gap-2">
+                                                            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                                            PROCESSING...
+                                                        </span>
+                                                    ) : 'PAY WITH CRYPTO'}
+                                                </button>
+                                                <button 
+                                                    type="button"
+                                                    onClick={(e) => handleCampaignBooking(e, 'whatsapp')}
+                                                    disabled={isProcessing}
+                                                    className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
+                                                >
+                                                    {isProcessing ? 'PROCESSING...' : 'CONFIRM ON WHATSAPP'}
+                                                </button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
