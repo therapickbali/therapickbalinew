@@ -786,7 +786,7 @@ export default function Home() {
                                                                             className="w-full flex items-center justify-between p-3 rounded-xl border border-border hover:border-primary/50 hover:bg-primary/5 transition-all group"
                                                                         >
                                                                             <span className="text-sm font-bold text-primary group-hover:text-primary transition-colors">{opt.duration} Mins</span>
-                                                                            <span className="text-sm font-serif text-primary">IDR {opt.price}</span>
+                                                                            <span className="text-sm font-serif text-primary">IDR {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                                         </button>
                                                                     ))}
                                                                 </div>
