@@ -598,7 +598,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                         <h2 className="font-serif text-2xl text-primary">Select Treatment</h2>
                                     </div>
                                     
-                                    <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 pb-4 no-scrollbar">
+                                    <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 pb-16 no-scrollbar">
                                         {treatments.map(t => (
                                             <div 
                                                 key={t.id} 
@@ -662,6 +662,11 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                 </AnimatePresence>
                                             </div>
                                         ))}
+                                        <div className="text-center pt-2 pb-8">
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted/50 flex items-center justify-center gap-2">
+                                                Scroll for more treatments <ArrowRight className="w-3 h-3 rotate-90" />
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             ) : (
