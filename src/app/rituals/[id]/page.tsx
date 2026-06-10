@@ -402,7 +402,7 @@ export default function RitualsDetails() {
                                         <h2 className="font-serif text-2xl text-primary">Select Treatment</h2>
                                     </div>
                                     
-                                    <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 pb-16 no-scrollbar">
+                                    <div className="space-y-3 max-h-[calc(100dvh-110px)] md:max-h-[70vh] overflow-y-auto pr-2 pb-16 no-scrollbar">
                                         {treatments.map(t => (
                                             <div 
                                                 key={t.id} 
