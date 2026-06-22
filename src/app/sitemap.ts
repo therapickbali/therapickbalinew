@@ -1,7 +1,11 @@
 import { MetadataRoute } from 'next';
+import { headers } from 'next/headers';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://www.elexoirhomespaubud.com';
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const headersList = await headers();
+  const host = headersList.get("host") || "www.elexoirhomespaubud.com";
+  const isBaliDomain = host.includes("balihomespaandmassage.com");
+  const baseUrl = isBaliDomain ? 'https://www.balihomespaandmassage.com' : 'https://www.elexoirhomespaubud.com';
 
   // Core pages
   const routes = [

@@ -1,12 +1,18 @@
 import { MetadataRoute } from 'next';
+import { headers } from 'next/headers';
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const headersList = await headers();
+  const host = headersList.get("host") || "www.elexoirhomespaubud.com";
+  const isBaliDomain = host.includes("balihomespaandmassage.com");
+  const baseUrl = isBaliDomain ? 'https://www.balihomespaandmassage.com' : 'https://www.elexoirhomespaubud.com';
+
   return {
     rules: {
       userAgent: '*',
       allow: '/',
       disallow: ['/admin/', '/api/'],
     },
-    sitemap: 'https://www.elexoirhomespaubud.com/sitemap.xml',
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

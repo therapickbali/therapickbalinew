@@ -44,3 +44,12 @@ h1, h2, h3, h4, h5, h6, .font-serif {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Domain-specific visibility rules */
+body[data-domain="bali"] .domain-ubud-only {
+  display: none !important;
+}
+
+body[data-domain="ubud"] .domain-bali-only {
+  display: none !important;
+}

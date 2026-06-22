@@ -212,9 +212,13 @@ export default function Home() {
                 
                 {/* Slogan */}
                 <div className="md:hidden mt-4 mb-6 px-2">
-                    <h1 className="font-serif text-3xl text-primary font-medium tracking-tight">
+                    <h1 className="font-serif text-3xl text-primary font-medium tracking-tight domain-ubud-only">
                         The Art of <br/>
                         <span className="italic opacity-80">Wellbeing</span>
+                    </h1>
+                    <h1 className="font-serif text-3xl text-primary font-medium tracking-tight domain-bali-only">
+                        Bali's Best <br/>
+                        <span className="italic opacity-80">Mobile Spa</span>
                     </h1>
                 </div>
 
@@ -554,8 +558,11 @@ export default function Home() {
                 <div className="mb-24 flex flex-col md:flex-row gap-12 md:gap-24 items-center max-w-7xl mx-auto px-6">
                     <div className="flex-1">
                         <span className="text-xs font-bold uppercase tracking-widest text-primary/50 mb-4 block">Our Philosophy</span>
-                        <h3 className="font-serif text-4xl md:text-5xl text-primary font-medium mb-6 leading-tight">
+                        <h3 className="font-serif text-4xl md:text-5xl text-primary font-medium mb-6 leading-tight domain-ubud-only">
                             Sanctuary for the Soul
+                        </h3>
+                        <h3 className="font-serif text-4xl md:text-5xl text-primary font-medium mb-6 leading-tight domain-bali-only">
+                            The Best Mobile Spa in <span className="italic">Bali</span>
                         </h3>
                         <p className="text-text-muted leading-relaxed mb-8 font-light">
                             Born from the ancient healing traditions of Bali, Elexoir Home Spa was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
