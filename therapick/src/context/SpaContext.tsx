@@ -1,0 +1,266 @@
+'use client';
+
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+
+// Define structures
+export type TreatmentOption = {
+    duration: string; // e.g. "60 Min", "90 Min"
+    price: string;    // e.g. "450,000"
+};
+
+export type Treatment = {
+    id: string;
+    title: string;
+    category: string;
+    desc: string;
+    options: TreatmentOption[];
+    benefits?: string[];
+    bgPattern: string;
+    is_published?: boolean;
+    is_pinned?: boolean;
+    pinned_image?: string;
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type SelectedCampaignTreatment = {
+    treatmentId: string;
+    durations: string[]; // which durations are discounted
+};
+
+export type Product = {
+    id: string;
+    title: string;
+    category: string;
+    price: string;
+    image: string;
+    description: string;
+    stock: number;
+    howToUse?: string;
+    ingredients?: string;
+    is_published?: boolean;
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type CartItem = {
+    product: Product;
+    quantity: number;
+};
+
+export type Campaign = {
+    id?: string;
+    title: string;
+    label: string;
+    description: string;
+    image?: string;
+    duration: string; // e.g., "1_month"
+    discountPercentage: number;
+    selectedTreatments: SelectedCampaignTreatment[];
+    is_published?: boolean;
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type TherapistFee = {
+    id: string;
+    treatment_id: string;
+    duration: string;
+    fee: string;
+    created_at?: string;
+    updated_at?: string;
+};
+
+type SpaContextType = {
+    treatments: Treatment[];
+    setTreatments: React.Dispatch<React.SetStateAction<Treatment[]>>;
+    campaign: Campaign | null;
+    setCampaign: (c: Campaign | null) => void;
+    products: Product[];
+    setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+    cartItems: CartItem[];
+    addToCart: (product: Product, quantity: number) => void;
+    updateCartQuantity: (productId: string, quantity: number) => void;
+    removeFromCart: (productId: string) => void;
+    clearCart: () => void;
+    savedProducts: string[];
+    toggleSavedProduct: (productId: string) => void;
+    isLoading: boolean;
+};
+
+
+
+const SpaContext = createContext<SpaContextType | undefined>(undefined);
+
+export function SpaProvider({ children }: { children: ReactNode }) {
+    const [treatments, setTreatments] = useState<Treatment[]>([]);
+    const [campaign, setCampaign] = useState<Campaign | null>(null);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [savedProducts, setSavedProducts] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        async function loadData() {
+            // Optimistically load from localStorage
+            try {
+                const cachedTreatments = localStorage.getItem('spa_treatments');
+                const cachedProducts = localStorage.getItem('spa_products');
+                const cachedCampaign = localStorage.getItem('spa_campaign');
+
+                let hasCache = false;
+
+                if (cachedTreatments) {
+                    setTreatments(JSON.parse(cachedTreatments));
+                    hasCache = true;
+                }
+                if (cachedProducts) {
+                    setProducts(JSON.parse(cachedProducts));
+                    hasCache = true;
+                }
+                if (cachedCampaign) {
+                    setCampaign(JSON.parse(cachedCampaign));
+                    hasCache = true;
+                }
+
+                if (hasCache) {
+                    setIsLoading(false); // Hide skeleton if we have cached data
+                }
+            } catch (e) {
+                console.error("Error reading from localStorage", e);
+            }
+
+            try {
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                const mockTreatments: Treatment[] = [
+                    {
+                        id: 't1',
+                        title: 'Balinese Traditional Massage',
+                        category: 'Massage',
+                        desc: 'A full-body, deep-tissue, holistic treatment using a combination of gentle stretches, acupressure, reflexology, and aromatherapy to stimulate the flow of blood, oxygen and "qi" (energy) around your body.',
+                        options: [
+                            { duration: '60 Min', price: '450,000' },
+                            { duration: '90 Min', price: '600,000' }
+                        ],
+                        benefits: ['Relieves deep muscle tension', 'Improves blood circulation', 'Reduces stress and anxiety'],
+                        bgPattern: 'from-secondary/10 via-white to-white',
+                        is_published: true,
+                        is_pinned: true,
+                        pinned_image: 'https://images.pexels.com/photos/3951375/pexels-photo-3951375.jpeg'
+                    },
+                    {
+                        id: 't2',
+                        title: 'Ubud Royal Ritual',
+                        category: 'Ritual',
+                        desc: 'Experience the ultimate pampering with our signature Ubud Royal Ritual, combining traditional massage techniques with a refreshing body scrub and a relaxing floral bath.',
+                        options: [
+                            { duration: '120 Min', price: '950,000' }
+                        ],
+                        benefits: ['Exfoliates dead skin cells', 'Deeply hydrates the skin', 'Provides complete relaxation'],
+                        bgPattern: 'from-secondary/10 via-white to-white',
+                        is_published: true
+                    }
+                ];
+
+                const mockProducts: Product[] = [
+                    {
+                        id: 'p1',
+                        title: 'Signature Lemongrass Oil',
+                        category: 'Essential Oils',
+                        price: '250,000',
+                        image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
+                        description: 'A soothing essential oil blend used in our signature treatments.',
+                        stock: 50,
+                        howToUse: 'Apply a few drops to pulse points or use in a diffuser.',
+                        ingredients: 'Pure Lemongrass Extract, Carrier Oil.',
+                        is_published: true
+                    }
+                ];
+
+                const mockCampaigns: Campaign[] = [
+                    {
+                        id: 'c1',
+                        title: 'Summer Wellness Retreat',
+                        label: 'Limited Offer',
+                        description: 'Enjoy up to 20% off all signature treatments this month to rejuvenate your body and soul.',
+                        image: 'https://images.pexels.com/photos/3951375/pexels-photo-3951375.jpeg',
+                        duration: '1_month',
+                        discountPercentage: 20,
+                        selectedTreatments: [
+                            { treatmentId: 't1', durations: ['60 Min', '90 Min'] },
+                            { treatmentId: 't2', durations: ['120 Min'] }
+                        ],
+                        is_published: true
+                    }
+                ];
+
+                if (mockTreatments.length > 0) {
+                    setTreatments(mockTreatments);
+                    try { localStorage.setItem('spa_treatments', JSON.stringify(mockTreatments)); } catch(e) { console.warn("Cache full"); }
+                }
+                if (mockProducts.length > 0) {
+                    setProducts(mockProducts);
+                    try { localStorage.setItem('spa_products', JSON.stringify(mockProducts)); } catch(e) { console.warn("Cache full"); }
+                }
+                if (mockCampaigns.length > 0) {
+                    setCampaign(mockCampaigns[0]);
+                    try { localStorage.setItem('spa_campaign', JSON.stringify(mockCampaigns[0])); } catch(e) { console.warn("Cache full"); }
+                }
+            } catch (error) {
+                console.error("Error fetching mock data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        loadData();
+    }, []);
+
+    const toggleSavedProduct = (productId: string) => {
+        setSavedProducts(prev => 
+            prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
+        );
+    };
+
+    const addToCart = (product: Product, quantity: number) => {
+        setCartItems(prev => {
+            const existing = prev.find(item => item.product.id === product.id);
+            if (existing) {
+                return prev.map(item => item.product.id === product.id ? { ...item, quantity: item.quantity + quantity } : item);
+            }
+            return [...prev, { product, quantity }];
+        });
+    };
+
+    const updateCartQuantity = (productId: string, quantity: number) => {
+        setCartItems(prev => prev.map(item => item.product.id === productId ? { ...item, quantity } : item));
+    };
+
+    const removeFromCart = (productId: string) => {
+        setCartItems(prev => prev.filter(item => item.product.id !== productId));
+    };
+
+    const clearCart = () => {
+        setCartItems([]);
+    };
+
+    return (
+        <SpaContext.Provider value={{ 
+            treatments, setTreatments, campaign, setCampaign, products, setProducts,
+            cartItems, addToCart, updateCartQuantity, removeFromCart, clearCart,
+            savedProducts, toggleSavedProduct,
+            isLoading
+        }}>
+            {children}
+        </SpaContext.Provider>
+    );
+}
+
+export function useSpa() {
+    const context = useContext(SpaContext);
+    if (context === undefined) {
+        throw new Error('useSpa must be used within a SpaProvider');
+    }
+    return context;
+}
