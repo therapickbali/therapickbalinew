@@ -58,35 +58,19 @@ export default function StorePage() {
             setIsProcessing(true);
             
             let total = 0;
+            let itemsList: string[] = [];
             cartItems.forEach(item => {
                 const numericPrice = parseInt(item.product.price.replace(/,/g, ''), 10);
                 total += numericPrice * item.quantity;
+                itemsList.push(`${item.quantity}x ${item.product.title} (Rp ${(numericPrice * item.quantity).toLocaleString('id-ID')})`);
             });
 
-            const response = await fetch('/api/checkout/nowpayments', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    price_amount: total,
-                    price_currency: 'idr',
-                    order_id: 'STORE-' + Date.now().toString(),
-                    order_description: `Store Order for ${formData.name}`,
-                    success_url: window.location.origin + '/payment/success',
-                    cancel_url: window.location.href,
-                }),
-            });
-
-            const data = await response.json();
-
-            if (data.invoice_url) {
-                clearCart();
-                window.location.href = data.invoice_url;
-            } else {
-                alert('Failed to initialize payment. Please try again later.');
-                setIsProcessing(false);
-            }
+            const waNumber = '6285174119423';
+            const baseMessage = `*NEW STORE ORDER*\n\n*ITEMS:*\n${itemsList.join('\n')}\n\n*TOTAL PRICE:* Rp ${total.toLocaleString('id-ID')}\n\n*CUSTOMER DETAILS:*\n- Name: ${formData.name}\n- Phone: ${formData.phone}\n- Address: ${formData.address}\n\nHello! I would like to place this order.`;
+            
+            const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(baseMessage)}`;
+            clearCart();
+            window.location.href = waUrl;
         } catch (error) {
             console.error(error);
             alert('An error occurred during checkout.');
@@ -151,7 +135,7 @@ export default function StorePage() {
 
                 {/* Headline */}
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium text-[#2B2B2B] tracking-tight leading-[1.2] mb-6 max-w-[280px] md:max-w-md">
-                    Therapick Signature Collection
+                    Elexoir Signature Collection
                 </h1>
 
                 {/* Categories */}
@@ -198,7 +182,7 @@ export default function StorePage() {
                                 
                                 {/* Text Info */}
                                 <div className="flex flex-col flex-grow px-2 md:px-3 pt-3 pb-2">
-                                    <p className="text-gray-400 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Therapick'}</p>
+                                    <p className="text-gray-400 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Elexoir'}</p>
                                     <h4 className="font-bold text-gray-900 text-[13px] md:text-sm line-clamp-1 mb-4">{product.title}</h4>
                                     
                                     {/* Price and Add Button */}

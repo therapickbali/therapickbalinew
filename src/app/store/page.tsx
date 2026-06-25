@@ -58,35 +58,19 @@ export default function StorePage() {
             setIsProcessing(true);
             
             let total = 0;
+            let itemsList: string[] = [];
             cartItems.forEach(item => {
                 const numericPrice = parseInt(item.product.price.replace(/,/g, ''), 10);
                 total += numericPrice * item.quantity;
+                itemsList.push(`${item.quantity}x ${item.product.title} (Rp ${(numericPrice * item.quantity).toLocaleString('id-ID')})`);
             });
 
-            const response = await fetch('/api/checkout/nowpayments', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    price_amount: total,
-                    price_currency: 'idr',
-                    order_id: 'STORE-' + Date.now().toString(),
-                    order_description: `Store Order for ${formData.name}`,
-                    success_url: window.location.origin + '/payment/success',
-                    cancel_url: window.location.href,
-                }),
-            });
-
-            const data = await response.json();
-
-            if (data.invoice_url) {
-                clearCart();
-                window.location.href = data.invoice_url;
-            } else {
-                alert('Failed to initialize payment. Please try again later.');
-                setIsProcessing(false);
-            }
+            const waNumber = '6285174119423';
+            const baseMessage = `*NEW STORE ORDER*\n\n*ITEMS:*\n${itemsList.join('\n')}\n\n*TOTAL PRICE:* Rp ${total.toLocaleString('id-ID')}\n\n*CUSTOMER DETAILS:*\n- Name: ${formData.name}\n- Phone: ${formData.phone}\n- Address: ${formData.address}\n\nHello! I would like to place this order.`;
+            
+            const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(baseMessage)}`;
+            clearCart();
+            window.location.href = waUrl;
         } catch (error) {
             console.error(error);
             alert('An error occurred during checkout.');
