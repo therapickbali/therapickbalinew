@@ -38,6 +38,8 @@
   ],
   "exclude": [
     "node_modules",
-    "old_src"
+    "old_src",
+    "**/old_src",
+    "therapick"
   ]
 }

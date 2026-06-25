@@ -8,10 +8,10 @@ import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee } f
 
 // Mock Supabase for design-only mode
 const supabase = {
-    from: (table: string) => ({
-        select: () => ({ eq: () => ({ order: () => Promise.resolve({ data: [] }) }), order: () => Promise.resolve({ data: [] }) }),
-        update: () => ({ eq: () => Promise.resolve({ data: [] }) }),
-        insert: (data: any[]) => ({ select: () => Promise.resolve({ data: [{ ...data[0], id: Math.random().toString() }] }) })
+    from: (table?: string) => ({
+        select: (query?: string) => ({ eq: (field?: string, val?: any) => ({ order: (field?: string, opts?: any) => Promise.resolve({ data: [], error: null }) }), order: (field?: string, opts?: any) => Promise.resolve({ data: [], error: null }) }),
+        update: (data?: any) => ({ eq: (field?: string, val?: any) => Promise.resolve({ data: [], error: null }) }),
+        insert: (data?: any[]) => ({ select: (query?: string) => Promise.resolve({ data: data ? [{ ...data[0], id: Math.random().toString() }] : [], error: null }) })
     })
 };
 
