@@ -140,7 +140,7 @@ export default function Home() {
             }).join('\n\n------------------------\n\n');
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
-            const baseMessage = `*NEW SPA BOOKING*\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n- Website: ${websiteSource}\n\nHello! I would like to confirm this booking.`;
+            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.`;
             const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(baseMessage)}`;
             if (newWindow) {
                 newWindow.location.href = waUrl;
