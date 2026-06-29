@@ -65,8 +65,9 @@ export default function StorePage() {
                 itemsList.push(`${item.quantity}x ${item.product.title} (Rp ${(numericPrice * item.quantity).toLocaleString('id-ID')})`);
             });
 
+            const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
             const waNumber = '6285174119423';
-            const baseMessage = `*NEW STORE ORDER*\n\n*ITEMS:*\n${itemsList.join('\n')}\n\n*TOTAL PRICE:* Rp ${total.toLocaleString('id-ID')}\n\n*CUSTOMER DETAILS:*\n- Name: ${formData.name}\n- Phone: ${formData.phone}\n- Address: ${formData.address}\n\nHello! I would like to place this order.`;
+            const baseMessage = `*NEW STORE ORDER*\n\n*ITEMS:*\n${itemsList.join('\n')}\n\n*TOTAL PRICE:* Rp ${total.toLocaleString('id-ID')}\n\n*CUSTOMER DETAILS:*\n- Name: ${formData.name}\n- Phone: ${formData.phone}\n- Address: ${formData.address}\n- Website: ${websiteSource}\n\nHello! I would like to place this order.`;
             
             const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(baseMessage)}`;
             clearCart();
