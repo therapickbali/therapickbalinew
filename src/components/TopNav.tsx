@@ -15,7 +15,6 @@ export default function TopNav() {
         { href: '/', label: 'HOME' },
         { href: '/store', label: 'STORE' },
         { href: '/rituals', label: 'TREATMENT' },
-        { href: '/review', label: 'REVIEW' },
         { href: '/contact', label: 'CONTACT' },
     ];
 
@@ -25,7 +24,6 @@ export default function TopNav() {
         { href: '/why-choose-us', label: 'WHY CHOOSE US' },
         { href: '/service-areas', label: 'SERVICE AREAS' },
         { href: '/faq', label: 'FAQ' },
-        { href: '/review', label: 'REVIEW' },
         { href: '/contact', label: 'CONTACT' },
     ];
 
