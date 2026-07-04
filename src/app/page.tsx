@@ -220,25 +220,22 @@ ${treatmentsList}
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
                 {/* Location Filter for Therapists */}
-                <div className="md:hidden mt-4 mb-4 px-6 relative z-30">
+                <div className="md:hidden mt-4 mb-4 relative z-30 -mx-6 px-6">
                     <div className="bg-[#F5F5F7]/80 backdrop-blur-xl border border-white/80 rounded-full p-1.5 flex items-center shadow-inner overflow-x-auto no-scrollbar gap-1">
                         
-                        {/* Region Toggle Button (Icon) */}
+                        {/* Region Toggle Button */}
                         <button 
                             onClick={() => {
                                 setSelectedRegion(selectedRegion === 'Bali' ? 'Dubai' : 'Bali');
                                 setSelectedAreaFilter('All');
                             }}
-                            className={`flex items-center justify-center shrink-0 w-14 h-10 rounded-full transition-all duration-300 ${selectedAreaFilter === 'All' ? 'bg-white shadow-sm text-primary' : 'text-text-muted hover:bg-white/50'}`}
+                            className={`flex items-center gap-1 shrink-0 px-4 h-10 rounded-full transition-all duration-300 font-serif font-bold tracking-wide ${selectedAreaFilter === 'All' ? 'bg-white shadow-sm text-primary' : 'text-text-muted hover:bg-white/50'}`}
                         >
-                            {selectedRegion === 'Bali' ? (
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v18"/><path d="M8 8h8"/><path d="M8 14h8"/><path d="M5 21h14"/></svg>
-                            ) : (
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 21h8"/><path d="M10 21V7l2-4 2 4v14"/><path d="M12 3v4"/></svg>
-                            )}
+                            <span>{selectedRegion}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
 
-                        <div className="w-px h-6 bg-border/50 shrink-0 mx-1"></div>
+                        <div className="w-px h-6 bg-border/40 shrink-0 mx-1"></div>
 
                         {REGION_AREAS[selectedRegion as keyof typeof REGION_AREAS].filter(a => a !== 'All').map(area => (
                             <button
@@ -253,17 +250,17 @@ ${treatmentsList}
                 </div>
 
                 {/* Therapist Stories */}
-                <div className="md:hidden mt-2 mb-6 relative z-20">
+                <div className="md:hidden mt-2 mb-6 relative z-20 -mx-6">
                     <h3 className="text-xs font-bold text-text-muted mb-3 uppercase tracking-wider px-6">Select Therapist</h3>
-                    <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-4 snap-x snap-mandatory">
+                    <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
                         {MOCK_THERAPISTS.filter(t => t.region === selectedRegion && (selectedAreaFilter === 'All' || t.location === selectedAreaFilter)).map(t => (
                             <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setSelectedTherapist(t.id)}>
-                                <div className={`w-[110px] h-[150px] rounded-[24px] p-[3px] transition-all duration-300 shadow-soft ${selectedTherapist === t.id ? 'bg-gradient-to-tr from-primary via-highlight to-primary shadow-[0_8px_20px_rgb(0,0,0,0.15)] scale-[1.02]' : 'bg-gradient-to-tr from-gray-200 to-gray-100 hover:scale-[1.02]'}`}>
-                                    <div className="w-full h-full rounded-[20px] border-[3px] border-[#FDFBF7] overflow-hidden bg-white">
-                                        <img src={t.avatar} alt={t.name} className="w-full h-full object-cover object-top" />
+                                <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-soft ${selectedTherapist === t.id ? 'bg-gradient-to-tr from-primary via-highlight to-primary shadow-[0_8px_20px_rgb(0,0,0,0.15)] scale-110' : 'bg-gradient-to-tr from-gray-200 to-gray-100 hover:scale-105'}`}>
+                                    <div className="w-full h-full rounded-full border-[3px] border-[#FDFBF7] overflow-hidden bg-white">
+                                        <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
                                     </div>
                                 </div>
-                                <span className={`text-[12px] text-center max-w-[100px] truncate transition-all ${selectedTherapist === t.id ? 'text-primary font-bold' : 'text-text-muted font-medium'}`}>
+                                <span className={`text-[11px] text-center max-w-[72px] truncate transition-all ${selectedTherapist === t.id ? 'text-primary font-bold' : 'text-text-muted font-medium'}`}>
                                     {t.name}
                                 </span>
                             </div>
