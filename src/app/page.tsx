@@ -1156,22 +1156,7 @@ ${treatmentsList}
 
                             </div>
 
-                            {/* Sticky Bottom Action */}
-                            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7] to-transparent pt-12 pointer-events-none">
-                                <button 
-                                    onClick={() => {
-                                        setSelectedTherapist(viewingTherapist.id);
-                                        setViewingTherapist(null);
-                                        if (cartItems.length > 0) {
-                                            setBookingStep(1);
-                                            setIsBookingModalOpen(true);
-                                        }
-                                    }}
-                                    className="w-full bg-primary text-white px-6 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-primary/90 transition-all shadow-lg flex items-center justify-center gap-2 pointer-events-auto"
-                                >
-                                    Select Therapist
-                                </button>
-                            </div>
+                            {/* Sticky Bottom Action removed as requested */}
                         </motion.div>
                     </motion.div>
                 )}
