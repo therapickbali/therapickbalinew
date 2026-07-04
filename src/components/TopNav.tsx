@@ -74,12 +74,12 @@ export default function TopNav() {
                 </a>
 
                 {/* Logo (Center) */}
-                <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
-                    <a href="/">
+                <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center h-full">
+                    <a href="/" className="flex items-center justify-center">
                         <img 
                             src="/logo.png" 
                             alt="Therapick Logo" 
-                            className="h-6 md:h-8 w-auto object-contain"
+                            className="h-6 md:h-8 w-auto object-contain scale-[3] md:scale-[4] origin-center"
                         />
                     </a>
                 </div>
