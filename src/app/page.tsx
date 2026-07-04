@@ -221,7 +221,7 @@ ${treatmentsList}
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
                 {/* Location Filter for Therapists */}
-                <div className="md:hidden mt-4 mb-4 relative z-30 -mx-6 px-6">
+                <div className="md:hidden mt-4 mb-4 relative z-30 -mx-6 px-2">
                     <div className="bg-[#F5F5F7]/80 backdrop-blur-xl border border-white/80 rounded-full p-1.5 flex items-center shadow-inner overflow-x-auto no-scrollbar gap-1">
                         
                         {/* Region Toggle Button */}
@@ -870,7 +870,13 @@ ${treatmentsList}
                                         </div>
                                         <button 
                                             type="button"
-                                            onClick={() => setBookingStep(2)}
+                                            onClick={() => {
+                                                if (selectedTherapist) {
+                                                    setBookingStep(4);
+                                                } else {
+                                                    setBookingStep(2);
+                                                }
+                                            }}
                                             disabled={cartItems.length === 0}
                                             className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
                                         >
@@ -945,11 +951,50 @@ ${treatmentsList}
                             ) : (
                                 <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                                     <div className="flex items-center gap-4 mb-6">
-                                        <button onClick={() => setBookingStep(3)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                        <button onClick={() => {
+                                            if (selectedTherapist) {
+                                                setBookingStep(1);
+                                            } else {
+                                                setBookingStep(3);
+                                            }
+                                        }} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
                                             <ChevronLeft className="w-4 h-4" />
                                         </button>
                                         <h2 className="font-serif text-2xl text-primary">Final Details</h2>
                                     </div>
+
+                                    {/* SUMMARY CARD */}
+                                    {cartItems.length > 0 && (
+                                    <div className="bg-surface border border-border/50 rounded-xl p-4 mb-6 shadow-sm">
+                                        <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Booking Summary</h4>
+                                        <div className="space-y-3 mb-4">
+                                            {cartItems.map((item, idx) => (
+                                                <div key={idx} className="flex justify-between items-start">
+                                                    <div>
+                                                        <p className="text-sm font-bold text-primary">{item.title}</p>
+                                                        <p className="text-xs text-text-muted">{item.duration} Mins • {item.guests} Guest(s)</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        {selectedTherapist && (
+                                            <div className="border-t border-border/50 pt-4 flex gap-3 items-center">
+                                                <img 
+                                                    src={MOCK_THERAPISTS.find(t => t.id === selectedTherapist)?.avatar} 
+                                                    className="w-10 h-10 rounded-full object-cover border border-border"
+                                                />
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest">Selected Therapist</p>
+                                                    <p className="text-sm font-bold text-primary flex items-center gap-2">
+                                                        {MOCK_THERAPISTS.find(t => t.id === selectedTherapist)?.name}
+                                                        <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">★ {MOCK_THERAPISTS.find(t => t.id === selectedTherapist)?.rating}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    )}
+
                                     <form className="space-y-5 pb-8 md:pb-0">
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
@@ -1102,6 +1147,10 @@ ${treatmentsList}
                                     onClick={() => {
                                         setSelectedTherapist(viewingTherapist.id);
                                         setViewingTherapist(null);
+                                        if (cartItems.length > 0) {
+                                            setBookingStep(1);
+                                            setIsBookingModalOpen(true);
+                                        }
                                     }}
                                     className="w-full bg-primary text-white px-6 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-primary/90 transition-all shadow-lg flex items-center justify-center gap-2 pointer-events-auto"
                                 >
