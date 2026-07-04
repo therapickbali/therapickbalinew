@@ -64,7 +64,7 @@ export default function Home() {
     const [formData, setFormData] = useState({ name: '', location: '', room: '', ...getInitialDateTime() });
     
     // Multi-step booking states
-    const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4>(1);
+    const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4 | 5>(1);
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedTherapist, setSelectedTherapist] = useState('');
     const [viewingTherapist, setViewingTherapist] = useState<any>(null);
@@ -870,17 +870,11 @@ ${treatmentsList}
                                         </div>
                                         <button 
                                             type="button"
-                                            onClick={() => {
-                                                if (selectedTherapist) {
-                                                    setBookingStep(4);
-                                                } else {
-                                                    setBookingStep(2);
-                                                }
-                                            }}
+                                            onClick={() => setBookingStep(2)}
                                             disabled={cartItems.length === 0}
                                             className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
                                         >
-                                            CONTINUE TO DETAILS <ArrowRight className="w-4 h-4" />
+                                            CONTINUE TO DATE & TIME <ArrowRight className="w-4 h-4" />
                                         </button>
                                     </div>
                                 </div>
@@ -890,20 +884,38 @@ ${treatmentsList}
                                         <button onClick={() => setBookingStep(1)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
                                             <ChevronLeft className="w-4 h-4" />
                                         </button>
-                                        <h2 className="font-serif text-2xl text-primary">Where are you staying?</h2>
+                                        <h2 className="font-serif text-2xl text-primary">When would you like this?</h2>
                                     </div>
-                                    <p className="text-xs text-text-muted mb-6 shrink-0">Select your area in Bali so we can match you with nearby therapists.</p>
-                                    <div className="space-y-3 overflow-y-auto pb-8">
-                                        {LOCATIONS.map(loc => (
-                                            <button
-                                                key={loc}
-                                                onClick={() => { setSelectedArea(loc); setBookingStep(3); }}
-                                                className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${selectedArea === loc ? 'border-primary bg-primary/5' : 'border-border/50 hover:border-primary/30'}`}
-                                            >
-                                                <span className="font-bold text-primary">{loc}</span>
-                                                <ArrowRight className="w-4 h-4 text-text-muted" />
-                                            </button>
-                                        ))}
+                                    <p className="text-xs text-text-muted mb-6 shrink-0">Select the date and time for your booking.</p>
+                                    
+                                    <div className="flex flex-col space-y-5 flex-1">
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Date</label>
+                                            <input 
+                                                type="date" required 
+                                                value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
+                                            <input 
+                                                type="time" required 
+                                                value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8 pt-6 border-t border-border/50">
+                                        <button 
+                                            type="button"
+                                            onClick={() => setBookingStep(3)}
+                                            disabled={!formData.date || !formData.time}
+                                            className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
+                                        >
+                                            CONTINUE TO AREA <ArrowRight className="w-4 h-4" />
+                                        </button>
                                     </div>
                                 </div>
                             ) : bookingStep === 3 ? (
@@ -912,12 +924,38 @@ ${treatmentsList}
                                         <button onClick={() => setBookingStep(2)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
                                             <ChevronLeft className="w-4 h-4" />
                                         </button>
+                                        <h2 className="font-serif text-2xl text-primary">Where are you staying?</h2>
+                                    </div>
+                                    <p className="text-xs text-text-muted mb-6 shrink-0">Select your area in Bali so we can match you with nearby therapists.</p>
+                                    <div className="space-y-3 overflow-y-auto pb-8">
+                                        {LOCATIONS.map(loc => (
+                                            <button
+                                                key={loc}
+                                                onClick={() => { 
+                                                    setSelectedArea(loc); 
+                                                    if (selectedTherapist) setBookingStep(5);
+                                                    else setBookingStep(4); 
+                                                }}
+                                                className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${selectedArea === loc ? 'border-primary bg-primary/5' : 'border-border/50 hover:border-primary/30'}`}
+                                            >
+                                                <span className="font-bold text-primary">{loc}</span>
+                                                <ArrowRight className="w-4 h-4 text-text-muted" />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : bookingStep === 4 ? (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                                    <div className="flex items-center gap-4 mb-6 shrink-0">
+                                        <button onClick={() => setBookingStep(3)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
                                         <h2 className="font-serif text-2xl text-primary">Choose Therapist</h2>
                                     </div>
-                                    <p className="text-xs text-text-muted mb-4 shrink-0">Therapists available in {selectedArea}. You can also skip this step.</p>
+                                    <p className="text-xs text-text-muted mb-4 shrink-0">Therapists available in {selectedArea} for {formData.date} at {formData.time}. You can also skip this step.</p>
                                     <div className="space-y-3 overflow-y-auto pb-8 pr-1 no-scrollbar">
                                         <button
-                                            onClick={() => { setSelectedTherapist(''); setBookingStep(4); }}
+                                            onClick={() => { setSelectedTherapist(''); setBookingStep(5); }}
                                             className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${!selectedTherapist ? 'border-primary bg-primary/5 shadow-sm' : 'border-border/50 hover:border-primary/30 bg-surface'}`}
                                         >
                                             <span className="font-bold text-primary text-sm tracking-wide">Any Available Therapist</span>
@@ -926,7 +964,7 @@ ${treatmentsList}
                                         {MOCK_THERAPISTS.filter(t => t.location === selectedArea).map(t => (
                                             <button
                                                 key={t.id}
-                                                onClick={() => { setSelectedTherapist(t.id); setBookingStep(4); }}
+                                                onClick={() => { setSelectedTherapist(t.id); setBookingStep(5); }}
                                                 className={`w-full p-4 rounded-xl border text-left flex gap-4 transition-all ${selectedTherapist === t.id ? 'border-primary bg-primary/5 shadow-sm' : 'border-border/50 hover:border-primary/30 bg-surface'}`}
                                             >
                                                 <img src={t.avatar} alt={t.name} className="w-14 h-14 rounded-full object-cover shrink-0 border border-border" />
@@ -953,9 +991,9 @@ ${treatmentsList}
                                     <div className="flex items-center gap-4 mb-6">
                                         <button onClick={() => {
                                             if (selectedTherapist) {
-                                                setBookingStep(1);
-                                            } else {
                                                 setBookingStep(3);
+                                            } else {
+                                                setBookingStep(4);
                                             }
                                         }} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
                                             <ChevronLeft className="w-4 h-4" />
@@ -1004,24 +1042,7 @@ ${treatmentsList}
                                                 className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
-                                        <div className="flex flex-col space-y-5">
-                                            <div className="space-y-1.5">
-                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Date</label>
-                                                <input 
-                                                    type="date" required 
-                                                    value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
-                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                                />
-                                            </div>
-                                            <div className="space-y-1.5">
-                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
-                                                <input 
-                                                    type="time" required 
-                                                    value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                                />
-                                            </div>
-                                        </div>
+                                        
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Address</label>
                                             <input 
@@ -1114,31 +1135,6 @@ ${treatmentsList}
                                     )}
                                 </div>
 
-                                {/* Calendar Schedule */}
-                                {viewingTherapist.availability && (
-                                    <div className="px-6 py-6">
-                                        <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-4">Availability Schedule</h4>
-                                        <div className="flex gap-3 overflow-x-auto no-scrollbar -mx-6 px-6 pb-2">
-                                            {viewingTherapist.availability.days.map((day: string, idx: number) => (
-                                                <div key={idx} className={`flex flex-col items-center justify-center shrink-0 w-14 h-16 rounded-2xl border ${idx === 0 ? 'bg-primary text-white border-primary shadow-md' : 'bg-white border-border/50 text-text-muted'}`}>
-                                                    <span className={`text-[10px] font-bold uppercase tracking-wide ${idx === 0 ? 'text-white/80' : ''}`}>{day}</span>
-                                                    <span className="text-lg font-serif font-medium mt-0.5">{14 + idx}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        <div className="mt-6">
-                                            <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Available Times</h4>
-                                            <div className="flex flex-wrap gap-2">
-                                                {viewingTherapist.availability.today.map((time: string, idx: number) => (
-                                                    <button key={idx} className="px-4 py-2 rounded-full border border-border/60 text-xs font-semibold text-text-muted hover:border-primary/40 hover:bg-primary/5 transition-all">
-                                                        {time}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
                             </div>
 
                             {/* Sticky Bottom Action */}
