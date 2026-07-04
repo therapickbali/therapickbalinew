@@ -43,9 +43,9 @@ export async function generateMetadata(): Promise<Metadata> {
         telephone: false,
       },
       icons: {
-        icon: '/icon.png',
-        shortcut: '/icon.png',
-        apple: '/icon.png',
+        icon: '/icon.svg',
+        shortcut: '/icon.svg',
+        apple: '/icon.svg',
       },
       openGraph: {
         title: "Bali Home Spa & Massage | Premium In-Villa Massage Delivery",
@@ -115,9 +115,9 @@ export async function generateMetadata(): Promise<Metadata> {
       telephone: false,
     },
     icons: {
-      icon: '/icon.png',
-      shortcut: '/icon.png',
-      apple: '/icon.png',
+      icon: '/icon.svg',
+      shortcut: '/icon.svg',
+      apple: '/icon.svg',
     },
     openGraph: {
       title: "Elexoir Home Spa | #1 Luxury Mobile Spa & In-Villa Massage Ubud",
