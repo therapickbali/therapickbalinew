@@ -552,6 +552,33 @@ ${treatmentsList}
             </div>
             
             <div className="hidden md:block pb-12">
+                {/* Therapists Section */}
+                <div className="mb-24 flex flex-col items-center max-w-7xl mx-auto px-6">
+                    <span className="text-xs font-bold uppercase tracking-widest text-primary/50 mb-4 block text-center">Meet Our Therapists</span>
+                    <h3 className="font-serif text-3xl md:text-5xl text-primary font-medium mb-12 text-center leading-tight">
+                        Expert <span className="italic">Healers</span>
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+                        {MOCK_THERAPISTS.slice(0, 4).map(t => (
+                            <div key={t.id} className="bg-white border border-border/50 rounded-[32px] p-6 flex flex-col items-center text-center shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 group">
+                                <div className="w-24 h-24 rounded-full overflow-hidden mb-5 border-4 border-surface shadow-sm group-hover:scale-105 transition-transform duration-500">
+                                    <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+                                </div>
+                                <h4 className="font-bold text-lg text-primary mb-1">{t.name}</h4>
+                                <div className="text-xs font-bold uppercase tracking-widest text-text-muted mb-3">{t.location}</div>
+                                <div className="flex items-center gap-1 mb-4 text-amber-500">
+                                    {Array(5).fill(0).map((_, i) => (
+                                        <svg key={i} className={`w-4 h-4 ${i < Math.floor(t.rating) ? 'fill-current' : 'fill-transparent stroke-current'}`} viewBox="0 0 24 24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                        </svg>
+                                    ))}
+                                </div>
+                                <p className="text-sm text-text-muted leading-relaxed">{t.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* About Us */}
                 <div className="mb-24 flex flex-col md:flex-row gap-12 md:gap-24 items-center max-w-7xl mx-auto px-6">
                     <div className="flex-1">
