@@ -967,7 +967,12 @@ ${treatmentsList}
                                                 onClick={() => { setSelectedTherapist(t.id); setBookingStep(5); }}
                                                 className={`w-full p-4 rounded-xl border text-left flex gap-4 transition-all ${selectedTherapist === t.id ? 'border-primary bg-primary/5 shadow-sm' : 'border-border/50 hover:border-primary/30 bg-surface'}`}
                                             >
-                                                <img src={t.avatar} alt={t.name} className="w-14 h-14 rounded-full object-cover shrink-0 border border-border" />
+                                                <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border border-border">
+                                                    <img src={t.avatar} alt={t.name} className="w-14 h-14 rounded-full object-cover transition-transform group-hover/avatar:scale-110" />
+                                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity">
+                                                        <span className="text-[8px] font-bold text-white uppercase tracking-wider">Profile</span>
+                                                    </div>
+                                                </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center justify-between mb-1">
                                                         <div className="flex items-center gap-2">

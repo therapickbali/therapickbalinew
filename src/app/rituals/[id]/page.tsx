@@ -38,16 +38,19 @@ export default function RitualsDetails() {
     const [formData, setFormData] = useState({ name: '', location: '', room: '', ...getInitialDateTime() });
 
     // Multi-step booking states
-    const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4>(1);
+    const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4 | 5>(1);
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedTherapist, setSelectedTherapist] = useState('');
+    const [viewingTherapist, setViewingTherapist] = useState<any>(null);
 
     const MOCK_THERAPISTS = [
-        { id: 't1', name: 'Sarah J.', location: 'Seminyak', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.' },
-        { id: 't2', name: 'Dewi K.', location: 'Ubud', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.' },
-        { id: 't3', name: 'Wayan M.', location: 'Canggu', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.' },
-        { id: 't4', name: 'Ketut A.', location: 'Ubud', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.' },
-        { id: 't5', name: 'Made B.', location: 'Uluwatu', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.' },
+        { id: 't1', name: 'Sarah J.', location: 'Seminyak', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.', reviews: [{ author: 'Emily R.', text: 'Sarah was incredible. Best deep tissue massage I have ever had.' }], availability: { today: ['10:00', '13:00', '16:30'], days: ['Mon', 'Tue', 'Thu', 'Fri'] }, status: 'Online' },
+        { id: 't2', name: 'Dewi K.', location: 'Ubud', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.', reviews: [{ author: 'Michael B.', text: 'Dewi brings such a calming, authentic Balinese energy.' }], availability: { today: ['11:30', '14:00', '18:00'], days: ['Wed', 'Thu', 'Sat', 'Sun'] }, status: 'Busy' },
+        { id: 't3', name: 'Wayan M.', location: 'Canggu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.', reviews: [{ author: 'Sophie T.', text: 'Wayan knew exactly what I needed. Highly recommend.' }], availability: { today: ['09:00', '15:00'], days: ['Mon', 'Wed', 'Fri', 'Sat'] }, status: 'Off' },
+        { id: 't4', name: 'Ketut A.', location: 'Ubud', region: 'Bali', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.', reviews: [{ author: 'David W.', text: 'Amazing technique and completely dissolved my tension.' }], availability: { today: ['12:00', '17:00'], days: ['Tue', 'Wed', 'Thu', 'Sun'] }, status: 'Online' },
+        { id: 't5', name: 'Made B.', location: 'Uluwatu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.', reviews: [{ author: 'Anna K.', text: 'The Lomi-Lomi was life-changing. Made is a master.' }], availability: { today: ['10:30', '14:30', '19:00'], days: ['Mon', 'Tue', 'Fri', 'Sun'] }, status: 'Busy' },
+        { id: 't6', name: 'Aisha F.', location: 'Downtown', region: 'Dubai', rating: 5, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop', desc: 'Specialist in Swedish and deep tissue.', reviews: [{ author: 'Sarah L.', text: 'Aisha is phenomenal! Perfect pressure.' }], availability: { today: ['09:00', '13:00', '16:00'], days: ['Mon', 'Tue', 'Wed', 'Thu'] }, status: 'Online' },
+        { id: 't7', name: 'Fatima R.', location: 'Marina', region: 'Dubai', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop', desc: 'Holistic healing and relaxation.', reviews: [{ author: 'Chloe M.', text: 'So soothing and relaxing, Fatima is the best.' }], availability: { today: ['11:00', '15:00', '18:30'], days: ['Thu', 'Fri', 'Sat', 'Sun'] }, status: 'Off' },
     ];
     const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
 
@@ -543,96 +546,196 @@ export default function RitualsDetails() {
                                             onClick={() => setBookingStep(2)}
                                             className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest"
                                         >
-                                            CONTINUE TO DETAILS
+                                            CONTINUE TO DATE & TIME <ArrowRight className="w-4 h-4" />
                                         </button>
                                     </div>
                                 </div>
                             )}
 
-                            {bookingStep === 2 && (
-                                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                                    <div className="flex items-center gap-4 mb-6">
+                                                        {bookingStep === 2 && (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                                    <div className="flex items-center gap-4 mb-6 shrink-0">
                                         <button onClick={() => setBookingStep(1)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
                                             <ChevronLeft className="w-4 h-4" />
                                         </button>
-                                        <div>
-                                            <h2 className="font-serif text-2xl text-primary">Where are you staying?</h2>
-                                            <p className="text-xs text-text-muted mt-1">Select your area in Bali</p>
+                                        <h2 className="font-serif text-2xl text-primary">When would you like this?</h2>
+                                    </div>
+                                    <p className="text-xs text-text-muted mb-6 shrink-0">Select the date and time for your booking.</p>
+                                    
+                                    <div className="flex flex-col space-y-5 flex-1">
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Date</label>
+                                            <input 
+                                                type="date" required 
+                                                value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
+                                            <input 
+                                                type="time" required 
+                                                value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
                                         </div>
                                     </div>
-                                    
-                                    <div className="space-y-3 pb-8 max-h-[60vh] overflow-y-auto no-scrollbar">
+
+                                    <div className="mt-8 pt-6 border-t border-border/50">
+                                        <button 
+                                            type="button"
+                                            onClick={() => setBookingStep(3)}
+                                            disabled={!formData.date || !formData.time}
+                                            className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
+                                        >
+                                            CONTINUE TO AREA <ArrowRight className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {bookingStep === 3 && (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                                    <div className="flex items-center gap-4 mb-6 shrink-0">
+                                        <button onClick={() => setBookingStep(2)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
+                                        <h2 className="font-serif text-2xl text-primary">Where are you staying?</h2>
+                                    </div>
+                                    <p className="text-xs text-text-muted mb-6 shrink-0">Select your area in Bali so we can match you with nearby therapists.</p>
+                                    <div className="space-y-3 overflow-y-auto pb-8">
                                         {LOCATIONS.map(loc => (
                                             <button
                                                 key={loc}
-                                                onClick={() => {
-                                                    setSelectedArea(loc);
-                                                    setBookingStep(3);
+                                                onClick={() => { 
+                                                    setSelectedArea(loc); 
+                                                    if (selectedTherapist) setBookingStep(5);
+                                                    else setBookingStep(4); 
                                                 }}
-                                                className="w-full text-left p-4 rounded-xl border border-border/50 hover:border-primary/50 hover:bg-primary/5 flex items-center justify-between transition-all group"
+                                                className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${selectedArea === loc ? 'border-primary bg-primary/5' : 'border-border/50 hover:border-primary/30'}`}
                                             >
-                                                <span className="font-bold text-primary group-hover:text-primary transition-colors">{loc}</span>
-                                                <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-primary transition-colors" />
+                                                <span className="font-bold text-primary">{loc}</span>
+                                                <ArrowRight className="w-4 h-4 text-text-muted" />
                                             </button>
                                         ))}
                                     </div>
                                 </div>
                             )}
 
-                            {bookingStep === 3 && (
-                                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                                    <div className="flex items-center gap-4 mb-6">
-                                        <button onClick={() => setBookingStep(2)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                            {bookingStep === 4 && (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                                    <div className="flex items-center gap-4 mb-6 shrink-0">
+                                        <button onClick={() => setBookingStep(3)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
                                             <ChevronLeft className="w-4 h-4" />
                                         </button>
-                                        <div>
-                                            <h2 className="font-serif text-2xl text-primary">Choose Therapist</h2>
-                                            <p className="text-xs text-text-muted mt-1">Available in {selectedArea}</p>
-                                        </div>
+                                        <h2 className="font-serif text-2xl text-primary">Choose Therapist</h2>
                                     </div>
-                                    
-                                    <div className="space-y-4 pb-8 max-h-[60vh] overflow-y-auto no-scrollbar">
+                                    <p className="text-xs text-text-muted mb-4 shrink-0">Therapists available in {selectedArea} for {formData.date} at {formData.time}. You can also skip this step.</p>
+                                    <div className="space-y-3 overflow-y-auto pb-8 pr-1 no-scrollbar">
                                         <button
-                                            onClick={() => {
-                                                setSelectedTherapist('');
-                                                setBookingStep(4);
-                                            }}
-                                            className="w-full text-left p-4 rounded-xl border border-border/50 bg-surface/50 hover:border-primary/50 hover:bg-primary/5 flex items-center justify-between transition-all"
+                                            onClick={() => { setSelectedTherapist(''); setBookingStep(5); }}
+                                            className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${!selectedTherapist ? 'border-primary bg-primary/5 shadow-sm' : 'border-border/50 hover:border-primary/30 bg-surface'}`}
                                         >
-                                            <span className="font-bold text-primary">Any Available Therapist</span>
-                                            <ArrowRight className="w-4 h-4 text-primary" />
+                                            <span className="font-bold text-primary text-sm tracking-wide">Any Available Therapist</span>
+                                            <ArrowRight className="w-4 h-4 text-text-muted" />
                                         </button>
-
-                                        <div className="text-[10px] font-bold uppercase tracking-widest text-text-muted pt-2 pb-1">Available Therapists</div>
-                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea || !selectedArea).map(t => (
-                                            <div key={t.id} className="bg-white border border-border/50 rounded-2xl p-4 flex gap-4 hover:shadow-md transition-all group cursor-pointer" onClick={() => { setSelectedTherapist(t.id); setBookingStep(4); }}>
-                                                <img src={t.avatar} alt={t.name} className="w-16 h-16 rounded-full object-cover shrink-0" />
-                                                <div className="flex-1">
-                                                    <div className="flex justify-between items-start mb-1">
-                                                        <h4 className="font-bold text-primary">{t.name}</h4>
-                                                        <div className="flex items-center gap-1 text-amber-500 text-xs font-bold">
+                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).map(t => (
+                                            <button
+                                                key={t.id}
+                                                onClick={() => { setSelectedTherapist(t.id); setBookingStep(5); }}
+                                                className={`w-full p-4 rounded-xl border text-left flex gap-4 transition-all ${selectedTherapist === t.id ? 'border-primary bg-primary/5 shadow-sm' : 'border-border/50 hover:border-primary/30 bg-surface'}`}
+                                            >
+                                                <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border border-border">
+                                                    <img src={t.avatar} alt={t.name} className="w-14 h-14 rounded-full object-cover transition-transform group-hover/avatar:scale-110" />
+                                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity">
+                                                        <span className="text-[8px] font-bold text-white uppercase tracking-wider">Profile</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <h4 className="font-bold text-primary truncate">{t.name}</h4>
+                                                            {t.status === 'Online' && <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>}
+                                                            {t.status === 'Busy' && <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span>}
+                                                            {t.status === 'Off' && <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>}
+                                                        </div>
+                                                        <div className="flex items-center gap-1 text-[10px] font-bold bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">
                                                             ★ {t.rating}
                                                         </div>
                                                     </div>
-                                                    <p className="text-[11px] text-text-muted leading-relaxed line-clamp-2">{t.desc}</p>
+                                                    <p className="text-[10px] text-text-muted leading-relaxed line-clamp-1 mb-2">{t.desc}</p>
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        {t.status === 'Off' ? (
+                                                            <span className="text-[10px] font-bold text-red-500/80 bg-red-50 px-2 py-1 rounded">Offline</span>
+                                                        ) : t.status === 'Busy' ? (
+                                                            <span className="text-[10px] font-bold text-amber-600/80 bg-amber-50 px-2 py-1 rounded">Still handle customer</span>
+                                                        ) : (
+                                                            t.availability?.today?.slice(0,3).map(time => (
+                                                                <span key={time} className="text-[9px] font-bold text-primary bg-primary/5 px-2 py-1 rounded-full border border-primary/10">
+                                                                    {time}
+                                                                </span>
+                                                            ))
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </button>
                                         ))}
+                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).length === 0 && (
+                                            <div className="p-6 text-center text-sm text-text-muted border border-dashed border-border/50 rounded-xl bg-surface/50">
+                                                No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
 
-                            {bookingStep === 4 && (
+                            {bookingStep === 5 && (
                                 <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                                     <div className="flex items-center gap-4 mb-6">
-                                        <button onClick={() => setBookingStep(3)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                        <button onClick={() => {
+                                            if (selectedTherapist) {
+                                                setBookingStep(3);
+                                            } else {
+                                                setBookingStep(4);
+                                            }
+                                        }} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
                                             <ChevronLeft className="w-4 h-4" />
                                         </button>
-                                        <div>
-                                            <h2 className="font-serif text-2xl text-primary mb-1">Final Details</h2>
-                                            <p className="text-xs text-text-muted">Your request will be sent securely via WhatsApp.</p>
-                                        </div>
+                                        <h2 className="font-serif text-2xl text-primary">Final Details</h2>
                                     </div>
+
+                                    {/* SUMMARY CARD */}
+                                    {cartItems.length > 0 && (
+                                    <div className="bg-surface border border-border/50 rounded-xl p-4 mb-6 shadow-sm">
+                                        <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Booking Summary</h4>
+                                        <div className="space-y-3 mb-4">
+                                            {cartItems.map((item, idx) => (
+                                                <div key={idx} className="flex justify-between items-start">
+                                                    <div>
+                                                        <p className="text-sm font-bold text-primary">{item.title}</p>
+                                                        <p className="text-xs text-text-muted">{item.duration} Mins • {item.guests} Guest(s)</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        {selectedTherapist && (
+                                            <div className="border-t border-border/50 pt-4 flex gap-3 items-center">
+                                                <img 
+                                                    src={MOCK_THERAPISTS.find(t => t.id === selectedTherapist)?.avatar} 
+                                                    className="w-10 h-10 rounded-full object-cover border border-border"
+                                                    alt="Therapist"
+                                                />
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest">Selected Therapist</p>
+                                                    <p className="text-sm font-bold text-primary flex items-center gap-2">
+                                                        {MOCK_THERAPISTS.find(t => t.id === selectedTherapist)?.name}
+                                                        <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">★ {MOCK_THERAPISTS.find(t => t.id === selectedTherapist)?.rating}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    )}
 
                                     <form className="space-y-5 pb-8 md:pb-0">
                                         <div className="space-y-1.5">
@@ -642,24 +745,6 @@ export default function RitualsDetails() {
                                                 value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
                                                 className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
-                                        </div>
-                                        <div className="flex flex-col space-y-5">
-                                            <div className="space-y-1.5">
-                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Date</label>
-                                                <input 
-                                                    type="date" required 
-                                                    value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
-                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                                />
-                                            </div>
-                                            <div className="space-y-1.5">
-                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
-                                                <input 
-                                                    type="time" required 
-                                                    value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                                />
-                                            </div>
                                         </div>
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Address / Villa Name</label>
@@ -704,6 +789,65 @@ export default function RitualsDetails() {
                 )}
             </AnimatePresence>
 
+
+            {/* Therapist Details Modal */}
+            <AnimatePresence>
+                {viewingTherapist && (
+                    <motion.div 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4"
+                        onClick={() => setViewingTherapist(null)}
+                    >
+                        <motion.div 
+                            initial={{ y: '100%' }} 
+                            animate={{ y: 0 }} 
+                            exit={{ y: '100%' }} 
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="w-full sm:max-w-md bg-[#FDFBF7] rounded-t-[32px] sm:rounded-[32px] overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Header Image */}
+                            <div className="relative h-64 shrink-0">
+                                <img src={viewingTherapist.avatar} alt={viewingTherapist.name} className="w-full h-full object-cover object-top" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                                <button onClick={() => setViewingTherapist(null)} className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
+                                    <X className="w-5 h-5" />
+                                </button>
+                                <div className="absolute bottom-4 left-6 right-6 flex justify-between items-end">
+                                    <div>
+                                        <h2 className="text-3xl font-serif text-white font-medium">{viewingTherapist.name}</h2>
+                                        <p className="text-white/80 text-sm tracking-wide mt-1">{viewingTherapist.location}</p>
+                                    </div>
+                                    <div className="flex items-center gap-1 text-xs font-bold bg-white/20 backdrop-blur-md text-white px-2.5 py-1 rounded-full border border-white/20">
+                                        ★ {viewingTherapist.rating}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Scrollable Content */}
+                            <div className="overflow-y-auto no-scrollbar flex-1 pb-24">
+                                {/* Bio & Reviews */}
+                                <div className="px-6 py-6 border-b border-border/40">
+                                    <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">About</h4>
+                                    <p className="text-sm text-text-muted leading-relaxed mb-6">{viewingTherapist.desc}</p>
+                                    
+                                    {viewingTherapist.reviews && viewingTherapist.reviews.length > 0 && (
+                                        <div className="bg-primary/5 rounded-2xl p-5 relative">
+                                            <div className="text-primary/20 absolute top-4 left-4 font-serif text-4xl leading-none">"</div>
+                                            <p className="text-primary/90 text-sm font-medium italic relative z-10 pl-6 leading-relaxed">
+                                                {viewingTherapist.reviews[0].text}
+                                            </p>
+                                            <p className="text-xs text-primary/60 font-bold tracking-wide mt-3 pl-6">— {viewingTherapist.reviews[0].author}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
-}
+};
