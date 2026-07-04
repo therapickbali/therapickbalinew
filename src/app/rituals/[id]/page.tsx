@@ -37,6 +37,20 @@ export default function RitualsDetails() {
     
     const [formData, setFormData] = useState({ name: '', location: '', room: '', ...getInitialDateTime() });
 
+    // Multi-step booking states
+    const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4>(1);
+    const [selectedArea, setSelectedArea] = useState('');
+    const [selectedTherapist, setSelectedTherapist] = useState('');
+
+    const MOCK_THERAPISTS = [
+        { id: 't1', name: 'Sarah J.', location: 'Seminyak', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.' },
+        { id: 't2', name: 'Dewi K.', location: 'Ubud', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.' },
+        { id: 't3', name: 'Wayan M.', location: 'Canggu', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.' },
+        { id: 't4', name: 'Ketut A.', location: 'Ubud', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.' },
+        { id: 't5', name: 'Made B.', location: 'Uluwatu', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.' },
+    ];
+    const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
+
     if (!treatment) {
         return <div className="min-h-screen bg-background flex items-center justify-center font-serif text-2xl text-primary">Loading...</div>;
     }
@@ -88,7 +102,12 @@ export default function RitualsDetails() {
             }).join('\n\n------------------------\n\n');
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
-            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.`;
+            const therapistDetails = selectedTherapist 
+                ? MOCK_THERAPISTS.find(t => t.id === selectedTherapist)
+                : null;
+            const therapistMsg = therapistDetails ? `\n*Therapist Request:* ${therapistDetails.name}` : `\n*Therapist Request:* Any Available`;
+
+            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
             
             const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(baseMessage)}`;
             if (newWindow) {
@@ -98,6 +117,9 @@ export default function RitualsDetails() {
             }
             
             setIsModalOpen(false);
+            setBookingStep(1);
+            setSelectedArea('');
+            setSelectedTherapist('');
         } catch (error) {
             console.error(error);
             if (newWindow) newWindow.close();
@@ -434,9 +456,11 @@ export default function RitualsDetails() {
                                     </div>
                                 </div>
                             ) : (
+                                <>
+                            {!isSelectingMore && bookingStep === 1 && (
                                 <div className="animate-in fade-in slide-in-from-left-4 duration-300">
-                                    <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
-                                    <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
+                                    <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Review Treatments</h2>
+                                    <p className="text-xs text-text-muted mb-6">Review your selected treatments before proceeding.</p>
 
                                     {/* Cart Items List */}
                                     <div className="space-y-3 mb-4 max-h-[40vh] overflow-y-auto pr-1 no-scrollbar">
@@ -506,69 +530,172 @@ export default function RitualsDetails() {
                                         + ADD ANOTHER TREATMENT
                                     </button>
 
-                            <form className="space-y-5 pb-8 md:pb-0">
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
-                                    <input 
-                                        type="text" required placeholder="John Doe"
-                                        value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
-                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                    />
-                                </div>
-                                <div className="flex flex-col space-y-5">
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Date</label>
-                                        <input 
-                                            type="date" required 
-                                            value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
-                                            className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                        />
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
-                                        <input 
-                                            type="time" required 
-                                            value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                            className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Name</label>
-                                    <input 
-                                        type="text" required placeholder="e.g. Four Seasons Sayan"
-                                        value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
-                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Room Number (Optional)</label>
-                                    <input 
-                                        type="text" placeholder="e.g. Villa 12"
-                                        value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})}
-                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                    />
-                                </div>
-
-                                <div className="mt-8 pt-6 border-t border-border/50">
-                                    <div className="flex items-end justify-between mb-6">
-                                        <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
-                                        <span className="text-2xl font-serif text-primary">IDR {formattedTotalPrice}</span>
-                                    </div>
-                                    <div className="flex flex-col gap-3">
+                                    <div className="mt-8 pt-6 border-t border-border/50">
+                                        <div className="flex items-end justify-between mb-6">
+                                            <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
+                                            <span className="text-2xl font-serif text-primary">IDR {formattedTotalPrice}</span>
+                                        </div>
                                         <button 
                                             type="button"
-                                            onClick={(e) => handleBooking(e)}
-                                            disabled={isProcessing}
-                                            className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
+                                            onClick={() => setBookingStep(2)}
+                                            className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest"
                                         >
-                                            {isProcessing ? 'PROCESSING...' : 'CONFIRM ON WHATSAPP'}
+                                            CONTINUE TO DETAILS
                                         </button>
                                     </div>
                                 </div>
-                            </form>
-                            </div>
                             )}
+
+                            {bookingStep === 2 && (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <button onClick={() => setBookingStep(1)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
+                                        <div>
+                                            <h2 className="font-serif text-2xl text-primary">Where are you staying?</h2>
+                                            <p className="text-xs text-text-muted mt-1">Select your area in Bali</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="space-y-3 pb-8 max-h-[60vh] overflow-y-auto no-scrollbar">
+                                        {LOCATIONS.map(loc => (
+                                            <button
+                                                key={loc}
+                                                onClick={() => {
+                                                    setSelectedArea(loc);
+                                                    setBookingStep(3);
+                                                }}
+                                                className="w-full text-left p-4 rounded-xl border border-border/50 hover:border-primary/50 hover:bg-primary/5 flex items-center justify-between transition-all group"
+                                            >
+                                                <span className="font-bold text-primary group-hover:text-primary transition-colors">{loc}</span>
+                                                <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-primary transition-colors" />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {bookingStep === 3 && (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <button onClick={() => setBookingStep(2)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
+                                        <div>
+                                            <h2 className="font-serif text-2xl text-primary">Choose Therapist</h2>
+                                            <p className="text-xs text-text-muted mt-1">Available in {selectedArea}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="space-y-4 pb-8 max-h-[60vh] overflow-y-auto no-scrollbar">
+                                        <button
+                                            onClick={() => {
+                                                setSelectedTherapist('');
+                                                setBookingStep(4);
+                                            }}
+                                            className="w-full text-left p-4 rounded-xl border border-border/50 bg-surface/50 hover:border-primary/50 hover:bg-primary/5 flex items-center justify-between transition-all"
+                                        >
+                                            <span className="font-bold text-primary">Any Available Therapist</span>
+                                            <ArrowRight className="w-4 h-4 text-primary" />
+                                        </button>
+
+                                        <div className="text-[10px] font-bold uppercase tracking-widest text-text-muted pt-2 pb-1">Available Therapists</div>
+                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea || !selectedArea).map(t => (
+                                            <div key={t.id} className="bg-white border border-border/50 rounded-2xl p-4 flex gap-4 hover:shadow-md transition-all group cursor-pointer" onClick={() => { setSelectedTherapist(t.id); setBookingStep(4); }}>
+                                                <img src={t.avatar} alt={t.name} className="w-16 h-16 rounded-full object-cover shrink-0" />
+                                                <div className="flex-1">
+                                                    <div className="flex justify-between items-start mb-1">
+                                                        <h4 className="font-bold text-primary">{t.name}</h4>
+                                                        <div className="flex items-center gap-1 text-amber-500 text-xs font-bold">
+                                                            ★ {t.rating}
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-[11px] text-text-muted leading-relaxed line-clamp-2">{t.desc}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {bookingStep === 4 && (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <button onClick={() => setBookingStep(3)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
+                                        <div>
+                                            <h2 className="font-serif text-2xl text-primary mb-1">Final Details</h2>
+                                            <p className="text-xs text-text-muted">Your request will be sent securely via WhatsApp.</p>
+                                        </div>
+                                    </div>
+
+                                    <form className="space-y-5 pb-8 md:pb-0">
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
+                                            <input 
+                                                type="text" required placeholder="John Doe"
+                                                value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col space-y-5">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Date</label>
+                                                <input 
+                                                    type="date" required 
+                                                    value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
+                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                />
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
+                                                <input 
+                                                    type="time" required 
+                                                    value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
+                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Address / Villa Name</label>
+                                            <input 
+                                                type="text" required placeholder={`e.g. Four Seasons Sayan (${selectedArea})`}
+                                                value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Room Number (Optional)</label>
+                                            <input 
+                                                type="text" placeholder="e.g. Villa 12"
+                                                value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+
+                                        <div className="mt-8 pt-6 border-t border-border/50">
+                                            <div className="flex items-end justify-between mb-6">
+                                                <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
+                                                <span className="text-2xl font-serif text-primary">IDR {formattedTotalPrice}</span>
+                                            </div>
+                                            <div className="flex flex-col gap-3">
+                                                <button 
+                                                    type="button"
+                                                    onClick={(e) => handleBooking(e)}
+                                                    disabled={isProcessing}
+                                                    className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
+                                                >
+                                                    {isProcessing ? 'PROCESSING...' : 'CONFIRM ON WHATSAPP'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            )}
+                            </>
+                        )}
                         </motion.div>
                     </motion.div>
                 )}
