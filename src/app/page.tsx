@@ -68,13 +68,24 @@ export default function Home() {
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedTherapist, setSelectedTherapist] = useState('');
 
+    const [selectedRegion, setSelectedRegion] = useState('Bali');
+    const [selectedAreaFilter, setSelectedAreaFilter] = useState('All');
+
     const MOCK_THERAPISTS = [
-        { id: 't1', name: 'Sarah J.', location: 'Seminyak', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.' },
-        { id: 't2', name: 'Dewi K.', location: 'Ubud', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.' },
-        { id: 't3', name: 'Wayan M.', location: 'Canggu', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.' },
-        { id: 't4', name: 'Ketut A.', location: 'Ubud', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.' },
-        { id: 't5', name: 'Made B.', location: 'Uluwatu', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.' },
+        { id: 't1', name: 'Sarah J.', location: 'Seminyak', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.' },
+        { id: 't2', name: 'Dewi K.', location: 'Ubud', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.' },
+        { id: 't3', name: 'Wayan M.', location: 'Canggu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.' },
+        { id: 't4', name: 'Ketut A.', location: 'Ubud', region: 'Bali', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.' },
+        { id: 't5', name: 'Made B.', location: 'Uluwatu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.' },
+        { id: 't6', name: 'Aisha F.', location: 'Downtown', region: 'Dubai', rating: 5, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop', desc: 'Specialist in Swedish and deep tissue.' },
+        { id: 't7', name: 'Fatima R.', location: 'Marina', region: 'Dubai', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop', desc: 'Holistic healing and relaxation.' },
     ];
+    
+    const REGION_AREAS = {
+        'Bali': ['All', 'Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'],
+        'Dubai': ['All', 'Downtown', 'Marina', 'Palm Jumeirah']
+    };
+
     const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
 
     const filteredAndSortedTreatments = React.useMemo(() => {
@@ -208,11 +219,35 @@ ${treatmentsList}
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
+                {/* Location Filter for Therapists */}
+                <div className="md:hidden mt-4 mb-2 px-6 relative z-30">
+                    <div className="bg-white/60 backdrop-blur-xl border border-white/80 rounded-full p-1.5 flex items-center shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+                        <select 
+                            value={selectedRegion}
+                            onChange={(e) => { setSelectedRegion(e.target.value); setSelectedAreaFilter('All'); }}
+                            className="bg-transparent text-primary font-bold text-[13px] px-3 py-2 outline-none appearance-none cursor-pointer"
+                        >
+                            {Object.keys(REGION_AREAS).map(r => <option key={r} value={r}>{r}</option>)}
+                        </select>
+                        <div className="w-px h-6 bg-border/80 mx-1"></div>
+                        <select 
+                            value={selectedAreaFilter}
+                            onChange={(e) => setSelectedAreaFilter(e.target.value)}
+                            className="bg-transparent text-text-muted font-medium text-[13px] px-3 py-2 outline-none appearance-none flex-1 cursor-pointer"
+                        >
+                            {REGION_AREAS[selectedRegion as keyof typeof REGION_AREAS].map(a => <option key={a} value={a}>{a}</option>)}
+                        </select>
+                        <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white shrink-0 shadow-sm ml-1">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Therapist Stories */}
                 <div className="md:hidden mt-4 mb-6 relative z-20">
                     <h3 className="text-xs font-bold text-text-muted mb-3 uppercase tracking-wider px-6">Select Therapist</h3>
                     <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
-                        {MOCK_THERAPISTS.map(t => (
+                        {MOCK_THERAPISTS.filter(t => t.region === selectedRegion && (selectedAreaFilter === 'All' || t.location === selectedAreaFilter)).map(t => (
                             <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setSelectedTherapist(t.id)}>
                                 <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-soft ${selectedTherapist === t.id ? 'bg-gradient-to-tr from-primary via-highlight to-primary shadow-[0_8px_20px_rgb(0,0,0,0.15)] scale-110' : 'bg-gradient-to-tr from-gray-200 to-gray-100 hover:scale-105'}`}>
                                     <div className="w-full h-full rounded-full border-[3px] border-[#FDFBF7] overflow-hidden bg-white">
@@ -226,58 +261,6 @@ ${treatmentsList}
                         ))}
                     </div>
                 </div>
-
-                {/* Search Bar (Mobile Only - Above Campaign) */}
-                <div className="md:hidden relative w-full mb-6 z-20 px-2">
-                    <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none h-[54px]">
-                        <Search className="h-5 w-5 text-text-muted" />
-                    </div>
-                    <input 
-                        type="text" 
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search your favourite treatment..." 
-                        className="w-full bg-white/70 backdrop-blur-md border border-white/50 rounded-2xl h-[54px] pl-12 pr-12 text-sm text-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-secondary/50 placeholder:text-text-muted"
-                    />
-                    <button 
-                        onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
-                        title="Filter by price"
-                        className={`absolute top-2 right-4 w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isPriceFilterOpen ? 'bg-primary text-white shadow-md' : 'bg-secondary/30 text-primary hover:bg-secondary/50'}`}
-                    >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                    </button>
-
-                    <AnimatePresence>
-                        {isPriceFilterOpen && (
-                            <motion.div 
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="absolute top-full right-2 mt-3 w-64 md:w-72 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl p-5 shadow-[0_20px_40px_rgb(0,0,0,0.12)] z-30"
-                            >
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Max Price</span>
-                                    <span className="text-sm font-serif text-primary font-medium">Rp {maxPrice.toLocaleString('en-US')}</span>
-                                </div>
-                                <input 
-                                    type="range" 
-                                    min="150000" 
-                                    max="1500000" 
-                                    step="50000"
-                                    value={maxPrice}
-                                    onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                                    className="w-full accent-primary h-1.5 bg-secondary rounded-lg appearance-none cursor-pointer"
-                                />
-                                <div className="flex justify-between text-[10px] text-text-muted mt-2 font-medium tracking-wider">
-                                    <span>150k</span>
-                                    <span>1.5m</span>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
-
-
 
                 {/* Cinematic Campaign Card (Below Search) */}
                 {campaign && (
@@ -394,56 +377,7 @@ ${treatmentsList}
                         </div>
                     </div>
 
-                    {/* Search Bar (Desktop Only - Next to Categories) */}
-                    <div className="hidden md:block relative w-full md:w-80 shrink-0 md:mb-4">
-                        <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none h-[54px]">
-                            <Search className="h-5 w-5 text-text-muted" />
-                        </div>
-                        <input 
-                            type="text" 
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search your favourite treatment..." 
-                            className="w-full bg-white/70 backdrop-blur-md border border-white/50 rounded-2xl h-[54px] pl-12 pr-12 text-sm text-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-secondary/50 placeholder:text-text-muted"
-                        />
-                        <button 
-                            onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
-                            title="Filter by price"
-                            className={`absolute top-2 right-2 w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isPriceFilterOpen ? 'bg-primary text-white shadow-md' : 'bg-secondary/30 text-primary hover:bg-secondary/50'}`}
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                        </button>
 
-                        {/* Price Filter Dropdown */}
-                        <AnimatePresence>
-                            {isPriceFilterOpen && (
-                                <motion.div 
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="absolute top-full right-0 mt-3 w-64 md:w-72 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl p-5 shadow-[0_20px_40px_rgb(0,0,0,0.12)] z-30"
-                                >
-                                    <div className="flex items-center justify-between mb-4">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Max Price</span>
-                                        <span className="text-sm font-serif text-primary font-medium">Rp {maxPrice.toLocaleString('en-US')}</span>
-                                    </div>
-                                    <input 
-                                        type="range" 
-                                        min="150000" 
-                                        max="1500000" 
-                                        step="50000"
-                                        value={maxPrice}
-                                        onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                                        className="w-full accent-primary h-1.5 bg-secondary rounded-lg appearance-none cursor-pointer"
-                                    />
-                                    <div className="flex justify-between text-[10px] text-text-muted mt-2 font-medium tracking-wider">
-                                        <span>150k</span>
-                                        <span>1.5m</span>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
                 </div>
 
                 {/* Popular Treatments Scroll */}
