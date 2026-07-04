@@ -76,8 +76,7 @@ export default function TopNav() {
                 {/* Location Title (Center) */}
                 <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center h-full">
                     <a href="/" className="flex flex-col items-center justify-center leading-none">
-                        <span className="font-serif text-lg md:text-xl text-primary font-bold tracking-wider">ELEXOIR HOME SPA</span>
-                        <span className="text-[9px] text-primary/70 tracking-widest uppercase mt-0.5">BALI, INDONESIA</span>
+                        <span className="text-[12px] md:text-[14px] font-serif text-primary tracking-widest font-bold uppercase mt-0.5">BALI, INDONESIA</span>
                     </a>
                 </div>
 
