@@ -73,11 +73,15 @@ export default function TopNav() {
                     </span>
                 </a>
 
-                {/* Location (Center) */}
-                <div className="absolute left-1/2 -translate-x-1/2 flex items-center cursor-pointer group">
-                    <span className="text-[9px] md:text-[11px] font-bold uppercase tracking-[0.15em] text-primary">
-                        BALI, INDONESIA
-                    </span>
+                {/* Logo (Center) */}
+                <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+                    <a href="/">
+                        <img 
+                            src="/logo.png" 
+                            alt="Therapick Logo" 
+                            className="h-6 md:h-8 w-auto object-contain"
+                        />
+                    </a>
                 </div>
 
                 {/* Desktop Inline Links (Always visible on desktop) */}

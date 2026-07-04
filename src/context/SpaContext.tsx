@@ -138,9 +138,43 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                     supabase.from('campaigns').select('*').eq('is_published', true).order('created_at', { ascending: false })
                 ]);
 
-                if (treatmentsRes.data && treatmentsRes.data.length > 0) {
-                    setTreatments(treatmentsRes.data);
-                    try { localStorage.setItem('spa_treatments', JSON.stringify(treatmentsRes.data)); } catch(e) { console.warn("Cache full"); }
+                let fetchedTreatments = treatmentsRes.data;
+                if (!fetchedTreatments || fetchedTreatments.length === 0) {
+                    fetchedTreatments = [
+                        {
+                            id: 'mock-1',
+                            title: 'Balinese Traditional Massage',
+                            category: 'massage',
+                            desc: 'A deep tissue massage using traditional Balinese techniques to relieve tension and improve circulation.',
+                            options: [{ duration: '60 min', price: '350000' }, { duration: '90 min', price: '500000' }],
+                            benefits: ['Relieves muscle tension', 'Improves blood circulation', 'Deep relaxation'],
+                            bgPattern: 'bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black',
+                            is_published: true,
+                            is_pinned: true,
+                            pinned_image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        },
+                        {
+                            id: 'mock-2',
+                            title: 'Aromatherapy Relaxation',
+                            category: 'massage',
+                            desc: 'A gentle, soothing massage using essential oils to calm the mind and body.',
+                            options: [{ duration: '60 min', price: '400000' }],
+                            benefits: ['Reduces stress', 'Improves sleep', 'Aromatic therapy'],
+                            bgPattern: 'bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black',
+                            is_published: true,
+                            is_pinned: false,
+                            pinned_image: '',
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        }
+                    ];
+                }
+
+                if (fetchedTreatments && fetchedTreatments.length > 0) {
+                    setTreatments(fetchedTreatments);
+                    try { localStorage.setItem('spa_treatments', JSON.stringify(fetchedTreatments)); } catch(e) { console.warn("Cache full"); }
                 }
                 if (productsRes.data && productsRes.data.length > 0) {
                     setProducts(productsRes.data);
@@ -152,6 +186,37 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 }
             } catch (error) {
                 console.error("Error fetching data from Supabase:", error);
+                // Fallback to mock treatments if everything fails
+                setTreatments([
+                    {
+                        id: 'mock-1',
+                        title: 'Balinese Traditional Massage',
+                        category: 'massage',
+                        desc: 'A deep tissue massage using traditional Balinese techniques to relieve tension and improve circulation.',
+                        options: [{ duration: '60 min', price: '350000' }, { duration: '90 min', price: '500000' }],
+                        benefits: ['Relieves muscle tension', 'Improves blood circulation', 'Deep relaxation'],
+                        bgPattern: 'bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black',
+                        is_published: true,
+                        is_pinned: true,
+                        pinned_image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    },
+                    {
+                        id: 'mock-2',
+                        title: 'Aromatherapy Relaxation',
+                        category: 'massage',
+                        desc: 'A gentle, soothing massage using essential oils to calm the mind and body.',
+                        options: [{ duration: '60 min', price: '400000' }],
+                        benefits: ['Reduces stress', 'Improves sleep', 'Aromatic therapy'],
+                        bgPattern: 'bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black',
+                        is_published: true,
+                        is_pinned: false,
+                        pinned_image: '',
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    }
+                ]);
             } finally {
                 setIsLoading(false);
             }
