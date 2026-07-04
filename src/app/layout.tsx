@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans, Newsreader } from "next/font/google";
 import "./globals.css";
 import TopNav from "@/components/TopNav";
 import { SpaProvider } from "@/context/SpaContext";
-import { headers } from "next/headers";
+
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -15,155 +15,76 @@ const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const headersList = await headers();
-  const host = headersList.get("host") || "www.elexoirhomespaubud.com";
-  const isBaliDomain = host.includes("balihomespaandmassage.com");
-
-  if (isBaliDomain) {
-    return {
-      metadataBase: new URL('https://www.balihomespaandmassage.com'),
-      title: {
-        default: "Bali Home Spa & Massage | Best In-Villa Massage Delivery Bali",
-        template: "%s | Bali Home Spa"
+export const metadata: Metadata = {
+  metadataBase: new URL('https://therapickbali.vercel.app'),
+  title: {
+    default: "Therapick Bali | Choose Available Therapists in Your Area",
+    template: "%s | Therapick Bali"
+  },
+  description: "Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Bali today.",
+  keywords: [
+    "Therapick Bali", "Choose Massage Therapist Bali", "Book Available Therapist Bali", 
+    "On-Demand Massage Bali", "Mobile Spa Bali", "In Villa Massage Bali", 
+    "Bali Therapist Booking", "Professional Massage Bali", "Ubud Massage Therapist", 
+    "Canggu Massage Therapist", "Seminyak Massage Therapist", "Massage near me Bali"
+  ],
+  authors: [{ name: "Therapick Bali" }],
+  creator: "Therapick Bali",
+  publisher: "Therapick Bali",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
+  openGraph: {
+    title: "Therapick Bali | Choose Available Therapists in Your Area",
+    description: "Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Bali.",
+    url: 'https://therapickbali.vercel.app',
+    siteName: 'Therapick Bali',
+    images: [
+      {
+        url: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
+        width: 1200,
+        height: 630,
+        alt: 'Therapick Bali - Find Massage Therapists',
       },
-      description: "Looking for the best massage in Bali? We deliver premium, 5-star professional spa treatments directly to your private villa or hotel. Serving Seminyak, Canggu, Kuta, and Nusa Dua. Book now for ultimate relaxation!",
-      keywords: [
-        "Best Massage Bali", "Bali Home Spa", "In Villa Massage Bali", "Mobile Spa Bali", "Luxury Home Spa Bali", 
-        "Balinese Massage Bali", "Deep Tissue Massage Bali", "Couples Massage Bali", "Massage near me Bali",
-        "Spa Treatment Bali", "Massage Delivery Bali", "Canggu Home Spa", "Seminyak Home Spa", "Sanur Home Spa", 
-        "Nusa Dua Home Spa", "Jimbaran Home Spa", "Kuta Massage", "Professional Massage Bali"
-      ],
-      authors: [{ name: "Bali Home Spa & Massage" }],
-      creator: "Bali Home Spa & Massage",
-      publisher: "Bali Home Spa & Massage",
-      formatDetection: {
-        email: false,
-        address: false,
-        telephone: false,
-      },
-      icons: {
-        icon: '/icon.svg',
-        shortcut: '/icon.svg',
-        apple: '/icon.svg',
-      },
-      openGraph: {
-        title: "Bali Home Spa & Massage | Premium In-Villa Massage Delivery",
-        description: "Voted Bali's premier mobile spa. Elevate your relaxation with our signature professional massages and couples treatments delivered to your door.",
-        url: 'https://www.balihomespaandmassage.com',
-        siteName: 'Bali Home Spa & Massage',
-        images: [
-          {
-            url: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
-            width: 1200,
-            height: 630,
-            alt: 'Bali Home Spa - Luxury Mobile Spa & Massage in Bali',
-          },
-        ],
-        locale: 'en_US',
-        type: 'website',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: 'Bali Home Spa & Massage | Best In-Villa Massage Delivery Bali',
-        description: 'Voted Bali\'s premier mobile spa. Elevate your relaxation with signature professional massages delivered directly to your villa.',
-        images: ['https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg'],
-      },
-      alternates: {
-        canonical: '/',
-      },
-      robots: {
-        index: true,
-        follow: true,
-        googleBot: {
-          index: true,
-          follow: true,
-          'max-video-preview': -1,
-          'max-image-preview': 'large',
-          'max-snippet': -1,
-        },
-      },
-      manifest: "/manifest.json",
-      other: {
-        'geo.region': 'ID-BA',
-        'geo.placename': 'Bali',
-        'geo.position': '-8.4095;115.1889',
-        'ICBM': '-8.4095, 115.1889',
-      }
-    };
-  }
-
-  return {
-    metadataBase: new URL('https://www.elexoirhomespaubud.com'),
-    title: {
-      default: "Elexoir Home Spa | #1 Luxury Mobile Spa & In-Villa Massage Ubud",
-      template: "%s | Elexoir Home Spa Bali"
-    },
-    description: "Experience Bali's top-rated luxury mobile spa. Professional in-villa massages, couples treatments & holistic rituals delivered directly to your hotel or villa in Ubud. Book your 5-star sanctuary today!",
-    keywords: [
-      "Ubud Massage", "Best Spa Ubud", "Ubud Home Spa", "In Villa Massage Ubud", "Mobile Spa Ubud",
-      "Private Massage Ubud", "Luxury Home Spa Bali", "Couples Massage Ubud", "Deep Tissue Massage Ubud",
-      "Balinese Massage Ubud", "Massage Delivery Ubud", "Spa Treatment Ubud", "Wellness Ubud", 
-      "Professional Massage Bali"
     ],
-    authors: [{ name: "Elexoir Spa" }],
-    creator: "Elexoir Spa",
-    publisher: "Elexoir Spa",
-    formatDetection: {
-      email: false,
-      address: false,
-      telephone: false,
-    },
-    icons: {
-      icon: '/icon.svg',
-      shortcut: '/icon.svg',
-      apple: '/icon.svg',
-    },
-    openGraph: {
-      title: "Elexoir Home Spa | #1 Luxury Mobile Spa & In-Villa Massage Ubud",
-      description: "Experience Bali's top-rated luxury mobile spa. Professional in-villa massages & holistic treatments delivered directly to your hotel or villa in Ubud.",
-      url: 'https://www.elexoirhomespaubud.com',
-      siteName: 'Elexoir Home Spa Bali',
-      images: [
-        {
-          url: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
-          width: 1200,
-          height: 630,
-          alt: 'Elexoir Home Spa - Luxury Mobile Spa & Massage in Bali',
-        },
-      ],
-      locale: 'en_US',
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Elexoir Home Spa | #1 Luxury Mobile Spa & In-Villa Massage Ubud',
-      description: 'Experience Bali\'s top-rated luxury mobile spa. Professional in-villa massages & holistic treatments delivered directly to your hotel or villa in Ubud.',
-      images: ['https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg'],
-    },
-    alternates: {
-      canonical: '/',
-    },
-    robots: {
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Therapick Bali | Choose Available Therapists in Your Area',
+    description: 'Find and book available professional massage therapists in your area on-demand. Browse therapist profiles and check availability.',
+    images: ['https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg'],
+  },
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
       index: true,
       follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
-    manifest: "/manifest.json",
-    other: {
-      'geo.region': 'ID-BA',
-      'geo.placename': 'Bali',
-      'geo.position': '-8.4095;115.1889',
-      'ICBM': '-8.4095, 115.1889',
-    }
-  };
-}
+  },
+  manifest: "/manifest.json",
+  other: {
+    'geo.region': 'ID-BA',
+    'geo.placename': 'Bali',
+    'geo.position': '-8.4095;115.1889',
+    'ICBM': '-8.4095, 115.1889',
+  }
+};
 
 export const viewport: Viewport = {
   themeColor: "#D2F34C",
@@ -179,12 +100,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = await headers();
-  const host = headersList.get("host") || "www.elexoirhomespaubud.com";
-  const isBaliDomain = host.includes("balihomespaandmassage.com");
-
-  const name = isBaliDomain ? "Bali Home Spa & Massage" : "Elexoir Home Spa";
-  const url = isBaliDomain ? "https://www.balihomespaandmassage.com" : "https://www.elexoirhomespaubud.com";
+  const name = "Therapick Bali";
+  const url = "https://therapickbali.vercel.app";
   
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -207,17 +124,7 @@ export default async function RootLayout({
       latitude: -8.5069,
       longitude: 115.2625
     },
-    areaServed: isBaliDomain ? [
-      { '@type': 'City', name: 'Seminyak' },
-      { '@type': 'City', name: 'Canggu' },
-      { '@type': 'City', name: 'Kuta' },
-      { '@type': 'City', name: 'Legian' },
-      { '@type': 'City', name: 'Jimbaran' },
-      { '@type': 'City', name: 'Nusa Dua' },
-      { '@type': 'City', name: 'Uluwatu' },
-      { '@type': 'City', name: 'Sanur' },
-      { '@type': 'City', name: 'Ubud' }
-    ] : [
+    areaServed: [
       { '@type': 'City', name: 'Ubud' },
       { '@type': 'City', name: 'Canggu' },
       { '@type': 'City', name: 'Seminyak' },
@@ -225,7 +132,8 @@ export default async function RootLayout({
       { '@type': 'City', name: 'Sanur' },
       { '@type': 'City', name: 'Nusa Dua' },
       { '@type': 'City', name: 'Jimbaran' },
-      { '@type': 'City', name: 'Kuta' }
+      { '@type': 'City', name: 'Kuta' },
+      { '@type': 'City', name: 'Legian' }
     ],
     priceRange: "$$$",
     openingHoursSpecification: {
@@ -246,9 +154,7 @@ export default async function RootLayout({
     sameAs: [
       'https://instagram.com/elexoirspa'
     ],
-    description: isBaliDomain 
-      ? 'Looking for the best massage in Bali? We deliver premium, 5-star professional spa treatments directly to your private villa or hotel. Serving Seminyak, Canggu, Kuta, and Nusa Dua. Book now for ultimate relaxation!' 
-      : 'Experience Bali\'s top-rated luxury mobile spa. Professional in-villa massages, couples treatments & holistic rituals delivered directly to your hotel or villa in Ubud. Book your 5-star sanctuary today!'
+    description: 'Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Bali.'
   };
 
   const serviceJsonLd = {
@@ -295,9 +201,7 @@ export default async function RootLayout({
         name: 'Do you provide massage in villas?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: isBaliDomain 
-            ? 'Yes, we specialize in in-villa massages and home spa services across Bali, including Seminyak, Canggu, Kuta, Jimbaran, and Nusa Dua.'
-            : 'Yes, we specialize in in-villa massages and home spa services across Bali, including Ubud, Canggu, Seminyak, and Uluwatu.'
+          text: 'Yes, we specialize in in-villa massages and home spa services across Bali, allowing you to choose available therapists in your specific area.'
         }
       },
       {
@@ -336,7 +240,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        data-domain={isBaliDomain ? "bali" : "ubud"}
+        data-domain="therapick"
         className={`${jakarta.variable} ${newsreader.variable} font-sans bg-transparent text-text min-h-screen selection:bg-primary selection:text-white pb-20`}
       >
         <SpaProvider>

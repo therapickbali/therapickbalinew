@@ -10,15 +10,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const locationName = slug.split('-').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
     return {
-        title: `Home Spa ${locationName} | Luxury Mobile Massage Delivery`,
-        description: `Looking for the best home spa in ${locationName}? Elexoir delivers premium professional massages and luxury spa treatments directly to your villa or hotel in ${locationName}, Bali.`,
+        title: `Available Massage Therapists in ${locationName} | Therapick Bali`,
+        description: `Looking for the best massage in ${locationName}? Therapick allows you to choose and book available premium professional massage therapists directly to your villa or hotel in ${locationName}, Bali.`,
         openGraph: {
-            title: `Elexoir Home Spa ${locationName} | Mobile Massage`,
-            description: `Experience the ultimate luxury mobile spa in ${locationName}, Bali. Book our signature professional massages to your private villa today.`,
-            url: `https://www.elexoirhomespaubud.com/locations/${slug}`,
+            title: `Choose Available Therapists in ${locationName} | Therapick Bali`,
+            description: `Find and book available professional massage therapists in ${locationName}, Bali on-demand.`,
+            url: `https://therapickbali.vercel.app/locations/${slug}`,
         },
         alternates: {
-            canonical: `https://www.elexoirhomespaubud.com/locations/${slug}`,
+            canonical: `https://therapickbali.vercel.app/locations/${slug}`,
         }
     };
 }
