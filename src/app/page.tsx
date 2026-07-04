@@ -208,16 +208,23 @@ ${treatmentsList}
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
-                {/* Slogan */}
-                <div className="md:hidden mt-4 mb-6 px-2">
-                    <h1 className="font-serif text-3xl text-primary font-medium tracking-tight domain-ubud-only">
-                        The Art of <br/>
-                        <span className="italic opacity-80">Wellbeing</span>
-                    </h1>
-                    <h1 className="font-serif text-3xl text-primary font-medium tracking-tight domain-bali-only">
-                        Bali's Best <br/>
-                        <span className="italic opacity-80">Mobile Spa</span>
-                    </h1>
+                {/* Therapist Stories */}
+                <div className="md:hidden mt-4 mb-6 relative z-20">
+                    <h3 className="text-xs font-bold text-text-muted mb-3 uppercase tracking-wider px-6">Select Therapist</h3>
+                    <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
+                        {MOCK_THERAPISTS.map(t => (
+                            <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setSelectedTherapist(t.id)}>
+                                <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-soft ${selectedTherapist === t.id ? 'bg-gradient-to-tr from-primary via-highlight to-primary shadow-[0_8px_20px_rgb(0,0,0,0.15)] scale-110' : 'bg-gradient-to-tr from-gray-200 to-gray-100 hover:scale-105'}`}>
+                                    <div className="w-full h-full rounded-full border-[3px] border-[#FDFBF7] overflow-hidden bg-white">
+                                        <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+                                    </div>
+                                </div>
+                                <span className={`text-[11px] text-center max-w-[72px] truncate transition-all ${selectedTherapist === t.id ? 'text-primary font-bold' : 'text-text-muted font-medium'}`}>
+                                    {t.name}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Search Bar (Mobile Only - Above Campaign) */}
@@ -279,8 +286,10 @@ ${treatmentsList}
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="relative w-full h-[240px] md:h-[420px] rounded-[32px] md:rounded-[40px] overflow-hidden shadow-[0_20px_40px_rgb(0,0,0,0.12)] mb-8 group cursor-pointer bg-primary"
+                        className="relative w-full h-[260px] md:h-[420px] rounded-[32px] md:rounded-[40px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.2)] mb-8 group cursor-pointer bg-primary transform-gpu transition-transform hover:-translate-y-2"
                     >
+                        {/* 3D Glassmorphism border */}
+                        <div className="absolute inset-0 rounded-[32px] md:rounded-[40px] border border-white/20 z-20 pointer-events-none"></div>
                         {/* Background Image */}
                         <img 
                             src={campaign.image || "https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop&crop=center"} 

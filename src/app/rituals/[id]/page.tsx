@@ -195,13 +195,13 @@ export default function RitualsDetails() {
                 </div>
 
                 {/* Smart Pricing & Duration Bento Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 pb-28 md:pb-0">
                     
                     {/* Selectable Durations */}
-                    <div className="bg-highlight/40 border border-highlight rounded-[32px] p-6 flex flex-col justify-between">
+                    <div className="bg-white/60 backdrop-blur-md border border-white rounded-[32px] p-6 flex flex-col justify-between shadow-[0_8px_30px_rgb(0,0,0,0.06)] transform-gpu transition-all hover:-translate-y-1">
                         <div className="flex items-start justify-between mb-6">
                             <span className="text-sm font-bold uppercase tracking-widest text-primary/80">Select Duration</span>
-                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary shadow-sm">
+                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-sm">
                                 <Clock className="w-4 h-4" />
                             </div>
                         </div>
@@ -214,48 +214,51 @@ export default function RitualsDetails() {
                                         onClick={() => setSelectedOptionIdx(idx)}
                                         className={`flex-1 py-3 px-2 rounded-2xl text-sm font-bold transition-all duration-300 ${
                                             isActive 
-                                            ? 'bg-primary text-white shadow-[0_8px_20px_rgb(0,0,0,0.12)] scale-105' 
-                                            : 'bg-white/60 text-primary border border-white hover:bg-white hover:scale-[1.02]'
+                                            ? 'bg-gradient-to-tr from-primary via-highlight to-primary text-white shadow-[0_8px_20px_rgb(0,0,0,0.2)] scale-105' 
+                                            : 'bg-white text-primary border border-border/50 hover:bg-white hover:scale-[1.02] shadow-sm'
                                         }`}
                                     >
-                                        {opt.duration} <span className={`text-[10px] ${isActive ? 'text-white/70' : 'text-primary/50'}`}>MINS</span>
+                                        {opt.duration} <span className={`text-[10px] ${isActive ? 'text-white/80' : 'text-primary/50'}`}>MINS</span>
                                     </button>
                                 );
                             })}
                         </div>
                     </div>
 
-                    {/* Price & Action */}
-                    <div className="rounded-[32px] p-6 flex flex-col justify-between relative overflow-hidden shadow-soft-lg min-h-[160px] bg-gradient-to-br from-[#1C1F1D] via-[#2A2E2C] to-[#1C1F1D]">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)] pointer-events-none"></div>
-                        
-                        <div className="relative z-10 flex flex-col h-full justify-between gap-6">
-                            <div className="flex flex-col">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
-                                    {isCoupleTreatment ? 'Price for 2 persons' : 'Price per person'}
-                                </span>
-                                <AnimatePresence mode="popLayout">
-                                    <motion.div 
-                                        key={selectedOption.price}
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        className="flex items-baseline gap-2 text-white"
-                                    >
-                                        <span className="text-lg font-medium text-white/70">IDR</span>
-                                        <span className="text-4xl md:text-5xl font-serif">{parseInt(selectedOption.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
-                                    </motion.div>
-                                </AnimatePresence>
+                    {/* Price & Action - Sticky on mobile */}
+                    <div className="fixed md:relative bottom-0 left-0 right-0 z-50 md:z-auto p-4 md:p-0 bg-white/90 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-t border-border/50 md:border-none rounded-t-[32px] md:rounded-none">
+                        <div className="rounded-[32px] p-6 flex flex-col justify-between relative overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.25)] min-h-[160px] bg-gradient-to-br from-[#1C1F1D] via-[#2A2E2C] to-[#1C1F1D] transform-gpu hover:-translate-y-1 transition-transform">
+                            {/* 3D Glassmorphism border */}
+                            <div className="absolute inset-0 rounded-[32px] border border-white/10 pointer-events-none"></div>
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)] pointer-events-none"></div>
+                            
+                            <div className="relative z-10 flex flex-col md:flex-col sm:flex-row h-full justify-between gap-6 sm:items-center md:items-stretch">
+                                <div className="flex flex-col">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
+                                        {isCoupleTreatment ? 'Price for 2 persons' : 'Price per person'}
+                                    </span>
+                                    <AnimatePresence mode="popLayout">
+                                        <motion.div 
+                                            key={selectedOption.price}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className="flex items-baseline gap-2 text-white drop-shadow-md"
+                                        >
+                                            <span className="text-lg font-medium text-white/70">IDR</span>
+                                            <span className="text-4xl md:text-5xl font-serif">{parseInt(selectedOption.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </div>
+                                <button 
+                                    onClick={handleInitialBook}
+                                    className="w-full sm:w-auto md:w-full bg-white text-primary px-8 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-100 active:scale-95 transition-all duration-300 shadow-[0_8px_24px_rgb(255,255,255,0.15)] uppercase tracking-widest"
+                                >
+                                    Book Now
+                                </button>
                             </div>
-                            <button 
-                                onClick={handleInitialBook}
-                                className="w-full bg-white text-primary px-6 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(255,255,255,0.15)] uppercase tracking-widest"
-                            >
-                                Book an Appointment
-                            </button>
                         </div>
                     </div>
-
                 </div>
 
                 {/* Description & SEO Content */}

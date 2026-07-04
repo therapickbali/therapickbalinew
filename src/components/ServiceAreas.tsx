@@ -38,9 +38,25 @@ export default function ServiceAreas() {
         </div>
       </div>
 
-      {/* Mobile Map Integration */}
-      <div className="md:hidden w-full h-[450px] mb-6">
-        <ServiceMap />
+      {/* Mobile Service Areas Carousel */}
+      <div className="md:hidden flex overflow-x-auto gap-4 no-scrollbar -mx-6 px-6 pb-8 snap-x snap-mandatory pt-2">
+        {areas.map((area, idx) => (
+          <Link href={`/locations/${area.slug}`} key={idx} className="group block outline-none shrink-0 w-[240px] snap-center">
+            <div className="bg-white rounded-3xl p-5 transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform-gpu hover:-translate-y-1 h-full flex flex-col relative overflow-hidden border border-white/60">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] to-[#F3F4F6] z-0"></div>
+              
+              <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-serif text-2xl text-primary font-medium">{area.name}</h3>
+                    <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 transform-gpu group-hover:scale-110">
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-text-muted leading-relaxed font-light flex-1">{area.desc}</p>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
 
       {/* Desktop Grid Cards (Hidden on Mobile) */}
