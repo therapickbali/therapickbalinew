@@ -8,6 +8,7 @@ export default function TherapistDashboard() {
     const [selectedTherapist, setSelectedTherapist] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [availableTimes, setAvailableTimes] = useState<string[]>([]);
+    const [status, setStatus] = useState('Online');
     const [saved, setSaved] = useState(false);
 
     // Mock data for therapists
@@ -123,14 +124,32 @@ export default function TherapistDashboard() {
                                 </div>
                             ) : (
                                 <div className="flex-1 flex flex-col">
-                                    <div className="flex items-center justify-between mb-8 pb-6 border-b border-border/40">
+                                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-border/40 gap-6">
                                         <div>
-                                            <p className="text-lg font-serif font-bold text-primary">Time Slots for {selectedDate}</p>
-                                            <p className="text-sm text-text-muted mt-1">Tap the buttons below to toggle your availability</p>
+                                            <p className="text-lg font-serif font-bold text-primary">Time Slots & Status for {selectedDate}</p>
+                                            <p className="text-sm text-text-muted mt-1">Manage your current working status and time slots.</p>
                                         </div>
-                                        <div className="text-xs font-bold bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-full">
-                                            {availableTimes.length} slots active
+                                        <div className="flex flex-col items-end gap-3">
+                                            <div className="flex bg-surface rounded-full p-1 border border-border/50 shadow-inner">
+                                                {['Online', 'Busy', 'Off'].map(s => (
+                                                    <button 
+                                                        key={s}
+                                                        onClick={() => setStatus(s)}
+                                                        className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
+                                                            status === s 
+                                                                ? (s === 'Online' ? 'bg-green-500 text-white shadow-sm' : s === 'Busy' ? 'bg-amber-500 text-white shadow-sm' : 'bg-red-500 text-white shadow-sm')
+                                                                : 'text-text-muted hover:text-primary hover:bg-black/5'
+                                                        }`}
+                                                    >
+                                                        {s === 'Busy' ? 'Still handle customer' : s === 'Off' ? 'Offline' : s}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <div className="text-xs font-bold bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-full">
+                                                {availableTimes.length} slots active
+                                            </div>
                                         </div>
+                                    </div>
                                     </div>
 
                                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mb-10">
