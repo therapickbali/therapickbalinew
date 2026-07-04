@@ -173,13 +173,9 @@ export default function Home() {
                 
                 {/* Slogan */}
                 <div className="md:hidden mt-4 mb-6 px-2">
-                    <h1 className="font-serif text-3xl text-primary font-medium tracking-tight domain-ubud-only">
+                    <h1 className="font-serif text-3xl text-primary font-medium tracking-tight">
                         The Art of <br/>
                         <span className="italic opacity-80">Wellbeing</span>
-                    </h1>
-                    <h1 className="font-serif text-3xl text-primary font-medium tracking-tight domain-bali-only">
-                        Bali's Best <br/>
-                        <span className="italic opacity-80">Mobile Spa</span>
                     </h1>
                 </div>
 

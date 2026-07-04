@@ -73,14 +73,12 @@ export default function TopNav() {
                     </span>
                 </a>
 
-                {/* Logo (Center) */}
+                {/* Location Title (Center) */}
                 <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center h-full">
-                    <a href="/" className="flex items-center justify-center">
-                        <img 
-                            src="/logo.png" 
-                            alt="Therapick Logo" 
-                            className="h-6 md:h-8 w-auto object-contain scale-[3] md:scale-[4] origin-center"
-                        />
+                    <a href="/" className="flex flex-col items-center justify-center leading-none">
+                        <span className="font-serif text-lg md:text-xl text-primary font-bold tracking-wider">ELEXOIR</span>
+                        <span className="text-[9px] text-primary/70 tracking-widest uppercase mt-0.5 domain-ubud-only">Ubud</span>
+                        <span className="text-[9px] text-primary/70 tracking-widest uppercase mt-0.5 domain-bali-only">Bali</span>
                     </a>
                 </div>
 
