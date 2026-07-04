@@ -67,18 +67,19 @@ export default function Home() {
     const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4>(1);
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedTherapist, setSelectedTherapist] = useState('');
+    const [viewingTherapist, setViewingTherapist] = useState<any>(null);
 
     const [selectedRegion, setSelectedRegion] = useState('Bali');
     const [selectedAreaFilter, setSelectedAreaFilter] = useState('All');
 
     const MOCK_THERAPISTS = [
-        { id: 't1', name: 'Sarah J.', location: 'Seminyak', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.' },
-        { id: 't2', name: 'Dewi K.', location: 'Ubud', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.' },
-        { id: 't3', name: 'Wayan M.', location: 'Canggu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.' },
-        { id: 't4', name: 'Ketut A.', location: 'Ubud', region: 'Bali', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.' },
-        { id: 't5', name: 'Made B.', location: 'Uluwatu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.' },
-        { id: 't6', name: 'Aisha F.', location: 'Downtown', region: 'Dubai', rating: 5, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop', desc: 'Specialist in Swedish and deep tissue.' },
-        { id: 't7', name: 'Fatima R.', location: 'Marina', region: 'Dubai', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop', desc: 'Holistic healing and relaxation.' },
+        { id: 't1', name: 'Sarah J.', location: 'Seminyak', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.', reviews: [{ author: 'Emily R.', text: 'Sarah was incredible. Best deep tissue massage I have ever had.' }], availability: { today: ['10:00 AM', '1:00 PM', '4:30 PM'], days: ['Mon', 'Tue', 'Thu', 'Fri'] } },
+        { id: 't2', name: 'Dewi K.', location: 'Ubud', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.', reviews: [{ author: 'Michael B.', text: 'Dewi brings such a calming, authentic Balinese energy.' }], availability: { today: ['11:30 AM', '2:00 PM', '6:00 PM'], days: ['Wed', 'Thu', 'Sat', 'Sun'] } },
+        { id: 't3', name: 'Wayan M.', location: 'Canggu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.', reviews: [{ author: 'Sophie T.', text: 'Wayan knew exactly what I needed. Highly recommend.' }], availability: { today: ['9:00 AM', '3:00 PM'], days: ['Mon', 'Wed', 'Fri', 'Sat'] } },
+        { id: 't4', name: 'Ketut A.', location: 'Ubud', region: 'Bali', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.', reviews: [{ author: 'David W.', text: 'Amazing technique and completely dissolved my tension.' }], availability: { today: ['12:00 PM', '5:00 PM'], days: ['Tue', 'Wed', 'Thu', 'Sun'] } },
+        { id: 't5', name: 'Made B.', location: 'Uluwatu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.', reviews: [{ author: 'Anna K.', text: 'The Lomi-Lomi was life-changing. Made is a master.' }], availability: { today: ['10:30 AM', '2:30 PM', '7:00 PM'], days: ['Mon', 'Tue', 'Fri', 'Sun'] } },
+        { id: 't6', name: 'Aisha F.', location: 'Downtown', region: 'Dubai', rating: 5, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop', desc: 'Specialist in Swedish and deep tissue.', reviews: [{ author: 'Sarah L.', text: 'Aisha is phenomenal! Perfect pressure.' }], availability: { today: ['9:00 AM', '1:00 PM', '4:00 PM'], days: ['Mon', 'Tue', 'Wed', 'Thu'] } },
+        { id: 't7', name: 'Fatima R.', location: 'Marina', region: 'Dubai', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop', desc: 'Holistic healing and relaxation.', reviews: [{ author: 'Chloe M.', text: 'So soothing and relaxing, Fatima is the best.' }], availability: { today: ['11:00 AM', '3:00 PM', '6:30 PM'], days: ['Thu', 'Fri', 'Sat', 'Sun'] } },
     ];
     
     const REGION_AREAS = {
@@ -251,10 +252,9 @@ ${treatmentsList}
 
                 {/* Therapist Stories */}
                 <div className="md:hidden mt-2 mb-6 relative z-20 -mx-6">
-                    <h3 className="text-xs font-bold text-text-muted mb-3 uppercase tracking-wider px-6">Select Therapist</h3>
                     <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
                         {MOCK_THERAPISTS.filter(t => t.region === selectedRegion && (selectedAreaFilter === 'All' || t.location === selectedAreaFilter)).map(t => (
-                            <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setSelectedTherapist(t.id)}>
+                            <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setViewingTherapist(t)}>
                                 <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-soft ${selectedTherapist === t.id ? 'bg-gradient-to-tr from-primary via-highlight to-primary shadow-[0_8px_20px_rgb(0,0,0,0.15)] scale-110' : 'bg-gradient-to-tr from-gray-200 to-gray-100 hover:scale-105'}`}>
                                     <div className="w-full h-full rounded-full border-[3px] border-[#FDFBF7] overflow-hidden bg-white">
                                         <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
@@ -1009,6 +1009,105 @@ ${treatmentsList}
                                     </form>
                                 </div>
                             )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Therapist Details Modal */}
+            <AnimatePresence>
+                {viewingTherapist && (
+                    <motion.div 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        exit={{ opacity: 0 }} 
+                        className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center bg-black/40 backdrop-blur-sm"
+                        onClick={() => setViewingTherapist(null)}
+                    >
+                        <motion.div 
+                            initial={{ y: '100%' }} 
+                            animate={{ y: 0 }} 
+                            exit={{ y: '100%' }} 
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="w-full sm:max-w-md bg-[#FDFBF7] rounded-t-[32px] sm:rounded-[32px] overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Header Image */}
+                            <div className="relative h-64 shrink-0">
+                                <img src={viewingTherapist.avatar} alt={viewingTherapist.name} className="w-full h-full object-cover object-top" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                                <button onClick={() => setViewingTherapist(null)} className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
+                                    <X className="w-5 h-5" />
+                                </button>
+                                <div className="absolute bottom-4 left-6 right-6 flex justify-between items-end">
+                                    <div>
+                                        <h2 className="text-3xl font-serif text-white font-medium">{viewingTherapist.name}</h2>
+                                        <p className="text-white/80 text-sm tracking-wide mt-1">{viewingTherapist.location}</p>
+                                    </div>
+                                    <div className="flex items-center gap-1 text-xs font-bold bg-white/20 backdrop-blur-md text-white px-2.5 py-1 rounded-full border border-white/20">
+                                        ★ {viewingTherapist.rating}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Scrollable Content */}
+                            <div className="overflow-y-auto no-scrollbar flex-1 pb-24">
+                                
+                                {/* Bio & Reviews */}
+                                <div className="px-6 py-6 border-b border-border/40">
+                                    <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">About</h4>
+                                    <p className="text-sm text-text-muted leading-relaxed mb-6">{viewingTherapist.desc}</p>
+                                    
+                                    {viewingTherapist.reviews && viewingTherapist.reviews.length > 0 && (
+                                        <div className="bg-primary/5 rounded-2xl p-5 relative">
+                                            <div className="text-primary/20 absolute top-4 left-4 font-serif text-4xl leading-none">"</div>
+                                            <p className="text-primary/90 text-sm font-medium italic relative z-10 pl-6 leading-relaxed">
+                                                {viewingTherapist.reviews[0].text}
+                                            </p>
+                                            <p className="text-xs text-primary/60 font-bold tracking-wide mt-3 pl-6">— {viewingTherapist.reviews[0].author}</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Calendar Schedule */}
+                                {viewingTherapist.availability && (
+                                    <div className="px-6 py-6">
+                                        <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-4">Availability Schedule</h4>
+                                        <div className="flex gap-3 overflow-x-auto no-scrollbar -mx-6 px-6 pb-2">
+                                            {viewingTherapist.availability.days.map((day: string, idx: number) => (
+                                                <div key={idx} className={`flex flex-col items-center justify-center shrink-0 w-14 h-16 rounded-2xl border ${idx === 0 ? 'bg-primary text-white border-primary shadow-md' : 'bg-white border-border/50 text-text-muted'}`}>
+                                                    <span className={`text-[10px] font-bold uppercase tracking-wide ${idx === 0 ? 'text-white/80' : ''}`}>{day}</span>
+                                                    <span className="text-lg font-serif font-medium mt-0.5">{14 + idx}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="mt-6">
+                                            <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Available Times</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                {viewingTherapist.availability.today.map((time: string, idx: number) => (
+                                                    <button key={idx} className="px-4 py-2 rounded-full border border-border/60 text-xs font-semibold text-text-muted hover:border-primary/40 hover:bg-primary/5 transition-all">
+                                                        {time}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Sticky Bottom Action */}
+                            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7] to-transparent pt-12 pointer-events-none">
+                                <button 
+                                    onClick={() => {
+                                        setSelectedTherapist(viewingTherapist.id);
+                                        setViewingTherapist(null);
+                                    }}
+                                    className="w-full bg-primary text-white px-6 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-primary/90 transition-all shadow-lg flex items-center justify-center gap-2 pointer-events-auto"
+                                >
+                                    Select Therapist
+                                </button>
+                            </div>
                         </motion.div>
                     </motion.div>
                 )}
