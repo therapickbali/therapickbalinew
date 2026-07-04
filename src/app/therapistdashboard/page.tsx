@@ -150,7 +150,6 @@ export default function TherapistDashboard() {
                                             </div>
                                         </div>
                                     </div>
-                                    </div>
 
                                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mb-10">
                                         {timeSlots.map(time => {
