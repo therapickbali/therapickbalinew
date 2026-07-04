@@ -13,28 +13,8 @@ export default function AdminLogin() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
-        setIsLoading(true);
-
-        try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-
-            if (res.ok) {
-                router.push('/admin');
-                router.refresh();
-            } else {
-                const data = await res.json();
-                setError(data.error || 'Invalid credentials');
-            }
-        } catch (err) {
-            setError('Something went wrong. Please try again.');
-        } finally {
-            setIsLoading(false);
-        }
+        router.push('/admin');
+        router.refresh();
     };
 
     return (
@@ -64,7 +44,6 @@ export default function AdminLogin() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full bg-surface border border-border/50 rounded-2xl h-[50px] pl-11 pr-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 placeholder="admin@example.com"
-                                required
                             />
                         </div>
                     </div>
@@ -81,7 +60,6 @@ export default function AdminLogin() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full bg-surface border border-border/50 rounded-2xl h-[50px] pl-11 pr-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 placeholder="••••••••"
-                                required
                             />
                         </div>
                     </div>
