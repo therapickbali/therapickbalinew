@@ -109,7 +109,7 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
     ];
 
     return (
-        <div className="bg-surface/80 backdrop-blur-xl border border-border/50 rounded-2xl p-4 shadow-sm relative overflow-hidden w-full">
+        <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl p-4 relative overflow-hidden w-full">
             {/* Background Accent */}
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
             

@@ -73,7 +73,7 @@ export default function TherapistDashboard() {
                                     <select 
                                         value={selectedTherapist}
                                         onChange={(e) => setSelectedTherapist(e.target.value)}
-                                        className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
+                                        className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
                                     >
                                         <option value="" disabled>Choose your profile...</option>
                                         {therapists.map(t => (
@@ -97,7 +97,7 @@ export default function TherapistDashboard() {
                                     type="date"
                                     value={selectedDate}
                                     onChange={(e) => setSelectedDate(e.target.value)}
-                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 />
                             </div>
                         </div>

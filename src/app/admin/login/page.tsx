@@ -42,7 +42,7 @@ export default function AdminLogin() {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-surface border border-border/50 rounded-2xl h-[50px] pl-11 pr-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl h-[50px] pl-11 pr-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 placeholder="admin@example.com"
                             />
                         </div>
@@ -58,7 +58,7 @@ export default function AdminLogin() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-surface border border-border/50 rounded-2xl h-[50px] pl-11 pr-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl h-[50px] pl-11 pr-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 placeholder="••••••••"
                             />
                         </div>
