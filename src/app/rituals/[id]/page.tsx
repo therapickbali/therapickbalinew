@@ -47,10 +47,10 @@ export default function RitualsDetails() {
 
     const MOCK_THERAPISTS = [
         { id: 't1', name: 'Sarah J.', location: 'Seminyak', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.', reviews: [{ author: 'Emily R.', text: 'Sarah was incredible. Best deep tissue massage I have ever had.' }], availability: { today: ['10:00', '13:00', '16:30'], days: ['Mon', 'Tue', 'Thu', 'Fri'] }, status: 'Online' },
-        { id: 't2', name: 'Dewi K.', location: 'Ubud', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.', reviews: [{ author: 'Michael B.', text: 'Dewi brings such a calming, authentic Balinese energy.' }], availability: { today: ['11:30', '14:00', '18:00'], days: ['Wed', 'Thu', 'Sat', 'Sun'] }, status: 'Busy' },
+        { id: 't2', name: 'Dewi K.', location: 'Ubud', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.', reviews: [{ author: 'Michael B.', text: 'Dewi brings such a calming, authentic Balinese energy.' }], availability: { today: ['11:30', '14:00', '18:00'], days: ['Wed', 'Thu', 'Sat', 'Sun'] }, status: 'Busy', availableAt: '13:00' },
         { id: 't3', name: 'Wayan M.', location: 'Canggu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.', reviews: [{ author: 'Sophie T.', text: 'Wayan knew exactly what I needed. Highly recommend.' }], availability: { today: ['09:00', '15:00'], days: ['Mon', 'Wed', 'Fri', 'Sat'] }, status: 'Off' },
         { id: 't4', name: 'Ketut A.', location: 'Ubud', region: 'Bali', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.', reviews: [{ author: 'David W.', text: 'Amazing technique and completely dissolved my tension.' }], availability: { today: ['12:00', '17:00'], days: ['Tue', 'Wed', 'Thu', 'Sun'] }, status: 'Online' },
-        { id: 't5', name: 'Made B.', location: 'Uluwatu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.', reviews: [{ author: 'Anna K.', text: 'The Lomi-Lomi was life-changing. Made is a master.' }], availability: { today: ['10:30', '14:30', '19:00'], days: ['Mon', 'Tue', 'Fri', 'Sun'] }, status: 'Busy' },
+        { id: 't5', name: 'Made B.', location: 'Uluwatu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.', reviews: [{ author: 'Anna K.', text: 'The Lomi-Lomi was life-changing. Made is a master.' }], availability: { today: ['10:30', '14:30', '19:00'], days: ['Mon', 'Tue', 'Fri', 'Sun'] }, status: 'Busy', availableAt: '13:00' },
         { id: 't6', name: 'Aisha F.', location: 'Downtown', region: 'Dubai', rating: 5, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop', desc: 'Specialist in Swedish and deep tissue.', reviews: [{ author: 'Sarah L.', text: 'Aisha is phenomenal! Perfect pressure.' }], availability: { today: ['09:00', '13:00', '16:00'], days: ['Mon', 'Tue', 'Wed', 'Thu'] }, status: 'Online' },
         { id: 't7', name: 'Fatima R.', location: 'Marina', region: 'Dubai', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop', desc: 'Holistic healing and relaxation.', reviews: [{ author: 'Chloe M.', text: 'So soothing and relaxing, Fatima is the best.' }], availability: { today: ['11:00', '15:00', '18:30'], days: ['Thu', 'Fri', 'Sat', 'Sun'] }, status: 'Off' },
     ];
@@ -549,7 +549,8 @@ export default function RitualsDetails() {
                                         </button>
                                         <h2 className="font-serif text-2xl text-primary">When would you like this?</h2>
                                     </div>
-                                    <p className="text-xs text-text-muted mb-6 shrink-0">Select the date and time for your booking.</p>
+                                    <p className="text-xs text-text-muted mb-4 shrink-0">Select the date and time for your booking.</p>
+                                    <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
                                     
                                     <div className="flex flex-col space-y-5 flex-1">
                                         <div className="space-y-3">
@@ -590,7 +591,8 @@ export default function RitualsDetails() {
                                         </button>
                                         <h2 className="font-serif text-2xl text-primary">Where are you staying?</h2>
                                     </div>
-                                    <p className="text-xs text-text-muted mb-6 shrink-0">Select your area in Bali so we can match you with nearby therapists.</p>
+                                    <p className="text-xs text-text-muted mb-4 shrink-0">Select your area in Bali so we can match you with nearby therapists.</p>
+                                    <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
                                     <div className="space-y-3 overflow-y-auto pb-8">
                                         {LOCATIONS.map(loc => (
                                             <button
@@ -618,7 +620,8 @@ export default function RitualsDetails() {
                                         </button>
                                         <h2 className="font-serif text-2xl text-primary">Choose Therapist</h2>
                                     </div>
-                                    <p className="text-xs text-text-muted mb-4 shrink-0">Therapists available in {selectedArea}. You need {totalGuests} therapist{totalGuests > 1 ? 's' : ''}. Selected: {selectedTherapists.length}/{totalGuests}</p>
+                                    <p className="text-xs text-text-muted mb-4 shrink-0">Therapists available in {selectedArea}.</p>
+                                    <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
                                     <div className="space-y-3 overflow-y-auto pb-8 pr-1 no-scrollbar">
                                         <button
                                             onClick={() => { setSelectedTherapists([]); setBookingStep(5); }}
@@ -627,6 +630,10 @@ export default function RitualsDetails() {
                                             <span className="font-bold text-primary text-sm tracking-wide">Assign Automatically</span>
                                             <ArrowRight className="w-4 h-4 text-text-muted" />
                                         </button>
+                                        <div className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] p-4 rounded-2xl flex items-center justify-between my-2">
+                                            <span className="text-xs font-bold text-primary/80 uppercase tracking-widest">Therapists Needed</span>
+                                            <span className="text-sm font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
+                                        </div>
                                         {MOCK_THERAPISTS.filter(t => t.location === selectedArea).map(t => (
                                             <button
                                                 key={t.id}
@@ -662,13 +669,16 @@ export default function RitualsDetails() {
                                                         {t.status === 'Off' ? (
                                                             <span className="text-[10px] font-bold text-red-500/80 bg-red-50 px-2 py-1 rounded">Offline</span>
                                                         ) : t.status === 'Busy' ? (
-                                                            <span className="text-[10px] font-bold text-amber-600/80 bg-amber-50 px-2 py-1 rounded">Still handle customer</span>
+                                                            <span className="text-[10px] font-bold text-amber-600/90 bg-amber-50 px-2 py-1 rounded">Online • Available at {t.availableAt || '13:00'}</span>
                                                         ) : (
-                                                            t.availability?.today?.slice(0,3).map(time => (
-                                                                <span key={time} className="text-[9px] font-bold text-primary bg-primary/5 px-2 py-1 rounded-full border border-primary/10">
-                                                                    {time}
-                                                                </span>
-                                                            ))
+                                                            <>
+                                                                <span className="text-[10px] font-bold text-green-600/90 bg-green-50 px-2 py-1 rounded mr-1">Ready to accept jobs</span>
+                                                                {t.availability?.today?.slice(0,2).map((time: string) => (
+                                                                    <span key={time} className="text-[9px] font-bold text-primary bg-primary/5 px-2 py-1 rounded-full border border-primary/10">
+                                                                        {time}
+                                                                    </span>
+                                                                ))}
+                                                            </>
                                                         )}
                                                     </div>
                                                 </div>

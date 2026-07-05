@@ -9,6 +9,7 @@ export default function TherapistDashboard() {
     const [selectedDate, setSelectedDate] = useState('');
     const [availableTimes, setAvailableTimes] = useState<string[]>([]);
     const [status, setStatus] = useState('Online');
+    const [availableAt, setAvailableAt] = useState('');
     const [saved, setSaved] = useState(false);
 
     // Mock data for therapists
@@ -130,20 +131,33 @@ export default function TherapistDashboard() {
                                             <p className="text-sm text-text-muted mt-1">Manage your current working status and time slots.</p>
                                         </div>
                                         <div className="flex flex-col items-end gap-3">
-                                            <div className="flex bg-surface rounded-full p-1 border border-border/50 shadow-inner">
-                                                {['Online', 'Busy', 'Off'].map(s => (
-                                                    <button 
-                                                        key={s}
-                                                        onClick={() => setStatus(s)}
-                                                        className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
-                                                            status === s 
-                                                                ? (s === 'Online' ? 'bg-green-500 text-white shadow-sm' : s === 'Busy' ? 'bg-amber-500 text-white shadow-sm' : 'bg-red-500 text-white shadow-sm')
-                                                                : 'text-text-muted hover:text-primary hover:bg-black/5'
-                                                        }`}
-                                                    >
-                                                        {s === 'Busy' ? 'Still handle customer' : s === 'Off' ? 'Offline' : s}
-                                                    </button>
-                                                ))}
+                                            <div className="flex flex-col items-end gap-2">
+                                                <div className="flex bg-surface rounded-full p-1 border border-border/50 shadow-inner">
+                                                    {['Online', 'Busy', 'Off'].map(s => (
+                                                        <button 
+                                                            key={s}
+                                                            onClick={() => setStatus(s)}
+                                                            className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
+                                                                status === s 
+                                                                    ? (s === 'Online' ? 'bg-green-500 text-white shadow-sm' : s === 'Busy' ? 'bg-amber-500 text-white shadow-sm' : 'bg-red-500 text-white shadow-sm')
+                                                                    : 'text-text-muted hover:text-primary hover:bg-black/5'
+                                                            }`}
+                                                        >
+                                                            {s === 'Busy' ? 'Handling customer' : s === 'Off' ? 'Offline' : 'Ready to accept jobs'}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                                {status === 'Busy' && (
+                                                    <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full animate-in fade-in slide-in-from-top-2">
+                                                        <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Available At:</span>
+                                                        <input 
+                                                            type="time" 
+                                                            value={availableAt} 
+                                                            onChange={e => setAvailableAt(e.target.value)} 
+                                                            className="text-xs bg-transparent border-none focus:outline-none text-amber-900 font-bold w-20"
+                                                        />
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="text-xs font-bold bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-full">
                                                 {availableTimes.length} slots active
