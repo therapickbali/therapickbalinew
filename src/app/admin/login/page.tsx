@@ -19,7 +19,7 @@ export default function AdminLogin() {
 
     return (
         <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-white rounded-[32px] shadow-[0_20px_40px_rgb(0,0,0,0.08)] p-8 border border-border/50">
+            <div className="w-full max-w-md bg-white/40 backdrop-blur-3xl rounded-[32px] shadow-[0_20px_40px_rgb(0,0,0,0.08)] p-8 border border-white/50">
                 <div className="text-center mb-8">
                     <h1 className="font-serif text-3xl text-primary font-medium mb-2">Admin Access</h1>
                     <p className="text-sm text-text-muted">Enter your credentials to continue</p>

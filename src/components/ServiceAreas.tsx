@@ -42,7 +42,7 @@ export default function ServiceAreas() {
       <div className="md:hidden flex overflow-x-auto gap-4 no-scrollbar -mx-6 px-6 pb-8 snap-x snap-mandatory pt-2">
         {areas.map((area, idx) => (
           <Link href={`/locations/${area.slug}`} key={idx} className="group block outline-none shrink-0 w-[240px] snap-center">
-            <div className="bg-white rounded-3xl p-5 transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform-gpu hover:-translate-y-1 h-full flex flex-col relative overflow-hidden border border-white/60">
+            <div className="bg-white/40 backdrop-blur-2xl border border-white/50 rounded-3xl p-5 transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transform-gpu hover:-translate-y-1 h-full flex flex-col relative overflow-hidden border border-white/60">
               <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] to-[#F3F4F6] z-0"></div>
               
               <div className="relative z-10 flex flex-col h-full">
@@ -63,7 +63,7 @@ export default function ServiceAreas() {
       <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 pb-6 md:pb-0">
         {areas.map((area, idx) => (
           <Link href={`/locations/${area.slug}`} key={idx} className="group block outline-none shrink-0 w-[260px] md:w-auto snap-center">
-            <div className="bg-white border border-border/40 rounded-3xl p-6 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] hover:border-primary/20 hover:-translate-y-1 h-full flex flex-col">
+            <div className="bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-6 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] hover:border-primary/20 hover:-translate-y-1 h-full flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-serif text-xl text-primary font-medium">{area.name}</h3>
                 <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">

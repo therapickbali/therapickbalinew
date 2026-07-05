@@ -864,7 +864,7 @@ export default function AdminDashboard() {
                                                                 <div className="p-5 pt-0 border-t border-border/20 mt-2 space-y-4">
                                                                     <div className="space-y-3">
                                                                         {t.options.map(opt => (
-                                                                            <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-border/50 rounded-xl gap-4 hover:border-primary/20 transition-colors">
+                                                                            <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-xl gap-4 hover:border-primary/20 transition-colors">
                                                                                 <div className="flex items-center justify-between sm:justify-start gap-4">
                                                                                     <span className="text-sm font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-md">{opt.duration}</span>
                                                                                     <span className="text-xs font-semibold text-text-muted">Cust. Price: Rp {opt.price}</span>
@@ -949,14 +949,14 @@ export default function AdminDashboard() {
                                                             <button 
                                                                 onClick={handleEditCampaign}
                                                                 type="button"
-                                                                className="w-10 h-10 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                className="w-10 h-10 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
                                                             >
                                                                 <Edit3 size={16} />
                                                             </button>
                                                             <button 
                                                                 onClick={handleRemoveCampaign}
                                                                 type="button"
-                                                                className="w-10 h-10 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                className="w-10 h-10 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                                                             >
                                                                 <Trash2 size={16} />
                                                             </button>
@@ -1038,14 +1038,14 @@ export default function AdminDashboard() {
                                                                     <button 
                                                                         type="button"
                                                                         onClick={() => handleEditTreatment(t)}
-                                                                        className="w-10 h-10 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                        className="w-10 h-10 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
                                                                     >
                                                                         <Edit3 size={16} />
                                                                     </button>
                                                                     <button 
                                                                         type="button"
                                                                         onClick={() => handleRemoveTreatment(t.id)}
-                                                                        className="w-10 h-10 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                        className="w-10 h-10 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                                                                     >
                                                                         <Trash2 size={16} />
                                                                     </button>
@@ -1100,14 +1100,14 @@ export default function AdminDashboard() {
                                                                 <button 
                                                                     type="button"
                                                                     onClick={() => handleEditProduct(p)}
-                                                                    className="w-8 h-8 rounded-full bg-white border border-border/50 text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                    className="w-8 h-8 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
                                                                 >
                                                                     <Edit3 size={14} />
                                                                 </button>
                                                                 <button 
                                                                     type="button"
                                                                     onClick={() => handleRemoveProduct(p.id)}
-                                                                    className="w-8 h-8 rounded-full bg-white border border-border/50 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                    className="w-8 h-8 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                                                                 >
                                                                     <Trash2 size={14} />
                                                                 </button>

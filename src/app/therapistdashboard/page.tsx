@@ -63,7 +63,7 @@ export default function TherapistDashboard() {
                     
                     {/* Sidebar / Setup */}
                     <div className="space-y-8">
-                        <div className="bg-white p-6 rounded-[24px] border border-border/50 shadow-sm">
+                        <div className="bg-white/40 backdrop-blur-2xl p-6 rounded-[24px] border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
                             <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
                                 <User className="w-4 h-4" /> Identity
                             </h3>
@@ -87,7 +87,7 @@ export default function TherapistDashboard() {
                             </div>
                         </div>
 
-                        <div className="bg-white p-6 rounded-[24px] border border-border/50 shadow-sm">
+                        <div className="bg-white/40 backdrop-blur-2xl p-6 rounded-[24px] border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
                             <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
                                 <Calendar className="w-4 h-4" /> Date Selection
                             </h3>
@@ -104,7 +104,7 @@ export default function TherapistDashboard() {
                     </div>
 
                     {/* Main Workspace */}
-                    <div className="bg-white p-6 md:p-10 rounded-[32px] border border-border/50 shadow-soft min-h-[500px] flex flex-col relative overflow-hidden">
+                    <div className="bg-white/40 backdrop-blur-2xl p-6 md:p-10 rounded-[32px] border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] min-h-[500px] flex flex-col relative overflow-hidden">
                         
                         {/* Decorative background blur */}
                         <div className="absolute top-[-10%] right-[-5%] w-64 h-64 bg-[#D2F34C]/20 blur-[80px] rounded-full z-0 pointer-events-none opacity-60" />
