@@ -174,7 +174,7 @@ export default function BookingModal({
                                                 <div className="text-[10px] text-white/90-muted flex items-center gap-1"><Clock className="w-3 h-3" />{t.options.length} Options</div>
                                             </div>
                                             <div className="flex items-center">
-                                                <div className={`w-8 h-8 rounded-full bg-white border border-white/20 flex items-center justify-center text-white transition-all duration-300 ${expandedTreatmentId === t.id ? 'rotate-45 bg-white text-black' : 'group-hover:bg-white group-hover:text-white'}`}>
+                                                <div className={`w-8 h-8 rounded-full bg-transparent border border-white/20 flex items-center justify-center text-white transition-all duration-300 ${expandedTreatmentId === t.id ? 'rotate-45 bg-white text-black' : 'group-hover:bg-white group-hover:text-black'}`}>
                                                     <Plus className="w-4 h-4" />
                                                 </div>
                                             </div>
@@ -254,7 +254,7 @@ export default function BookingModal({
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: Math.max(step, i.guests - step) };
                                                             }))}
-                                                            className="w-8 h-8 rounded-full bg-white/50 border border-white flex items-center justify-center text-white hover:bg-white transition-colors shadow-sm"
+                                                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black hover:bg-white transition-colors shadow-sm"
                                                         >
                                                             <Minus className="w-3 h-3" />
                                                         </button>
@@ -267,7 +267,7 @@ export default function BookingModal({
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: i.guests + step };
                                                             }))}
-                                                            className="w-8 h-8 rounded-full bg-white/50 border border-white flex items-center justify-center text-white hover:bg-white transition-colors shadow-sm"
+                                                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black hover:bg-white transition-colors shadow-sm"
                                                         >
                                                             <Plus className="w-3 h-3" />
                                                         </button>
@@ -295,7 +295,7 @@ export default function BookingModal({
                                             <input 
                                                 type="time" required 
                                                 value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                                className={`w-full ${liquidGlassClasses} rounded-xl px-4 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all`}
+                                                className={`w-full ${liquidGlassClasses} rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all`}
                                             />
                                         </div>
                                     </div>
@@ -311,7 +311,7 @@ export default function BookingModal({
                                                     onClick={() => setSelectedArea(loc)}
                                                     className={`py-4 px-3 rounded-2xl border text-sm font-bold transition-all duration-300 ${
                                                         selectedArea === loc 
-                                                        ? 'bg-white border-primary text-white shadow-md' 
+                                                        ? 'bg-white border-primary text-black shadow-md' 
                                                         : `${liquidGlassClasses} text-white hover:bg-white/40`
                                                     }`}
                                                 >
@@ -339,7 +339,7 @@ export default function BookingModal({
                                                                 prev.includes(t.id) ? prev.filter(id => id !== t.id) : 
                                                                 (prev.length < totalGuests ? [...prev, t.id] : prev)
                                                             )}
-                                                            className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] transition-colors ${selectedTherapists.includes(t.id) ? 'bg-white text-black' : 'bg-white border border-white/20 text-white'}`}
+                                                            className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] transition-colors ${selectedTherapists.includes(t.id) ? 'bg-white text-black' : 'bg-transparent border border-white/20 text-white hover:bg-white/10'}`}
                                                         >
                                                             {selectedTherapists.includes(t.id) ? '✓' : <Plus className="w-3 h-3" />}
                                                         </button>

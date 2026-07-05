@@ -216,7 +216,7 @@ ${treatmentsList}
         <div className="min-h-screen bg-black relative overflow-hidden font-sans text-white/90">
             
             {/* Top Gradient Background */}
-            <div className="absolute top-0 left-0 right-0 h-[400px] md:h-[500px] bg-gradient-to-b from-[#D2F34C]/20 to-black z-0 pointer-events-none"></div>
+            <div className="absolute top-0 left-0 right-0 h-[400px] md:h-[500px] bg-gradient-to-b from-transparent to-transparent z-0 pointer-events-none"></div>
 
             {/* Luxurious Ambient Background */}
             <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] md:w-[800px] h-[600px] bg-secondary/30 blur-[120px] rounded-full z-0 pointer-events-none opacity-60 mix-blend-multiply" />
@@ -733,7 +733,7 @@ ${treatmentsList}
                                                         <div className="text-[10px] text-white/90-muted"><Clock className="w-3 h-3 inline mr-1" />{t.options.length} Options</div>
                                                     </div>
                                                     <div className="flex items-center pr-2">
-                                                        <div className={`w-8 h-8 rounded-full bg-white border border-white/20 flex items-center justify-center text-white transition-all duration-300 ${expandedTreatmentId === t.id ? 'rotate-45 bg-white text-black' : 'group-hover:bg-white group-hover:text-white'}`}>
+                                                        <div className={`w-8 h-8 rounded-full bg-transparent border border-white/20 flex items-center justify-center text-white transition-all duration-300 ${expandedTreatmentId === t.id ? 'rotate-45 bg-white text-black' : 'group-hover:bg-white group-hover:text-black'}`}>
                                                             <Plus className="w-4 h-4" />
                                                         </div>
                                                     </div>
@@ -838,7 +838,7 @@ ${treatmentsList}
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: Math.max(step, i.guests - step) };
                                                             }))}
-                                                            className="w-8 h-8 rounded-full bg-white border border-white/20 flex items-center justify-center text-white hover:bg-border transition-colors shadow-sm"
+                                                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black hover:bg-border transition-colors shadow-sm"
                                                         >
                                                             <Minus className="w-3 h-3" />
                                                         </button>
@@ -851,7 +851,7 @@ ${treatmentsList}
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: i.guests + step };
                                                             }))}
-                                                            className="w-8 h-8 rounded-full bg-white border border-white/20 flex items-center justify-center text-white hover:bg-border transition-colors shadow-sm"
+                                                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black hover:bg-border transition-colors shadow-sm"
                                                         >
                                                             <Plus className="w-3 h-3" />
                                                         </button>
@@ -908,7 +908,7 @@ ${treatmentsList}
                                             <input 
                                                 type="time" required 
                                                 value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                     </div>

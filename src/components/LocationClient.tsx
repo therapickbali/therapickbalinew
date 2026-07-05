@@ -577,7 +577,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                         <div className="text-[10px] text-white/90-muted"><Clock className="w-3 h-3 inline mr-1" />{t.options.length} Options</div>
                                                     </div>
                                                     <div className="flex items-center pr-2">
-                                                        <div className={`w-8 h-8 rounded-full bg-white border border-white/20 flex items-center justify-center text-white transition-all duration-300 ${expandedTreatmentId === t.id ? 'rotate-45 bg-white text-black' : 'group-hover:bg-white group-hover:text-white'}`}>
+                                                        <div className={`w-8 h-8 rounded-full bg-transparent border border-white/20 flex items-center justify-center text-white transition-all duration-300 ${expandedTreatmentId === t.id ? 'rotate-45 bg-white text-black' : 'group-hover:bg-white group-hover:text-black'}`}>
                                                             <Plus className="w-4 h-4" />
                                                         </div>
                                                     </div>
@@ -673,7 +673,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                         <button 
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => i.id === item.id ? { ...i, guests: Math.max(1, i.guests - 1) } : i))}
-                                                            className="w-8 h-8 rounded-full bg-white border border-white/20 flex items-center justify-center text-white hover:bg-border transition-colors shadow-sm"
+                                                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black hover:bg-border transition-colors shadow-sm"
                                                         >
                                                             <Minus className="w-3 h-3" />
                                                         </button>
@@ -681,7 +681,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                         <button 
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => i.id === item.id ? { ...i, guests: i.guests + 1 } : i))}
-                                                            className="w-8 h-8 rounded-full bg-white border border-white/20 flex items-center justify-center text-white hover:bg-border transition-colors shadow-sm"
+                                                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black hover:bg-border transition-colors shadow-sm"
                                                         >
                                                             <Plus className="w-3 h-3" />
                                                         </button>
