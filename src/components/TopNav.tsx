@@ -16,6 +16,7 @@ export default function TopNav() {
         { href: '/store', label: 'STORE' },
         { href: '/rituals', label: 'TREATMENT' },
         { href: '/contact', label: 'CONTACT' },
+        { href: '/therapist-login', label: 'THERAPIST PORTAL' },
     ];
 
     const mobileNavItems = [
@@ -101,6 +102,14 @@ export default function TopNav() {
                         );
                     })}
                 </nav>
+                
+                {/* Desktop Therapist Portal Button */}
+                <a 
+                    href="/therapist-login"
+                    className="hidden md:flex items-center justify-center bg-white/40 hover:bg-white/60 text-primary border border-white/60 px-4 py-2 rounded-full text-[11px] font-bold tracking-widest uppercase transition-colors shadow-sm ml-2"
+                >
+                    THERAPIST PORTAL
+                </a>
 
                 {/* Dropdown Toggle Button (Visible on mobile ALWAYS) */}
                 <button 
