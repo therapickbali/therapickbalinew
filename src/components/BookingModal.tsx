@@ -130,10 +130,10 @@ export default function BookingModal({
                     initial={{ opacity: 0, scale: 0.9, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    className="bg-white rounded-none md:rounded-[32px] w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative flex flex-col overflow-hidden"
+                    className="bg-[#111111] border border-white/10 rounded-none md:rounded-[32px] w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative flex flex-col overflow-hidden"
                 >
                     {/* Header */}
-                    <div className="flex items-center justify-between p-6 border-b border-white/20/30 bg-white z-10 shrink-0">
+                    <div className="flex items-center justify-between p-6 border-b border-white/10 bg-transparent z-10 shrink-0">
                         {bookingStep > 1 && !isSelectingMore && (
                             <button onClick={() => setBookingStep((prev) => (prev - 1) as any)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors">
                                 <ChevronLeft className="w-4 h-4 text-white" />
@@ -162,7 +162,7 @@ export default function BookingModal({
                     </div>
 
                     {/* Scrollable Content */}
-                    <div className="flex-1 overflow-y-auto no-scrollbar p-6 bg-white/10/30">
+                    <div className="flex-1 overflow-y-auto no-scrollbar p-6 bg-transparent">
                         {isSelectingMore ? (
                             <div className="space-y-4 pb-16">
                                 {treatments.map(t => (
@@ -373,7 +373,7 @@ export default function BookingModal({
 
                     {/* Footer / Action */}
                     {!isSelectingMore && (
-                        <div className="bg-white border-t border-white/20/30 p-6 z-10 shrink-0">
+                        <div className="bg-transparent border-t border-white/10 p-6 z-10 shrink-0">
                             <div className="flex items-end justify-between mb-4">
                                 <span className="text-xs font-bold text-white/90-muted uppercase tracking-widest">Total Price</span>
                                 <span className="text-2xl font-serif text-white">IDR {formattedTotalPrice}</span>

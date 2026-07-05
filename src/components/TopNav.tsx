@@ -86,7 +86,7 @@ export default function TopNav() {
                         <img 
                             src="/logo.png" 
                             alt="Therapick Logo" 
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-contain invert brightness-0"
                         />
                     </a>
                 </div>
