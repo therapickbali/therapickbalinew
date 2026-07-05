@@ -50,7 +50,12 @@ export default function TopNav() {
     }, []);
 
     // Hide TopNav on admin and store routes
-    if (pathname?.startsWith('/admin') || pathname?.startsWith('/store')) {
+    if (
+        pathname?.startsWith('/admin') || 
+        pathname?.startsWith('/store') || 
+        pathname?.startsWith('/therapist-login') || 
+        pathname?.startsWith('/therapistdashboard')
+    ) {
         return null;
     }
 

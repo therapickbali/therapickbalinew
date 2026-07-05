@@ -31,6 +31,17 @@ export default function TherapistLogin() {
 
     return (
         <main className="min-h-screen bg-[#FDFDFD] selection:bg-primary/10 relative overflow-hidden flex flex-col">
+
+            {/* Custom App-like Back Button */}
+            <div className="absolute top-6 left-4 z-50">
+                <button 
+                    onClick={() => router.push('/')}
+                    className="w-10 h-10 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center text-primary shadow-sm hover:bg-white/60 transition-colors"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+            </div>
+
             {/* Minimal Background Gradients */}
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#E8E8E6] rounded-full blur-[100px] opacity-40 mix-blend-multiply pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#D5D5D1] rounded-full blur-[120px] opacity-30 mix-blend-multiply pointer-events-none" />
@@ -107,7 +118,7 @@ export default function TherapistLogin() {
                                                 </div>
                                                 <input
                                                     type="text"
-                                                    required
+                                                    
                                                     value={formData.name}
                                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                                                     className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
@@ -120,7 +131,7 @@ export default function TherapistLogin() {
                                                         <MapPin className="h-5 w-5 text-text-muted/50" />
                                                     </div>
                                                     <select
-                                                        required
+                                                        
                                                         value={formData.location}
                                                         onChange={(e) => setFormData({...formData, location: e.target.value})}
                                                         className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
@@ -137,7 +148,7 @@ export default function TherapistLogin() {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        required
+                                                        
                                                         value={formData.speciality}
                                                         onChange={(e) => setFormData({...formData, speciality: e.target.value})}
                                                         className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
@@ -154,7 +165,7 @@ export default function TherapistLogin() {
                                         </div>
                                         <input
                                             type="email"
-                                            required
+                                            
                                             value={formData.email}
                                             onChange={(e) => setFormData({...formData, email: e.target.value})}
                                             className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
@@ -168,7 +179,7 @@ export default function TherapistLogin() {
                                         </div>
                                         <input
                                             type="password"
-                                            required
+                                            
                                             value={formData.password}
                                             onChange={(e) => setFormData({...formData, password: e.target.value})}
                                             className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
