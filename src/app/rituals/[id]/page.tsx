@@ -646,6 +646,14 @@ export default function RitualsDetails() {
                                             const t = { ...rawT } as any;
                                             if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
                                                 t.status = 'Online';
+                                            } else if (t.status === 'Busy' && t.availableAt) {
+                                                const now = new Date();
+                                                const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+                                                if (!formData.date || formData.date === todayStr) {
+                                                    if (currentTimeStr >= t.availableAt) {
+                                                        t.status = 'Online';
+                                                    }
+                                                }
                                             }
                                             return (
 <button
@@ -687,13 +695,19 @@ export default function RitualsDetails() {
                                                     </div>
                                                 </div>
                                                 <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                                    <div className="mb-1">
+                                                        {t.status === "Off" ? (
+                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
+                                                        ) : t.status === "Busy" ? (
+                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Handling Customer</span>
+                                                        ) : (
+                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
+                                                        )}
+                                                    </div>
                                                     <div className="flex items-center justify-between mb-1.5">
                                                         <div className="flex items-center gap-2">
                                                             <h4 className={`font-serif text-lg leading-none ${selectedTherapists.includes(t.id) ? "text-white" : "text-primary"}`}>{t.name}</h4>
-                                                            {/* Status Label */}
-                                                            {t.status === "Online" && <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span>}
-                                                            {t.status === "Busy" && <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]"></span>}
-                                                            {t.status === "Off" && <span className="w-2 h-2 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]"></span>}
+                                                            
                                                         </div>
                                                         <div className="flex items-center text-[#2563eb]">
                                                             <BadgeCheck className="w-4 h-4" />
@@ -704,7 +718,7 @@ export default function RitualsDetails() {
                                                         {t.status === "Off" ? (
                                                             <span className="text-[10px] font-semibold text-red-400 flex items-center gap-1.5 bg-red-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>Offline</span>
                                                         ) : t.status === "Busy" ? (
-                                                            <span className="text-[10px] font-semibold text-amber-500 flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>HANDLING CUSTOMER • READY AT {t.availableAt || "13:00"}</span>
+                                                            <span className="text-[10px] font-semibold text-amber-500 flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>READY AT {t.availableAt || "13:00"}</span>
                                                         ) : (
                                                             <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>READY TO ACCEPT JOBS</span>
                                                         )}
