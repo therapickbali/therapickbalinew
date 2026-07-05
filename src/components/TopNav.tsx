@@ -26,6 +26,7 @@ export default function TopNav() {
         { href: '/service-areas', label: 'SERVICE AREAS' },
         { href: '/faq', label: 'FAQ' },
         { href: '/contact', label: 'CONTACT' },
+        { href: '/therapist-login', label: 'THERAPIST PORTAL' },
     ];
 
     // Scroll listener for dynamic navbar
@@ -143,9 +144,11 @@ export default function TopNav() {
                                         href={item.href}
                                         onClick={() => setIsOpen(false)}
                                         className={`px-4 py-3 rounded-xl text-xs font-bold tracking-wider transition-colors ${
-                                            isActive 
-                                                ? 'bg-surface text-primary' 
-                                                : 'text-text-muted hover:bg-surface/50 hover:text-primary'
+                                            item.href === '/therapist-login' 
+                                                ? 'bg-[#292831] text-white mt-2 text-center' // Standout style for therapist portal
+                                                : isActive 
+                                                    ? 'bg-surface text-primary' 
+                                                    : 'text-text-muted hover:bg-surface/50 hover:text-primary'
                                         }`}
                                     >
                                         {item.label}
