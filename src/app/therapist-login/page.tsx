@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, User, MapPin, Sparkles, ChevronRight, UserCircle2 } from 'lucide-react';
+import { Mail, Lock, User, MapPin, ChevronRight, Eye, EyeOff, Phone, FileText, Upload } from 'lucide-react';
 import TopNav from '@/components/TopNav';
 
 export default function TherapistLogin() {
@@ -15,8 +15,11 @@ export default function TherapistLogin() {
         email: '',
         password: '',
         location: '',
-        speciality: ''
+        whatsapp: '',
+        bio: '',
+        image: null as File | null
     });
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -57,15 +60,10 @@ export default function TherapistLogin() {
                 >
                     {/* Header */}
                     <div className="text-center mb-10">
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                            className="w-16 h-16 rounded-full bg-white border border-white/20/50 shadow-sm flex items-center justify-center mx-auto mb-6"
-                        >
-                            <UserCircle2 className="w-8 h-8 text-white/80" />
-                        </motion.div>
-                        <h1 className="font-serif text-3xl md:text-4xl text-white mb-3">Therapist Portal</h1>
+                        <div className="inline-block bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] px-8 py-4 rounded-3xl mb-4">
+                            <h1 className="font-serif text-3xl md:text-4xl text-white mb-2">Therapist Portal</h1>
+                            <div className="w-12 h-[1px] bg-white/20 mx-auto"></div>
+                        </div>
                         <p className="text-white/90-muted text-sm px-4">
                             {isLogin 
                                 ? "Welcome back. Access your schedule and manage your sessions." 
@@ -118,20 +116,32 @@ export default function TherapistLogin() {
                                                 </div>
                                                 <input
                                                     type="text"
-                                                    
                                                     value={formData.name}
                                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                                                     className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                                     placeholder="Full Name"
                                                 />
                                             </div>
+
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                    <Phone className="h-5 w-5 text-white/90-muted/50" />
+                                                </div>
+                                                <input
+                                                    type="tel"
+                                                    value={formData.whatsapp}
+                                                    onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                                    placeholder="WhatsApp Number"
+                                                />
+                                            </div>
+
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="relative">
                                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                                         <MapPin className="h-5 w-5 text-white/90-muted/50" />
                                                     </div>
                                                     <select
-                                                        
                                                         value={formData.location}
                                                         onChange={(e) => setFormData({...formData, location: e.target.value})}
                                                         className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
@@ -144,17 +154,27 @@ export default function TherapistLogin() {
                                                 </div>
                                                 <div className="relative">
                                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                        <Sparkles className="h-5 w-5 text-white/90-muted/50" />
+                                                        <Upload className="h-5 w-5 text-white/90-muted/50" />
                                                     </div>
                                                     <input
-                                                        type="text"
-                                                        
-                                                        value={formData.speciality}
-                                                        onChange={(e) => setFormData({...formData, speciality: e.target.value})}
-                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
-                                                        placeholder="Specialty"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={(e) => setFormData({...formData, image: e.target.files?.[0] || null})}
+                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white/90-muted file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all cursor-pointer"
                                                     />
                                                 </div>
+                                            </div>
+
+                                            <div className="relative">
+                                                <div className="absolute top-3.5 left-4 pointer-events-none">
+                                                    <FileText className="h-5 w-5 text-white/90-muted/50" />
+                                                </div>
+                                                <textarea
+                                                    value={formData.bio}
+                                                    onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all min-h-[100px] resize-y"
+                                                    placeholder="Short Bio"
+                                                />
                                             </div>
                                         </div>
                                     )}
@@ -178,13 +198,19 @@ export default function TherapistLogin() {
                                             <Lock className="h-5 w-5 text-white/90-muted/50" />
                                         </div>
                                         <input
-                                            type="password"
-                                            
+                                            type={showPassword ? "text" : "password"}
                                             value={formData.password}
                                             onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                            className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                            className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-12 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                             placeholder="Password"
                                         />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-white/90-muted/50 hover:text-white/80 transition-colors"
+                                        >
+                                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                        </button>
                                     </div>
 
                                     <button
