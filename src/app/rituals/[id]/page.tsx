@@ -320,7 +320,7 @@ export default function RitualsDetails() {
                             <Link href={`/rituals/${item.id}`} key={idx} className="w-72 shrink-0 block group outline-none">
                                 <div className={`rounded-[32px] bg-gradient-to-br ${item.bgPattern || 'from-secondary/80 to-highlight/40'} border border-white/20/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6`}>
                                     
-                                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/60 blur-[30px] rounded-full pointer-events-none transition-transform duration-700 group-hover:scale-150"></div>
+                                    
 
                                     <div className="mb-6 flex items-start justify-between relative z-10">
                                         <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] border border-primary/10 text-white px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
