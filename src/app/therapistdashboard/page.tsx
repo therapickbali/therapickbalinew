@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, ChevronRight, LogOut } from 'lucide-react';
+import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import FloatingCalendar from '@/components/FloatingCalendar';
 
 type Tab = 'home' | 'schedule' | 'profile';
 
@@ -17,32 +18,18 @@ export default function TherapistDashboard() {
     
     // Schedule State
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-    const [availableTimes, setAvailableTimes] = useState<string[]>([]);
+    const [startTime, setStartTime] = useState('09:00');
+    const [endTime, setEndTime] = useState('17:00');
     
     // Profile State
     const [profile, setProfile] = useState({
         name: 'Dewi K.',
         location: 'Ubud',
-        specialty: 'Traditional Balinese Massage',
+        bio: 'Professional therapist with 5 years of experience in Traditional Balinese Massage.',
         avatar: ''
     });
 
     const [saved, setSaved] = useState(false);
-
-    const timeSlots = [
-        '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-        '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
-        '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
-        '18:00', '18:30', '19:00', '19:30', '20:00'
-    ];
-
-    const toggleTimeSlot = (time: string) => {
-        if (availableTimes.includes(time)) {
-            setAvailableTimes(availableTimes.filter(t => t !== time));
-        } else {
-            setAvailableTimes([...availableTimes, time].sort());
-        }
-    };
 
     const handleSave = () => {
         setSaved(true);
@@ -151,38 +138,44 @@ export default function TherapistDashboard() {
                 <p className="text-sm text-text-muted mt-1">Set future availability</p>
             </div>
 
-            <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[24px] p-5 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_8px_32px_rgba(0,0,0,0.04)]">
-                <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Select Date</label>
-                <div className="flex items-center gap-3 bg-white rounded-2xl p-2 border border-border/50 shadow-sm">
-                    <Calendar className="w-5 h-5 text-primary/50 ml-2" />
-                    <input 
-                        type="date" 
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        className="flex-1 bg-transparent border-none focus:outline-none text-primary font-bold py-2"
-                    />
-                </div>
+            {/* Floating Calendar */}
+            <div className="relative">
+                <FloatingCalendar 
+                    value={selectedDate} 
+                    onChange={(date) => setSelectedDate(date)} 
+                />
             </div>
 
+            {/* Freely Set Available Times */}
             <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_8px_32px_rgba(0,0,0,0.04)]">
-                <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest">Time Slots</h3>
-                    <span className="text-xs font-bold bg-primary/10 text-primary px-3 py-1 rounded-full">{availableTimes.length} active</span>
-                </div>
+                <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Available Hours for {new Date(selectedDate).toLocaleDateString()}</h3>
                 
-                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3">
-                    {timeSlots.map(time => {
-                        const isSelected = availableTimes.includes(time);
-                        return (
-                            <button
-                                key={time}
-                                onClick={() => toggleTimeSlot(time)}
-                                className={`py-3 rounded-xl text-sm font-semibold transition-all duration-300 border ${isSelected ? 'bg-primary text-white border-primary shadow-md scale-[1.05] z-10' : 'bg-surface/50 text-text-muted border-border/50 hover:border-primary/40'}`}
-                            >
-                                {time}
-                            </button>
-                        );
-                    })}
+                <div className="flex items-center justify-between gap-4">
+                    <div className="flex-1">
+                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-2">Start Time</label>
+                        <div className="flex items-center gap-2 bg-white rounded-2xl p-2 border border-border/50 shadow-sm">
+                            <Clock className="w-4 h-4 text-primary/40 ml-2" />
+                            <input 
+                                type="time" 
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                                className="flex-1 bg-transparent border-none focus:outline-none text-primary font-bold py-1.5"
+                            />
+                        </div>
+                    </div>
+                    
+                    <div className="flex-1">
+                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-2">End Time</label>
+                        <div className="flex items-center gap-2 bg-white rounded-2xl p-2 border border-border/50 shadow-sm">
+                            <Clock className="w-4 h-4 text-primary/40 ml-2" />
+                            <input 
+                                type="time" 
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                                className="flex-1 bg-transparent border-none focus:outline-none text-primary font-bold py-1.5"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -205,7 +198,7 @@ export default function TherapistDashboard() {
         >
             <div className="text-center mb-2">
                 <h2 className="font-serif text-3xl text-primary font-medium">Your Profile</h2>
-                <p className="text-sm text-text-muted mt-1">Manage your identity</p>
+                <p className="text-sm text-text-muted mt-1">Manage your identity & app</p>
             </div>
 
             <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_8px_32px_rgba(0,0,0,0.04)] flex flex-col items-center">
@@ -236,12 +229,12 @@ export default function TherapistDashboard() {
                         />
                     </div>
                     <div>
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-1">Primary Specialty</label>
-                        <input 
-                            type="text" 
-                            value={profile.specialty}
-                            onChange={(e) => setProfile({...profile, specialty: e.target.value})}
-                            className="w-full bg-white/60 border border-white/60 rounded-2xl py-3.5 px-4 text-sm font-semibold text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-1">Bio</label>
+                        <textarea 
+                            value={profile.bio}
+                            onChange={(e) => setProfile({...profile, bio: e.target.value})}
+                            rows={3}
+                            className="w-full bg-white/60 border border-white/60 rounded-2xl py-3.5 px-4 text-sm font-semibold text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm resize-none"
                         />
                     </div>
                     <div>
@@ -257,18 +250,31 @@ export default function TherapistDashboard() {
                         </select>
                     </div>
                 </div>
+                
+                <button 
+                    onClick={handleSave}
+                    className="mt-6 w-full bg-primary text-white rounded-2xl py-4 font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                    {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Profile</>}
+                </button>
+            </div>
+
+            {/* App Installation Section */}
+            <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_8px_32px_rgba(0,0,0,0.04)]">
+                <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4">Install Therapist App</h3>
+                <div className="space-y-3">
+                    <button className="w-full bg-[#3DDC84] text-white rounded-2xl py-3.5 px-4 font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        <Download className="w-5 h-5" /> Download for Android
+                    </button>
+                    <button className="w-full bg-surface text-primary border border-border/50 rounded-2xl py-3.5 px-4 font-bold shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2" onClick={() => alert("To install on iPhone: Tap the 'Share' icon at the bottom of Safari, then tap 'Add to Home Screen'.")}>
+                        <Smartphone className="w-5 h-5" /> Add to iPhone (PWA)
+                    </button>
+                </div>
             </div>
 
             <button 
-                onClick={handleSave}
-                className="w-full bg-primary text-white rounded-2xl py-4 font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-            >
-                {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Profile</>}
-            </button>
-
-            <button 
                 onClick={() => router.push('/')}
-                className="mt-4 w-full bg-white/40 border border-border/50 text-red-500 rounded-2xl py-4 font-bold shadow-sm hover:bg-white/60 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                className="mt-2 w-full bg-white/40 border border-border/50 text-red-500 rounded-2xl py-4 font-bold shadow-sm hover:bg-white/60 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
                 <LogOut className="w-4 h-4" /> Sign Out
             </button>
