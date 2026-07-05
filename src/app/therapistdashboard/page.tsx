@@ -10,6 +10,7 @@ export default function TherapistDashboard() {
     const [availableTimes, setAvailableTimes] = useState<string[]>([]);
     const [status, setStatus] = useState('Online');
     const [availableAt, setAvailableAt] = useState('');
+    const [availableDate, setAvailableDate] = useState('');
     const [saved, setSaved] = useState(false);
 
     // Mock data for therapists
@@ -148,13 +149,20 @@ export default function TherapistDashboard() {
                                                     ))}
                                                 </div>
                                                 {status === 'Busy' && (
-                                                    <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full animate-in fade-in slide-in-from-top-2">
-                                                        <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Available At:</span>
+                                                    <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-[20px] animate-in fade-in slide-in-from-top-2 shadow-sm">
+                                                        <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Date & Time:</span>
+                                                        <input 
+                                                            type="date" 
+                                                            value={availableDate} 
+                                                            onChange={e => setAvailableDate(e.target.value)} 
+                                                            className="text-xs bg-transparent border-none focus:outline-none text-amber-900 font-bold w-24 cursor-pointer"
+                                                        />
+                                                        <div className="w-[1px] h-4 bg-amber-200/50"></div>
                                                         <input 
                                                             type="time" 
                                                             value={availableAt} 
                                                             onChange={e => setAvailableAt(e.target.value)} 
-                                                            className="text-xs bg-transparent border-none focus:outline-none text-amber-900 font-bold w-20"
+                                                            className="text-xs bg-transparent border-none focus:outline-none text-amber-900 font-bold w-20 cursor-pointer"
                                                         />
                                                     </div>
                                                 )}

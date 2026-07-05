@@ -63,11 +63,14 @@ export default function Home() {
     };
     
     const [formData, setFormData] = useState({ name: '', location: '', room: '', ...getInitialDateTime() });
+    const [popupState, setPopupState] = useState<{isOpen: boolean, type: 'group' | 'time' | null, therapistId: string | null, availableAt: string, availableDate?: string}>({isOpen: false, type: null, therapistId: null, availableAt: ''});
     
     // Multi-step booking states
     const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4 | 5>(1);
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedTherapists, setSelectedTherapists] = useState<string[]>([]);
+    const todayStr = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+
     const totalGuests = cartItems.reduce((acc, item) => acc + item.guests, 0);
     const [viewingTherapist, setViewingTherapist] = useState<any>(null);
 
@@ -887,7 +890,7 @@ ${treatmentsList}
                                         <button onClick={() => setBookingStep(1)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
                                             <ChevronLeft className="w-4 h-4" />
                                         </button>
-                                        <h2 className="font-serif text-2xl text-primary">When would you like this?</h2>
+                                        <h2 className="font-serif text-2xl text-primary">Select Date & Time</h2>
                                     </div>
                                     <p className="text-xs text-text-muted mb-4 shrink-0">Select the date and time for your booking.</p>
                                     <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
@@ -958,7 +961,7 @@ ${treatmentsList}
                                     </div>
                                     <p className="text-xs text-text-muted mb-4 shrink-0">Therapists available in {selectedArea}.</p>
                                     <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
-                                    <div className="space-y-3 overflow-y-auto pb-8 pr-1 no-scrollbar">
+                                    <div className="space-y-3 overflow-y-auto pb-8 px-2 -mx-2 no-scrollbar">
                                         <button
                                             onClick={() => { setSelectedTherapists([]); setBookingStep(5); }}
                                             className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${selectedTherapists.length === 0 ? 'border-primary bg-primary/5 shadow-sm' : 'border-border/50 hover:border-primary/30 bg-surface'}`}
@@ -970,7 +973,13 @@ ${treatmentsList}
                                             <span className="text-xs font-bold text-primary/80 uppercase tracking-widest">Therapists Needed</span>
                                             <span className="text-sm font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
                                         </div>
-                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).map(t => (
+                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).map(rawT => {
+                                            const isFuture = formData.date && formData.date !== todayStr;
+                                            const t = { ...rawT } as any;
+                                            if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
+                                                t.status = 'Online';
+                                            }
+                                            return (
 <button
                                                 key={t.id}
                                                 onClick={() => { 
@@ -979,7 +988,7 @@ ${treatmentsList}
                                                     } else if (selectedTherapists.length < totalGuests) {
                                                         if (t.status === 'Busy') {
                                                             if (totalGuests > 1) {
-                                                                alert("For group bookings, please select therapists who are currently 'Ready to accept jobs'.");
+                                                                alert("For group bookings, please select therapists who are currently 'READY TO ACCEPT JOBS'.");
                                                                 return;
                                                             }
                                                             if (t.availableAt) {
@@ -1027,14 +1036,14 @@ ${treatmentsList}
                                                         {t.status === "Off" ? (
                                                             <span className="text-[10px] font-semibold text-red-400 flex items-center gap-1.5 bg-red-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>Offline</span>
                                                         ) : t.status === "Busy" ? (
-                                                            <span className="text-[10px] font-semibold text-amber-500 flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>Handling customer • Ready at {t.availableAt || "13:00"}</span>
+                                                            <span className="text-[10px] font-semibold text-amber-500 flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>HANDLING CUSTOMER • READY AT {t.availableAt || "13:00"}</span>
                                                         ) : (
-                                                            <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>Ready to accept jobs</span>
+                                                            <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>READY TO ACCEPT JOBS</span>
                                                         )}
                                                     </div>
                                                 </div>
                                             </button>
-                                        ))}
+                                        );})}
                                         {MOCK_THERAPISTS.filter(t => t.location === selectedArea).length === 0 && (
                                             <div className="p-6 text-center text-sm text-text-muted border border-dashed border-border/50 rounded-xl bg-surface/50">
                                                 No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
@@ -1213,6 +1222,79 @@ ${treatmentsList}
 
             <div className="max-w-7xl mx-auto px-6 relative z-10">
             </div>
-        </div>
+        
+            {/* Custom Therapist Popup Modal */}
+            <AnimatePresence>
+                {popupState.isOpen && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+                    >
+                        {/* Backdrop */}
+                        <div 
+                            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                            onClick={() => setPopupState({ ...popupState, isOpen: false })}
+                        ></div>
+                        
+                        {/* Modal Content */}
+                        <motion.div 
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-sm bg-white/70 backdrop-blur-[40px] border border-white/40 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,1)] rounded-3xl p-6 sm:p-8 overflow-hidden text-center"
+                        >
+                            {popupState.type === 'group' ? (
+                                <>
+                                    <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                    </div>
+                                    <h3 className="font-serif text-xl text-primary mb-2">Group Booking Alert</h3>
+                                    <p className="text-sm text-text-muted mb-8 leading-relaxed">
+                                        For group bookings, please select therapists who are currently <strong className="text-primary font-bold">'READY TO ACCEPT JOBS'</strong> to ensure synchronized scheduling.
+                                    </p>
+                                    <button 
+                                        onClick={() => setPopupState({ ...popupState, isOpen: false })}
+                                        className="w-full bg-[#292831] text-white px-6 py-3.5 rounded-2xl text-sm font-bold shadow-md hover:bg-[#292831]/90 active:scale-95 transition-all"
+                                    >
+                                        Understood
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    </div>
+                                    <h3 className="font-serif text-xl text-primary mb-2">Adjust Booking Time?</h3>
+                                    <p className="text-sm text-text-muted mb-8 leading-relaxed">
+                                        This therapist will be ready at <strong className="text-primary font-bold">{popupState.availableAt}</strong>. Your booking time will be automatically updated to match their availability.
+                                    </p>
+                                    <div className="flex gap-3">
+                                        <button 
+                                            onClick={() => setPopupState({ ...popupState, isOpen: false })}
+                                            className="flex-1 bg-white/20 border border-white/40 text-primary px-4 py-3.5 rounded-2xl text-sm font-bold shadow-sm hover:bg-white/40 active:scale-95 transition-all"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button 
+                                            onClick={() => {
+                                                setFormData({ ...formData, time: popupState.availableAt, date: popupState.availableDate || formData.date });
+                                                setSelectedTherapists([...selectedTherapists, popupState.therapistId as string]);
+                                                setPopupState({ ...popupState, isOpen: false });
+                                            }}
+                                            className="flex-1 bg-[#292831] text-white px-4 py-3.5 rounded-2xl text-sm font-bold shadow-md hover:bg-[#292831]/90 active:scale-95 transition-all"
+                                        >
+                                            Proceed
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+</div>
     );
 }
