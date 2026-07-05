@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone } from 'lucide-react';
+import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import FloatingCalendar from '@/components/FloatingCalendar';
 
-type Tab = 'home' | 'schedule' | 'profile';
+type Tab = 'home' | 'schedule' | 'booking' | 'profile';
 
 export default function TherapistDashboard() {
     const router = useRouter();
@@ -26,8 +26,14 @@ export default function TherapistDashboard() {
     
     // Schedule State
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-    const [scheduleTime, setScheduleTime] = useState('09:00');
+    const [scheduleTimes, setScheduleTimes] = useState<Record<string, string>>({});
     
+    const currentScheduleTime = scheduleTimes[selectedDate] || '09:00';
+
+    const handleTimeChange = (time: string) => {
+        setScheduleTimes(prev => ({ ...prev, [selectedDate]: time }));
+    };
+
     // Profile State
     const [profile, setProfile] = useState({
         name: 'Dewi K.',
@@ -51,37 +57,37 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="text-center mb-4">
-                <h2 className="font-serif text-3xl text-primary font-medium">Your Status</h2>
-                <p className="text-sm text-text-muted mt-1">Set your real-time availability</p>
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+                <h2 className="font-serif text-3xl text-white font-medium">Your Status</h2>
+                <p className="text-sm text-white/70 mt-1">Set your real-time availability</p>
             </div>
 
             <div className="flex flex-col gap-4">
                 {/* Online Button */}
                 <button
                     onClick={() => setStatus('Online')}
-                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Online' ? 'bg-primary border-transparent shadow-[0_20px_40px_rgb(0,0,0,0.15)] scale-[1.02]' : 'bg-white/40 border-white/60 shadow-sm border hover:bg-white/60'} backdrop-blur-xl`}
+                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Online' ? 'bg-white/20 border-white/40 shadow-[0_8px_32px_rgba(255,255,255,0.1)] scale-[1.02]' : 'bg-white/5 border-white/10 shadow-sm border hover:bg-white/10'} backdrop-blur-xl`}
                 >
                     <div className="relative z-10 flex items-center justify-between">
                         <div>
-                            <h3 className={`font-bold text-lg ${status === 'Online' ? 'text-white' : 'text-primary'}`}>READY TO ACCEPT JOBS</h3>
-                            <p className={`text-xs mt-1 font-medium ${status === 'Online' ? 'text-white/80' : 'text-text-muted'}`}>You will appear online immediately</p>
+                            <h3 className={`font-bold text-lg text-white`}>READY TO ACCEPT JOBS</h3>
+                            <p className={`text-xs mt-1 font-medium ${status === 'Online' ? 'text-white/90' : 'text-white/50'}`}>You will appear online immediately</p>
                         </div>
-                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Online' ? 'border-white bg-green-400 shadow-[0_0_12px_rgba(74,222,128,1)]' : 'border-border/50 bg-transparent'}`} />
+                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Online' ? 'border-white bg-green-400 shadow-[0_0_12px_rgba(74,222,128,1)]' : 'border-white/20 bg-transparent'}`} />
                     </div>
                 </button>
 
                 {/* Handling Customer Button */}
                 <button
                     onClick={() => setStatus('Busy')}
-                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Busy' ? 'bg-amber-500 border-transparent shadow-[0_20px_40px_rgba(245,158,11,0.2)] scale-[1.02]' : 'bg-white/40 border-white/60 shadow-sm border hover:bg-white/60'} backdrop-blur-xl`}
+                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Busy' ? 'bg-amber-500/80 border-amber-300/50 shadow-[0_8px_32px_rgba(245,158,11,0.3)] scale-[1.02]' : 'bg-white/5 border-white/10 shadow-sm border hover:bg-white/10'} backdrop-blur-xl`}
                 >
                     <div className="relative z-10 flex items-center justify-between">
                         <div>
-                            <h3 className={`font-bold text-lg ${status === 'Busy' ? 'text-white' : 'text-primary'}`}>HANDLING CUSTOMER</h3>
-                            <p className={`text-xs mt-1 font-medium ${status === 'Busy' ? 'text-white/80' : 'text-text-muted'}`}>You are currently busy</p>
+                            <h3 className={`font-bold text-lg text-white`}>HANDLING CUSTOMER</h3>
+                            <p className={`text-xs mt-1 font-medium ${status === 'Busy' ? 'text-white/90' : 'text-white/50'}`}>You are currently busy</p>
                         </div>
-                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Busy' ? 'border-white bg-amber-200' : 'border-border/50 bg-transparent'}`} />
+                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Busy' ? 'border-white bg-amber-200' : 'border-white/20 bg-transparent'}`} />
                     </div>
                 </button>
 
@@ -92,16 +98,16 @@ export default function TherapistDashboard() {
                             initial={{ opacity: 0, height: 0, marginTop: -10 }}
                             animate={{ opacity: 1, height: 'auto', marginTop: 0 }}
                             exit={{ opacity: 0, height: 0, marginTop: -10 }}
-                            className="bg-amber-50/80 backdrop-blur-xl border border-amber-200 rounded-[24px] p-5 shadow-sm overflow-hidden"
+                            className="bg-amber-500/20 backdrop-blur-xl border border-amber-300/30 rounded-[24px] p-5 shadow-lg overflow-hidden"
                         >
-                            <label className="text-xs font-bold text-amber-800 uppercase tracking-widest block mb-3">When will you be ready?</label>
-                            <div className="flex items-center gap-3 bg-white rounded-2xl p-2 border border-amber-200/50 shadow-inner">
-                                <Clock className="w-5 h-5 text-amber-500 ml-2" />
+                            <label className="text-xs font-bold text-amber-100 uppercase tracking-widest block mb-3">When will you be ready?</label>
+                            <div className="flex items-center gap-3 bg-white/10 rounded-2xl p-2 border border-amber-200/20 shadow-inner">
+                                <Clock className="w-5 h-5 text-amber-300 ml-2" />
                                 <input 
                                     type="time" 
                                     value={availableAt} 
                                     onChange={e => setAvailableAt(e.target.value)} 
-                                    className="flex-1 bg-transparent border-none focus:outline-none text-amber-900 font-bold text-lg py-2"
+                                    className="flex-1 bg-transparent border-none focus:outline-none text-white font-bold text-lg py-2 [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
                                 />
                             </div>
                         </motion.div>
@@ -111,24 +117,45 @@ export default function TherapistDashboard() {
                 {/* Offline Button */}
                 <button
                     onClick={() => setStatus('Off')}
-                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Off' ? 'bg-[#292831] border-transparent shadow-[0_20px_40px_rgb(0,0,0,0.15)] scale-[1.02]' : 'bg-white/40 border-white/60 shadow-sm border hover:bg-white/60'} backdrop-blur-xl`}
+                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Off' ? 'bg-red-500/40 border-red-400/50 shadow-[0_8px_32px_rgba(239,68,68,0.2)] scale-[1.02]' : 'bg-white/5 border-white/10 shadow-sm border hover:bg-white/10'} backdrop-blur-xl`}
                 >
                     <div className="relative z-10 flex items-center justify-between">
                         <div>
-                            <h3 className={`font-bold text-lg ${status === 'Off' ? 'text-white' : 'text-primary'}`}>OFFLINE</h3>
-                            <p className={`text-xs mt-1 font-medium ${status === 'Off' ? 'text-white/60' : 'text-text-muted'}`}>You will not appear in the app</p>
+                            <h3 className={`font-bold text-lg text-white`}>OFFLINE</h3>
+                            <p className={`text-xs mt-1 font-medium ${status === 'Off' ? 'text-white/90' : 'text-white/50'}`}>You will not appear in the app</p>
                         </div>
-                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Off' ? 'border-white bg-red-400' : 'border-border/50 bg-transparent'}`} />
+                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Off' ? 'border-white bg-red-400' : 'border-white/20 bg-transparent'}`} />
                     </div>
                 </button>
             </div>
             
             <button 
                 onClick={handleSave}
-                className="mt-4 w-full bg-primary text-white rounded-2xl py-4 font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                className="mt-4 w-full bg-white text-black rounded-2xl py-4 font-bold shadow-[0_8px_32px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
                 {saved ? <><CheckCircle2 className="w-5 h-5" /> Saved Successfully</> : <><Save className="w-5 h-5" /> Update Status</>}
             </button>
+        </motion.div>
+    );
+
+    // Render Booking Tab
+    const renderBooking = () => (
+        <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="flex flex-col gap-6"
+        >
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+                <h2 className="font-serif text-3xl text-white font-medium">Live Bookings</h2>
+                <p className="text-sm text-white/70 mt-1">Manage real-time requests</p>
+            </div>
+            
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
+                <CalendarCheck className="w-12 h-12 text-white/30 mb-4" />
+                <h3 className="text-white font-bold text-lg">No Active Requests</h3>
+                <p className="text-white/50 text-sm mt-2">When a customer books you in real-time, it will appear here.</p>
+            </div>
         </motion.div>
     );
 
@@ -140,50 +167,38 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="text-center mb-2">
-                <h2 className="font-serif text-3xl text-primary font-medium">Your Schedule</h2>
-                <p className="text-sm text-text-muted mt-1">Set future availability</p>
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+                <h2 className="font-serif text-3xl text-white font-medium">Your Schedule</h2>
+                <p className="text-sm text-white/70 mt-1">Set future availability</p>
             </div>
 
             {/* Floating Calendar */}
-            <div className="relative">
-                {/* Visual Indicator of the Set Time */}
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 bg-primary text-white px-4 py-1.5 rounded-full shadow-lg text-xs font-bold whitespace-nowrap flex items-center gap-1.5 border border-white/20">
-                    <Clock className="w-3.5 h-3.5" />
-                    {new Date(selectedDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} at {scheduleTime}
+            <div className="relative mt-8">
+                {/* Floating Time Setter Above Date */}
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20 bg-white/20 backdrop-blur-xl border border-white/30 text-white px-5 py-2.5 rounded-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col items-center min-w-[160px]">
+                    <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest mb-1">{new Date(selectedDate).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                    <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-white/90" />
+                        <input 
+                            type="time" 
+                            value={currentScheduleTime}
+                            onChange={(e) => handleTimeChange(e.target.value)}
+                            className="bg-transparent border-none focus:outline-none text-white font-bold text-lg [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert cursor-pointer"
+                        />
+                    </div>
                 </div>
 
-                <div className="pt-3">
+                <div className="pt-6">
                     <FloatingCalendar 
                         value={selectedDate} 
                         onChange={(date) => setSelectedDate(date)} 
                     />
                 </div>
             </div>
-
-            {/* Freely Set Available Times */}
-            <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_8px_32px_rgba(0,0,0,0.04)]">
-                <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Available Time for {new Date(selectedDate).toLocaleDateString()}</h3>
-                
-                <div className="flex items-center gap-4">
-                    <div className="flex-1">
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-2">Available From</label>
-                        <div className="flex items-center gap-2 bg-white rounded-2xl p-2 border border-border/50 shadow-sm">
-                            <Clock className="w-4 h-4 text-primary/40 ml-2" />
-                            <input 
-                                type="time" 
-                                value={scheduleTime}
-                                onChange={(e) => setScheduleTime(e.target.value)}
-                                className="flex-1 bg-transparent border-none focus:outline-none text-primary font-bold py-1.5"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
             
             <button 
                 onClick={handleSave}
-                className="w-full bg-[#292831] text-white rounded-2xl py-4 font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                className="w-full bg-white text-black rounded-2xl py-4 font-bold shadow-[0_8px_32px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
                 {saved ? <><CheckCircle2 className="w-5 h-5" /> Schedule Saved</> : <><Save className="w-5 h-5" /> Save Schedule</>}
             </button>
@@ -198,22 +213,22 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="text-center mb-2">
-                <h2 className="font-serif text-3xl text-primary font-medium">Your Profile</h2>
-                <p className="text-sm text-text-muted mt-1">Manage your identity & app</p>
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+                <h2 className="font-serif text-3xl text-white font-medium">Your Profile</h2>
+                <p className="text-sm text-white/70 mt-1">Manage your identity & app</p>
             </div>
 
-            <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_8px_32px_rgba(0,0,0,0.04)] flex flex-col items-center">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col items-center">
                 
                 {/* Avatar Uploader (UI Only) */}
                 <div className="relative mb-8 group cursor-pointer">
-                    <div className="w-28 h-28 rounded-full bg-surface border-4 border-white shadow-lg flex items-center justify-center overflow-hidden relative">
+                    <div className="w-28 h-28 rounded-full bg-white/5 border-4 border-white/20 shadow-lg flex items-center justify-center overflow-hidden relative backdrop-blur-md">
                         {profile.avatar ? (
                             <img src={profile.avatar} alt="Profile" className="w-full h-full object-cover" />
                         ) : (
-                            <User className="w-12 h-12 text-text-muted/50" />
+                            <User className="w-12 h-12 text-white/50" />
                         )}
-                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <Camera className="w-8 h-8 text-white" />
                         </div>
                     </div>
@@ -222,29 +237,29 @@ export default function TherapistDashboard() {
                 {/* Form Fields */}
                 <div className="w-full space-y-4">
                     <div>
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-1">Full Name</label>
+                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Full Name</label>
                         <input 
                             type="text" 
                             value={profile.name}
                             onChange={(e) => setProfile({...profile, name: e.target.value})}
-                            className="w-full bg-white/60 border border-white/60 rounded-2xl py-3.5 px-4 text-sm font-semibold text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-white/30 transition-all shadow-inner"
                         />
                     </div>
                     <div>
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-1">Bio</label>
+                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Bio</label>
                         <textarea 
                             value={profile.bio}
                             onChange={(e) => setProfile({...profile, bio: e.target.value})}
                             rows={3}
-                            className="w-full bg-white/60 border border-white/60 rounded-2xl py-3.5 px-4 text-sm font-semibold text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm resize-none"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-white/30 transition-all shadow-inner resize-none"
                         />
                     </div>
                     <div>
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-1">Base Location</label>
+                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Base Location</label>
                         <select 
                             value={profile.location}
                             onChange={(e) => setProfile({...profile, location: e.target.value})}
-                            className="w-full bg-white/60 border border-white/60 rounded-2xl py-3.5 px-4 text-sm font-semibold text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm appearance-none"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-white/30 transition-all shadow-inner appearance-none [&>option]:text-black"
                         >
                             <option value="Ubud">Ubud</option>
                             <option value="Canggu">Canggu</option>
@@ -255,20 +270,20 @@ export default function TherapistDashboard() {
                 
                 <button 
                     onClick={handleSave}
-                    className="mt-6 w-full bg-primary text-white rounded-2xl py-4 font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                    className="mt-6 w-full bg-white text-black rounded-2xl py-4 font-bold shadow-[0_8px_32px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                 >
                     {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Profile</>}
                 </button>
             </div>
 
             {/* App Installation Section */}
-            <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_8px_32px_rgba(0,0,0,0.04)]">
-                <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4">Install Therapist App</h3>
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+                <h3 className="text-xs font-bold text-white/60 uppercase tracking-widest mb-4">Install Therapist App</h3>
                 <div className="space-y-3">
-                    <button className="w-full bg-[#3DDC84] text-white rounded-2xl py-3.5 px-4 font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                    <button className="w-full bg-[#3DDC84] text-black rounded-2xl py-3.5 px-4 font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                         <Download className="w-5 h-5" /> Download for Android
                     </button>
-                    <button className="w-full bg-surface text-primary border border-border/50 rounded-2xl py-3.5 px-4 font-bold shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2" onClick={() => alert("To install on iPhone: Tap the 'Share' icon at the bottom of Safari, then tap 'Add to Home Screen'.")}>
+                    <button className="w-full bg-white/5 text-white border border-white/20 rounded-2xl py-3.5 px-4 font-bold shadow-sm hover:bg-white/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2" onClick={() => alert("To install on iPhone: Tap the 'Share' icon at the bottom of Safari, then tap 'Add to Home Screen'.")}>
                         <Smartphone className="w-5 h-5" /> Add to iPhone (PWA)
                     </button>
                 </div>
@@ -276,7 +291,7 @@ export default function TherapistDashboard() {
 
             <button 
                 onClick={() => router.push('/')}
-                className="mt-2 w-full bg-white/40 border border-border/50 text-red-500 rounded-2xl py-4 font-bold shadow-sm hover:bg-white/60 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                className="mt-2 w-full bg-red-500/10 border border-red-500/30 text-red-400 rounded-2xl py-4 font-bold shadow-sm hover:bg-red-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
                 <LogOut className="w-4 h-4" /> Sign Out
             </button>
@@ -284,14 +299,15 @@ export default function TherapistDashboard() {
     );
 
     return (
-        <div className="min-h-screen bg-[#FDFDFD] font-sans text-text relative overflow-hidden pb-32">
-            {/* Minimal App Background Gradients */}
-            <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#E8E8E6] rounded-full blur-[100px] opacity-40 mix-blend-multiply pointer-events-none fixed" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-[#D5D5D1] rounded-full blur-[120px] opacity-30 mix-blend-multiply pointer-events-none fixed" />
+        <div className="min-h-screen bg-black font-sans text-white relative overflow-hidden pb-32">
+            {/* Minimal App Background Gradients - Adjusted for Dark Mode */}
+            <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-white/5 rounded-full blur-[100px] pointer-events-none fixed" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-white/5 rounded-full blur-[120px] pointer-events-none fixed" />
 
             <main className="max-w-md mx-auto px-5 pt-12 relative z-10 min-h-screen">
                 <AnimatePresence mode="wait">
                     {activeTab === 'home' && <motion.div key="home">{renderHome()}</motion.div>}
+                    {activeTab === 'booking' && <motion.div key="booking">{renderBooking()}</motion.div>}
                     {activeTab === 'schedule' && <motion.div key="schedule">{renderSchedule()}</motion.div>}
                     {activeTab === 'profile' && <motion.div key="profile">{renderProfile()}</motion.div>}
                 </AnimatePresence>
@@ -299,19 +315,27 @@ export default function TherapistDashboard() {
 
             {/* Floating Bottom Navbar */}
             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-sm z-50">
-                <div className="bg-white/60 saturate-[1.5] backdrop-blur-[40px] border border-white/80 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_20px_40px_rgba(0,0,0,0.1)] rounded-full flex items-center justify-between p-2 px-4">
+                <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.5)] rounded-[32px] flex items-center justify-between p-2 px-3">
                     
                     <button 
                         onClick={() => setActiveTab('home')}
-                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'home' ? 'text-primary scale-110' : 'text-text-muted hover:text-primary/70'}`}
+                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'home' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
                     >
                         <Home className="w-5 h-5 mb-1" strokeWidth={activeTab === 'home' ? 2.5 : 2} />
                         <span className="text-[9px] font-bold tracking-widest uppercase">Home</span>
                     </button>
                     
                     <button 
+                        onClick={() => setActiveTab('booking')}
+                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'booking' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
+                    >
+                        <CalendarCheck className="w-5 h-5 mb-1" strokeWidth={activeTab === 'booking' ? 2.5 : 2} />
+                        <span className="text-[9px] font-bold tracking-widest uppercase">Live</span>
+                    </button>
+
+                    <button 
                         onClick={() => setActiveTab('schedule')}
-                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'schedule' ? 'text-primary scale-110' : 'text-text-muted hover:text-primary/70'}`}
+                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'schedule' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
                     >
                         <Calendar className="w-5 h-5 mb-1" strokeWidth={activeTab === 'schedule' ? 2.5 : 2} />
                         <span className="text-[9px] font-bold tracking-widest uppercase">Schedule</span>
@@ -319,7 +343,7 @@ export default function TherapistDashboard() {
                     
                     <button 
                         onClick={() => setActiveTab('profile')}
-                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'profile' ? 'text-primary scale-110' : 'text-text-muted hover:text-primary/70'}`}
+                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'profile' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
                     >
                         <User className="w-5 h-5 mb-1" strokeWidth={activeTab === 'profile' ? 2.5 : 2} />
                         <span className="text-[9px] font-bold tracking-widest uppercase">Profile</span>

@@ -57,7 +57,7 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
         // Weekday headers
         weekDays.forEach(day => {
             days.push(
-                <div key={day} className="text-center text-[10px] font-bold text-text-muted/60 uppercase tracking-widest pb-2">
+                <div key={day} className="text-center text-[10px] font-bold text-white/60 uppercase tracking-widest pb-2">
                     {day}
                 </div>
             );
@@ -91,9 +91,9 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
                     onClick={() => handleDateSelect(i)}
                     className={`
                         h-10 w-full rounded-xl flex items-center justify-center text-sm font-medium transition-all duration-300 relative
-                        ${isPast ? 'text-border/40 cursor-not-allowed' : 'hover:bg-primary/5 cursor-pointer'}
-                        ${isSelected ? 'bg-primary text-white shadow-[0_4px_12px_rgba(0,0,0,0.2)] hover:bg-primary' : 'text-primary'}
-                        ${isToday && !isSelected ? 'border border-primary/20 bg-primary/5' : ''}
+                        ${isPast ? 'text-white/20 cursor-not-allowed' : 'hover:bg-white/10 cursor-pointer'}
+                        ${isSelected ? 'bg-white/20 border border-white/40 text-white shadow-[0_4px_12px_rgba(255,255,255,0.2)] hover:bg-white/30' : 'text-white'}
+                        ${isToday && !isSelected ? 'border border-white/20 bg-white/5' : ''}
                     `}
                 >
                     <span className="relative z-10">{i}</span>
@@ -109,22 +109,22 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
     ];
 
     return (
-        <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl p-4 relative overflow-hidden w-full">
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.37)] rounded-[24px] p-4 relative overflow-hidden w-full">
             {/* Background Accent */}
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
             
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
                 <button 
                     type="button"
                     onClick={handlePrevMonth}
-                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] flex items-center justify-center text-primary hover:bg-surface transition-colors shadow-sm"
+                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <div 
-                    className="font-serif text-lg text-primary cursor-pointer hover:opacity-70 transition-opacity"
+                    className="font-serif text-lg text-white cursor-pointer hover:opacity-70 transition-opacity"
                     onClick={() => setIsSelectingMonth(!isSelectingMonth)}
                 >
                     {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
@@ -133,7 +133,7 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
                 <button 
                     type="button"
                     onClick={handleNextMonth}
-                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] flex items-center justify-center text-primary hover:bg-surface transition-colors shadow-sm"
+                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
                 >
                     <ChevronRight className="w-4 h-4" />
                 </button>
