@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -16,10 +16,17 @@ export default function TherapistDashboard() {
     const [status, setStatus] = useState<'Online' | 'Busy' | 'Off'>('Online');
     const [availableAt, setAvailableAt] = useState('');
     
+    // Auto-set current time when busy is clicked
+    useEffect(() => {
+        if (status === 'Busy' && !availableAt) {
+            const now = new Date();
+            setAvailableAt(now.toTimeString().substring(0, 5));
+        }
+    }, [status, availableAt]);
+    
     // Schedule State
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-    const [startTime, setStartTime] = useState('09:00');
-    const [endTime, setEndTime] = useState('17:00');
+    const [scheduleTime, setScheduleTime] = useState('09:00');
     
     // Profile State
     const [profile, setProfile] = useState({
@@ -140,38 +147,33 @@ export default function TherapistDashboard() {
 
             {/* Floating Calendar */}
             <div className="relative">
-                <FloatingCalendar 
-                    value={selectedDate} 
-                    onChange={(date) => setSelectedDate(date)} 
-                />
+                {/* Visual Indicator of the Set Time */}
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 bg-primary text-white px-4 py-1.5 rounded-full shadow-lg text-xs font-bold whitespace-nowrap flex items-center gap-1.5 border border-white/20">
+                    <Clock className="w-3.5 h-3.5" />
+                    {new Date(selectedDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} at {scheduleTime}
+                </div>
+
+                <div className="pt-3">
+                    <FloatingCalendar 
+                        value={selectedDate} 
+                        onChange={(date) => setSelectedDate(date)} 
+                    />
+                </div>
             </div>
 
             {/* Freely Set Available Times */}
             <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_8px_32px_rgba(0,0,0,0.04)]">
-                <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Available Hours for {new Date(selectedDate).toLocaleDateString()}</h3>
+                <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Available Time for {new Date(selectedDate).toLocaleDateString()}</h3>
                 
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
                     <div className="flex-1">
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-2">Start Time</label>
+                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-2">Available From</label>
                         <div className="flex items-center gap-2 bg-white rounded-2xl p-2 border border-border/50 shadow-sm">
                             <Clock className="w-4 h-4 text-primary/40 ml-2" />
                             <input 
                                 type="time" 
-                                value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
-                                className="flex-1 bg-transparent border-none focus:outline-none text-primary font-bold py-1.5"
-                            />
-                        </div>
-                    </div>
-                    
-                    <div className="flex-1">
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest ml-4 block mb-2">End Time</label>
-                        <div className="flex items-center gap-2 bg-white rounded-2xl p-2 border border-border/50 shadow-sm">
-                            <Clock className="w-4 h-4 text-primary/40 ml-2" />
-                            <input 
-                                type="time" 
-                                value={endTime}
-                                onChange={(e) => setEndTime(e.target.value)}
+                                value={scheduleTime}
+                                onChange={(e) => setScheduleTime(e.target.value)}
                                 className="flex-1 bg-transparent border-none focus:outline-none text-primary font-bold py-1.5"
                             />
                         </div>
