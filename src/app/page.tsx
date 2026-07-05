@@ -788,6 +788,8 @@ ${treatmentsList}
                             ) : bookingStep === 1 ? (
                                 <div className="animate-in fade-in slide-in-from-left-4 duration-300">
                                     <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
+                                    <p className="text-xs text-text-muted mb-4">Review your selected treatments before proceeding.</p>
+                                    <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6"></div>
                                     <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
 
                                     {/* Cart Items List */}

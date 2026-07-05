@@ -199,68 +199,55 @@ export default function RitualsDetails() {
                 </div>
 
                 {/* Smart Pricing & Duration Bento Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 pb-28 md:pb-0">
-                    
-                    {/* Selectable Durations */}
-                    <div className="bg-white/60 backdrop-blur-md border border-white rounded-[32px] p-6 flex flex-col justify-between shadow-[0_8px_30px_rgb(0,0,0,0.06)] transform-gpu transition-all hover:-translate-y-1">
+                <div className="w-full max-w-md mx-auto mb-10 pb-10 md:pb-0">
+                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[32px] p-6 sm:p-8 flex flex-col justify-between transform-gpu transition-all hover:-translate-y-1">
                         <div className="flex items-start justify-between mb-6">
                             <span className="text-sm font-bold uppercase tracking-widest text-primary/80">Select Duration</span>
-                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-sm">
+                            <div className="w-8 h-8 rounded-full bg-white/20 border border-white/40 flex items-center justify-center text-primary shadow-sm">
                                 <Clock className="w-4 h-4" />
                             </div>
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-3 mb-8">
                             {treatment.options.map((opt, idx) => {
                                 const isActive = selectedOptionIdx === idx;
                                 return (
                                     <button 
                                         key={idx}
                                         onClick={() => setSelectedOptionIdx(idx)}
-                                        className={`flex-1 py-3 px-2 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                                        className={`flex-1 py-4 px-2 rounded-2xl text-sm font-bold transition-all duration-300 ${
                                             isActive 
-                                            ? 'bg-gradient-to-tr from-primary via-highlight to-primary text-white shadow-[0_8px_20px_rgb(0,0,0,0.2)] scale-105' 
-                                            : 'bg-white text-primary border border-border/50 hover:bg-white hover:scale-[1.02] shadow-sm'
+                                            ? "bg-white/40 border-white shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] text-primary scale-105" 
+                                            : "bg-white/10 text-primary border border-white/20 hover:bg-white/20 hover:scale-[1.02]"
                                         }`}
                                     >
-                                        {opt.duration} <span className={`text-[10px] ${isActive ? 'text-white/80' : 'text-primary/50'}`}>MINS</span>
+                                        {opt.duration} <span className="text-[10px] text-primary/60">MINS</span>
                                     </button>
                                 );
                             })}
                         </div>
-                    </div>
-
-                    {/* Price & Action - Sticky on mobile */}
-                    <div className="fixed md:relative bottom-0 left-0 right-0 z-50 md:z-auto p-4 md:p-0 bg-white/90 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-t border-border/50 md:border-none rounded-t-[32px] md:rounded-none">
-                        <div className="rounded-[32px] p-6 flex flex-col justify-between relative overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.25)] min-h-[160px] bg-gradient-to-br from-[#1C1F1D] via-[#2A2E2C] to-[#1C1F1D] transform-gpu hover:-translate-y-1 transition-transform">
-                            {/* 3D Glassmorphism border */}
-                            <div className="absolute inset-0 rounded-[32px] border border-white/10 pointer-events-none"></div>
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)] pointer-events-none"></div>
-                            
-                            <div className="relative z-10 flex flex-col md:flex-col sm:flex-row h-full justify-between gap-6 sm:items-center md:items-stretch">
-                                <div className="flex flex-col">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
-                                        {isCoupleTreatment ? 'Price for 2 persons' : 'Price per person'}
-                                    </span>
-                                    <AnimatePresence mode="popLayout">
-                                        <motion.div 
-                                            key={selectedOption.price}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -10 }}
-                                            className="flex items-baseline gap-2 text-white drop-shadow-md"
-                                        >
-                                            <span className="text-lg font-medium text-white/70">IDR</span>
-                                            <span className="text-4xl md:text-5xl font-serif">{parseInt(selectedOption.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
-                                        </motion.div>
-                                    </AnimatePresence>
-                                </div>
-                                <button 
-                                    onClick={handleInitialBook}
-                                    className="w-full sm:w-auto md:w-full bg-white text-primary px-8 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-100 active:scale-95 transition-all duration-300 shadow-[0_8px_24px_rgb(255,255,255,0.15)] uppercase tracking-widest"
+                        
+                        <div className="border-t border-white/20 pt-6 flex flex-col items-center">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-2">
+                                {isCoupleTreatment ? "Price for 2 persons" : "Price per person"}
+                            </span>
+                            <AnimatePresence mode="popLayout">
+                                <motion.div 
+                                    key={selectedOption.price}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="flex items-baseline gap-2 text-primary drop-shadow-sm mb-6"
                                 >
-                                    Book Now
-                                </button>
-                            </div>
+                                    <span className="text-lg font-medium text-primary/70">IDR</span>
+                                    <span className="text-4xl md:text-5xl font-serif">{parseInt(selectedOption.price.replace(/,/g, "") || "0").toLocaleString("en-US")}</span>
+                                </motion.div>
+                            </AnimatePresence>
+                            <button 
+                                onClick={handleInitialBook}
+                                className="w-full bg-primary text-white px-8 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 active:scale-95 transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest"
+                            >
+                                Book Now
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -467,7 +454,8 @@ export default function RitualsDetails() {
                             {!isSelectingMore && bookingStep === 1 && (
                                 <div className="animate-in fade-in slide-in-from-left-4 duration-300">
                                     <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Review Treatments</h2>
-                                    <p className="text-xs text-text-muted mb-6">Review your selected treatments before proceeding.</p>
+                                    <p className="text-xs text-text-muted mb-4">Review your selected treatments before proceeding.</p>
+                                    <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6"></div>
 
                                     {/* Cart Items List */}
                                     <div className="space-y-3 mb-4 max-h-[40vh] overflow-y-auto pr-1 no-scrollbar">
