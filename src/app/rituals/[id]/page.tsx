@@ -647,10 +647,12 @@ export default function RitualsDetails() {
                                             if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
                                                 t.status = 'Online';
                                             } else if (t.status === 'Busy' && t.availableAt) {
-                                                const now = new Date();
-                                                const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
-                                                if (!formData.date || formData.date === todayStr) {
-                                                    if (currentTimeStr >= t.availableAt) {
+                                                if (formData.time && formData.time >= t.availableAt) {
+                                                    t.status = 'Online';
+                                                } else {
+                                                    const now = new Date();
+                                                    const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+                                                    if ((!formData.date || formData.date === todayStr) && currentTimeStr >= t.availableAt) {
                                                         t.status = 'Online';
                                                     }
                                                 }
