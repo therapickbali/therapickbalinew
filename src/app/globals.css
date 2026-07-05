@@ -53,3 +53,8 @@ body[data-domain="bali"] .domain-ubud-only {
 body[data-domain="ubud"] .domain-bali-only {
   display: none !important;
 }
+
+
+body, html {
+  overflow-x: hidden;
+}

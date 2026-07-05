@@ -73,7 +73,7 @@ export default function TopNav() {
             >
                 
                 {/* Brand / Store (Left) */}
-                <a href="/store" className="flex items-center gap-2 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-white shrink-0">
+                <a href="/store" className="flex items-center gap-2 bg-[#111111] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-white shrink-0">
                     <Store size={16} strokeWidth={2.5} />
                     <span className="text-[10px] md:text-[11px] font-bold tracking-widest uppercase mt-0.5">
                         STORE
@@ -134,7 +134,7 @@ export default function TopNav() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
                             transition={{ duration: 0.2 }}
-                            className={`absolute top-[120%] right-0 w-48 shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col p-2 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl z-50 md:hidden`}
+                            className={`absolute top-[120%] right-0 w-48 shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col p-2 bg-[#111111] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-2xl z-50 md:hidden`}
                         >
                             {mobileNavItems.map((item) => {
                                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
@@ -145,10 +145,10 @@ export default function TopNav() {
                                         onClick={() => setIsOpen(false)}
                                         className={`px-4 py-3 rounded-xl text-xs font-bold tracking-wider transition-colors ${
                                             item.href === '/therapist-login' 
-                                                ? 'bg-[#292831] text-white mt-2 text-center' // Standout style for therapist portal
+                                                ? 'bg-white text-black mt-2 text-center' // Standout style for therapist portal
                                                 : isActive 
-                                                    ? 'bg-surface text-white' 
-                                                    : 'text-white/90-muted hover:bg-surface/50 hover:text-white'
+                                                    ? 'bg-white/10 text-white' 
+                                                    : 'text-white/90-muted hover:bg-white/5 hover:text-white'
                                         }`}
                                     >
                                         {item.label}
