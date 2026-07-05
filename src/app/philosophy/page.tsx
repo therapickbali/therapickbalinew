@@ -15,7 +15,7 @@ export default function PhilosophyPage() {
                         Sanctuary for the Soul
                     </h3>
                     <p className="text-white/90-muted leading-relaxed mb-8 font-light">
-                        Born from the ancient healing traditions of Bali, Elexoir Home Spa was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
+                        Born from the ancient healing traditions of Bali, Therapick was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
                     </p>
                     <AnimatePresence>
                         {showStory && (
@@ -29,7 +29,7 @@ export default function PhilosophyPage() {
                                     The Ultimate <span className="italic">Luxury Home Spa</span> in Bali
                                 </h4>
                                 <p className="text-white/90-muted leading-relaxed font-light mb-6">
-                                    Elevate your wellness journey with Elexoir Home Spa, Bali's premier mobile spa and in-villa massage service. Whether you are staying in the lush jungles of Ubud, the vibrant coasts of Canggu and Seminyak, or the breathtaking cliffs of Uluwatu, our certified professional therapists bring the ultimate 5-star spa experience directly to your doorstep.
+                                    Elevate your wellness journey with Therapick, Bali's premier mobile spa and in-villa massage service. Whether you are staying in the lush jungles of Ubud, the vibrant coasts of Canggu and Seminyak, or the breathtaking cliffs of Uluwatu, our certified professional therapists bring the ultimate 5-star spa experience directly to your doorstep.
                                 </p>
                                 <p className="text-white/90-muted leading-relaxed font-light mb-6">
                                     We specialize in traditional Balinese Massage, Deep Tissue therapies, and exclusive Couples Massage packages designed for absolute relaxation. Using only premium, organic massage oils and authentic holistic healing techniques, our bespoke spa treatments in Bali transform your private villa or hotel room into a tranquil sanctuary of rejuvenation.

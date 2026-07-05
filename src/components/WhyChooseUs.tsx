@@ -39,7 +39,7 @@ export default function WhyChooseUs() {
       <div className="absolute inset-0 bg-white/[0.02] rounded-[40px] -z-10"></div>
       <div className="py-16 px-6 md:px-12 rounded-[40px] border border-white/20/40 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
         <motion.div variants={itemVariants} className="text-center mb-16">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-white/80 mb-3 block">Elexoir Standard</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-white/80 mb-3 block">Therapick Standard</span>
           <h2 className="font-serif text-3xl md:text-4xl text-white leading-tight">Why Choose Our Mobile Spa</h2>
         </motion.div>
         

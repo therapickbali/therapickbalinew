@@ -381,7 +381,7 @@ export default function AdminDashboard() {
                 <div className="p-8">
                     <Link href="/" className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity">
                         <Store size={20} strokeWidth={2.5} />
-                        <span className="text-[13px] font-bold tracking-widest uppercase mt-1">Elexoir Admin</span>
+                        <span className="text-[13px] font-bold tracking-widest uppercase mt-1">Therapick Admin</span>
                     </Link>
                 </div>
                 
@@ -447,7 +447,7 @@ export default function AdminDashboard() {
                     <div className="md:hidden flex items-center justify-between mb-8">
                         <Link href="/" className="flex items-center gap-2 text-white">
                             <Store size={20} strokeWidth={2.5} />
-                            <span className="text-[13px] font-bold tracking-widest uppercase mt-1">Elexoir</span>
+                            <span className="text-[13px] font-bold tracking-widest uppercase mt-1">Therapick</span>
                         </Link>
                         {/* Tab buttons removed in favor of bottom nav bar */}
                     </div>
@@ -463,7 +463,7 @@ export default function AdminDashboard() {
                         <p className="text-white/90-muted text-sm">
                             {activeTab === 'treatment' ? 'Add or edit a massage or ritual to your spa menu.' : 
                              activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
-                             activeTab === 'store' ? 'Add physical products like oils or candles to the Elexoir Boutique.' :
+                             activeTab === 'store' ? 'Add physical products like oils or candles to the Therapick Store.' :
                              activeTab === 'fees' ? 'Configure fees paid to therapists based on the duration of the treatment.' :
                              activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : ''}
                         </p>
@@ -916,7 +916,7 @@ export default function AdminDashboard() {
                                                     type="button"
                                                     className={`flex-1 py-3 text-[10px] md:text-xs font-bold uppercase tracking-widest rounded-xl transition-all duration-300 ${listView === view ? 'bg-white text-black shadow-md' : 'text-white/90-muted hover:text-white hover:bg-white/40'}`}
                                                 >
-                                                    {view === 'campaign' ? 'Active Campaign' : view === 'treatments' ? 'Treatments' : 'Elexoir Boutique'}
+                                                    {view === 'campaign' ? 'Active Campaign' : view === 'treatments' ? 'Treatments' : 'Therapick Store'}
                                                 </button>
                                             ))}
                                         </div>
@@ -1074,7 +1074,7 @@ export default function AdminDashboard() {
                                                 {/* Store Section */}
                                                 <div className="flex items-center justify-between mb-4">
                                                     <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                                                        <Store size={20} className="text-white" /> Elexoir Boutique
+                                                        <Store size={20} className="text-white" /> Therapick Store
                                                     </h2>
                                                     <span className="text-xs font-semibold text-white/90-muted bg-surface px-3 py-1 rounded-full">{products.length} Products</span>
                                                 </div>

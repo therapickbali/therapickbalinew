@@ -153,8 +153,8 @@ export default function RitualsDetails() {
 
     const handleShare = async () => {
         const shareData = {
-            title: `${treatment.title} - Elexoir Home Spa`,
-            text: `Book the ${treatment.title} at Elexoir Home Spa Ubud!`,
+            title: `${treatment.title} - Therapick`,
+            text: `Book the ${treatment.title} at Therapick Ubud!`,
             url: window.location.href,
         };
 

@@ -33,7 +33,7 @@ export default function ServiceAreas() {
           <span className="text-[10px] font-bold uppercase tracking-widest text-white/80 mb-3 block">Service Areas</span>
           <h2 className="font-serif text-3xl md:text-4xl text-white leading-tight mb-4">We Come to Your Sanctuary</h2>
           <p className="text-sm text-white/90-muted leading-relaxed font-light">
-            Elexoir Home Spa provides luxury mobile massage and wellness services directly to private villas, estates, and hotels across Bali's most prestigious locations.
+            Therapick provides luxury mobile massage and wellness services directly to private villas, estates, and hotels across Bali's most prestigious locations.
           </p>
         </div>
       </div>

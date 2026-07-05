@@ -152,7 +152,7 @@ export default async function RootLayout({
       worstRating: '1'
     },
     sameAs: [
-      'https://instagram.com/elexoirspa'
+      'https://instagram.com/therapickbali'
     ],
     description: 'Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Bali.'
   };

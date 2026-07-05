@@ -136,7 +136,7 @@ export default function StorePage() {
 
                 {/* Headline */}
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium text-[#2B2B2B] tracking-tight leading-[1.2] mb-6 max-w-[280px] md:max-w-md">
-                    Elexoir Signature Collection
+                    Therapick Signature Collection
                 </h1>
 
                 {/* Categories */}
@@ -183,7 +183,7 @@ export default function StorePage() {
                                 
                                 {/* Text Info */}
                                 <div className="flex flex-col flex-grow px-2 md:px-3 pt-3 pb-2">
-                                    <p className="text-white/50 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Elexoir'}</p>
+                                    <p className="text-white/50 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Therapick'}</p>
                                     <h4 className="font-bold text-white text-[13px] md:text-sm line-clamp-1 mb-4">{product.title}</h4>
                                     
                                     {/* Price and Add Button */}

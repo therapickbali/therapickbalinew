@@ -368,7 +368,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                     )}
                 </div>
 
-                {/* The Elexoir Boutique Section */}
+                {/* The Therapick Store Section */}
                 {products.length > 0 && (
                 <div className="mb-32">
                     <div className="flex items-center justify-between mb-8 px-6 md:px-0">
@@ -394,7 +394,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                     
                                     {/* Text Info */}
                                     <div className="flex flex-col flex-grow px-2 md:px-3 pt-3 pb-2">
-                                        <p className="text-white/50 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Elexoir'}</p>
+                                        <p className="text-white/50 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Therapick'}</p>
                                         <h4 className="font-bold text-white text-sm line-clamp-1 mb-4">{product.title}</h4>
                                         
                                         {/* Price and Add Button */}
@@ -420,7 +420,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                             Sanctuary for the Soul
                         </h3>
                         <p className="text-white/90-muted leading-relaxed mb-8 font-light">
-                            Born from the ancient healing traditions of Bali, Elexoir Home Spa was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
+                            Born from the ancient healing traditions of Bali, Therapick was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
                         </p>
                         <button className="text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-70 transition-opacity">
                             Discover Our Story <ArrowRight size={16} />
