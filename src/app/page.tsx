@@ -971,7 +971,7 @@ ${treatmentsList}
                                             <span className="text-sm font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
                                         </div>
                                         {MOCK_THERAPISTS.filter(t => t.location === selectedArea).map(t => (
-                                            <button
+<button
                                                 key={t.id}
                                                 onClick={() => { 
                                                     if (selectedTherapists.includes(t.id)) {
@@ -980,42 +980,41 @@ ${treatmentsList}
                                                         setSelectedTherapists([...selectedTherapists, t.id]);
                                                     }
                                                 }}
-                                                className={`w-full p-4 rounded-xl border text-left flex gap-4 transition-all ${selectedTherapists.includes(t.id) ? 'border-primary bg-primary/5 shadow-sm' : (selectedTherapists.length >= totalGuests && !selectedTherapists.includes(t.id) ? 'border-border/50 opacity-50 cursor-not-allowed bg-surface' : 'border-border/50 hover:border-primary/30 bg-surface')}`}
+                                                className={`w-full p-4 sm:p-5 rounded-3xl text-left flex gap-5 transition-all duration-300 relative overflow-hidden ${
+                                                    selectedTherapists.includes(t.id) 
+                                                    ? "bg-[#292831] border-[#292831] text-white shadow-xl scale-[1.02]" 
+                                                    : (selectedTherapists.length >= totalGuests && !selectedTherapists.includes(t.id) 
+                                                        ? "bg-white/5 border-white/10 opacity-40 cursor-not-allowed" 
+                                                        : "bg-white/10 backdrop-blur-[40px] border border-white/40 hover:bg-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] hover:-translate-y-1")
+                                                }`}
                                             >
-                                                <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border border-border">
-                                                    <img src={t.avatar} alt={t.name} className="w-14 h-14 rounded-full object-cover transition-transform group-hover/avatar:scale-110" />
-                                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity">
-                                                        <span className="text-[8px] font-bold text-white uppercase tracking-wider">Profile</span>
+                                                <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border-2 border-white/50 shadow-sm w-16 h-16">
+                                                    <img src={t.avatar} alt={t.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
+                                                    <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity backdrop-blur-sm">
+                                                        <span className="text-[9px] font-bold text-white uppercase tracking-wider">View</span>
                                                     </div>
                                                 </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-center justify-between mb-1">
+                                                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                                    <div className="flex items-center justify-between mb-1.5">
                                                         <div className="flex items-center gap-2">
-                                                            <h4 className="font-bold text-primary truncate">{t.name}</h4>
+                                                            <h4 className={`font-serif text-lg leading-none ${selectedTherapists.includes(t.id) ? "text-white" : "text-primary"}`}>{t.name}</h4>
                                                             {/* Status Label */}
-                                                            {t.status === 'Online' && <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>}
-                                                            {t.status === 'Busy' && <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span>}
-                                                            {t.status === 'Off' && <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>}
+                                                            {t.status === "Online" && <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span>}
+                                                            {t.status === "Busy" && <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]"></span>}
+                                                            {t.status === "Off" && <span className="w-2 h-2 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]"></span>}
                                                         </div>
-                                                        <div className="flex items-center gap-1 text-[10px] font-bold bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">
+                                                        <div className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${selectedTherapists.includes(t.id) ? "bg-white/20 text-white" : "bg-primary/5 text-primary"}`}>
                                                             ★ {t.rating}
                                                         </div>
                                                     </div>
-                                                    <p className="text-[10px] text-text-muted leading-relaxed line-clamp-1 mb-2">{t.desc}</p>
-                                                    <div className="flex items-center gap-2 flex-wrap">
-                                                        {t.status === 'Off' ? (
-                                                            <span className="text-[10px] font-bold text-red-500/80 bg-red-50 px-2 py-1 rounded">Offline</span>
-                                                        ) : t.status === 'Busy' ? (
-                                                            <span className="text-[10px] font-bold text-amber-600/90 bg-amber-50 px-2 py-1 rounded">Online • Available at {t.availableAt || '13:00'}</span>
+                                                    <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-primary/60"}`}>{t.desc}</p>
+                                                    <div className="flex items-center gap-2">
+                                                        {t.status === "Off" ? (
+                                                            <span className="text-[10px] font-bold text-red-500/90 bg-red-50/80 px-2 py-1 rounded border border-red-100">Offline</span>
+                                                        ) : t.status === "Busy" ? (
+                                                            <span className="text-[10px] font-bold text-amber-600/90 bg-amber-50/80 px-2 py-1 rounded border border-amber-100">Handling customer • Ready at {t.availableAt || "13:00"}</span>
                                                         ) : (
-                                                            <>
-                                                                <span className="text-[10px] font-bold text-green-600/90 bg-green-50 px-2 py-1 rounded mr-1">Ready to accept jobs</span>
-                                                                {t.availability?.today?.slice(0,2).map((time: string) => (
-                                                                    <span key={time} className="text-[9px] font-bold text-primary bg-primary/5 px-2 py-1 rounded-full border border-primary/10">
-                                                                        {time}
-                                                                    </span>
-                                                                ))}
-                                                            </>
+                                                            <span className="text-[10px] font-bold text-green-600/90 bg-green-50/80 px-2 py-1 rounded border border-green-100">Ready to accept jobs</span>
                                                         )}
                                                     </div>
                                                 </div>
