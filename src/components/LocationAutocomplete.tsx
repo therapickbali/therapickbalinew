@@ -194,7 +194,7 @@ const LocationAutocomplete: React.FC<Props> = ({ value, onChange, placeholder = 
                         initial={{ opacity: 0, y: 10, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.98 }}
-                        className="absolute z-[100] left-0 right-0 mt-2 bg-white border border-border rounded-none shadow-none max-h-60 overflow-y-auto no-scrollbar"
+                        className="absolute z-[100] left-0 right-0 mt-2 bg-white/40 backdrop-blur-2xl border border-white/50 rounded-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] max-h-60 overflow-y-auto no-scrollbar"
                     >
                         {suggestions.map((suggestion, index) => (
                             <li 

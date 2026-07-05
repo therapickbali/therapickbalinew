@@ -9,6 +9,7 @@ import SeoExpandedContent from '@/components/SeoExpandedContent';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import ServiceAreas from '@/components/ServiceAreas';
 import FaqSection from '@/components/FaqSection';
+import FloatingCalendar from '@/components/FloatingCalendar';
 
 // Dummy data for redesign structure
 const CATEGORIES = [
@@ -62,6 +63,33 @@ export default function Home() {
     };
     
     const [formData, setFormData] = useState({ name: '', location: '', room: '', ...getInitialDateTime() });
+    
+    // Multi-step booking states
+    const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4 | 5>(1);
+    const [selectedArea, setSelectedArea] = useState('');
+    const [selectedTherapists, setSelectedTherapists] = useState<string[]>([]);
+    const totalGuests = cartItems.reduce((acc, item) => acc + item.guests, 0);
+    const [viewingTherapist, setViewingTherapist] = useState<any>(null);
+
+    const [selectedRegion, setSelectedRegion] = useState('Bali');
+    const [selectedAreaFilter, setSelectedAreaFilter] = useState('All');
+
+    const MOCK_THERAPISTS = [
+        { id: 't1', name: 'Sarah J.', location: 'Seminyak', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.', reviews: [{ author: 'Emily R.', text: 'Sarah was incredible. Best deep tissue massage I have ever had.' }], availability: { today: ['10:00', '13:00', '16:30'], days: ['Mon', 'Tue', 'Thu', 'Fri'] }, status: 'Online' },
+        { id: 't2', name: 'Dewi K.', location: 'Ubud', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.', reviews: [{ author: 'Michael B.', text: 'Dewi brings such a calming, authentic Balinese energy.' }], availability: { today: ['11:30', '14:00', '18:00'], days: ['Wed', 'Thu', 'Sat', 'Sun'] }, status: 'Busy' },
+        { id: 't3', name: 'Wayan M.', location: 'Canggu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.', reviews: [{ author: 'Sophie T.', text: 'Wayan knew exactly what I needed. Highly recommend.' }], availability: { today: ['09:00', '15:00'], days: ['Mon', 'Wed', 'Fri', 'Sat'] }, status: 'Off' },
+        { id: 't4', name: 'Ketut A.', location: 'Ubud', region: 'Bali', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.', reviews: [{ author: 'David W.', text: 'Amazing technique and completely dissolved my tension.' }], availability: { today: ['12:00', '17:00'], days: ['Tue', 'Wed', 'Thu', 'Sun'] }, status: 'Online' },
+        { id: 't5', name: 'Made B.', location: 'Uluwatu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.', reviews: [{ author: 'Anna K.', text: 'The Lomi-Lomi was life-changing. Made is a master.' }], availability: { today: ['10:30', '14:30', '19:00'], days: ['Mon', 'Tue', 'Fri', 'Sun'] }, status: 'Busy' },
+        { id: 't6', name: 'Aisha F.', location: 'Downtown', region: 'Dubai', rating: 5, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop', desc: 'Specialist in Swedish and deep tissue.', reviews: [{ author: 'Sarah L.', text: 'Aisha is phenomenal! Perfect pressure.' }], availability: { today: ['09:00', '13:00', '16:00'], days: ['Mon', 'Tue', 'Wed', 'Thu'] }, status: 'Online' },
+        { id: 't7', name: 'Fatima R.', location: 'Marina', region: 'Dubai', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop', desc: 'Holistic healing and relaxation.', reviews: [{ author: 'Chloe M.', text: 'So soothing and relaxing, Fatima is the best.' }], availability: { today: ['11:00', '15:00', '18:30'], days: ['Thu', 'Fri', 'Sat', 'Sun'] }, status: 'Off' },
+    ];
+    
+    const REGION_AREAS = {
+        'Bali': ['All', 'Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'],
+        'Dubai': ['All', 'Downtown', 'Marina', 'Palm Jumeirah']
+    };
+
+    const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
 
     const filteredAndSortedTreatments = React.useMemo(() => {
         let result = treatments.filter(t => {
@@ -140,16 +168,38 @@ export default function Home() {
             }).join('\n\n------------------------\n\n');
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
-            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.`;
-            const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(baseMessage)}`;
-            if (newWindow) {
-                newWindow.location.href = waUrl;
-            } else {
-                window.location.href = waUrl;
-            }
+            const therapistMsg = selectedTherapists.length > 0
+                ? `\n*Therapist Request:* ${selectedTherapists.map(id => MOCK_THERAPISTS.find(t => t.id === id)?.name).join(', ')}`
+                : `\n*Therapist Request:* Assign Automatically`;
+
+            const whatsappUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(`*NEW RESERVATION*
             
-            setCartItems([]);
+*Guest Details*
+Name: ${formData.name}
+Date: ${formData.date}
+Time: ${formData.time}
+Location Area: ${selectedArea}
+Address: ${formData.location}
+Room: ${formData.room || 'Not specified'}${therapistMsg}
+
+*Treatments Selected*
+${treatmentsList}
+
+*TOTAL IDR ${totalPrice.toLocaleString('en-US')}*`)}`;
+
+            setTimeout(() => {
+                if (newWindow) {
+                    newWindow.location.href = whatsappUrl;
+                } else {
+                    window.location.href = whatsappUrl;
+                }
+            }, 300);
+
             setIsBookingModalOpen(false);
+            setBookingStep(1);
+            setCartItems([]);
+            setSelectedArea('');
+            setSelectedTherapists([]);
         } catch (error) {
             console.error(error);
             if (newWindow) newWindow.close();
@@ -171,65 +221,53 @@ export default function Home() {
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
-                {/* Slogan */}
-                <div className="md:hidden mt-4 mb-6 px-2">
-                    <h1 className="font-serif text-3xl text-primary font-medium tracking-tight">
-                        The Art of <br/>
-                        <span className="italic opacity-80">Wellbeing</span>
-                    </h1>
-                </div>
+                {/* Location Filter for Therapists */}
+                <div className="md:hidden mt-4 mb-4 relative z-30 -mx-6 px-2">
+                    <div className="bg-[#F5F5F7]/80 backdrop-blur-xl border border-white/80 rounded-full p-1.5 flex items-center shadow-inner overflow-x-auto no-scrollbar gap-1">
+                        
+                        {/* Region Toggle Button */}
+                        <button 
+                            onClick={() => {
+                                setSelectedRegion(selectedRegion === 'Bali' ? 'Dubai' : 'Bali');
+                                setSelectedAreaFilter('All');
+                            }}
+                            className={`flex items-center gap-1 shrink-0 px-4 h-10 rounded-full transition-all duration-300 font-serif font-bold tracking-wide ${selectedAreaFilter === 'All' ? 'bg-white shadow-sm text-primary' : 'text-text-muted hover:bg-white/50'}`}
+                        >
+                            <span>{selectedRegion}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
 
-                {/* Search Bar (Mobile Only - Above Campaign) */}
-                <div className="md:hidden relative w-full mb-6 z-20 px-2">
-                    <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none h-[54px]">
-                        <Search className="h-5 w-5 text-text-muted" />
-                    </div>
-                    <input 
-                        type="text" 
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search your favourite treatment..." 
-                        className="w-full bg-white/70 backdrop-blur-md border border-white/50 rounded-2xl h-[54px] pl-12 pr-12 text-sm text-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-secondary/50 placeholder:text-text-muted"
-                    />
-                    <button 
-                        onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
-                        title="Filter by price"
-                        className={`absolute top-2 right-4 w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isPriceFilterOpen ? 'bg-primary text-white shadow-md' : 'bg-secondary/30 text-primary hover:bg-secondary/50'}`}
-                    >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                    </button>
+                        <div className="w-px h-6 bg-border/40 shrink-0 mx-1"></div>
 
-                    <AnimatePresence>
-                        {isPriceFilterOpen && (
-                            <motion.div 
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="absolute top-full right-2 mt-3 w-64 md:w-72 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl p-5 shadow-[0_20px_40px_rgb(0,0,0,0.12)] z-30"
+                        {REGION_AREAS[selectedRegion as keyof typeof REGION_AREAS].filter(a => a !== 'All').map(area => (
+                            <button
+                                key={area}
+                                onClick={() => setSelectedAreaFilter(area)}
+                                className={`px-5 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all duration-300 ${selectedAreaFilter === area ? 'bg-white shadow-sm text-primary' : 'text-text-muted hover:text-primary'}`}
                             >
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Max Price</span>
-                                    <span className="text-sm font-serif text-primary font-medium">Rp {maxPrice.toLocaleString('en-US')}</span>
-                                </div>
-                                <input 
-                                    type="range" 
-                                    min="150000" 
-                                    max="1500000" 
-                                    step="50000"
-                                    value={maxPrice}
-                                    onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                                    className="w-full accent-primary h-1.5 bg-secondary rounded-lg appearance-none cursor-pointer"
-                                />
-                                <div className="flex justify-between text-[10px] text-text-muted mt-2 font-medium tracking-wider">
-                                    <span>150k</span>
-                                    <span>1.5m</span>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                                {area}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
-
+                {/* Therapist Stories */}
+                <div className="md:hidden mt-2 mb-6 relative z-20 -mx-6">
+                    <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
+                        {MOCK_THERAPISTS.filter(t => t.region === selectedRegion && (selectedAreaFilter === 'All' || t.location === selectedAreaFilter)).map(t => (
+                            <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setViewingTherapist(t)}>
+                                <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-soft ${selectedTherapists.includes(t.id) ? 'bg-gradient-to-tr from-primary via-highlight to-primary shadow-[0_8px_20px_rgb(0,0,0,0.15)] scale-110' : 'bg-gradient-to-tr from-gray-200 to-gray-100 hover:scale-105'}`}>
+                                    <div className="w-full h-full rounded-full border-[3px] border-[#FDFBF7] overflow-hidden bg-white">
+                                        <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+                                    </div>
+                                </div>
+                                <span className={`text-[11px] text-center max-w-[72px] truncate transition-all ${selectedTherapists.includes(t.id) ? 'text-primary font-bold' : 'text-text-muted font-medium'}`}>
+                                    {t.name}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
                 {/* Cinematic Campaign Card (Below Search) */}
                 {campaign && (
@@ -238,8 +276,10 @@ export default function Home() {
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="relative w-full h-[240px] md:h-[420px] rounded-[32px] md:rounded-[40px] overflow-hidden shadow-[0_20px_40px_rgb(0,0,0,0.12)] mb-8 group cursor-pointer bg-primary"
+                        className="relative w-full h-[260px] md:h-[420px] rounded-[32px] md:rounded-[40px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.2)] mb-8 group cursor-pointer bg-primary transform-gpu transition-transform hover:-translate-y-2"
                     >
+                        {/* 3D Glassmorphism border */}
+                        <div className="absolute inset-0 rounded-[32px] md:rounded-[40px] border border-white/20 z-20 pointer-events-none"></div>
                         {/* Background Image */}
                         <img 
                             src={campaign.image || "https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop&crop=center"} 
@@ -293,7 +333,7 @@ export default function Home() {
                         <div className="flex overflow-x-auto gap-4 no-scrollbar -mx-6 px-6 pb-4 snap-x snap-mandatory">
                             {treatments.filter(t => t.is_pinned).map(treatment => (
                                 <a href={`/rituals/${treatment.id}`} key={treatment.id} className="w-[65vw] sm:w-[220px] shrink-0 snap-center outline-none">
-                                    <div className="bg-white border border-[#E5E7EB] rounded-[24px] p-2 flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
+                                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[24px] p-2 flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
                                         <div className="aspect-[4/3] relative bg-[#F5F5F7] overflow-hidden rounded-[16px]">
                                             {treatment.pinned_image ? (
                                                 <img src={treatment.pinned_image} alt={treatment.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -344,56 +384,7 @@ export default function Home() {
                         </div>
                     </div>
 
-                    {/* Search Bar (Desktop Only - Next to Categories) */}
-                    <div className="hidden md:block relative w-full md:w-80 shrink-0 md:mb-4">
-                        <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none h-[54px]">
-                            <Search className="h-5 w-5 text-text-muted" />
-                        </div>
-                        <input 
-                            type="text" 
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search your favourite treatment..." 
-                            className="w-full bg-white/70 backdrop-blur-md border border-white/50 rounded-2xl h-[54px] pl-12 pr-12 text-sm text-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-secondary/50 placeholder:text-text-muted"
-                        />
-                        <button 
-                            onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
-                            title="Filter by price"
-                            className={`absolute top-2 right-2 w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isPriceFilterOpen ? 'bg-primary text-white shadow-md' : 'bg-secondary/30 text-primary hover:bg-secondary/50'}`}
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                        </button>
 
-                        {/* Price Filter Dropdown */}
-                        <AnimatePresence>
-                            {isPriceFilterOpen && (
-                                <motion.div 
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="absolute top-full right-0 mt-3 w-64 md:w-72 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl p-5 shadow-[0_20px_40px_rgb(0,0,0,0.12)] z-30"
-                                >
-                                    <div className="flex items-center justify-between mb-4">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80">Max Price</span>
-                                        <span className="text-sm font-serif text-primary font-medium">Rp {maxPrice.toLocaleString('en-US')}</span>
-                                    </div>
-                                    <input 
-                                        type="range" 
-                                        min="150000" 
-                                        max="1500000" 
-                                        step="50000"
-                                        value={maxPrice}
-                                        onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                                        className="w-full accent-primary h-1.5 bg-secondary rounded-lg appearance-none cursor-pointer"
-                                    />
-                                    <div className="flex justify-between text-[10px] text-text-muted mt-2 font-medium tracking-wider">
-                                        <span>150k</span>
-                                        <span>1.5m</span>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
                 </div>
 
                 {/* Popular Treatments Scroll */}
@@ -401,13 +392,13 @@ export default function Home() {
                     {/* Navigation Buttons (Desktop only) */}
                     <button 
                         onClick={scrollLeft}
-                        className="hidden md:flex absolute left-[-20px] lg:left-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white border border-border/50 rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
+                        className="hidden md:flex absolute left-[-20px] lg:left-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     </button>
                     <button 
                         onClick={scrollRight}
-                        className="hidden md:flex absolute right-[-20px] lg:right-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white border border-border/50 rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
+                        className="hidden md:flex absolute right-[-20px] lg:right-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
@@ -482,7 +473,7 @@ export default function Home() {
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {products.map((product) => (
                             <a href="/store" key={product.id} className="w-48 md:w-52 shrink-0 block outline-none">
-                                <div className="bg-white border border-[#E5E7EB] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
+                                <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
                                     
                                     {/* Image */}
                                     <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden rounded-[16px]">
@@ -511,6 +502,33 @@ export default function Home() {
             </div>
             
             <div className="hidden md:block pb-12">
+                {/* Therapists Section */}
+                <div className="mb-24 flex flex-col items-center max-w-7xl mx-auto px-6">
+                    <span className="text-xs font-bold uppercase tracking-widest text-primary/50 mb-4 block text-center">Meet Our Therapists</span>
+                    <h3 className="font-serif text-3xl md:text-5xl text-primary font-medium mb-12 text-center leading-tight">
+                        Expert <span className="italic">Healers</span>
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+                        {MOCK_THERAPISTS.slice(0, 4).map(t => (
+                            <div key={t.id} className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[32px] p-6 flex flex-col items-center text-center shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 group">
+                                <div className="w-24 h-24 rounded-full overflow-hidden mb-5 border-4 border-surface shadow-sm group-hover:scale-105 transition-transform duration-500">
+                                    <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+                                </div>
+                                <h4 className="font-bold text-lg text-primary mb-1">{t.name}</h4>
+                                <div className="text-xs font-bold uppercase tracking-widest text-text-muted mb-3">{t.location}</div>
+                                <div className="flex items-center gap-1 mb-4 text-amber-500">
+                                    {Array(5).fill(0).map((_, i) => (
+                                        <svg key={i} className={`w-4 h-4 ${i < Math.floor(t.rating) ? 'fill-current' : 'fill-transparent stroke-current'}`} viewBox="0 0 24 24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                        </svg>
+                                    ))}
+                                </div>
+                                <p className="text-sm text-text-muted leading-relaxed">{t.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* About Us */}
                 <div className="mb-24 flex flex-col md:flex-row gap-12 md:gap-24 items-center max-w-7xl mx-auto px-6">
                     <div className="flex-1">
@@ -630,7 +648,7 @@ export default function Home() {
                                                 }]);
                                                 setIsBookingModalOpen(true);
                                             }}>
-                                                <div className="rounded-[32px] p-6 bg-white border border-border/40 shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
+                                                <div className="rounded-[32px] p-6 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
                                                     <div className="mb-4 flex items-start justify-between">
                                                         <div className="bg-primary/5 border border-primary/10 text-primary px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm">
                                                             {treatment.category}
@@ -678,7 +696,7 @@ export default function Home() {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
+                            className="bg-white/10 backdrop-blur-[40px] border border-white/40 rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
                         >
                             <button 
                                 onClick={() => setIsBookingModalOpen(false)}
@@ -767,7 +785,7 @@ export default function Home() {
                                         </div>
                                     </div>
                                 </div>
-                            ) : (
+                            ) : bookingStep === 1 ? (
                                 <div className="animate-in fade-in slide-in-from-left-4 duration-300">
                                     <h2 className="font-serif text-2xl text-primary mb-1 pr-8">Complete Booking</h2>
                                     <p className="text-xs text-text-muted mb-6">Your request will be sent securely via WhatsApp.</p>
@@ -846,6 +864,217 @@ export default function Home() {
                                         + ADD ANOTHER TREATMENT
                                     </button>
 
+                                    <div className="mt-8 pt-6 border-t border-border/50">
+                                        <div className="flex items-end justify-between mb-6">
+                                            <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
+                                            <span className="text-2xl font-serif text-primary">IDR {cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0).toLocaleString('en-US')}</span>
+                                        </div>
+                                        <button 
+                                            type="button"
+                                            onClick={() => setBookingStep(2)}
+                                            disabled={cartItems.length === 0}
+                                            className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
+                                        >
+                                            CONTINUE TO DATE & TIME <ArrowRight className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : bookingStep === 2 ? (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                                    <div className="flex items-center gap-4 mb-6 shrink-0">
+                                        <button onClick={() => setBookingStep(1)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
+                                        <h2 className="font-serif text-2xl text-primary">When would you like this?</h2>
+                                    </div>
+                                    <p className="text-xs text-text-muted mb-6 shrink-0">Select the date and time for your booking.</p>
+                                    
+                                    <div className="flex flex-col space-y-5 flex-1">
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Select Date</label>
+                                            <FloatingCalendar 
+                                                value={formData.date}
+                                                onChange={(date) => setFormData({...formData, date})}
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
+                                            <input 
+                                                type="time" required 
+                                                value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
+                                                className="w-full bg-surface border border-border/50 rounded-xl px-4 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8 pt-6 border-t border-border/50">
+                                        <button 
+                                            type="button"
+                                            onClick={() => setBookingStep(3)}
+                                            disabled={!formData.date || !formData.time}
+                                            className="w-full bg-primary text-white px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_24px_rgb(0,0,0,0.15)] uppercase tracking-widest disabled:opacity-70"
+                                        >
+                                            CONTINUE TO AREA <ArrowRight className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : bookingStep === 3 ? (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                                    <div className="flex items-center gap-4 mb-6 shrink-0">
+                                        <button onClick={() => setBookingStep(2)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
+                                        <h2 className="font-serif text-2xl text-primary">Where are you staying?</h2>
+                                    </div>
+                                    <p className="text-xs text-text-muted mb-6 shrink-0">Select your area in Bali so we can match you with nearby therapists.</p>
+                                    <div className="space-y-3 overflow-y-auto pb-8">
+                                        {LOCATIONS.map(loc => (
+                                            <button
+                                                key={loc}
+                                                onClick={() => { 
+                                                    setSelectedArea(loc); 
+                                                    if (selectedTherapists.length > 0) setBookingStep(5);
+                                                    else setBookingStep(4); 
+                                                }}
+                                                className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${selectedArea === loc ? 'border-primary bg-primary/5' : 'border-border/50 hover:border-primary/30'}`}
+                                            >
+                                                <span className="font-bold text-primary">{loc}</span>
+                                                <ArrowRight className="w-4 h-4 text-text-muted" />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : bookingStep === 4 ? (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                                    <div className="flex items-center gap-4 mb-6 shrink-0">
+                                        <button onClick={() => setBookingStep(3)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
+                                        <h2 className="font-serif text-2xl text-primary">Choose Therapist</h2>
+                                    </div>
+                                    <p className="text-xs text-text-muted mb-4 shrink-0">Therapists available in {selectedArea}. You need {totalGuests} therapist{totalGuests > 1 ? 's' : ''}. Selected: {selectedTherapists.length}/{totalGuests}</p>
+                                    <div className="space-y-3 overflow-y-auto pb-8 pr-1 no-scrollbar">
+                                        <button
+                                            onClick={() => { setSelectedTherapists([]); setBookingStep(5); }}
+                                            className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${selectedTherapists.length === 0 ? 'border-primary bg-primary/5 shadow-sm' : 'border-border/50 hover:border-primary/30 bg-surface'}`}
+                                        >
+                                            <span className="font-bold text-primary text-sm tracking-wide">Assign Automatically</span>
+                                            <ArrowRight className="w-4 h-4 text-text-muted" />
+                                        </button>
+                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).map(t => (
+                                            <button
+                                                key={t.id}
+                                                onClick={() => { 
+                                                    if (selectedTherapists.includes(t.id)) {
+                                                        setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
+                                                    } else if (selectedTherapists.length < totalGuests) {
+                                                        setSelectedTherapists([...selectedTherapists, t.id]);
+                                                    }
+                                                }}
+                                                className={`w-full p-4 rounded-xl border text-left flex gap-4 transition-all ${selectedTherapists.includes(t.id) ? 'border-primary bg-primary/5 shadow-sm' : (selectedTherapists.length >= totalGuests && !selectedTherapists.includes(t.id) ? 'border-border/50 opacity-50 cursor-not-allowed bg-surface' : 'border-border/50 hover:border-primary/30 bg-surface')}`}
+                                            >
+                                                <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border border-border">
+                                                    <img src={t.avatar} alt={t.name} className="w-14 h-14 rounded-full object-cover transition-transform group-hover/avatar:scale-110" />
+                                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity">
+                                                        <span className="text-[8px] font-bold text-white uppercase tracking-wider">Profile</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <h4 className="font-bold text-primary truncate">{t.name}</h4>
+                                                            {/* Status Label */}
+                                                            {t.status === 'Online' && <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>}
+                                                            {t.status === 'Busy' && <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span>}
+                                                            {t.status === 'Off' && <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>}
+                                                        </div>
+                                                        <div className="flex items-center gap-1 text-[10px] font-bold bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">
+                                                            ★ {t.rating}
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-[10px] text-text-muted leading-relaxed line-clamp-1 mb-2">{t.desc}</p>
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        {t.status === 'Off' ? (
+                                                            <span className="text-[10px] font-bold text-red-500/80 bg-red-50 px-2 py-1 rounded">Offline</span>
+                                                        ) : t.status === 'Busy' ? (
+                                                            <span className="text-[10px] font-bold text-amber-600/80 bg-amber-50 px-2 py-1 rounded">Still handle customer</span>
+                                                        ) : (
+                                                            t.availability?.today?.slice(0,3).map(time => (
+                                                                <span key={time} className="text-[9px] font-bold text-primary bg-primary/5 px-2 py-1 rounded-full border border-primary/10">
+                                                                    {time}
+                                                                </span>
+                                                            ))
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        ))}
+                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).length === 0 && (
+                                            <div className="p-6 text-center text-sm text-text-muted border border-dashed border-border/50 rounded-xl bg-surface/50">
+                                                No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <button onClick={() => {
+                                            if (selectedTherapists.length > 0) {
+                                                setBookingStep(3);
+                                            } else {
+                                                setBookingStep(4);
+                                            }
+                                        }} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </button>
+                                        <h2 className="font-serif text-2xl text-primary">Final Details</h2>
+                                    </div>
+
+                                    {/* SUMMARY CARD */}
+                                    {cartItems.length > 0 && (
+                                    <div className="bg-surface border border-border/50 rounded-xl p-4 mb-6 shadow-sm">
+                                        <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Booking Summary</h4>
+                                        <div className="space-y-3 mb-4">
+                                            {cartItems.map((item, idx) => (
+                                                <div key={idx} className="flex justify-between items-start">
+                                                    <div>
+                                                        <p className="text-sm font-bold text-primary">{item.title}</p>
+                                                        <p className="text-xs text-text-muted">{item.duration} Mins • {item.guests} Guest(s)</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        {selectedTherapists.length > 0 && (
+                                            <div className="border-t border-border/50 pt-4">
+                                                <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Selected Therapist{selectedTherapists.length > 1 ? 's' : ''}</p>
+                                                <div className="space-y-3">
+                                                    {selectedTherapists.map((tid, i) => {
+                                                        const t = MOCK_THERAPISTS.find(th => th.id === tid);
+                                                        if (!t) return null;
+                                                        return (
+                                                            <div key={i} className="flex gap-3 items-center">
+                                                                <img 
+                                                                    src={t.avatar} 
+                                                                    className="w-10 h-10 rounded-full object-cover border border-border"
+                                                                    alt={t.name}
+                                                                />
+                                                                <div>
+                                                                    <p className="text-sm font-bold text-primary flex items-center gap-2">
+                                                                        {t.name}
+                                                                        <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">★ {t.rating}</span>
+                                                                    </p>
+                                                                    <p className="text-[10px] text-text-muted">{t.desc.substring(0, 40)}...</p>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    )}
+
                                     <form className="space-y-5 pb-8 md:pb-0">
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Guest Name</label>
@@ -855,28 +1084,11 @@ export default function Home() {
                                                 className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
-                                        <div className="flex flex-col space-y-5">
-                                            <div className="space-y-1.5">
-                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Date</label>
-                                                <input 
-                                                    type="date" required 
-                                                    value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
-                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                                />
-                                            </div>
-                                            <div className="space-y-1.5">
-                                                <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Time</label>
-                                                <input 
-                                                    type="time" required 
-                                                    value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                                />
-                                            </div>
-                                        </div>
+                                        
                                         <div className="space-y-1.5">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Name</label>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-primary/80 ml-1">Villa / Hotel Address</label>
                                             <input 
-                                                type="text" required placeholder="e.g. Four Seasons Sayan"
+                                                type="text" required placeholder="e.g. Four Seasons Sayan, Ubud"
                                                 value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
                                                 className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
@@ -891,10 +1103,6 @@ export default function Home() {
                                         </div>
 
                                         <div className="mt-8 pt-6 border-t border-border/50">
-                                            <div className="flex items-end justify-between mb-6">
-                                                <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Total Price</span>
-                                                <span className="text-2xl font-serif text-primary">IDR {cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0).toLocaleString('en-US')}</span>
-                                            </div>
                                             <div className="flex flex-col gap-3">
                                                 <button 
                                                     type="button"
@@ -909,6 +1117,69 @@ export default function Home() {
                                     </form>
                                 </div>
                             )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Therapist Details Modal */}
+            <AnimatePresence>
+                {viewingTherapist && (
+                    <motion.div 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        exit={{ opacity: 0 }} 
+                        className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center bg-black/40 backdrop-blur-sm"
+                        onClick={() => setViewingTherapist(null)}
+                    >
+                        <motion.div 
+                            initial={{ y: '100%' }} 
+                            animate={{ y: 0 }} 
+                            exit={{ y: '100%' }} 
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="w-full sm:max-w-md bg-[#FDFBF7] rounded-t-[32px] sm:rounded-[32px] overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Header Image */}
+                            <div className="relative h-64 shrink-0">
+                                <img src={viewingTherapist.avatar} alt={viewingTherapist.name} className="w-full h-full object-cover object-top" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                                <button onClick={() => setViewingTherapist(null)} className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
+                                    <X className="w-5 h-5" />
+                                </button>
+                                <div className="absolute bottom-4 left-6 right-6 flex justify-between items-end">
+                                    <div>
+                                        <h2 className="text-3xl font-serif text-white font-medium">{viewingTherapist.name}</h2>
+                                        <p className="text-white/80 text-sm tracking-wide mt-1">{viewingTherapist.location}</p>
+                                    </div>
+                                    <div className="flex items-center gap-1 text-xs font-bold bg-white/20 backdrop-blur-md text-white px-2.5 py-1 rounded-full border border-white/20">
+                                        ★ {viewingTherapist.rating}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Scrollable Content */}
+                            <div className="overflow-y-auto no-scrollbar flex-1 pb-24">
+                                
+                                {/* Bio & Reviews */}
+                                <div className="px-6 py-6 border-b border-border/40">
+                                    <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">About</h4>
+                                    <p className="text-sm text-text-muted leading-relaxed mb-6">{viewingTherapist.desc}</p>
+                                    
+                                    {viewingTherapist.reviews && viewingTherapist.reviews.length > 0 && (
+                                        <div className="bg-primary/5 rounded-2xl p-5 relative">
+                                            <div className="text-primary/20 absolute top-4 left-4 font-serif text-4xl leading-none">"</div>
+                                            <p className="text-primary/90 text-sm font-medium italic relative z-10 pl-6 leading-relaxed">
+                                                {viewingTherapist.reviews[0].text}
+                                            </p>
+                                            <p className="text-xs text-primary/60 font-bold tracking-wide mt-3 pl-6">— {viewingTherapist.reviews[0].author}</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                            </div>
+
+                            {/* Sticky Bottom Action removed as requested */}
                         </motion.div>
                     </motion.div>
                 )}

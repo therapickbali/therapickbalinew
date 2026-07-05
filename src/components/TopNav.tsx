@@ -58,7 +58,7 @@ export default function TopNav() {
             <header 
                 className={`pointer-events-auto flex items-center justify-between relative transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border will-change-auto
                     ${isScrolled 
-                        ? 'translate-y-4 md:translate-y-0 w-[calc(100%-32px)] md:w-full max-w-6xl bg-white/70 saturate-[1.8] backdrop-blur-xl border-white/60 rounded-[32px] md:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 py-2 md:py-3' 
+                        ? 'translate-y-4 md:translate-y-0 w-[calc(100%-32px)] md:w-full max-w-6xl bg-white/10 backdrop-blur-[40px] border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[32px] md:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 py-2 md:py-3' 
                         : 'translate-y-0 md:translate-y-0 w-full md:w-full max-w-7xl md:max-w-6xl bg-transparent md:bg-white/70 md:saturate-[1.8] md:backdrop-blur-xl border-transparent md:border-white/60 shadow-none md:shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-none md:rounded-full px-4 md:px-8 py-4 md:py-3'}
                 `} 
                 ref={dropdownRef}
@@ -73,10 +73,14 @@ export default function TopNav() {
                     </span>
                 </a>
 
-                {/* Location Title (Center) */}
-                <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center h-full">
-                    <a href="/" className="flex flex-col items-center justify-center leading-none">
-                        <span className="text-[12px] md:text-[14px] font-serif text-primary tracking-widest font-bold uppercase mt-0.5">BALI, INDONESIA</span>
+                {/* Logo (Center) */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-auto mt-0 md:mt-1">
+                    <a href="/" className="flex items-center justify-center h-20 md:h-28 w-48 md:w-72">
+                        <img 
+                            src="/logo.png" 
+                            alt="Therapick Logo" 
+                            className="w-full h-full object-contain"
+                        />
                     </a>
                 </div>
 
@@ -115,7 +119,7 @@ export default function TopNav() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
                             transition={{ duration: 0.2 }}
-                            className={`absolute top-[120%] right-0 w-48 shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col p-2 bg-white/95 backdrop-blur-3xl border border-border/30 rounded-2xl z-50 md:hidden`}
+                            className={`absolute top-[120%] right-0 w-48 shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col p-2 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl z-50 md:hidden`}
                         >
                             {mobileNavItems.map((item) => {
                                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
