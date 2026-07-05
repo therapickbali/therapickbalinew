@@ -36,14 +36,14 @@ const ModernServiceCard: React.FC<Props> = ({ service, onView, domRef }) => {
 
             {/* Content Section - Extremely Minimal */}
             <div className="flex flex-col px-1 flex-grow">
-                <h3 className="font-sans font-medium text-sm text-secondary tracking-wide mb-1 transition-colors group-hover:text-text-muted">
+                <h3 className="font-sans font-medium text-sm text-secondary tracking-wide mb-1 transition-colors group-hover:text-white/90-muted">
                     {service.name}
                 </h3>
-                <p className="text-[10px] font-sans font-light text-text-muted/80 mb-3">
+                <p className="text-[10px] font-sans font-light text-white/90-muted/80 mb-3">
                     {durationDisplay}
                 </p>
-                <div className="flex items-center justify-between bg-gray-50 rounded-full p-1 pl-3 mt-auto border border-gray-100">
-                    <span className="font-semibold text-gray-900 text-[13px] md:text-sm">Rp {startingPrice.toLocaleString()}</span>
+                <div className="flex items-center justify-between bg-white/10 rounded-full p-1 pl-3 mt-auto border border-white/10">
+                    <span className="font-semibold text-white text-[13px] md:text-sm">Rp {startingPrice.toLocaleString()}</span>
                     <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                         <Plus size={18} strokeWidth={2.5} />
                     </div>

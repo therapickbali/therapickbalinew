@@ -241,11 +241,11 @@ export default async function RootLayout({
       </head>
       <body
         data-domain="therapick"
-        className={`${jakarta.variable} ${newsreader.variable} font-sans bg-transparent text-text min-h-screen selection:bg-primary selection:text-white pb-20`}
+        className={`${jakarta.variable} ${newsreader.variable} font-sans bg-transparent text-white/90 min-h-screen selection:bg-white selection:text-white pb-20`}
       >
         <SpaProvider>
           <TopNav />
-          <main className="w-full relative min-h-[100dvh] bg-background overflow-x-hidden">
+          <main className="w-full relative min-h-[100dvh] bg-black overflow-x-hidden">
               {children}
           </main>
         </SpaProvider>

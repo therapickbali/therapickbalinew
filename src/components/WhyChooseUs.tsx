@@ -36,19 +36,19 @@ export default function WhyChooseUs() {
       viewport={{ once: true, margin: "-100px" }}
       variants={containerVariants}
     >
-      <div className="absolute inset-0 bg-primary/[0.02] rounded-[40px] -z-10"></div>
-      <div className="py-16 px-6 md:px-12 rounded-[40px] border border-border/40 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+      <div className="absolute inset-0 bg-white/[0.02] rounded-[40px] -z-10"></div>
+      <div className="py-16 px-6 md:px-12 rounded-[40px] border border-white/20/40 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
         <motion.div variants={itemVariants} className="text-center mb-16">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-3 block">Elexoir Standard</span>
-          <h2 className="font-serif text-3xl md:text-4xl text-primary leading-tight">Why Choose Our Mobile Spa</h2>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-white/80 mb-3 block">Elexoir Standard</span>
+          <h2 className="font-serif text-3xl md:text-4xl text-white leading-tight">Why Choose Our Mobile Spa</h2>
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {reasons.map((item, idx) => (
             <motion.div variants={itemVariants} key={idx} className="flex gap-5 group bg-white/40 backdrop-blur-2xl md:bg-transparent p-6 md:p-0 rounded-[24px] md:rounded-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:shadow-none border border-white/50 md:border-transparent">
               <div>
-                <h3 className="font-bold text-sm text-primary mb-2 uppercase tracking-wider">{item.title}</h3>
-                <p className="text-xs md:text-sm text-text-muted leading-relaxed font-light">{item.desc}</p>
+                <h3 className="font-bold text-sm text-white mb-2 uppercase tracking-wider">{item.title}</h3>
+                <p className="text-xs md:text-sm text-white/90-muted leading-relaxed font-light">{item.desc}</p>
               </div>
             </motion.div>
           ))}

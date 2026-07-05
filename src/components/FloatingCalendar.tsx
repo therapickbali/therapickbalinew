@@ -109,7 +109,7 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
     ];
 
     return (
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.37)] rounded-[24px] p-4 relative overflow-hidden w-full">
+        <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[24px] p-4 relative overflow-hidden w-full">
             {/* Background Accent */}
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
             
@@ -118,7 +118,7 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
                 <button 
                     type="button"
                     onClick={handlePrevMonth}
-                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] flex items-center justify-center text-white hover:bg-white/20 transition-colors"
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -133,7 +133,7 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
                 <button 
                     type="button"
                     onClick={handleNextMonth}
-                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] flex items-center justify-center text-white hover:bg-white/20 transition-colors"
                 >
                     <ChevronRight className="w-4 h-4" />
                 </button>

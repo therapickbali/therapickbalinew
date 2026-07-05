@@ -57,7 +57,7 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
                 <h2 className="font-serif text-3xl text-white font-medium">Your Status</h2>
                 <p className="text-sm text-white/70 mt-1">Set your real-time availability</p>
             </div>
@@ -146,12 +146,12 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
                 <h2 className="font-serif text-3xl text-white font-medium">Live Bookings</h2>
                 <p className="text-sm text-white/70 mt-1">Manage real-time requests</p>
             </div>
             
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
+            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
                 <CalendarCheck className="w-12 h-12 text-white/30 mb-4" />
                 <h3 className="text-white font-bold text-lg">No Active Requests</h3>
                 <p className="text-white/50 text-sm mt-2">When a customer books you in real-time, it will appear here.</p>
@@ -167,7 +167,7 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
                 <h2 className="font-serif text-3xl text-white font-medium">Your Schedule</h2>
                 <p className="text-sm text-white/70 mt-1">Set future availability</p>
             </div>
@@ -175,7 +175,7 @@ export default function TherapistDashboard() {
             {/* Floating Calendar */}
             <div className="relative mt-8">
                 {/* Floating Time Setter Above Date */}
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20 bg-white/20 backdrop-blur-xl border border-white/30 text-white px-5 py-2.5 rounded-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col items-center min-w-[160px]">
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-white px-5 py-2.5 rounded-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col items-center min-w-[160px]">
                     <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest mb-1">{new Date(selectedDate).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
                     <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-white/90" />
@@ -213,12 +213,12 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
                 <h2 className="font-serif text-3xl text-white font-medium">Your Profile</h2>
                 <p className="text-sm text-white/70 mt-1">Manage your identity & app</p>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col items-center">
+            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col items-center">
                 
                 {/* Avatar Uploader (UI Only) */}
                 <div className="relative mb-8 group cursor-pointer">
@@ -277,7 +277,7 @@ export default function TherapistDashboard() {
             </div>
 
             {/* App Installation Section */}
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
                 <h3 className="text-xs font-bold text-white/60 uppercase tracking-widest mb-4">Install Therapist App</h3>
                 <div className="space-y-3">
                     <button className="w-full bg-[#3DDC84] text-black rounded-2xl py-3.5 px-4 font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
@@ -315,7 +315,7 @@ export default function TherapistDashboard() {
 
             {/* Floating Bottom Navbar */}
             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-sm z-50">
-                <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.5)] rounded-[32px] flex items-center justify-between p-2 px-3">
+                <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] flex items-center justify-between p-2 px-3">
                     
                     <button 
                         onClick={() => setActiveTab('home')}

@@ -173,12 +173,12 @@ const LocationAutocomplete: React.FC<Props> = ({ value, onChange, placeholder = 
                 {/* Right-side Actions */}
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 z-10">
                     {isLoading ? (
-                        <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                        <Loader2 className="w-4 h-4 text-white animate-spin" />
                     ) : value.length > 2 && (
                         <button 
                             type="button"
                             onClick={handleCheckMap}
-                            className="text-stone-300 hover:text-primary p-1.5 transition-all"
+                            className="text-stone-300 hover:text-white p-1.5 transition-all"
                             title="Check location on Google Maps"
                         >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -202,8 +202,8 @@ const LocationAutocomplete: React.FC<Props> = ({ value, onChange, placeholder = 
                                 onClick={() => handleSelectSuggestion(suggestion)}
                                 className="px-5 py-4 hover:bg-stone-50 cursor-pointer text-sm font-light text-stone-600 hover:text-secondary transition-colors border-b border-stone-100 last:border-0 flex items-center gap-4 group"
                             >
-                                <div className="p-2 bg-stone-50 rounded-none border border-border group-hover:border-black transition-colors">
-                                     <MapPin className="w-3 h-3 text-primary shrink-0" strokeWidth={1.5} />
+                                <div className="p-2 bg-stone-50 rounded-none border border-white/20 group-hover:border-black transition-colors">
+                                     <MapPin className="w-3 h-3 text-white shrink-0" strokeWidth={1.5} />
                                 </div>
                                 <span className="truncate">{suggestion}</span>
                             </li>

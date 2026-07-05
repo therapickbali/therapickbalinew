@@ -6,14 +6,14 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#1C1F1D] text-white pt-20 pb-10 rounded-t-[40px] mt-10 border-t border-border/10">
+    <footer className="bg-[#1C1F1D] text-white pt-20 pb-10 rounded-t-[40px] mt-10 border-t border-white/20/10">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
           {/* Brand & Intro */}
           <div className="col-span-1 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-6 group outline-none">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:bg-primary transition-colors">
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:bg-white transition-colors">
                 <Store size={20} strokeWidth={2} />
               </div>
               <span className="font-serif text-xl font-medium tracking-wide">Elexoir Home Spa</span>
@@ -22,7 +22,7 @@ export default function Footer() {
               Bali's premier luxury mobile spa. Bringing 5-star professional massages and organic wellness treatments directly to your private villa or hotel.
             </p>
             <div className="flex gap-4">
-              <a href="https://instagram.com/elexoirspa" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-white hover:text-primary transition-all">
+              <a href="https://instagram.com/elexoirspa" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-white hover:text-white transition-all">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
             </div>

@@ -30,13 +30,13 @@ export default function TherapistLogin() {
     };
 
     return (
-        <main className="min-h-screen bg-[#FDFDFD] selection:bg-primary/10 relative overflow-hidden flex flex-col">
+        <main className="min-h-screen bg-[#FDFDFD] selection:bg-white/10 relative overflow-hidden flex flex-col">
 
             {/* Custom App-like Back Button */}
             <div className="absolute top-6 left-4 z-50">
                 <button 
                     onClick={() => router.push('/')}
-                    className="w-10 h-10 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center text-primary shadow-sm hover:bg-white/60 transition-colors"
+                    className="w-10 h-10 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-full flex items-center justify-center text-white shadow-sm hover:bg-white/60 transition-colors"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                 </button>
@@ -61,12 +61,12 @@ export default function TherapistLogin() {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ delay: 0.2 }}
-                            className="w-16 h-16 rounded-full bg-white border border-border/50 shadow-sm flex items-center justify-center mx-auto mb-6"
+                            className="w-16 h-16 rounded-full bg-white border border-white/20/50 shadow-sm flex items-center justify-center mx-auto mb-6"
                         >
-                            <UserCircle2 className="w-8 h-8 text-primary/80" />
+                            <UserCircle2 className="w-8 h-8 text-white/80" />
                         </motion.div>
-                        <h1 className="font-serif text-3xl md:text-4xl text-primary mb-3">Therapist Portal</h1>
-                        <p className="text-text-muted text-sm px-4">
+                        <h1 className="font-serif text-3xl md:text-4xl text-white mb-3">Therapist Portal</h1>
+                        <p className="text-white/90-muted text-sm px-4">
                             {isLogin 
                                 ? "Welcome back. Access your schedule and manage your sessions." 
                                 : "Join our elite network of professional therapists in Bali."}
@@ -77,7 +77,7 @@ export default function TherapistLogin() {
                     <div className="bg-white/40 backdrop-blur-[40px] border border-white/60 rounded-[32px] p-6 sm:p-8 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_24px_48px_-12px_rgba(0,0,0,0.05)]">
                         
                         {/* Toggle */}
-                        <div className="flex p-1 bg-surface/50 border border-border/50 rounded-2xl mb-8 relative">
+                        <div className="flex p-1 bg-surface/50 border border-white/20/50 rounded-2xl mb-8 relative">
                             <motion.div
                                 className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-xl shadow-sm"
                                 animate={{ left: isLogin ? '4px' : 'calc(50%)' }}
@@ -86,14 +86,14 @@ export default function TherapistLogin() {
                             <button
                                 type="button"
                                 onClick={() => setIsLogin(true)}
-                                className={`flex-1 py-2.5 text-sm font-bold z-10 transition-colors ${isLogin ? 'text-primary' : 'text-text-muted hover:text-primary/70'}`}
+                                className={`flex-1 py-2.5 text-sm font-bold z-10 transition-colors ${isLogin ? 'text-white' : 'text-white/90-muted hover:text-white/70'}`}
                             >
                                 Log In
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setIsLogin(false)}
-                                className={`flex-1 py-2.5 text-sm font-bold z-10 transition-colors ${!isLogin ? 'text-primary' : 'text-text-muted hover:text-primary/70'}`}
+                                className={`flex-1 py-2.5 text-sm font-bold z-10 transition-colors ${!isLogin ? 'text-white' : 'text-white/90-muted hover:text-white/70'}`}
                             >
                                 Sign Up
                             </button>
@@ -114,27 +114,27 @@ export default function TherapistLogin() {
                                         <div className="space-y-4">
                                             <div className="relative">
                                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                    <User className="h-5 w-5 text-text-muted/50" />
+                                                    <User className="h-5 w-5 text-white/90-muted/50" />
                                                 </div>
                                                 <input
                                                     type="text"
                                                     
                                                     value={formData.name}
                                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                                    className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                                     placeholder="Full Name"
                                                 />
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="relative">
                                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                        <MapPin className="h-5 w-5 text-text-muted/50" />
+                                                        <MapPin className="h-5 w-5 text-white/90-muted/50" />
                                                     </div>
                                                     <select
                                                         
                                                         value={formData.location}
                                                         onChange={(e) => setFormData({...formData, location: e.target.value})}
-                                                        className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
+                                                        className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
                                                     >
                                                         <option value="" disabled>Location</option>
                                                         <option value="Ubud">Ubud</option>
@@ -144,14 +144,14 @@ export default function TherapistLogin() {
                                                 </div>
                                                 <div className="relative">
                                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                        <Sparkles className="h-5 w-5 text-text-muted/50" />
+                                                        <Sparkles className="h-5 w-5 text-white/90-muted/50" />
                                                     </div>
                                                     <input
                                                         type="text"
                                                         
                                                         value={formData.speciality}
                                                         onChange={(e) => setFormData({...formData, speciality: e.target.value})}
-                                                        className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                                        className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                                         placeholder="Specialty"
                                                     />
                                                 </div>
@@ -161,28 +161,28 @@ export default function TherapistLogin() {
 
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <Mail className="h-5 w-5 text-text-muted/50" />
+                                            <Mail className="h-5 w-5 text-white/90-muted/50" />
                                         </div>
                                         <input
                                             type="email"
                                             
                                             value={formData.email}
                                             onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                            className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                            className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                             placeholder="Email Address"
                                         />
                                     </div>
 
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <Lock className="h-5 w-5 text-text-muted/50" />
+                                            <Lock className="h-5 w-5 text-white/90-muted/50" />
                                         </div>
                                         <input
                                             type="password"
                                             
                                             value={formData.password}
                                             onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                            className="w-full bg-white/50 border border-border/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                            className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                             placeholder="Password"
                                         />
                                     </div>

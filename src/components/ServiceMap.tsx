@@ -38,7 +38,7 @@ const locations = [
 
 export default function ServiceMap() {
   return (
-    <div className="w-full h-full relative overflow-hidden rounded-[32px] border border-border/40 shadow-inner bg-[#f5f5f3]">
+    <div className="w-full h-full relative overflow-hidden rounded-[32px] border border-white/20/40 shadow-inner bg-[#f5f5f3]">
       <MapContainer 
         center={[-8.68, 115.18]} 
         zoom={10} 
@@ -59,7 +59,7 @@ export default function ServiceMap() {
           <Marker key={idx} position={loc.coords} icon={createCustomIcon(loc.name)}>
             <Popup className="custom-popup" closeButton={false}>
               <div className="text-center p-1">
-                <h4 className="font-serif font-medium text-primary text-sm m-0">{loc.name}</h4>
+                <h4 className="font-serif font-medium text-white text-sm m-0">{loc.name}</h4>
               </div>
             </Popup>
           </Marker>

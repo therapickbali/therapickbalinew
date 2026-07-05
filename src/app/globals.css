@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #FAFCF5;
-  --color-surface: #FFFFFF;
-  --color-primary: #322F37; /* Dark bento boxes and text */
-  --color-secondary: #E5F88A; /* Lime yellow gradient start */
+  --color-background: #000000;
+  --color-surface: #111111;
+  --color-primary: #FFFFFF;
+  --color-secondary: #D2F34C; /* Lime yellow gradient start */
   --color-accent: #9AF2C4; /* Mint green for cards */
   --color-highlight: #EBF8B1; /* Lighter yellow */
-  --color-text: #1C221D;
-  --color-text-muted: #7A7C75;
-  --color-border: #E8EBE3;
+  --color-text: #FFFFFF;
+  --color-text-muted: #9CA3AF;
+  --color-border: #333333;
   
-  --shadow-soft: 0 8px 24px -4px rgba(0, 0, 0, 0.04);
-  --shadow-soft-lg: 0 12px 32px -4px rgba(0, 0, 0, 0.08);
-  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.06);
+  --shadow-soft: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+  --shadow-soft-lg: 0 12px 32px -4px rgba(0, 0, 0, 0.5);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 
   --font-sans: var(--font-jakarta);
   --font-serif: var(--font-newsreader);

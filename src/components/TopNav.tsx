@@ -73,7 +73,7 @@ export default function TopNav() {
             >
                 
                 {/* Brand / Store (Left) */}
-                <a href="/store" className="flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 shadow-sm rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-primary shrink-0">
+                <a href="/store" className="flex items-center gap-2 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-white shrink-0">
                     <Store size={16} strokeWidth={2.5} />
                     <span className="text-[10px] md:text-[11px] font-bold tracking-widest uppercase mt-0.5">
                         STORE
@@ -100,7 +100,7 @@ export default function TopNav() {
                                 key={item.href}
                                 href={item.href} 
                                 className={`text-[11px] md:text-[13px] font-semibold tracking-wider transition-colors whitespace-nowrap ${
-                                    isActive ? 'text-primary' : 'text-primary/60 hover:text-primary'
+                                    isActive ? 'text-white' : 'text-white/60 hover:text-white'
                                 }`}
                             >
                                 {item.label}
@@ -112,7 +112,7 @@ export default function TopNav() {
                 {/* Desktop Therapist Portal Button */}
                 <a 
                     href="/therapist-login"
-                    className="hidden md:flex items-center justify-center bg-white/40 hover:bg-white/60 text-primary border border-white/60 px-4 py-2 rounded-full text-[11px] font-bold tracking-widest uppercase transition-colors shadow-sm ml-2"
+                    className="hidden md:flex items-center justify-center bg-white/40 hover:bg-white/60 text-white border border-white/60 px-4 py-2 rounded-full text-[11px] font-bold tracking-widest uppercase transition-colors shadow-sm ml-2"
                 >
                     THERAPIST PORTAL
                 </a>
@@ -120,7 +120,7 @@ export default function TopNav() {
                 {/* Dropdown Toggle Button (Visible on mobile ALWAYS) */}
                 <button 
                     onClick={() => setIsOpen(!isOpen)}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center text-primary transition-colors hover:bg-black/5 shrink-0 md:hidden`}
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-white transition-colors hover:bg-black/5 shrink-0 md:hidden`}
                     aria-label="Toggle Navigation"
                 >
                     {isOpen ? <X size={18} /> : <Menu size={18} />}
@@ -134,7 +134,7 @@ export default function TopNav() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
                             transition={{ duration: 0.2 }}
-                            className={`absolute top-[120%] right-0 w-48 shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col p-2 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl z-50 md:hidden`}
+                            className={`absolute top-[120%] right-0 w-48 shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col p-2 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl z-50 md:hidden`}
                         >
                             {mobileNavItems.map((item) => {
                                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
@@ -147,8 +147,8 @@ export default function TopNav() {
                                             item.href === '/therapist-login' 
                                                 ? 'bg-[#292831] text-white mt-2 text-center' // Standout style for therapist portal
                                                 : isActive 
-                                                    ? 'bg-surface text-primary' 
-                                                    : 'text-text-muted hover:bg-surface/50 hover:text-primary'
+                                                    ? 'bg-surface text-white' 
+                                                    : 'text-white/90-muted hover:bg-surface/50 hover:text-white'
                                         }`}
                                     >
                                         {item.label}

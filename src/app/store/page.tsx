@@ -158,10 +158,10 @@ export default function StorePage() {
 
                 {/* Product Grid */}
                 {filteredProducts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-24 text-center col-span-full relative overflow-hidden rounded-[40px] bg-[#F5F5F7]">
+                    <div className="flex flex-col items-center justify-center py-24 text-center col-span-full relative overflow-hidden rounded-[40px] bg-[#111]">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 pointer-events-none"></div>
                         <div className="relative z-10 flex flex-col items-center">
-                            <span className="bg-white/80 backdrop-blur-md border border-white/60 text-[#86868B] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm mb-4">Coming Soon</span>
+                            <span className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-[#86868B] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm mb-4">Coming Soon</span>
                             <h3 className="text-2xl md:text-3xl font-medium text-[#1D1D1F] tracking-tight mb-2">Boutique Curations</h3>
                             <p className="text-[#86868B] max-w-sm mx-auto text-sm font-medium px-4">We are currently crafting an exclusive collection of spa products.</p>
                         </div>
@@ -174,21 +174,21 @@ export default function StorePage() {
                             className="cursor-pointer outline-none h-full" 
                             onClick={() => product.stock > 0 && setSelectedProduct(product)}
                         >
-                            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
+                            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
                                 
                                 {/* Image */}
-                                <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden rounded-[16px]">
+                                <div className="aspect-[4/5] relative bg-[#111] overflow-hidden rounded-[16px]">
                                     <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 </div>
                                 
                                 {/* Text Info */}
                                 <div className="flex flex-col flex-grow px-2 md:px-3 pt-3 pb-2">
-                                    <p className="text-gray-400 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Elexoir'}</p>
-                                    <h4 className="font-bold text-gray-900 text-[13px] md:text-sm line-clamp-1 mb-4">{product.title}</h4>
+                                    <p className="text-white/50 text-[11px] font-medium mb-1 line-clamp-1">{product.category || 'Elexoir'}</p>
+                                    <h4 className="font-bold text-white text-[13px] md:text-sm line-clamp-1 mb-4">{product.title}</h4>
                                     
                                     {/* Price and Add Button */}
-                                    <div className="flex items-center justify-between bg-gray-50 rounded-full p-1 pl-3 mt-auto border border-gray-100">
-                                        <span className="font-semibold text-gray-900 text-[13px] md:text-sm">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
+                                    <div className="flex items-center justify-between bg-white/10 rounded-full p-1 pl-3 mt-auto border border-white/10">
+                                        <span className="font-semibold text-white text-[13px] md:text-sm">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
                                         <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                                             <Plus size={18} strokeWidth={2.5} />
                                         </div>
@@ -212,13 +212,13 @@ export default function StorePage() {
                         >
                                     {/* Top Nav */}
                                     <div className="absolute top-6 left-6 right-6 flex justify-between z-20 pointer-events-none">
-                                        <button onClick={closeModal} className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#2B2B2B] shadow-sm hover:scale-105 transition-transform pointer-events-auto">
+                                        <button onClick={closeModal} className="w-10 h-10 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-full flex items-center justify-center text-[#2B2B2B] shadow-sm hover:scale-105 transition-transform pointer-events-auto">
                                             <ChevronRight className="rotate-180" size={24} strokeWidth={2}/>
                                         </button>
                                     </div>
                                     
                                     {/* Image Section */}
-                                    <div className="h-[45%] bg-[#F5F5F7] relative flex items-center justify-center shrink-0 overflow-hidden">
+                                    <div className="h-[45%] bg-[#111] relative flex items-center justify-center shrink-0 overflow-hidden">
                                         <img src={selectedProduct.image} className="w-full h-full object-cover mix-blend-multiply" />
                                     </div>
 
@@ -331,14 +331,14 @@ export default function StorePage() {
                                         <form id="checkout-form" onSubmit={handleCheckoutSubmit} className="space-y-3 mb-8">
                                             <div className="relative shadow-sm">
                                                 <MapPin className="absolute left-4 top-3.5 text-[#2B2B2B]" size={18} />
-                                                <input required type="text" placeholder="Full Address..." value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl pl-12 pr-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors" />
+                                                <input required type="text" placeholder="Full Address..." value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl pl-12 pr-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors" />
                                             </div>
-                                            <input required type="text" placeholder="Full Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors shadow-sm" />
-                                            <input required type="tel" placeholder="Phone Number" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors shadow-sm" />
+                                            <input required type="text" placeholder="Full Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors shadow-sm" />
+                                            <input required type="tel" placeholder="Phone Number" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors shadow-sm" />
                                         </form>
 
                                         <div className="flex gap-2 mb-8">
-                                            <input type="text" placeholder="Enter promo code" className="flex-1 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] shadow-sm rounded-xl px-4 py-3 text-sm outline-none focus:border-[#2B2B2B] transition-colors" />
+                                            <input type="text" placeholder="Enter promo code" className="flex-1 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] shadow-sm rounded-xl px-4 py-3 text-sm outline-none focus:border-[#2B2B2B] transition-colors" />
                                             <button className="bg-[#2B2B2B] text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-black transition-colors">Apply</button>
                                         </div>
 

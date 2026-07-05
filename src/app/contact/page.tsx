@@ -7,10 +7,10 @@ import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
 
 export default function ContactPage() {
     return (
-        <div className="min-h-screen bg-background pb-24">
+        <div className="min-h-screen bg-black pb-24">
             {/* Mobile Header */}
-            <div className="pt-14 pb-4 px-6 bg-surface/90 backdrop-blur-md sticky top-0 z-30 border-b border-border/60">
-                <h1 className="font-serif text-3xl text-primary">Concierge</h1>
+            <div className="pt-14 pb-4 px-6 bg-surface/90 backdrop-blur-md sticky top-0 z-30 border-b border-white/20/60">
+                <h1 className="font-serif text-3xl text-white">Concierge</h1>
             </div>
 
             <div className="px-6 py-8">
@@ -19,39 +19,39 @@ export default function ContactPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-8"
                 >
-                    <p className="text-sm font-light text-text-muted leading-relaxed">
+                    <p className="text-sm font-light text-white/90-muted leading-relaxed">
                         Our dedicated concierge is available to assist you with inquiries, bespoke rituals, and special arrangements for your in-villa wellness experience.
                     </p>
                 </motion.div>
 
                 <div className="space-y-4 mb-10">
-                    <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="flex items-center gap-4 bg-surface p-5 rounded-2xl border border-border/80 active:scale-95 transition-transform">
-                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
+                    <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="flex items-center gap-4 bg-surface p-5 rounded-2xl border border-white/20/80 active:scale-95 transition-transform">
+                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0">
                             <Phone size={18} className="text-white" />
                         </div>
                         <div>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted block mb-1">WhatsApp</span>
-                            <span className="font-sans font-medium text-sm text-primary">+62 851 7411 9423</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/90-muted block mb-1">WhatsApp</span>
+                            <span className="font-sans font-medium text-sm text-white">+62 851 7411 9423</span>
                         </div>
                     </a>
 
-                    <a href="mailto:info@elexoirhomespa.com" className="flex items-center gap-4 bg-surface p-5 rounded-2xl border border-border/80 active:scale-95 transition-transform">
-                        <div className="w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center shrink-0">
-                            <Mail size={18} className="text-primary" />
+                    <a href="mailto:info@elexoirhomespa.com" className="flex items-center gap-4 bg-surface p-5 rounded-2xl border border-white/20/80 active:scale-95 transition-transform">
+                        <div className="w-10 h-10 rounded-full bg-black border border-white/20 flex items-center justify-center shrink-0">
+                            <Mail size={18} className="text-white" />
                         </div>
                         <div>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted block mb-1">Email</span>
-                            <span className="font-sans font-medium text-sm text-primary">info@elexoirhomespa.com</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/90-muted block mb-1">Email</span>
+                            <span className="font-sans font-medium text-sm text-white">info@elexoirhomespa.com</span>
                         </div>
                     </a>
 
-                    <div className="flex items-center gap-4 bg-surface p-5 rounded-2xl border border-border/80">
-                        <div className="w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center shrink-0">
-                            <MapPin size={18} className="text-primary" />
+                    <div className="flex items-center gap-4 bg-surface p-5 rounded-2xl border border-white/20/80">
+                        <div className="w-10 h-10 rounded-full bg-black border border-white/20 flex items-center justify-center shrink-0">
+                            <MapPin size={18} className="text-white" />
                         </div>
                         <div>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted block mb-1">Service Area</span>
-                            <span className="font-sans font-medium text-sm text-primary">Ubud & Surrounding Areas</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/90-muted block mb-1">Service Area</span>
+                            <span className="font-sans font-medium text-sm text-white">Ubud & Surrounding Areas</span>
                         </div>
                     </div>
                 </div>
@@ -60,13 +60,13 @@ export default function ContactPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-primary text-white p-8 rounded-3xl text-center"
+                    className="bg-white text-black p-8 rounded-3xl text-center"
                 >
                     <h3 className="font-serif text-2xl mb-2">Have Questions?</h3>
                     <p className="text-xs font-light text-white/80 mb-6 max-w-[250px] mx-auto">
                         Speak directly with our wellness advisors for personalized recommendations.
                     </p>
-                    <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="inline-flex h-12 px-8 bg-white text-primary rounded-xl items-center justify-center gap-2 active:bg-surface transition-colors">
+                    <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="inline-flex h-12 px-8 bg-white text-white rounded-xl items-center justify-center gap-2 active:bg-surface transition-colors">
                         <span className="text-[10px] font-bold uppercase tracking-widest">Chat Now</span>
                         <ArrowRight size={14} strokeWidth={2.5} />
                     </a>
