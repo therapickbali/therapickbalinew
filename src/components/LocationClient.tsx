@@ -257,7 +257,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Search your favourite treatment..." 
-                            className="w-full bg-white/70 backdrop-blur-md border border-white/50 rounded-2xl h-[54px] pl-12 pr-12 text-sm text-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-secondary/50 placeholder:text-text-muted"
+                            className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 rounded-2xl h-[54px] pl-12 pr-12 text-sm text-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-secondary/50 placeholder:text-text-muted"
                         />
                         <button 
                             onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
@@ -304,13 +304,13 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                     {/* Navigation Buttons (Desktop only) */}
                     <button 
                         onClick={scrollLeft}
-                        className="hidden md:flex absolute left-[-20px] lg:left-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
+                        className="hidden md:flex absolute left-[-20px] lg:left-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     </button>
                     <button 
                         onClick={scrollRight}
-                        className="hidden md:flex absolute right-[-20px] lg:right-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
+                        className="hidden md:flex absolute right-[-20px] lg:right-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
@@ -385,7 +385,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {products.map((product) => (
                             <a href="/store" key={product.id} className="w-48 md:w-52 shrink-0 block outline-none">
-                                <div className="bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
+                                <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
                                     
                                     {/* Image */}
                                     <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden rounded-[16px]">
@@ -495,7 +495,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                 }]);
                                                 setIsBookingModalOpen(true);
                                             }}>
-                                                <div className="rounded-[32px] p-6 bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
+                                                <div className="rounded-[32px] p-6 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
                                                     <div className="mb-4 flex items-start justify-between">
                                                         <div className="bg-primary/5 border border-primary/10 text-primary px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm">
                                                             {treatment.category}
@@ -543,7 +543,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white/40 backdrop-blur-3xl border border-white/50 rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
+                            className="bg-white/10 backdrop-blur-[40px] border border-white/40 rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
                         >
                             <button 
                                 onClick={() => setIsBookingModalOpen(false)}

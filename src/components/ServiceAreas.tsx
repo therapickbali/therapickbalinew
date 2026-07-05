@@ -63,7 +63,7 @@ export default function ServiceAreas() {
       <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 pb-6 md:pb-0">
         {areas.map((area, idx) => (
           <Link href={`/locations/${area.slug}`} key={idx} className="group block outline-none shrink-0 w-[260px] md:w-auto snap-center">
-            <div className="bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-6 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] hover:border-primary/20 hover:-translate-y-1 h-full flex flex-col">
+            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-3xl p-6 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] hover:border-primary/20 hover:-translate-y-1 h-full flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-serif text-xl text-primary font-medium">{area.name}</h3>
                 <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">

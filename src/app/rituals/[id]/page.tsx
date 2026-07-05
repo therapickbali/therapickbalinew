@@ -177,7 +177,7 @@ export default function RitualsDetails() {
                 {/* Header Actions */}
                 <header className="flex items-center justify-between mb-16">
                     <Link href="/">
-                        <button className="w-12 h-12 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-center text-primary shadow-[0_8px_20px_rgb(0,0,0,0.04)] hover:bg-surface hover:scale-105 transition-all">
+                        <button className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] flex items-center justify-center text-primary shadow-[0_8px_20px_rgb(0,0,0,0.04)] hover:bg-surface hover:scale-105 transition-all">
                             <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
                         </button>
                     </Link>
@@ -374,7 +374,7 @@ export default function RitualsDetails() {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white/40 backdrop-blur-3xl border border-white/50 rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
+                            className="bg-white/10 backdrop-blur-[40px] border border-white/40 rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
                         >
                             <button 
                                 onClick={() => setIsModalOpen(false)}

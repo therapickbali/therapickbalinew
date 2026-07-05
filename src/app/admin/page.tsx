@@ -489,14 +489,14 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Deep Tissue Flow" 
                                                     value={treatmentTitle} onChange={e => setTreatmentTitle(e.target.value)}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Category</label>
                                                 <select 
                                                     value={treatmentCategory} onChange={e => setTreatmentCategory(e.target.value)}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm appearance-none"
+                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm appearance-none"
                                                 >
                                                     <option value="Massage">Massage</option>
                                                     <option value="Facial">Facial</option>
@@ -519,7 +519,7 @@ export default function AdminDashboard() {
                                                     <div className="flex-1 relative">
                                                         <input 
                                                             type="number" required placeholder="60" value={option.duration} onChange={(e) => handlePricingChange(idx, 'duration', e.target.value)}
-                                                            className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 pr-16 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                            className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 pr-16 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                         />
                                                         <span className="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-semibold text-text-muted">MINS</span>
                                                     </div>
@@ -527,7 +527,7 @@ export default function AdminDashboard() {
                                                         <span className="absolute left-5 top-1/2 -translate-y-1/2 text-sm font-semibold text-text-muted">Rp</span>
                                                         <input 
                                                             type="text" required placeholder="450,000" value={option.price} onChange={(e) => handlePricingChange(idx, 'price', e.target.value)}
-                                                            className="w-full bg-white/50 border border-border/50 rounded-2xl px-12 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                            className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-12 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                         />
                                                     </div>
                                                     {pricingOptions.length > 1 && (
@@ -545,7 +545,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 required rows={3} placeholder="Write a captivating description about the treatment..." 
                                                 value={treatmentDesc} onChange={e => setTreatmentDesc(e.target.value)}
-                                                className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
                                             />
                                         </div>
 
@@ -561,7 +561,7 @@ export default function AdminDashboard() {
                                                 <div key={idx} className="flex items-center gap-4">
                                                     <input 
                                                         type="text" required placeholder="e.g. Relieves deep muscle tension" value={benefit} onChange={(e) => handleBenefitChange(idx, e.target.value)}
-                                                        className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                        className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                     />
                                                     {benefits.length > 1 && (
                                                         <button type="button" onClick={() => handleRemoveBenefit(idx)} className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center shrink-0 hover:bg-red-100 transition-colors">
@@ -583,7 +583,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Summer Retreat" 
                                                     value={campaignTitle} onChange={e => setCampaignTitle(e.target.value)}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -591,7 +591,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Limited Offer" 
                                                     value={campaignLabel} onChange={e => setCampaignLabel(e.target.value)}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
                                         </div>
@@ -626,7 +626,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 required rows={3} placeholder="Enjoy up to 20% off all signature treatments this month..." 
                                                 value={campaignDesc} onChange={e => setCampaignDesc(e.target.value)}
-                                                className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
                                             />
                                         </div>
 
@@ -636,7 +636,7 @@ export default function AdminDashboard() {
                                                 <label className="text-xs font-bold uppercase tracking-widest text-text-muted ml-1">Campaign Duration</label>
                                                 <div className="relative">
                                                     <select 
-                                                        className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm appearance-none"
+                                                        className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm appearance-none"
                                                         value={campaignDuration}
                                                         onChange={(e) => setCampaignDuration(e.target.value)}
                                                     >
@@ -656,7 +656,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="number" required min="1" max="100" placeholder="20" 
                                                     value={discountPercentage} onChange={e => setDiscountPercentage(Number(e.target.value))}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
                                         </div>
@@ -719,7 +719,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Signature Massage Oil" 
                                                     value={productTitle} onChange={e => setProductTitle(e.target.value)}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -727,7 +727,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Oils" 
                                                     value={productCategory} onChange={e => setProductCategory(e.target.value)}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
                                         </div>
@@ -739,7 +739,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. 350,000" 
                                                     value={productPrice} onChange={e => setProductPrice(e.target.value)}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -747,7 +747,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="number" required min="0" placeholder="e.g. 10" 
                                                     value={productStock} onChange={e => setProductStock(parseInt(e.target.value) || 0)}
-                                                    className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
+                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
                                                 />
                                             </div>
                                         </div>
@@ -783,7 +783,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 required rows={4} placeholder="Write a captivating description about the product..." 
                                                 value={productDesc} onChange={e => setProductDesc(e.target.value)}
-                                                className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
                                             />
                                         </div>
 
@@ -793,7 +793,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 rows={4} placeholder="Instructions on how to use..." 
                                                 value={productHowToUse} onChange={e => setProductHowToUse(e.target.value)}
-                                                className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
                                             />
                                         </div>
 
@@ -803,7 +803,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 rows={3} placeholder="Comma-separated ingredients..." 
                                                 value={productIngredients} onChange={e => setProductIngredients(e.target.value)}
-                                                className="w-full bg-white/50 border border-border/50 rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl px-5 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm resize-none"
                                             />
                                         </div>
                                     </>
@@ -821,7 +821,7 @@ export default function AdminDashboard() {
                                                     placeholder="Search treatments..."
                                                     value={feeSearch}
                                                     onChange={(e) => setFeeSearch(e.target.value)}
-                                                    className="w-full md:w-64 bg-white/50 border border-border/50 rounded-xl px-4 py-2 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                                                    className="w-full md:w-64 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-2 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
                                                 />
                                                 <span className="text-xs font-semibold text-text-muted bg-surface px-3 py-1 rounded-full whitespace-nowrap">
                                                     {treatments.filter(t => t.title.toLowerCase().includes(feeSearch.toLowerCase()) || t.category.toLowerCase().includes(feeSearch.toLowerCase())).length} Treatments
@@ -864,7 +864,7 @@ export default function AdminDashboard() {
                                                                 <div className="p-5 pt-0 border-t border-border/20 mt-2 space-y-4">
                                                                     <div className="space-y-3">
                                                                         {t.options.map(opt => (
-                                                                            <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-xl gap-4 hover:border-primary/20 transition-colors">
+                                                                            <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl gap-4 hover:border-primary/20 transition-colors">
                                                                                 <div className="flex items-center justify-between sm:justify-start gap-4">
                                                                                     <span className="text-sm font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-md">{opt.duration}</span>
                                                                                     <span className="text-xs font-semibold text-text-muted">Cust. Price: Rp {opt.price}</span>
@@ -908,7 +908,7 @@ export default function AdminDashboard() {
                                 {activeTab === 'list' && (
                                     <div className="space-y-8">
                                         {/* Segmented Control for View Selection */}
-                                        <div className="flex bg-white/50 border border-border/50 p-1.5 rounded-2xl w-full max-w-xl shadow-sm mb-6">
+                                        <div className="flex bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,1)] p-1.5 rounded-2xl w-full max-w-xl shadow-sm mb-6">
                                             {['campaign', 'treatments', 'store'].map((view) => (
                                                 <button
                                                     key={view}
@@ -949,14 +949,14 @@ export default function AdminDashboard() {
                                                             <button 
                                                                 onClick={handleEditCampaign}
                                                                 type="button"
-                                                                className="w-10 h-10 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
                                                             >
                                                                 <Edit3 size={16} />
                                                             </button>
                                                             <button 
                                                                 onClick={handleRemoveCampaign}
                                                                 type="button"
-                                                                className="w-10 h-10 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                                                             >
                                                                 <Trash2 size={16} />
                                                             </button>
@@ -1038,14 +1038,14 @@ export default function AdminDashboard() {
                                                                     <button 
                                                                         type="button"
                                                                         onClick={() => handleEditTreatment(t)}
-                                                                        className="w-10 h-10 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
                                                                     >
                                                                         <Edit3 size={16} />
                                                                     </button>
                                                                     <button 
                                                                         type="button"
                                                                         onClick={() => handleRemoveTreatment(t.id)}
-                                                                        className="w-10 h-10 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                                                                     >
                                                                         <Trash2 size={16} />
                                                                     </button>
@@ -1100,14 +1100,14 @@ export default function AdminDashboard() {
                                                                 <button 
                                                                     type="button"
                                                                     onClick={() => handleEditProduct(p)}
-                                                                    className="w-8 h-8 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
+                                                                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] text-text-muted hover:text-primary hover:bg-surface flex items-center justify-center transition-colors"
                                                                 >
                                                                     <Edit3 size={14} />
                                                                 </button>
                                                                 <button 
                                                                     type="button"
                                                                     onClick={() => handleRemoveProduct(p.id)}
-                                                                    className="w-8 h-8 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                                                                 >
                                                                     <Trash2 size={14} />
                                                                 </button>

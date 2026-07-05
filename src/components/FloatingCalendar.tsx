@@ -118,7 +118,7 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
                 <button 
                     type="button"
                     onClick={handlePrevMonth}
-                    className="w-8 h-8 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-center text-primary hover:bg-surface transition-colors shadow-sm"
+                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] flex items-center justify-center text-primary hover:bg-surface transition-colors shadow-sm"
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -133,7 +133,7 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
                 <button 
                     type="button"
                     onClick={handleNextMonth}
-                    className="w-8 h-8 rounded-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-center text-primary hover:bg-surface transition-colors shadow-sm"
+                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] flex items-center justify-center text-primary hover:bg-surface transition-colors shadow-sm"
                 >
                     <ChevronRight className="w-4 h-4" />
                 </button>

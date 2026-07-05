@@ -174,7 +174,7 @@ export default function StorePage() {
                             className="cursor-pointer outline-none h-full" 
                             onClick={() => product.stock > 0 && setSelectedProduct(product)}
                         >
-                            <div className="bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
+                            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
                                 
                                 {/* Image */}
                                 <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden rounded-[16px]">
@@ -331,14 +331,14 @@ export default function StorePage() {
                                         <form id="checkout-form" onSubmit={handleCheckoutSubmit} className="space-y-3 mb-8">
                                             <div className="relative shadow-sm">
                                                 <MapPin className="absolute left-4 top-3.5 text-[#2B2B2B]" size={18} />
-                                                <input required type="text" placeholder="Full Address..." value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-xl pl-12 pr-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors" />
+                                                <input required type="text" placeholder="Full Address..." value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl pl-12 pr-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors" />
                                             </div>
-                                            <input required type="text" placeholder="Full Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors shadow-sm" />
-                                            <input required type="tel" placeholder="Phone Number" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors shadow-sm" />
+                                            <input required type="text" placeholder="Full Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors shadow-sm" />
+                                            <input required type="tel" placeholder="Phone Number" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#2B2B2B] transition-colors shadow-sm" />
                                         </form>
 
                                         <div className="flex gap-2 mb-8">
-                                            <input type="text" placeholder="Enter promo code" className="flex-1 bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] shadow-sm rounded-xl px-4 py-3 text-sm outline-none focus:border-[#2B2B2B] transition-colors" />
+                                            <input type="text" placeholder="Enter promo code" className="flex-1 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] shadow-sm rounded-xl px-4 py-3 text-sm outline-none focus:border-[#2B2B2B] transition-colors" />
                                             <button className="bg-[#2B2B2B] text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-black transition-colors">Apply</button>
                                         </div>
 
