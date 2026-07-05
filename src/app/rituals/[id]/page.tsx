@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FloatingCalendar from '@/components/FloatingCalendar';
-import { ChevronLeft, Share, MapPin, Clock, Calendar, Sparkles, Plus, Minus, X, MessageCircle, Heart, Bitcoin, ArrowRight } from 'lucide-react';
+import { ChevronLeft, Share, MapPin, Clock, Calendar, Sparkles, Plus, Minus, X, MessageCircle, Heart, Bitcoin, ArrowRight , BadgeCheck} from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useSpa } from '@/context/SpaContext';
@@ -177,7 +177,7 @@ export default function RitualsDetails() {
                 {/* Header Actions */}
                 <header className="flex items-center justify-between mb-16">
                     <Link href="/">
-                        <button className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] flex items-center justify-center text-primary shadow-[0_8px_20px_rgb(0,0,0,0.04)] hover:bg-surface hover:scale-105 transition-all">
+                        <button className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] flex items-center justify-center text-primary shadow-[0_8px_20px_rgb(0,0,0,0.04)] hover:bg-surface hover:scale-105 transition-all">
                             <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
                         </button>
                     </Link>
@@ -201,7 +201,7 @@ export default function RitualsDetails() {
                 {/* Smart Pricing & Duration Bento Grid */}
                 <div className="w-full max-w-md mx-auto mb-10 pb-10 md:pb-0 space-y-4">
                     {/* Duration Card */}
-                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[32px] p-6 sm:p-8">
+                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 sm:p-8">
                         <div className="flex items-center justify-between mb-6">
                             <span className="text-sm font-bold uppercase tracking-widest text-primary/80">Select Duration</span>
                             <div className="w-8 h-8 rounded-full bg-white/20 border border-white/40 flex items-center justify-center text-primary shadow-sm">
@@ -229,7 +229,7 @@ export default function RitualsDetails() {
                     </div>
 
                     {/* Price Card */}
-                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[32px] p-6 sm:p-8">
+                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 sm:p-8">
                         <div className="flex flex-col mb-8">
                             <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-2">
                                 {isCoupleTreatment ? "Price for 2 persons" : "Price per person"}
@@ -464,7 +464,7 @@ export default function RitualsDetails() {
                                     {/* Cart Items List */}
                                     <div className="space-y-3 mb-4 max-h-[40vh] overflow-y-auto pr-1 no-scrollbar">
                                         {cartItems.map(item => (
-                                            <div key={item.id} className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl p-4 relative">
+                                            <div key={item.id} className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl p-4 relative">
                                                 {cartItems.length > 1 && (
                                                     <button 
                                                         onClick={() => setCartItems(cartItems.filter(i => i.id !== item.id))}
@@ -569,7 +569,7 @@ export default function RitualsDetails() {
                                             <input 
                                                 type="time" required 
                                                 value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                     </div>
@@ -634,7 +634,7 @@ export default function RitualsDetails() {
                                             <span className="font-bold text-primary text-sm tracking-wide">Assign Automatically</span>
                                             <ArrowRight className="w-4 h-4 text-text-muted" />
                                         </button>
-                                        <div className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] p-4 rounded-2xl flex items-center justify-between my-2">
+                                        <div className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] p-4 rounded-2xl flex items-center justify-between my-2">
                                             <span className="text-xs font-bold text-primary/80 uppercase tracking-widest">Therapists Needed</span>
                                             <span className="text-sm font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
                                         </div>
@@ -645,7 +645,22 @@ export default function RitualsDetails() {
                                                     if (selectedTherapists.includes(t.id)) {
                                                         setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
                                                     } else if (selectedTherapists.length < totalGuests) {
-                                                        setSelectedTherapists([...selectedTherapists, t.id]);
+                                                        if (t.status === 'Busy') {
+                                                            if (totalGuests > 1) {
+                                                                alert("For group bookings, please select therapists who are currently 'Ready to accept jobs'.");
+                                                                return;
+                                                            }
+                                                            if (t.availableAt) {
+                                                                if (confirm(`This therapist will be ready at ${t.availableAt}. Your booking time will be automatically updated to ${t.availableAt}. Do you want to proceed?`)) {
+                                                                    setFormData({...formData, time: t.availableAt});
+                                                                    setSelectedTherapists([...selectedTherapists, t.id]);
+                                                                }
+                                                            } else {
+                                                                setSelectedTherapists([...selectedTherapists, t.id]);
+                                                            }
+                                                        } else {
+                                                            setSelectedTherapists([...selectedTherapists, t.id]);
+                                                        }
                                                     }
                                                 }}
                                                 className={`w-full p-4 sm:p-5 rounded-3xl text-left flex gap-5 transition-all duration-300 relative overflow-hidden ${
@@ -653,7 +668,7 @@ export default function RitualsDetails() {
                                                     ? "bg-[#292831] border-[#292831] text-white shadow-xl scale-[1.02]" 
                                                     : (selectedTherapists.length >= totalGuests && !selectedTherapists.includes(t.id) 
                                                         ? "bg-white/5 border-white/10 opacity-40 cursor-not-allowed" 
-                                                        : "bg-white/10 backdrop-blur-[40px] border border-white/40 hover:bg-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] hover:-translate-y-1")
+                                                        : "bg-white/10 backdrop-blur-[40px] border border-white/40 hover:bg-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] hover:-translate-y-1")
                                                 }`}
                                             >
                                                 <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border-2 border-white/50 shadow-sm w-16 h-16">
@@ -671,18 +686,18 @@ export default function RitualsDetails() {
                                                             {t.status === "Busy" && <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]"></span>}
                                                             {t.status === "Off" && <span className="w-2 h-2 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]"></span>}
                                                         </div>
-                                                        <div className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${selectedTherapists.includes(t.id) ? "bg-white/20 text-white" : "bg-primary/5 text-primary"}`}>
-                                                            ★ {t.rating}
+                                                        <div className="flex items-center text-[#2563eb]">
+                                                            <BadgeCheck className="w-4 h-4" />
                                                         </div>
                                                     </div>
                                                     <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-primary/60"}`}>{t.desc}</p>
                                                     <div className="flex items-center gap-2">
                                                         {t.status === "Off" ? (
-                                                            <span className="text-[10px] font-bold text-red-500/90 bg-red-50/80 px-2 py-1 rounded border border-red-100">Offline</span>
+                                                            <span className="text-[10px] font-semibold text-red-400 flex items-center gap-1.5 bg-red-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>Offline</span>
                                                         ) : t.status === "Busy" ? (
-                                                            <span className="text-[10px] font-bold text-amber-600/90 bg-amber-50/80 px-2 py-1 rounded border border-amber-100">Handling customer • Ready at {t.availableAt || "13:00"}</span>
+                                                            <span className="text-[10px] font-semibold text-amber-500 flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>Handling customer • Ready at {t.availableAt || "13:00"}</span>
                                                         ) : (
-                                                            <span className="text-[10px] font-bold text-green-600/90 bg-green-50/80 px-2 py-1 rounded border border-green-100">Ready to accept jobs</span>
+                                                            <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>Ready to accept jobs</span>
                                                         )}
                                                     </div>
                                                 </div>
@@ -723,7 +738,7 @@ export default function RitualsDetails() {
 
                                     {/* SUMMARY CARD */}
                                     {cartItems.length > 0 && (
-                                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl p-4 mb-6 shadow-sm">
+                                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl p-4 mb-6 shadow-sm">
                                         <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Booking Summary</h4>
                                         <div className="space-y-3 mb-4">
                                             {cartItems.map((item, idx) => (
@@ -771,7 +786,7 @@ export default function RitualsDetails() {
                                             <input 
                                                 type="text" required placeholder="John Doe"
                                                 value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                         <div className="space-y-1.5">
@@ -779,7 +794,7 @@ export default function RitualsDetails() {
                                             <input 
                                                 type="text" required placeholder={`e.g. Four Seasons Sayan (${selectedArea})`}
                                                 value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                         <div className="space-y-1.5">
@@ -787,7 +802,7 @@ export default function RitualsDetails() {
                                             <input 
                                                 type="text" placeholder="e.g. Villa 12"
                                                 value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
 

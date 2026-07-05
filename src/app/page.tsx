@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle, ChevronLeft, Bitcoin } from 'lucide-react';
+import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle, ChevronLeft, Bitcoin , BadgeCheck} from 'lucide-react';
 import Link from 'next/link';
 import { useSpa } from '@/context/SpaContext';
 import SeoExpandedContent from '@/components/SeoExpandedContent';
@@ -333,7 +333,7 @@ ${treatmentsList}
                         <div className="flex overflow-x-auto gap-4 no-scrollbar -mx-6 px-6 pb-4 snap-x snap-mandatory">
                             {treatments.filter(t => t.is_pinned).map(treatment => (
                                 <a href={`/rituals/${treatment.id}`} key={treatment.id} className="w-[65vw] sm:w-[220px] shrink-0 snap-center outline-none">
-                                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[24px] p-2 flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group">
+                                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[24px] p-2 flex flex-col h-full hover:shadow-none transition-all duration-300 relative group">
                                         <div className="aspect-[4/3] relative bg-[#F5F5F7] overflow-hidden rounded-[16px]">
                                             {treatment.pinned_image ? (
                                                 <img src={treatment.pinned_image} alt={treatment.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -392,13 +392,13 @@ ${treatmentsList}
                     {/* Navigation Buttons (Desktop only) */}
                     <button 
                         onClick={scrollLeft}
-                        className="hidden md:flex absolute left-[-20px] lg:left-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
+                        className="hidden md:flex absolute left-[-20px] lg:left-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     </button>
                     <button 
                         onClick={scrollRight}
-                        className="hidden md:flex absolute right-[-20px] lg:right-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
+                        className="hidden md:flex absolute right-[-20px] lg:right-[-40px] top-[40%] -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-full shadow-lg items-center justify-center z-20 text-primary hover:scale-105 transition-transform"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
@@ -473,7 +473,7 @@ ${treatmentsList}
                     <div className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar">
                         {products.map((product) => (
                             <a href="/store" key={product.id} className="w-48 md:w-52 shrink-0 block outline-none">
-                                <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[24px] flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative group p-2">
+                                <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[24px] flex flex-col h-full hover:shadow-none transition-all duration-300 relative group p-2">
                                     
                                     {/* Image */}
                                     <div className="aspect-[4/5] relative bg-[#F5F5F7] overflow-hidden rounded-[16px]">
@@ -510,7 +510,7 @@ ${treatmentsList}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
                         {MOCK_THERAPISTS.slice(0, 4).map(t => (
-                            <div key={t.id} className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-[32px] p-6 flex flex-col items-center text-center shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 group">
+                            <div key={t.id} className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 flex flex-col items-center text-center shadow-sm hover:shadow-none transition-all duration-300 group">
                                 <div className="w-24 h-24 rounded-full overflow-hidden mb-5 border-4 border-surface shadow-sm group-hover:scale-105 transition-transform duration-500">
                                     <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
                                 </div>
@@ -648,7 +648,7 @@ ${treatmentsList}
                                                 }]);
                                                 setIsBookingModalOpen(true);
                                             }}>
-                                                <div className="rounded-[32px] p-6 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
+                                                <div className="rounded-[32px] p-6 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] shadow-sm hover:shadow-md transition-all duration-500 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-1">
                                                     <div className="mb-4 flex items-start justify-between">
                                                         <div className="bg-primary/5 border border-primary/10 text-primary px-3 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm">
                                                             {treatment.category}
@@ -795,7 +795,7 @@ ${treatmentsList}
                                     {/* Cart Items List */}
                                     <div className="space-y-3 mb-4 max-h-[40vh] overflow-y-auto pr-1 no-scrollbar">
                                         {cartItems.map(item => (
-                                            <div key={item.id} className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-2xl p-4 relative">
+                                            <div key={item.id} className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl p-4 relative">
                                                 {cartItems.length > 1 && (
                                                     <button 
                                                         onClick={() => setCartItems(cartItems.filter(i => i.id !== item.id))}
@@ -905,7 +905,7 @@ ${treatmentsList}
                                             <input 
                                                 type="time" required 
                                                 value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-4 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                     </div>
@@ -966,7 +966,7 @@ ${treatmentsList}
                                             <span className="font-bold text-primary text-sm tracking-wide">Assign Automatically</span>
                                             <ArrowRight className="w-4 h-4 text-text-muted" />
                                         </button>
-                                        <div className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] p-4 rounded-2xl flex items-center justify-between my-2">
+                                        <div className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] p-4 rounded-2xl flex items-center justify-between my-2">
                                             <span className="text-xs font-bold text-primary/80 uppercase tracking-widest">Therapists Needed</span>
                                             <span className="text-sm font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
                                         </div>
@@ -977,7 +977,22 @@ ${treatmentsList}
                                                     if (selectedTherapists.includes(t.id)) {
                                                         setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
                                                     } else if (selectedTherapists.length < totalGuests) {
-                                                        setSelectedTherapists([...selectedTherapists, t.id]);
+                                                        if (t.status === 'Busy') {
+                                                            if (totalGuests > 1) {
+                                                                alert("For group bookings, please select therapists who are currently 'Ready to accept jobs'.");
+                                                                return;
+                                                            }
+                                                            if (t.availableAt) {
+                                                                if (confirm(`This therapist will be ready at ${t.availableAt}. Your booking time will be automatically updated to ${t.availableAt}. Do you want to proceed?`)) {
+                                                                    setFormData({...formData, time: t.availableAt});
+                                                                    setSelectedTherapists([...selectedTherapists, t.id]);
+                                                                }
+                                                            } else {
+                                                                setSelectedTherapists([...selectedTherapists, t.id]);
+                                                            }
+                                                        } else {
+                                                            setSelectedTherapists([...selectedTherapists, t.id]);
+                                                        }
                                                     }
                                                 }}
                                                 className={`w-full p-4 sm:p-5 rounded-3xl text-left flex gap-5 transition-all duration-300 relative overflow-hidden ${
@@ -985,7 +1000,7 @@ ${treatmentsList}
                                                     ? "bg-[#292831] border-[#292831] text-white shadow-xl scale-[1.02]" 
                                                     : (selectedTherapists.length >= totalGuests && !selectedTherapists.includes(t.id) 
                                                         ? "bg-white/5 border-white/10 opacity-40 cursor-not-allowed" 
-                                                        : "bg-white/10 backdrop-blur-[40px] border border-white/40 hover:bg-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] hover:-translate-y-1")
+                                                        : "bg-white/10 backdrop-blur-[40px] border border-white/40 hover:bg-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] hover:-translate-y-1")
                                                 }`}
                                             >
                                                 <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border-2 border-white/50 shadow-sm w-16 h-16">
@@ -1003,18 +1018,18 @@ ${treatmentsList}
                                                             {t.status === "Busy" && <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]"></span>}
                                                             {t.status === "Off" && <span className="w-2 h-2 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]"></span>}
                                                         </div>
-                                                        <div className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${selectedTherapists.includes(t.id) ? "bg-white/20 text-white" : "bg-primary/5 text-primary"}`}>
-                                                            ★ {t.rating}
+                                                        <div className="flex items-center text-[#2563eb]">
+                                                            <BadgeCheck className="w-4 h-4" />
                                                         </div>
                                                     </div>
                                                     <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-primary/60"}`}>{t.desc}</p>
                                                     <div className="flex items-center gap-2">
                                                         {t.status === "Off" ? (
-                                                            <span className="text-[10px] font-bold text-red-500/90 bg-red-50/80 px-2 py-1 rounded border border-red-100">Offline</span>
+                                                            <span className="text-[10px] font-semibold text-red-400 flex items-center gap-1.5 bg-red-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>Offline</span>
                                                         ) : t.status === "Busy" ? (
-                                                            <span className="text-[10px] font-bold text-amber-600/90 bg-amber-50/80 px-2 py-1 rounded border border-amber-100">Handling customer • Ready at {t.availableAt || "13:00"}</span>
+                                                            <span className="text-[10px] font-semibold text-amber-500 flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>Handling customer • Ready at {t.availableAt || "13:00"}</span>
                                                         ) : (
-                                                            <span className="text-[10px] font-bold text-green-600/90 bg-green-50/80 px-2 py-1 rounded border border-green-100">Ready to accept jobs</span>
+                                                            <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>Ready to accept jobs</span>
                                                         )}
                                                     </div>
                                                 </div>
@@ -1044,7 +1059,7 @@ ${treatmentsList}
 
                                     {/* SUMMARY CARD */}
                                     {cartItems.length > 0 && (
-                                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl p-4 mb-6 shadow-sm">
+                                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl p-4 mb-6 shadow-sm">
                                         <h4 className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Booking Summary</h4>
                                         <div className="space-y-3 mb-4">
                                             {cartItems.map((item, idx) => (
@@ -1092,7 +1107,7 @@ ${treatmentsList}
                                             <input 
                                                 type="text" required placeholder="John Doe"
                                                 value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                         
@@ -1101,7 +1116,7 @@ ${treatmentsList}
                                             <input 
                                                 type="text" required placeholder="e.g. Four Seasons Sayan, Ubud"
                                                 value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                         <div className="space-y-1.5">
@@ -1109,7 +1124,7 @@ ${treatmentsList}
                                             <input 
                                                 type="text" placeholder="e.g. Villa 12"
                                                 value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,1)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3.5 text-sm text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
 
