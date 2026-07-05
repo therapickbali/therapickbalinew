@@ -295,7 +295,7 @@ export default function BookingModal({
                                             <input 
                                                 type="time" required 
                                                 value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                                className={`w-full ${liquidGlassClasses} rounded-[24px] px-4 py-4 text-sm text-white text-center focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all`}
+                                                className={`w-48 mx-auto block ${liquidGlassClasses} rounded-[24px] px-4 py-4 text-sm text-white text-center focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all`}
                                             />
                                         </div>
                                     </div>

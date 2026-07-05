@@ -908,7 +908,7 @@ ${treatmentsList}
                                             <input 
                                                 type="time" required 
                                                 value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[24px] px-4 py-4 text-sm text-white text-center placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                className="w-48 mx-auto block bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[24px] px-4 py-4 text-sm text-white text-center placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />
                                         </div>
                                     </div>
