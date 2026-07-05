@@ -45,7 +45,7 @@ export default function FaqSection() {
           {faqs.map((faq, idx) => (
             <div 
               key={idx} 
-              className={`bg-white border ${openIdx === idx ? 'border-primary/30 shadow-[0_10px_30px_rgb(0,0,0,0.04)]' : 'border-white/20/50'} rounded-3xl overflow-hidden transition-all duration-300`}
+              className={`bg-[#111111] border border-white/10 ${openIdx === idx ? 'border-primary/30 shadow-[0_10px_30px_rgb(0,0,0,0.04)]' : 'border-white/20/50'} rounded-3xl overflow-hidden transition-all duration-300`}
             >
               <button 
                 onClick={() => setOpenIdx(openIdx === idx ? null : idx)}

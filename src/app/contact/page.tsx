@@ -60,13 +60,13 @@ export default function ContactPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-white text-black p-8 rounded-3xl text-center"
+                    className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-white p-8 rounded-3xl text-center"
                 >
                     <h3 className="font-serif text-2xl mb-2">Have Questions?</h3>
                     <p className="text-xs font-light text-white/80 mb-6 max-w-[250px] mx-auto">
                         Speak directly with our wellness advisors for personalized recommendations.
                     </p>
-                    <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="inline-flex h-12 px-8 bg-white text-white rounded-xl items-center justify-center gap-2 active:bg-surface transition-colors">
+                    <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="inline-flex h-12 px-8 bg-white text-black hover:bg-white/90 rounded-xl items-center justify-center gap-2 active:bg-surface transition-colors">
                         <span className="text-[10px] font-bold uppercase tracking-widest">Chat Now</span>
                         <ArrowRight size={14} strokeWidth={2.5} />
                     </a>

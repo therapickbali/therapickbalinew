@@ -219,8 +219,8 @@ ${treatmentsList}
             <div className="absolute top-0 left-0 right-0 h-[400px] md:h-[500px] bg-gradient-to-b from-transparent to-transparent z-0 pointer-events-none"></div>
 
             {/* Luxurious Ambient Background */}
-            <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] md:w-[800px] h-[600px] bg-secondary/30 blur-[120px] rounded-full z-0 pointer-events-none opacity-60 mix-blend-multiply" />
-            <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-accent/20 blur-[100px] rounded-full z-0 pointer-events-none opacity-50" />
+            <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] md:w-[800px] h-[600px] bg-transparent blur-[120px] rounded-full z-0 pointer-events-none opacity-60 mix-blend-multiply" />
+            <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-transparent blur-[100px] rounded-full z-0 pointer-events-none opacity-50" />
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
@@ -576,7 +576,7 @@ ${treatmentsList}
                         )}
                     </div>
                     <div className="flex-1 w-full relative">
-                        <div className="aspect-[4/3] rounded-[40px] overflow-hidden bg-gradient-to-br from-highlight/60 to-surface border border-white shadow-soft relative flex items-center justify-center p-8 text-center">
+                        <div className="aspect-[4/3] rounded-[40px] overflow-hidden bg-transparent border border-white shadow-soft relative flex items-center justify-center p-8 text-center">
                              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.8),transparent_100%)] pointer-events-none"></div>
                              <div className="relative z-10">
                                  <h4 className="font-serif text-3xl text-white mb-3 italic">"A journey to pure tranquility."</h4>
@@ -584,7 +584,7 @@ ${treatmentsList}
                              </div>
                         </div>
                         {/* Decorative element */}
-                        <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-secondary/30 rounded-full blur-2xl"></div>
+                        <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-transparent rounded-full blur-2xl"></div>
                     </div>
                 </div>
                 

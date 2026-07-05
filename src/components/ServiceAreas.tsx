@@ -42,7 +42,7 @@ export default function ServiceAreas() {
       <div className="md:hidden flex overflow-x-auto gap-4 no-scrollbar -mx-6 px-6 pb-8 snap-x snap-mandatory pt-2">
         {areas.map((area, idx) => (
           <Link href={`/locations/${area.slug}`} key={idx} className="group block outline-none shrink-0 w-[240px] snap-center">
-            <div className="bg-white/40 backdrop-blur-2xl border border-white/50 rounded-3xl p-5 transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transform-gpu hover:-translate-y-1 h-full flex flex-col relative overflow-hidden border border-white/60">
+            <div className="bg-[#111111] border border-white/10 rounded-3xl p-5 transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transform-gpu hover:-translate-y-1 h-full flex flex-col relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] to-[#F3F4F6] z-0"></div>
               
               <div className="relative z-10 flex flex-col h-full">

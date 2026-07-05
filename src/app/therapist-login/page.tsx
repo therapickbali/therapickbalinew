@@ -30,7 +30,7 @@ export default function TherapistLogin() {
     };
 
     return (
-        <main className="min-h-screen bg-[#FDFDFD] selection:bg-white/10 relative overflow-hidden flex flex-col">
+        <main className="min-h-screen bg-black selection:bg-white/10 relative overflow-hidden flex flex-col">
 
             {/* Custom App-like Back Button */}
             <div className="absolute top-6 left-4 z-50">
@@ -74,12 +74,12 @@ export default function TherapistLogin() {
                     </div>
 
                     {/* Main Card */}
-                    <div className="bg-white/40 backdrop-blur-[40px] border border-white/60 rounded-[32px] p-6 sm:p-8 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_24px_48px_-12px_rgba(0,0,0,0.05)]">
+                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 sm:p-8">
                         
                         {/* Toggle */}
                         <div className="flex p-1 bg-surface/50 border border-white/20/50 rounded-2xl mb-8 relative">
                             <motion.div
-                                className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-xl shadow-sm"
+                                className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white/20 rounded-xl shadow-sm"
                                 animate={{ left: isLogin ? '4px' : 'calc(50%)' }}
                                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                             />
@@ -121,7 +121,7 @@ export default function TherapistLogin() {
                                                     
                                                     value={formData.name}
                                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                                    className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                                     placeholder="Full Name"
                                                 />
                                             </div>
@@ -134,7 +134,7 @@ export default function TherapistLogin() {
                                                         
                                                         value={formData.location}
                                                         onChange={(e) => setFormData({...formData, location: e.target.value})}
-                                                        className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
+                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
                                                     >
                                                         <option value="" disabled>Location</option>
                                                         <option value="Ubud">Ubud</option>
@@ -151,7 +151,7 @@ export default function TherapistLogin() {
                                                         
                                                         value={formData.speciality}
                                                         onChange={(e) => setFormData({...formData, speciality: e.target.value})}
-                                                        className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                                         placeholder="Specialty"
                                                     />
                                                 </div>
@@ -168,7 +168,7 @@ export default function TherapistLogin() {
                                             
                                             value={formData.email}
                                             onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                            className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                            className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                             placeholder="Email Address"
                                         />
                                     </div>
@@ -182,7 +182,7 @@ export default function TherapistLogin() {
                                             
                                             value={formData.password}
                                             onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                            className="w-full bg-white/50 border border-white/20/50 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                            className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
                                             placeholder="Password"
                                         />
                                     </div>
