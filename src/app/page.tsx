@@ -377,7 +377,7 @@ ${treatmentsList}
                                         className={`flex items-center justify-center px-6 py-3 rounded-full whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                                             isActive 
                                                 ? 'bg-white text-black shadow-[0_8px_20px_rgb(0,0,0,0.12)] scale-[1.02] border border-primary' 
-                                                : 'bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-white border border-white/60 hover:bg-white/80 hover:scale-[1.02]'
+                                                : 'bg-white/5 border border-white/10 text-white hover:bg-white/20 hover:scale-[1.02]'
                                         }`}
                                     >
                                         <span className="text-sm font-semibold tracking-wide">{cat.label}</span>

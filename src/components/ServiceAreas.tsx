@@ -43,7 +43,7 @@ export default function ServiceAreas() {
         {areas.map((area, idx) => (
           <Link href={`/locations/${area.slug}`} key={idx} className="group block outline-none shrink-0 w-[240px] snap-center">
             <div className="bg-[#111111] border border-white/10 rounded-3xl p-5 transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transform-gpu hover:-translate-y-1 h-full flex flex-col relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] to-[#F3F4F6] z-0"></div>
+              
               
               <div className="relative z-10 flex flex-col h-full">
                   <div className="flex items-center justify-between mb-4">
