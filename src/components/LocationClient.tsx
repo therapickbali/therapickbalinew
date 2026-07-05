@@ -543,7 +543,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-2xl relative overflow-y-auto no-scrollbar"
+                            className="bg-[#111111] border border-white/10 rounded-none md:rounded-[32px] p-6 md:p-8 w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-y-auto no-scrollbar"
                         >
                             <button 
                                 onClick={() => setIsBookingModalOpen(false)}
