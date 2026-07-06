@@ -58,18 +58,6 @@ export default function TherapistLogin() {
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     className="w-full max-w-md"
                 >
-                    {/* Header */}
-                    <div className="text-center mb-10">
-                        <div className="inline-block bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] px-8 py-4 rounded-3xl mb-4">
-                            <h1 className="font-serif text-3xl md:text-4xl text-white mb-2">Therapist Portal</h1>
-                            <div className="w-12 h-[1px] bg-white/20 mx-auto"></div>
-                        </div>
-                        <p className="text-white/90-muted text-sm px-4">
-                            {isLogin 
-                                ? "Welcome back. Access your schedule and manage your sessions." 
-                                : "Join our elite network of professional therapists in Bali."}
-                        </p>
-                    </div>
 
                     {/* Main Card */}
                     <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 sm:p-8">
