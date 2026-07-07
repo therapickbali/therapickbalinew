@@ -341,7 +341,7 @@ ${treatmentsList}
                                             {treatment.pinned_image ? (
                                                 <img src={treatment.pinned_image} alt={treatment.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                             ) : (
-                                                <div className={`w-full h-full bg-gradient-to-br ${treatment.bgPattern} opacity-30 group-hover:opacity-50 transition-opacity duration-500`}></div>
+                                                <div className={`w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black opacity-30 group-hover:opacity-50 transition-opacity duration-500`}></div>
                                             )}
                                         </div>
                                         <div className="flex flex-col flex-grow px-2 pt-3 pb-2">
@@ -425,7 +425,7 @@ ${treatmentsList}
                     <div ref={scrollContainerRef} className="flex overflow-x-auto pb-10 -mx-6 px-6 md:mx-0 md:px-0 gap-6 no-scrollbar scroll-smooth">
                         {filteredAndSortedTreatments.map((item, idx) => (
                             <Link href={`/rituals/${item.id}`} key={item.id} className="w-72 md:w-80 shrink-0 block group outline-none">
-                                <div className={`rounded-[32px] md:rounded-[40px] bg-gradient-to-br ${item.bgPattern} border border-white/20/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6 md:p-8`}>
+                                <div className={`rounded-[32px] md:rounded-[40px] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black border border-white/20/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6 md:p-8`}>
                                     
                                     {/* Subtle glowing orb for spa ambiance */}
                                     
