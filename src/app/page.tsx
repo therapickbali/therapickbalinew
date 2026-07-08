@@ -1036,7 +1036,7 @@ ${treatmentsList}
                                                                         {t.name}
                                                                         <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">★ {t.rating}</span>
                                                                     </p>
-                                                                    <p className="text-[10px] text-white/90-muted">{t.desc.substring(0, 40)}...</p>
+                                                                    <p className="text-[10px] text-white/90-muted">{(t.bio || '').substring(0, 40)}...</p>
                                                                 </div>
                                                             </div>
                                                         );
