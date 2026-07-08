@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
+import { Therapist } from '@/context/SpaContext';
 import FloatingCalendar from '@/components/FloatingCalendar';
 
 type Tab = 'home' | 'schedule' | 'booking' | 'profile';
@@ -11,6 +13,9 @@ type Tab = 'home' | 'schedule' | 'booking' | 'profile';
 export default function TherapistDashboard() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState<Tab>('home');
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+    const [isPending, setIsPending] = useState(false);
+    const [therapistId, setTherapistId] = useState<string | null>(null);
     
     // Status State
     const [status, setStatus] = useState<'Online' | 'Busy' | 'Off'>('Online');
@@ -36,13 +41,43 @@ export default function TherapistDashboard() {
 
     // Profile State
     const [profile, setProfile] = useState({
-        name: 'Dewi K.',
-        location: 'Ubud',
-        bio: 'Professional therapist with 5 years of experience in Traditional Balinese Massage.',
+        name: '',
+        location: '',
+        bio: '',
         avatar: ''
     });
 
     const [saved, setSaved] = useState(false);
+
+    useEffect(() => {
+        async function checkAuthAndStatus() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                router.push('/therapist-login');
+                return;
+            }
+
+            const { data: therapistData, error } = await supabase
+                .from('therapists')
+                .select('*')
+                .eq('id', session.user.id)
+                .single();
+
+            if (error || !therapistData || !therapistData.is_active) {
+                setIsPending(true);
+            } else {
+                setTherapistId(therapistData.id);
+                setProfile({
+                    name: therapistData.name,
+                    location: therapistData.location || '',
+                    bio: therapistData.bio,
+                    avatar: therapistData.image_url || ''
+                });
+            }
+            setIsCheckingAuth(false);
+        }
+        checkAuthAndStatus();
+    }, [router]);
 
     const handleSave = () => {
         setSaved(true);
@@ -290,13 +325,48 @@ export default function TherapistDashboard() {
             </div>
 
             <button 
-                onClick={() => router.push('/')}
+                onClick={handleLogout}
                 className="mt-2 w-full bg-red-500/10 border border-red-500/30 text-red-400 rounded-2xl py-4 font-bold shadow-sm hover:bg-red-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
                 <LogOut className="w-4 h-4" /> Sign Out
             </button>
         </motion.div>
     );
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        router.push('/therapist-login');
+    };
+
+    if (isCheckingAuth) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
+    if (isPending) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center p-6 text-center">
+                <div className="bg-white/10 backdrop-blur-3xl border border-white/20 rounded-[32px] p-8 max-w-md w-full">
+                    <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Clock className="w-8 h-8 text-white/70" />
+                    </div>
+                    <h2 className="font-serif text-3xl text-white font-medium mb-3">Pending Approval</h2>
+                    <p className="text-white/60 text-sm mb-8">
+                        Your application has been received and is currently being reviewed by our team. We will reach out to you via WhatsApp for verification soon.
+                    </p>
+                    <button 
+                        onClick={handleLogout}
+                        className="w-full bg-white/5 border border-white/20 text-white rounded-2xl py-3.5 text-sm font-semibold hover:bg-white/10 transition-colors"
+                    >
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-black font-sans text-white relative overflow-hidden pb-32">

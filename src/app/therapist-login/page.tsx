@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, User, MapPin, ChevronRight, Eye, EyeOff, Phone, FileText, Upload } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import TopNav from '@/components/TopNav';
 
 export default function TherapistLogin() {
@@ -21,15 +22,95 @@ export default function TherapistLogin() {
     });
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const resizeImage = (file: File): Promise<string> => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 400;
+                    const MAX_HEIGHT = 400;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx?.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/webp', 0.8));
+                };
+                img.src = e.target?.result as string;
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        
-        // Simulate network request
-        setTimeout(() => {
+
+        try {
+            if (isLogin) {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email: formData.email,
+                    password: formData.password,
+                });
+                
+                if (error) throw error;
+                router.push('/therapistdashboard');
+                
+            } else {
+                // 1. Sign Up the User
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: formData.email,
+                    password: formData.password,
+                });
+
+                if (authError) throw authError;
+
+                if (authData.user) {
+                    let image_url = '';
+                    if (formData.image) {
+                        image_url = await resizeImage(formData.image);
+                    }
+
+                    // 2. Insert into therapists table as pending
+                    const { error: dbError } = await supabase.from('therapists').insert([{
+                        id: authData.user.id,
+                        name: formData.name,
+                        whatsapp: formData.whatsapp,
+                        location: formData.location,
+                        bio: formData.bio,
+                        email: formData.email,
+                        image_url: image_url,
+                        brand: 'Therapick Bali',
+                        is_active: false
+                    }]);
+
+                    if (dbError) throw dbError;
+
+                    alert("Application submitted successfully! Please wait for admin approval before logging in.");
+                    setIsLogin(true);
+                }
+            }
+        } catch (err: any) {
+            alert(err.message || "An error occurred.");
+        } finally {
             setIsLoading(false);
-            router.push('/therapistdashboard');
-        }, 1500);
+        }
     };
 
     return (

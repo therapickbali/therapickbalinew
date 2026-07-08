@@ -24,7 +24,18 @@ export type Treatment = {
     updated_at?: string;
 };
 
-export type Therapist = { id: string; name: string; bio: string; image_url: string; rating: number; is_active: boolean; brand: string; };
+export type Therapist = { 
+    id: string; 
+    name: string; 
+    bio: string; 
+    image_url: string; 
+    rating: number; 
+    is_active: boolean; 
+    brand: string; 
+    whatsapp?: string;
+    location?: string;
+    email?: string;
+};
 
 export type SelectedCampaignTreatment = {
     treatmentId: string;

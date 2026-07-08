@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin, ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin, ChevronDown, ChevronUp, Users, MessageCircle, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee, Therapist } from '@/context/SpaContext';
 import { supabase } from '@/lib/supabase';
@@ -1006,6 +1006,7 @@ export default function AdminDashboard() {
                                                         <thead>
                                                             <tr className="border-b border-white/10 text-xs uppercase tracking-wider text-white/50">
                                                                 <th className="p-4 font-medium">Therapist</th>
+                                                                <th className="p-4 font-medium">Contact & Location</th>
                                                                 <th className="p-4 font-medium">Brand</th>
                                                                 <th className="p-4 font-medium">Bio</th>
                                                                 <th className="p-4 font-medium">Status</th>
@@ -1031,6 +1032,37 @@ export default function AdminDashboard() {
                                                                             ) : (
                                                                                 <span className="font-medium text-white">{therapist.name}</span>
                                                                             )}
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="p-4 align-top text-white/70 text-sm">
+                                                                        <div className="flex flex-col gap-2">
+                                                                            {therapist.location && (
+                                                                                <div className="flex items-center gap-1.5 text-xs">
+                                                                                    <MapPin size={12} className="text-white/40" />
+                                                                                    {isEditing ? (
+                                                                                        <select value={editTherapistData.location || ''} onChange={e => setEditTherapistData({...editTherapistData, location: e.target.value})} className="bg-black/50 border border-white/20 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-white/50 appearance-none">
+                                                                                            <option value="Ubud">Ubud</option>
+                                                                                            <option value="Canggu">Canggu</option>
+                                                                                            <option value="Seminyak">Seminyak</option>
+                                                                                        </select>
+                                                                                    ) : (
+                                                                                        therapist.location
+                                                                                    )}
+                                                                                </div>
+                                                                            )}
+                                                                            {therapist.whatsapp && (
+                                                                                <div className="flex items-center gap-1.5 text-xs">
+                                                                                    <MessageCircle size={12} className="text-[#25D366]" />
+                                                                                    {isEditing ? (
+                                                                                        <input type="text" value={editTherapistData.whatsapp || ''} onChange={e => setEditTherapistData({...editTherapistData, whatsapp: e.target.value})} className="bg-black/50 border border-white/20 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-white/50 w-24 appearance-none" />
+                                                                                    ) : (
+                                                                                        <a href={`https://wa.me/${therapist.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-2">
+                                                                                            {therapist.whatsapp}
+                                                                                        </a>
+                                                                                    )}
+                                                                                </div>
+                                                                            )}
+                                                                            {!therapist.location && !therapist.whatsapp && <span className="text-white/30 text-xs italic">No contact info</span>}
                                                                         </div>
                                                                     </td>
                                                                     <td className="p-4 align-top text-white/70 text-sm">
