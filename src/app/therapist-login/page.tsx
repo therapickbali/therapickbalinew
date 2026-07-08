@@ -187,7 +187,7 @@ export default function TherapistLogin() {
                                                     type="text"
                                                     value={formData.name}
                                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
                                                     placeholder="Full Name"
                                                 />
                                             </div>
@@ -200,7 +200,7 @@ export default function TherapistLogin() {
                                                     type="tel"
                                                     value={formData.whatsapp}
                                                     onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
-                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
                                                     placeholder="WhatsApp Number"
                                                 />
                                             </div>
@@ -241,7 +241,7 @@ export default function TherapistLogin() {
                                                 <textarea
                                                     value={formData.bio}
                                                     onChange={(e) => setFormData({...formData, bio: e.target.value})}
-                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all min-h-[100px] resize-y"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all min-h-[100px] resize-y appearance-none"
                                                     placeholder="Short Bio"
                                                 />
                                             </div>
@@ -257,7 +257,7 @@ export default function TherapistLogin() {
                                             
                                             value={formData.email}
                                             onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                            className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                            className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
                                             placeholder="Email Address"
                                         />
                                     </div>
@@ -270,7 +270,7 @@ export default function TherapistLogin() {
                                             type={showPassword ? "text" : "password"}
                                             value={formData.password}
                                             onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                            className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-12 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                                            className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-12 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
                                             placeholder="Password"
                                         />
                                         <button
