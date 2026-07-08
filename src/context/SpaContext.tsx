@@ -146,19 +146,20 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                     supabase.from('therapists').select('*').eq('is_active', true).eq('brand', siteBrand).order('created_at', { ascending: false })
                 ]);
 
-                let fetchedTreatments = treatmentsRes.data;
-
-                if (fetchedTreatments && fetchedTreatments.length > 0) {
-                    setTreatments(fetchedTreatments);
-                    try { localStorage.setItem('spa_treatments', JSON.stringify(fetchedTreatments)); } catch(e) { console.warn("Cache full"); }
+                if (treatmentsRes.data) {
+                    setTreatments(treatmentsRes.data);
+                    try { localStorage.setItem('spa_treatments', JSON.stringify(treatmentsRes.data)); } catch(e) { console.warn("Cache full"); }
                 }
-                if (productsRes.data && productsRes.data.length > 0) {
+                if (productsRes.data) {
                     setProducts(productsRes.data);
                     try { localStorage.setItem('spa_products', JSON.stringify(productsRes.data)); } catch(e) { console.warn("Cache full"); }
                 }
                 if (campaignsRes.data && campaignsRes.data.length > 0) {
                     setCampaign(campaignsRes.data[0] as Campaign);
                     localStorage.setItem('spa_campaign', JSON.stringify(campaignsRes.data[0]));
+                } else if (campaignsRes.data) {
+                    setCampaign(null);
+                    localStorage.removeItem('spa_campaign');
                 }
                 
                 if (therapistsRes.data) {
