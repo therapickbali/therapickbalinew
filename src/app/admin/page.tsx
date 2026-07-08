@@ -29,6 +29,8 @@ export default function AdminDashboard() {
     const [editTherapistData, setEditTherapistData] = useState<Partial<Therapist>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [locationFilter, setLocationFilter] = useState<string>('All');
+    const [statusFilter, setStatusFilter] = useState<'All' | 'New' | 'Working'>('All');
+    const [detailedTherapist, setDetailedTherapist] = useState<Therapist | null>(null);
 
     useEffect(() => {
         async function checkAuth() {
@@ -373,7 +375,11 @@ export default function AdminDashboard() {
 
     const handleTherapistStatus = async (id: string, is_active: boolean) => {
         try {
-            await supabase.from('therapists').update({ is_active }).eq('id', id);
+            const { error } = await supabase.from('therapists').update({ is_active }).eq('id', id);
+            if (error) {
+                alert('Error updating status: ' + error.message);
+                return;
+            }
             setAllTherapists(allTherapists.map(t => t.id === id ? { ...t, is_active } : t));
         } catch (error) {
             console.error(error);
@@ -996,136 +1002,112 @@ export default function AdminDashboard() {
 
                                 {activeTab === 'therapists' && (
                                     <div className="space-y-6">
-                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                                            <h2 className="text-xl font-medium text-white">Registered Therapists</h2>
-                                            <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-                                                {['All', 'Ubud', 'Canggu', 'Seminyak'].map(loc => (
-                                                    <button 
-                                                        key={loc}
-                                                        onClick={() => setLocationFilter(loc)}
-                                                        className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${locationFilter === loc ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
-                                                    >
-                                                        {loc}
-                                                    </button>
-                                                ))}
+                                        <div className="flex flex-col gap-4 mb-4">
+                                            <div className="flex items-center justify-between">
+                                                <h2 className="text-xl font-medium text-white">Registered Therapists</h2>
+                                            </div>
+                                            
+                                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                {/* Status Filter */}
+                                                <div className="flex bg-white/5 border border-white/20 p-1.5 rounded-2xl w-full md:w-auto shadow-sm">
+                                                    {[
+                                                        { id: 'All', label: 'All' },
+                                                        { id: 'Working', label: 'Already Working' },
+                                                        { id: 'New', label: 'New Signups' }
+                                                    ].map((filter) => (
+                                                        <button
+                                                            key={filter.id}
+                                                            onClick={() => setStatusFilter(filter.id as any)}
+                                                            className={`flex-1 md:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${statusFilter === filter.id ? 'bg-white text-black shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+                                                        >
+                                                            {filter.label}
+                                                        </button>
+                                                    ))}
+                                                </div>
+
+                                                {/* Location Filter */}
+                                                <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+                                                    {['All', 'Ubud', 'Canggu', 'Seminyak'].map(loc => (
+                                                        <button 
+                                                            key={loc}
+                                                            onClick={() => setLocationFilter(loc)}
+                                                            className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${locationFilter === loc ? 'bg-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'bg-transparent border border-white/10 text-white/50 hover:border-white/30 hover:text-white/80'}`}
+                                                        >
+                                                            {loc}
+                                                        </button>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
-                                        {allTherapists.filter(t => locationFilter === 'All' || t.location === locationFilter).length === 0 ? (
-                                            <div className="text-white/60 text-center py-16 bg-white/5 rounded-[32px] border border-white/10">No therapists found in this area.</div>
+
+                                        {allTherapists
+                                            .filter(t => locationFilter === 'All' || t.location === locationFilter)
+                                            .filter(t => statusFilter === 'All' || (statusFilter === 'Working' && t.is_active) || (statusFilter === 'New' && !t.is_active))
+                                            .length === 0 ? (
+                                            <div className="text-white/60 text-center py-16 bg-white/5 rounded-[32px] border border-white/10">No therapists found for this filter.</div>
                                         ) : (
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                                {allTherapists.filter(t => locationFilter === 'All' || t.location === locationFilter).map(therapist => {
-                                                    const isEditing = editingTherapistId === therapist.id;
-                                                    return (
-                                                        <div key={therapist.id} className="bg-white/5 border border-white/10 rounded-[24px] overflow-hidden group hover:border-white/20 hover:shadow-[0_8px_30px_rgb(255,255,255,0.05)] transition-all duration-300 flex flex-col h-full relative">
-                                                            
-                                                            {/* Delete/Edit Actions Floating Top Right */}
-                                                            <div className="absolute top-4 right-4 z-20 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                                {isEditing ? (
-                                                                    <>
-                                                                        <button onClick={() => setEditingTherapistId(null)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-black/60 text-white hover:bg-black transition-colors backdrop-blur-md">
-                                                                            <LogOut size={14} className="rotate-180" />
+                                            <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full text-left border-collapse min-w-[600px]">
+                                                        <thead>
+                                                            <tr className="border-b border-white/10 text-[10px] font-bold uppercase tracking-widest text-white/50 bg-black/20">
+                                                                <th className="p-4 rounded-tl-3xl">Therapist</th>
+                                                                <th className="p-4">Location</th>
+                                                                <th className="p-4">Status</th>
+                                                                <th className="p-4 text-right rounded-tr-3xl">Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="divide-y divide-white/5">
+                                                            {allTherapists
+                                                                .filter(t => locationFilter === 'All' || t.location === locationFilter)
+                                                                .filter(t => statusFilter === 'All' || (statusFilter === 'Working' && t.is_active) || (statusFilter === 'New' && !t.is_active))
+                                                                .map(therapist => (
+                                                                <tr key={therapist.id} className="hover:bg-white/5 transition-colors group">
+                                                                    <td className="p-4 align-middle">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <div 
+                                                                                className="w-12 h-12 bg-white/10 rounded-2xl flex shrink-0 items-center justify-center overflow-hidden border border-white/10 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all hover:scale-105"
+                                                                                onClick={() => therapist.image_url && setSelectedImage(therapist.image_url)}
+                                                                            >
+                                                                                {therapist.image_url ? (
+                                                                                    <img src={therapist.image_url} alt={therapist.name} className="w-full h-full object-cover" />
+                                                                                ) : (
+                                                                                    <Users size={16} className="text-white/50" />
+                                                                                )}
+                                                                            </div>
+                                                                            <div className="flex flex-col">
+                                                                                <span className="font-bold text-white">{therapist.name}</span>
+                                                                                <span className="text-xs text-white/50 font-medium">{therapist.brand || 'No Brand'}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="p-4 align-middle text-white/80 text-sm font-medium">
+                                                                        <div className="flex items-center gap-1.5">
+                                                                            <MapPin size={14} className="text-white/40" />
+                                                                            {therapist.location || 'Unknown'}
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="p-4 align-middle">
+                                                                        <button 
+                                                                            onClick={(e) => { e.stopPropagation(); handleTherapistStatus(therapist.id, !therapist.is_active); }}
+                                                                            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none ${therapist.is_active ? 'bg-primary' : 'bg-white/20'}`}
+                                                                        >
+                                                                            <span className={`inline-block h-5 w-5 transform rounded-full bg-black transition-transform ${therapist.is_active ? 'translate-x-6' : 'translate-x-1'}`} />
                                                                         </button>
-                                                                        <button onClick={() => handleSaveTherapist(therapist.id)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-black hover:bg-primary/90 transition-colors shadow-lg">
-                                                                            <CheckCircle size={14} />
+                                                                    </td>
+                                                                    <td className="p-4 align-middle text-right">
+                                                                        <button 
+                                                                            onClick={() => setDetailedTherapist(therapist)}
+                                                                            className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-colors inline-flex items-center gap-2"
+                                                                        >
+                                                                            See Details
                                                                         </button>
-                                                                    </>
-                                                                ) : (
-                                                                    <>
-                                                                        <button onClick={() => { setEditingTherapistId(therapist.id); setEditTherapistData(therapist); }} className="w-8 h-8 flex items-center justify-center rounded-lg bg-black/60 text-white hover:bg-black transition-colors backdrop-blur-md">
-                                                                            <Edit3 size={14} />
-                                                                        </button>
-                                                                        <button onClick={() => handleDeleteTherapist(therapist.id)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/80 text-white hover:bg-red-500 transition-colors backdrop-blur-md">
-                                                                            <Trash2 size={14} />
-                                                                        </button>
-                                                                    </>
-                                                                )}
-                                                            </div>
-
-                                                            {/* Big Image Top */}
-                                                            <div 
-                                                                className="w-full h-64 bg-black/20 relative cursor-pointer overflow-hidden group/img shrink-0"
-                                                                onClick={() => therapist.image_url && setSelectedImage(therapist.image_url)}
-                                                            >
-                                                                {therapist.image_url ? (
-                                                                    <img src={therapist.image_url} alt={therapist.name} className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-700 ease-out" />
-                                                                ) : (
-                                                                    <div className="w-full h-full flex items-center justify-center bg-white/5"><Users size={32} className="text-white/30" /></div>
-                                                                )}
-                                                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
-                                                                
-                                                                {/* Name and Status Toggle */}
-                                                                <div className="absolute bottom-4 left-5 right-5 z-10 flex items-end justify-between gap-2">
-                                                                    <div className="flex-1">
-                                                                        {isEditing ? (
-                                                                            <input type="text" value={editTherapistData.name || ''} onChange={e => setEditTherapistData({...editTherapistData, name: e.target.value})} className="bg-black/80 border border-white/20 rounded-lg px-2 py-1 text-base font-bold text-white focus:outline-none w-full backdrop-blur-sm" onClick={e => e.stopPropagation()} />
-                                                                        ) : (
-                                                                            <h3 className="font-serif text-2xl text-white drop-shadow-md leading-none">{therapist.name}</h3>
-                                                                        )}
-                                                                    </div>
-                                                                    
-                                                                    <button 
-                                                                        onClick={(e) => { e.stopPropagation(); handleTherapistStatus(therapist.id, !therapist.is_active); }}
-                                                                        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors focus:outline-none shadow-[0_0_15px_rgba(0,0,0,0.5)] ${therapist.is_active ? 'bg-primary' : 'bg-white/30 backdrop-blur-md border border-white/20'}`}
-                                                                    >
-                                                                        <span className={`inline-block h-5 w-5 transform rounded-full bg-black transition-transform ${therapist.is_active ? 'translate-x-6' : 'translate-x-1'}`} />
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Details Bottom */}
-                                                            <div className="p-5 flex-1 flex flex-col gap-4 bg-white/[0.02]">
-                                                                <div className="flex flex-wrap items-center gap-3">
-                                                                    {/* Location */}
-                                                                    <div className="flex items-center gap-1.5 text-xs text-white/80 bg-white/10 px-2.5 py-1 rounded-md border border-white/10">
-                                                                        <MapPin size={12} className="text-white/50" />
-                                                                        {isEditing ? (
-                                                                            <select value={editTherapistData.location || ''} onChange={e => setEditTherapistData({...editTherapistData, location: e.target.value})} className="bg-transparent text-white focus:outline-none appearance-none cursor-pointer">
-                                                                                <option value="Ubud" className="text-black">Ubud</option>
-                                                                                <option value="Canggu" className="text-black">Canggu</option>
-                                                                                <option value="Seminyak" className="text-black">Seminyak</option>
-                                                                            </select>
-                                                                        ) : (
-                                                                            therapist.location || 'Unknown'
-                                                                        )}
-                                                                    </div>
-                                                                    
-                                                                    {/* Brand */}
-                                                                    <div className="flex items-center gap-1.5 text-xs text-white/80 bg-white/10 px-2.5 py-1 rounded-md border border-white/10">
-                                                                        <Store size={12} className="text-white/50" />
-                                                                        {isEditing ? (
-                                                                            <input type="text" value={editTherapistData.brand || ''} onChange={e => setEditTherapistData({...editTherapistData, brand: e.target.value})} className="w-24 bg-transparent text-white focus:outline-none" placeholder="Brand" />
-                                                                        ) : (
-                                                                            therapist.brand || '-'
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-
-                                                                {/* WhatsApp */}
-                                                                {therapist.whatsapp && (
-                                                                    <div className="flex items-center gap-2 text-sm bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-colors w-full px-4 py-3 rounded-xl border border-[#25D366]/20">
-                                                                        <MessageCircle size={16} className="text-[#25D366]" />
-                                                                        {isEditing ? (
-                                                                            <input type="text" value={editTherapistData.whatsapp || ''} onChange={e => setEditTherapistData({...editTherapistData, whatsapp: e.target.value})} className="bg-transparent text-white focus:outline-none w-full appearance-none" placeholder="WhatsApp" />
-                                                                        ) : (
-                                                                            <a href={`https://wa.me/${therapist.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-white font-medium hover:text-[#25D366] transition-colors">
-                                                                                {therapist.whatsapp}
-                                                                            </a>
-                                                                        )}
-                                                                    </div>
-                                                                )}
-                                                                
-                                                                <div className="flex-1 mt-1">
-                                                                    {isEditing ? (
-                                                                        <textarea value={editTherapistData.bio || ''} onChange={e => setEditTherapistData({...editTherapistData, bio: e.target.value})} className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white/30 transition-all appearance-none min-h-[100px]" placeholder="Therapist Bio..." />
-                                                                    ) : (
-                                                                        <p className="text-white/60 text-sm leading-relaxed line-clamp-3">{therapist.bio || 'No bio provided.'}</p>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                })}
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         )}
                                     </div>
@@ -1403,6 +1385,96 @@ export default function AdminDashboard() {
                     </AnimatePresence>
                 </div>
             </main>
+
+            {/* Detailed Therapist Modal */}
+            <AnimatePresence>
+                {detailedTherapist && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+                        onClick={() => setDetailedTherapist(null)}
+                    >
+                        <motion.div 
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                            className="w-full max-w-2xl bg-[#111] border border-white/10 rounded-[32px] overflow-hidden flex flex-col max-h-[90vh]"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="relative w-full h-72 bg-black/50 shrink-0">
+                                {detailedTherapist.image_url ? (
+                                    <img src={detailedTherapist.image_url} alt={detailedTherapist.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center"><Users size={48} className="text-white/20" /></div>
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent pointer-events-none" />
+                                <button 
+                                    className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-colors"
+                                    onClick={() => setDetailedTherapist(null)}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                                <div className="absolute bottom-6 left-8">
+                                    <h2 className="font-serif text-4xl text-white drop-shadow-md mb-2">{detailedTherapist.name}</h2>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg text-sm text-white/90">
+                                            <MapPin size={14} className="text-white/50" /> {detailedTherapist.location || 'Unknown'}
+                                        </div>
+                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg text-sm text-white/90">
+                                            <Store size={14} className="text-white/50" /> {detailedTherapist.brand || 'No Brand'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="p-8 overflow-y-auto flex-1 space-y-6">
+                                <div>
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Biography</label>
+                                    <p className="text-white/80 leading-relaxed text-sm">{detailedTherapist.bio || 'No biography provided by this therapist.'}</p>
+                                </div>
+                                
+                                {detailedTherapist.whatsapp && (
+                                    <div>
+                                        <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">WhatsApp Contact</label>
+                                        <a href={`https://wa.me/${detailedTherapist.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-colors px-6 py-4 rounded-2xl border border-[#25D366]/20">
+                                            <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg">
+                                                <MessageCircle size={20} />
+                                            </div>
+                                            <span className="text-white font-medium text-lg tracking-wide">{detailedTherapist.whatsapp}</span>
+                                        </a>
+                                    </div>
+                                )}
+                                
+                                <div className="pt-4 flex items-center justify-between border-t border-white/5">
+                                    <div className="flex items-center gap-3">
+                                        <button 
+                                            onClick={() => handleDeleteTherapist(detailedTherapist.id)}
+                                            className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
+                                        >
+                                            <Trash2 size={16} /> Delete Therapist
+                                        </button>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <span className="text-xs font-bold uppercase tracking-widest text-white/50">Status</span>
+                                        <button 
+                                            onClick={() => {
+                                                handleTherapistStatus(detailedTherapist.id, !detailedTherapist.is_active);
+                                                setDetailedTherapist({ ...detailedTherapist, is_active: !detailedTherapist.is_active });
+                                            }}
+                                            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none shadow-lg ${detailedTherapist.is_active ? 'bg-primary' : 'bg-white/20'}`}
+                                        >
+                                            <span className={`inline-block h-6 w-6 transform rounded-full bg-black transition-transform ${detailedTherapist.is_active ? 'translate-x-7' : 'translate-x-1'}`} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Image Viewer Modal */}
             <AnimatePresence>

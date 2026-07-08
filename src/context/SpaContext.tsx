@@ -154,7 +154,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                     supabase.from('treatments').select('*').eq('is_published', true).order('created_at', { ascending: false }),
                     supabase.from('products').select('*').eq('is_published', true).order('created_at', { ascending: false }),
                     supabase.from('campaigns').select('*').eq('is_published', true).order('created_at', { ascending: false }),
-                    supabase.from('therapists').select('*').eq('is_active', true).eq('brand', siteBrand).order('created_at', { ascending: false })
+                    supabase.from('therapists').select('*').eq('is_active', true).order('created_at', { ascending: false })
                 ]);
 
                 if (treatmentsRes.data) {
