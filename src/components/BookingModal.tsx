@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, X, Clock, Plus, Minus, ArrowRight, MapPin, Search } from 'lucide-react';
+import { ChevronLeft, X, Clock, Plus, Minus, ArrowRight, MapPin, Search, BadgeCheck } from 'lucide-react';
 import FloatingCalendar from '@/components/FloatingCalendar';
+import { useSpa } from '@/context/SpaContext';
 
 interface CartItem {
     id: string;
@@ -20,7 +21,7 @@ interface BookingModalProps {
     cartItems: CartItem[];
     setCartItems: (items: CartItem[]) => void;
     treatments: any[];
-    MOCK_THERAPISTS: any[];
+    totalPriceNum: number;
 }
 
 export default function BookingModal({
@@ -29,8 +30,9 @@ export default function BookingModal({
     cartItems,
     setCartItems,
     treatments,
-    MOCK_THERAPISTS
+    totalPriceNum
 }: BookingModalProps) {
+    const { therapists } = useSpa();
     const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4 | 5>(1);
     const [isSelectingMore, setIsSelectingMore] = useState(false);
     const [expandedTreatmentId, setExpandedTreatmentId] = useState<string | null>(null);
@@ -45,18 +47,20 @@ export default function BookingModal({
     const [formData, setFormData] = useState({ name: '', location: '', room: '', ...getInitialDateTime() });
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedTherapists, setSelectedTherapists] = useState<string[]>([]);
-    const [viewingTherapist, setViewingTherapist] = useState<any>(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
     const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
     const totalGuests = cartItems.reduce((acc, item) => acc + item.guests, 0);
 
-    const totalPrice = cartItems.reduce((acc, item) => {
-        const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
-        const multiplier = isCouple ? (item.guests / 2) : item.guests;
-        return acc + (item.price * multiplier);
-    }, 0);
-    const formattedTotalPrice = totalPrice.toLocaleString('en-US');
+    const toggleTherapist = (id: string) => {
+        if (selectedTherapists.includes(id)) {
+            setSelectedTherapists(prev => prev.filter(item => item !== id));
+        } else if (selectedTherapists.length < totalGuests) {
+            setSelectedTherapists(prev => [...prev, id]);
+        }
+    };
+
+    const formattedTotalPrice = totalPriceNum.toLocaleString('en-US');
 
     const handleBooking = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -89,7 +93,7 @@ export default function BookingModal({
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
             const therapistMsg = selectedTherapists.length > 0
-                ? `\n*Therapist Request:* ${selectedTherapists.map(id => MOCK_THERAPISTS.find(t => t.id === id)?.name).join(', ')}`
+                ? `\n*Therapist Request:* ${selectedTherapists.map(id => therapists.find(t => t.id === id)?.name).join(', ')}`
                 : `\n*Therapist Request:* Assign Automatically`;
 
             const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
@@ -132,7 +136,6 @@ export default function BookingModal({
                     exit={{ opacity: 0, scale: 0.9, y: 20 }}
                     className="bg-[#111111] border border-white/10 rounded-none md:rounded-[32px] w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-md shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative flex flex-col overflow-hidden"
                 >
-                    {/* Header */}
                     <div className="flex items-center justify-between p-6 border-b border-white/10 bg-transparent z-10 shrink-0">
                         {bookingStep > 1 && !isSelectingMore && (
                             <button onClick={() => setBookingStep((prev) => (prev - 1) as any)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors">
@@ -161,7 +164,6 @@ export default function BookingModal({
                         </button>
                     </div>
 
-                    {/* Scrollable Content */}
                     <div className="flex-1 overflow-y-auto no-scrollbar p-6 bg-transparent">
                         {isSelectingMore ? (
                             <div className="space-y-4 pb-16">
@@ -325,29 +327,48 @@ export default function BookingModal({
                                 {bookingStep === 4 && (
                                     <div className="space-y-4 pb-24">
                                         <p className="text-xs text-white/90-muted mb-4 font-light">Select {totalGuests} therapist{totalGuests > 1 ? 's' : ''} based on your selected area and time, or skip to let us assign automatically.</p>
-                                        {MOCK_THERAPISTS.filter(t => !selectedArea || t.location === selectedArea).map(t => (
-                                            <div key={t.id} className={`${liquidGlassClasses} rounded-2xl p-4 flex gap-4 transition-all ${selectedTherapists.includes(t.id) ? 'ring-2 ring-primary bg-white/30' : ''}`}>
-                                                <img src={t.avatar} alt={t.name} className="w-16 h-16 rounded-full object-cover shadow-sm" />
-                                                <div className="flex-1">
-                                                    <div className="flex justify-between items-start">
-                                                        <div>
-                                                            <h4 className="font-bold text-sm text-white">{t.name}</h4>
-                                                            <div className="text-[10px] text-white/90-muted mt-0.5">{t.location} • {t.rating} ★</div>
-                                                        </div>
-                                                        <button 
-                                                            onClick={() => setSelectedTherapists(prev => 
-                                                                prev.includes(t.id) ? prev.filter(id => id !== t.id) : 
-                                                                (prev.length < totalGuests ? [...prev, t.id] : prev)
-                                                            )}
-                                                            className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] transition-colors ${selectedTherapists.includes(t.id) ? 'bg-white text-black' : 'bg-transparent border border-white/20 text-white hover:bg-white/10'}`}
-                                                        >
-                                                            {selectedTherapists.includes(t.id) ? '✓' : <Plus className="w-3 h-3" />}
-                                                        </button>
-                                                    </div>
-                                                    <p className="text-xs text-white/90-muted mt-2 line-clamp-2 font-light">{t.desc}</p>
+                                        {therapists.filter(t => !selectedArea || t.location === selectedArea).map(t => (
+                                            <button 
+                                                key={t.id}
+                                                onClick={() => toggleTherapist(t.id)}
+                                                className={`w-full p-4 rounded-[24px] border text-left transition-all duration-300 flex items-start gap-4 ${
+                                                    selectedTherapists.includes(t.id)
+                                                    ? 'bg-white/10 border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]'
+                                                    : 'bg-surface/50 border-white/10 hover:border-white/20 hover:bg-surface'
+                                                }`}
+                                            >
+                                                <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-white/10 relative bg-white/5 flex items-center justify-center">
+                                                    {t.image_url ? (
+                                                        <img src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <span className="text-white/50 text-xs font-bold uppercase">{t.name.substring(0, 2)}</span>
+                                                    )}
+                                                    <div className="absolute inset-0 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] pointer-events-none rounded-full" />
                                                 </div>
-                                            </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="mb-1">
+                                                        <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Available</span>
+                                                    </div>
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <div className="flex items-center gap-2">
+                                                            <h4 className={`font-serif text-lg leading-none ${selectedTherapists.includes(t.id) ? "text-white" : "text-white"}`}>{t.name}</h4>
+                                                        </div>
+                                                        <div className="flex items-center text-[#2563eb]">
+                                                            <BadgeCheck className="w-4 h-4" />
+                                                        </div>
+                                                    </div>
+                                                    <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio || "Therapist professional"}</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>READY TO ACCEPT JOBS</span>
+                                                    </div>
+                                                </div>
+                                            </button>
                                         ))}
+                                        {therapists.filter(t => !selectedArea || t.location === selectedArea).length === 0 && (
+                                            <div className="p-6 text-center text-sm text-white/90-muted border border-dashed border-white/20/50 rounded-xl bg-surface/50">
+                                                No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 

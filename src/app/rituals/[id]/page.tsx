@@ -11,7 +11,7 @@ import { useSpa } from '@/context/SpaContext';
 export default function RitualsDetails() {
     const params = useParams();
     const id = params?.id as string;
-    const { treatments } = useSpa();
+    const { treatments, therapists } = useSpa();
     const treatment = treatments.find(t => t.id === id);
 
     const [selectedOptionIdx, setSelectedOptionIdx] = useState(0);
@@ -48,15 +48,14 @@ export default function RitualsDetails() {
     const totalGuests = cartItems.reduce((acc, item) => acc + item.guests, 0);
     const [viewingTherapist, setViewingTherapist] = useState<any>(null);
 
-    const MOCK_THERAPISTS = [
-        { id: 't1', name: 'Sarah J.', location: 'Seminyak', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.', reviews: [{ author: 'Emily R.', text: 'Sarah was incredible. Best deep tissue massage I have ever had.' }], availability: { today: ['10:00', '13:00', '16:30'], days: ['Mon', 'Tue', 'Thu', 'Fri'] }, status: 'Online' },
-        { id: 't2', name: 'Dewi K.', location: 'Ubud', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.', reviews: [{ author: 'Michael B.', text: 'Dewi brings such a calming, authentic Balinese energy.' }], availability: { today: ['11:30', '14:00', '18:00'], days: ['Wed', 'Thu', 'Sat', 'Sun'] }, status: 'Busy', availableAt: '13:00' },
-        { id: 't3', name: 'Wayan M.', location: 'Canggu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.', reviews: [{ author: 'Sophie T.', text: 'Wayan knew exactly what I needed. Highly recommend.' }], availability: { today: ['09:00', '15:00'], days: ['Mon', 'Wed', 'Fri', 'Sat'] }, status: 'Off' },
-        { id: 't4', name: 'Ketut A.', location: 'Ubud', region: 'Bali', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.', reviews: [{ author: 'David W.', text: 'Amazing technique and completely dissolved my tension.' }], availability: { today: ['12:00', '17:00'], days: ['Tue', 'Wed', 'Thu', 'Sun'] }, status: 'Online' },
-        { id: 't5', name: 'Made B.', location: 'Uluwatu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.', reviews: [{ author: 'Anna K.', text: 'The Lomi-Lomi was life-changing. Made is a master.' }], availability: { today: ['10:30', '14:30', '19:00'], days: ['Mon', 'Tue', 'Fri', 'Sun'] }, status: 'Busy', availableAt: '13:00' },
-        { id: 't6', name: 'Aisha F.', location: 'Downtown', region: 'Dubai', rating: 5, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop', desc: 'Specialist in Swedish and deep tissue.', reviews: [{ author: 'Sarah L.', text: 'Aisha is phenomenal! Perfect pressure.' }], availability: { today: ['09:00', '13:00', '16:00'], days: ['Mon', 'Tue', 'Wed', 'Thu'] }, status: 'Online' },
-        { id: 't7', name: 'Fatima R.', location: 'Marina', region: 'Dubai', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop', desc: 'Holistic healing and relaxation.', reviews: [{ author: 'Chloe M.', text: 'So soothing and relaxing, Fatima is the best.' }], availability: { today: ['11:00', '15:00', '18:30'], days: ['Thu', 'Fri', 'Sat', 'Sun'] }, status: 'Off' },
-    ];
+    const toggleTherapist = (id: string) => {
+        if (selectedTherapists.includes(id)) {
+            setSelectedTherapists(prev => prev.filter(item => item !== id));
+        } else if (selectedTherapists.length < totalGuests) {
+            setSelectedTherapists(prev => [...prev, id]);
+        }
+    };
+
     const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
 
     if (!treatment) {
@@ -111,7 +110,7 @@ export default function RitualsDetails() {
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
             const therapistMsg = selectedTherapists.length > 0
-                ? `\n*Therapist Request:* ${selectedTherapists.map(id => MOCK_THERAPISTS.find(t => t.id === id)?.name).join(', ')}`
+                ? `\n*Therapist Request:* ${selectedTherapists.map(id => therapists.find(t => t.id === id)?.name).join(', ')}`
                 : `\n*Therapist Request:* Assign Automatically`;
 
             const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
@@ -204,14 +203,14 @@ export default function RitualsDetails() {
                 {/* Smart Pricing & Duration Bento Grid */}
                 <div className="w-full max-w-md mx-auto mb-10 pb-10 md:pb-0 space-y-4">
                     {/* Duration Card */}
-                    <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 sm:p-8">
+                    <div className="bg-[#111111] border border-white/10 rounded-[32px] p-6 sm:p-8">
                         <div className="flex items-center justify-between mb-6">
                             <span className="text-sm font-bold uppercase tracking-widest text-white/80">Select Duration</span>
-                            <div className="w-8 h-8 rounded-full bg-white/20 border border-white/40 flex items-center justify-center text-white shadow-sm">
+                            <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-sm">
                                 <Clock className="w-4 h-4" />
                             </div>
                         </div>
-                        <div className="flex bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] p-1.5 rounded-[20px]">
+                        <div className="flex bg-black border border-white/10 p-1.5 rounded-[20px] shadow-inner">
                             {treatment.options.map((opt, idx) => {
                                 const isActive = selectedOptionIdx === idx;
                                 return (
@@ -220,11 +219,11 @@ export default function RitualsDetails() {
                                         onClick={() => setSelectedOptionIdx(idx)}
                                         className={`flex-1 py-4 px-2 rounded-[14px] text-sm font-bold transition-all duration-300 ${
                                             isActive 
-                                            ? "bg-[#292831] text-white shadow-md scale-[1.02]" 
-                                            : "text-white/70 hover:text-white hover:bg-white/20"
+                                            ? "bg-white text-black shadow-md scale-[1.02]" 
+                                            : "text-white/50 hover:text-white hover:bg-white/10"
                                         }`}
                                     >
-                                        {opt.duration} <span className="text-[10px] opacity-70">MINS</span>
+                                        {opt.duration} <span className={`text-[10px] ${isActive ? 'text-black/60' : 'text-white/40'}`}>MINS</span>
                                     </button>
                                 );
                             })}
@@ -320,8 +319,6 @@ export default function RitualsDetails() {
                             <Link href={`/rituals/${item.id}`} key={idx} className="w-72 shrink-0 block group outline-none">
                                 <div className={`rounded-[32px] bg-gradient-to-br ${item.bgPattern || 'from-secondary/80 to-highlight/40'} border border-white/20/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full relative overflow-hidden group-hover:-translate-y-2 p-6`}>
                                     
-                                    
-
                                     <div className="mb-6 flex items-start justify-between relative z-10">
                                         <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] border border-primary/10 text-white px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
                                             {item.category}
@@ -629,106 +626,48 @@ export default function RitualsDetails() {
                                     </div>
                                     <p className="text-xs text-white/90-muted mb-4 shrink-0">Therapists available in {selectedArea}.</p>
                                     <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
-                                    <div className="space-y-3 overflow-y-auto pb-8 px-2 -mx-2 no-scrollbar">
-                                        <button
-                                            onClick={() => { setSelectedTherapists([]); setBookingStep(5); }}
-                                            className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${selectedTherapists.length === 0 ? 'border-primary bg-white/5 shadow-sm' : 'border-white/20/50 hover:border-primary/30 bg-surface'}`}
-                                        >
-                                            <span className="font-bold text-white text-sm tracking-wide">Assign Automatically</span>
-                                            <ArrowRight className="w-4 h-4 text-white/90-muted" />
-                                        </button>
-                                        <div className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] p-4 rounded-2xl flex items-center justify-between my-2">
-                                            <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Therapists Needed</span>
-                                            <span className="text-sm font-bold text-white bg-white/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
-                                        </div>
-                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).map(rawT => {
-                                            const isFuture = formData.date && formData.date !== todayStr;
-                                            const t = { ...rawT } as any;
-                                            if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
-                                                t.status = 'Online';
-                                            } else if (t.status === 'Busy' && t.availableAt) {
-                                                if (formData.time && formData.time >= t.availableAt) {
-                                                    t.status = 'Online';
-                                                } else {
-                                                    const now = new Date();
-                                                    const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
-                                                    if ((!formData.date || formData.date === todayStr) && currentTimeStr >= t.availableAt) {
-                                                        t.status = 'Online';
-                                                    }
-                                                }
-                                            }
+                                    
+                                    <div className="flex flex-col gap-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                                        {therapists.filter(t => t.location === selectedArea).map(t => {
                                             return (
-<button
+                                            <button 
                                                 key={t.id}
-                                                onClick={() => { 
-                                                    if (selectedTherapists.includes(t.id)) {
-                                                        setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
-                                                    } else if (selectedTherapists.length < totalGuests) {
-                                                        if (t.status === 'Busy') {
-                                                            if (totalGuests > 1) {
-                                                                alert("For group bookings, please select therapists who are currently 'READY TO ACCEPT JOBS'.");
-                                                                return;
-                                                            }
-                                                            if (t.availableAt) {
-                                                                if (confirm(`This therapist will be ready at ${t.availableAt}. Your booking time will be automatically updated to ${t.availableAt}. Do you want to proceed?`)) {
-                                                                    setFormData({...formData, time: t.availableAt});
-                                                                    setSelectedTherapists([...selectedTherapists, t.id]);
-                                                                }
-                                                            } else {
-                                                                setSelectedTherapists([...selectedTherapists, t.id]);
-                                                            }
-                                                        } else {
-                                                            setSelectedTherapists([...selectedTherapists, t.id]);
-                                                        }
-                                                    }
-                                                }}
-                                                className={`w-full p-4 sm:p-5 rounded-3xl text-left flex gap-5 transition-all duration-300 relative overflow-hidden ${
-                                                    selectedTherapists.includes(t.id) 
-                                                    ? "bg-[#292831] border-[#292831] text-white shadow-xl scale-[1.02]" 
-                                                    : (selectedTherapists.length >= totalGuests && !selectedTherapists.includes(t.id) 
-                                                        ? "bg-white/5 border-white/10 opacity-40 cursor-not-allowed" 
-                                                        : "bg-white/10 backdrop-blur-[40px] border border-white/40 hover:bg-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] hover:-translate-y-1")
+                                                type="button"
+                                                onClick={() => toggleTherapist(t.id)}
+                                                className={`w-full p-4 rounded-[24px] border text-left transition-all duration-300 flex items-start gap-4 ${
+                                                    selectedTherapists.includes(t.id)
+                                                    ? 'bg-white/10 border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]'
+                                                    : 'bg-surface/50 border-white/10 hover:border-white/20 hover:bg-surface'
                                                 }`}
                                             >
-                                                <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border-2 border-white/50 shadow-sm w-16 h-16">
-                                                    <img src={t.avatar} alt={t.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
-                                                    <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity backdrop-blur-sm">
-                                                        <span className="text-[9px] font-bold text-white uppercase tracking-wider">View</span>
-                                                    </div>
+                                                <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-white/10 relative bg-white/5 flex items-center justify-center">
+                                                    {t.image_url ? (
+                                                        <img src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <span className="text-white/50 text-xs font-bold uppercase">{t.name.substring(0, 2)}</span>
+                                                    )}
+                                                    <div className="absolute inset-0 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] pointer-events-none rounded-full" />
                                                 </div>
-                                                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                                <div className="flex-1 min-w-0">
                                                     <div className="mb-1">
-                                                        {t.status === "Off" ? (
-                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
-                                                        ) : t.status === "Busy" ? (
-                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Handling Customer</span>
-                                                        ) : (
-                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
-                                                        )}
+                                                        <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Available</span>
                                                     </div>
                                                     <div className="flex items-center justify-between mb-1.5">
                                                         <div className="flex items-center gap-2">
                                                             <h4 className={`font-serif text-lg leading-none ${selectedTherapists.includes(t.id) ? "text-white" : "text-white"}`}>{t.name}</h4>
-                                                            
                                                         </div>
                                                         <div className="flex items-center text-[#2563eb]">
                                                             <BadgeCheck className="w-4 h-4" />
                                                         </div>
                                                     </div>
-                                                    <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.desc}</p>
+                                                    <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio || "Therapist professional"}</p>
                                                     <div className="flex items-center gap-2">
-                                                        {t.status === "Off" ? (
-                                                            <span className="text-[10px] font-semibold text-red-400 flex items-center gap-1.5 bg-red-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>Offline</span>
-                                                        ) : t.status === "Busy" ? (
-                                                            <span className="text-[10px] font-semibold text-amber-500 flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>READY AT {t.availableAt || "13:00"}</span>
-                                                        ) : (
-                                                            <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>READY TO ACCEPT JOBS</span>
-                                                        )}
+                                                        <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>READY TO ACCEPT JOBS</span>
                                                     </div>
                                                 </div>
                                             </button>
                                         );})}
-                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).length === 0 && (
+                                        {therapists.filter(t => t.location === selectedArea).length === 0 && (
                                             <div className="p-6 text-center text-sm text-white/90-muted border border-dashed border-white/20/50 rounded-xl bg-surface/50">
                                                 No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
                                             </div>
@@ -779,26 +718,22 @@ export default function RitualsDetails() {
                                             <div className="border-t border-white/20/50 pt-4">
                                                 <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-3">Selected Therapist{selectedTherapists.length > 1 ? 's' : ''}</p>
                                                 <div className="space-y-3">
-                                                    {selectedTherapists.map((tid, i) => {
-                                                        const t = MOCK_THERAPISTS.find(th => th.id === tid);
-                                                        if (!t) return null;
-                                                        return (
-                                                            <div key={i} className="flex gap-3 items-center">
-                                                                <img 
-                                                                    src={t.avatar} 
-                                                                    className="w-10 h-10 rounded-full object-cover border border-white/20"
-                                                                    alt={t.name}
-                                                                />
-                                                                <div>
-                                                                    <p className="text-sm font-bold text-white flex items-center gap-2">
-                                                                        {t.name}
-                                                                        <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">★ {t.rating}</span>
-                                                                    </p>
-                                                                    <p className="text-[10px] text-white/90-muted">{t.desc.substring(0, 40)}...</p>
-                                                                </div>
+                                                {selectedTherapists.map(tid => {
+                                                    const t = therapists.find(th => th.id === tid);
+                                                    if (!t) return null;
+                                                    return (
+                                                        <div key={tid} className="flex gap-3 items-center bg-white/5 border border-white/10 p-2 rounded-xl">
+                                                            <div className="w-8 h-8 rounded-full overflow-hidden bg-white/10 flex items-center justify-center">
+                                                                {t.image_url ? (
+                                                                    <img src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
+                                                                ) : (
+                                                                    <span className="text-white/50 text-xs font-bold uppercase">{t.name.substring(0, 2)}</span>
+                                                                )}
                                                             </div>
-                                                        );
-                                                    })}
+                                                            <span className="text-sm text-white font-medium">{t.name}</span>
+                                                        </div>
+                                                    );
+                                                })}
                                                 </div>
                                             </div>
                                         )}
