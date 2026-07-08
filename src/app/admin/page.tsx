@@ -22,6 +22,8 @@ export default function AdminDashboard() {
     // Local state for Therapist Fees (private to admin dashboard)
     const [therapistFees, setTherapistFees] = useState<TherapistFee[]>([]);
     const [allTherapists, setAllTherapists] = useState<Therapist[]>([]);
+    const [editingTherapistId, setEditingTherapistId] = useState<string | null>(null);
+    const [editTherapistData, setEditTherapistData] = useState<Partial<Therapist>>({});
 
     useEffect(() => {
         async function fetchData() {
@@ -369,6 +371,21 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleSaveTherapist = async (id: string) => {
+        try {
+            const { error } = await supabase.from('therapists').update(editTherapistData).eq('id', id);
+            if (!error) {
+                setAllTherapists(allTherapists.map(t => t.id === id ? { ...t, ...editTherapistData } : t));
+                setEditingTherapistId(null);
+                setEditTherapistData({});
+            } else {
+                console.error(error);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string>>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
@@ -405,7 +422,7 @@ export default function AdminDashboard() {
         <div className="min-h-screen bg-black flex overflow-hidden font-sans text-white/90">
             
             {/* Sidebar */}
-            <aside className="hidden md:flex flex-col w-64 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] border-r border-white/20/50 shadow-soft z-20">
+            <aside className="hidden md:flex flex-col w-64 bg-white/5 border border-white/20 border-r border-white/20/50 shadow-soft z-20">
                 <div className="p-8">
                     <Link href="/" className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity">
                         <Store size={20} strokeWidth={2.5} />
@@ -526,14 +543,14 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Deep Tissue Flow" 
                                                     value={treatmentTitle} onChange={e => setTreatmentTitle(e.target.value)}
-                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                 />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-xs font-bold uppercase tracking-widest text-white/90-muted ml-1">Category</label>
                                                 <select 
                                                     value={treatmentCategory} onChange={e => setTreatmentCategory(e.target.value)}
-                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm appearance-none"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                 >
                                                     <option value="Massage">Massage</option>
                                                     <option value="Facial">Facial</option>
@@ -556,7 +573,7 @@ export default function AdminDashboard() {
                                                     <div className="flex-1 relative">
                                                         <input 
                                                             type="number" required placeholder="60" value={option.duration} onChange={(e) => handlePricingChange(idx, 'duration', e.target.value)}
-                                                            className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 pr-16 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                            className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 pr-16 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                         />
                                                         <span className="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-semibold text-white/90-muted">MINS</span>
                                                     </div>
@@ -564,7 +581,7 @@ export default function AdminDashboard() {
                                                         <span className="absolute left-5 top-1/2 -translate-y-1/2 text-sm font-semibold text-white/90-muted">Rp</span>
                                                         <input 
                                                             type="text" required placeholder="450,000" value={option.price} onChange={(e) => handlePricingChange(idx, 'price', e.target.value)}
-                                                            className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-12 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                            className="w-full bg-white/5 border border-white/20 rounded-2xl px-12 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                         />
                                                     </div>
                                                     {pricingOptions.length > 1 && (
@@ -582,7 +599,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 required rows={3} placeholder="Write a captivating description about the treatment..." 
                                                 value={treatmentDesc} onChange={e => setTreatmentDesc(e.target.value)}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none resize-none"
                                             />
                                         </div>
 
@@ -598,7 +615,7 @@ export default function AdminDashboard() {
                                                 <div key={idx} className="flex items-center gap-4">
                                                     <input 
                                                         type="text" required placeholder="e.g. Relieves deep muscle tension" value={benefit} onChange={(e) => handleBenefitChange(idx, e.target.value)}
-                                                        className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                     />
                                                     {benefits.length > 1 && (
                                                         <button type="button" onClick={() => handleRemoveBenefit(idx)} className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center shrink-0 hover:bg-red-100 transition-colors">
@@ -620,7 +637,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Summer Retreat" 
                                                     value={campaignTitle} onChange={e => setCampaignTitle(e.target.value)}
-                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -628,7 +645,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Limited Offer" 
                                                     value={campaignLabel} onChange={e => setCampaignLabel(e.target.value)}
-                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                 />
                                             </div>
                                         </div>
@@ -663,7 +680,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 required rows={3} placeholder="Enjoy up to 20% off all signature treatments this month..." 
                                                 value={campaignDesc} onChange={e => setCampaignDesc(e.target.value)}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none resize-none"
                                             />
                                         </div>
 
@@ -673,7 +690,7 @@ export default function AdminDashboard() {
                                                 <label className="text-xs font-bold uppercase tracking-widest text-white/90-muted ml-1">Campaign Duration</label>
                                                 <div className="relative">
                                                     <select 
-                                                        className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm appearance-none"
+                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                         value={campaignDuration}
                                                         onChange={(e) => setCampaignDuration(e.target.value)}
                                                     >
@@ -693,7 +710,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="number" required min="1" max="100" placeholder="20" 
                                                     value={discountPercentage} onChange={e => setDiscountPercentage(Number(e.target.value))}
-                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                 />
                                             </div>
                                         </div>
@@ -756,7 +773,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Signature Massage Oil" 
                                                     value={productTitle} onChange={e => setProductTitle(e.target.value)}
-                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -764,7 +781,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. Oils" 
                                                     value={productCategory} onChange={e => setProductCategory(e.target.value)}
-                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                 />
                                             </div>
                                         </div>
@@ -776,7 +793,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="text" required placeholder="e.g. 350,000" 
                                                     value={productPrice} onChange={e => setProductPrice(e.target.value)}
-                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -784,7 +801,7 @@ export default function AdminDashboard() {
                                                 <input 
                                                     type="number" required min="0" placeholder="e.g. 10" 
                                                     value={productStock} onChange={e => setProductStock(parseInt(e.target.value) || 0)}
-                                                    className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm"
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
                                                 />
                                             </div>
                                         </div>
@@ -820,7 +837,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 required rows={4} placeholder="Write a captivating description about the product..." 
                                                 value={productDesc} onChange={e => setProductDesc(e.target.value)}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none resize-none"
                                             />
                                         </div>
 
@@ -830,7 +847,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 rows={4} placeholder="Instructions on how to use..." 
                                                 value={productHowToUse} onChange={e => setProductHowToUse(e.target.value)}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none resize-none"
                                             />
                                         </div>
 
@@ -840,7 +857,7 @@ export default function AdminDashboard() {
                                             <textarea 
                                                 rows={3} placeholder="Comma-separated ingredients..." 
                                                 value={productIngredients} onChange={e => setProductIngredients(e.target.value)}
-                                                className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white/20 transition-all shadow-sm resize-none"
+                                                className="w-full bg-white/5 border border-white/20 rounded-2xl px-5 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none resize-none"
                                             />
                                         </div>
                                     </>
@@ -858,7 +875,7 @@ export default function AdminDashboard() {
                                                     placeholder="Search treatments..."
                                                     value={feeSearch}
                                                     onChange={(e) => setFeeSearch(e.target.value)}
-                                                    className="w-full md:w-64 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-2 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                                                    className="w-full md:w-64 bg-white/5 border border-white/20 rounded-xl px-4 py-2 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
                                                 />
                                                 <span className="text-xs font-semibold text-white/90-muted bg-surface px-3 py-1 rounded-full whitespace-nowrap">
                                                     {treatments.filter(t => t.title.toLowerCase().includes(feeSearch.toLowerCase()) || t.category.toLowerCase().includes(feeSearch.toLowerCase())).length} Treatments
@@ -901,7 +918,7 @@ export default function AdminDashboard() {
                                                                 <div className="p-5 pt-0 border-t border-white/20/20 mt-2 space-y-4">
                                                                     <div className="space-y-3">
                                                                         {t.options.map(opt => (
-                                                                            <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl gap-4 hover:border-primary/20 transition-colors">
+                                                                            <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white/5 border border-white/20 rounded-xl gap-4 hover:border-primary/20 transition-colors">
                                                                                 <div className="flex items-center justify-between sm:justify-start gap-4">
                                                                                     <span className="text-sm font-bold text-white bg-white/5 px-3 py-1.5 rounded-md">{opt.duration}</span>
                                                                                     <span className="text-xs font-semibold text-white/90-muted">Cust. Price: Rp {opt.price}</span>
@@ -950,45 +967,89 @@ export default function AdminDashboard() {
                                         {allTherapists.length === 0 ? (
                                             <div className="text-white/60 text-center py-12">No therapists found.</div>
                                         ) : (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {allTherapists.map(therapist => (
-                                                    <div key={therapist.id} className="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:bg-white/10 transition-colors">
-                                                        <div className="flex justify-between items-start mb-4">
-                                                            <div className="flex items-center gap-3">
-                                                                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center overflow-hidden">
-                                                                    {therapist.image_url ? (
-                                                                        <img src={therapist.image_url} alt={therapist.name} className="w-full h-full object-cover" />
-                                                                    ) : (
-                                                                        <Users size={20} className="text-white/50" />
-                                                                    )}
-                                                                </div>
-                                                                <div>
-                                                                    <h3 className="text-white font-medium text-lg leading-tight">{therapist.name}</h3>
-                                                                    <p className="text-white/50 text-xs mt-1 uppercase tracking-wider">{therapist.brand}</p>
-                                                                </div>
-                                                            </div>
-                                                            <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${therapist.is_active ? 'bg-green-500/20 text-green-300 border-green-500/30' : 'bg-red-500/20 text-red-300 border-red-500/30'}`}>
-                                                                {therapist.is_active ? 'Active' : 'Suspended'}
-                                                            </span>
-                                                        </div>
-                                                        <p className="text-white/70 text-sm mb-6 line-clamp-2">{therapist.bio}</p>
-                                                        
-                                                        <div className="flex items-center gap-2 border-t border-white/10 pt-4 mt-auto">
-                                                            {therapist.is_active ? (
-                                                                <button onClick={() => handleTherapistStatus(therapist.id, false)} className="flex-1 py-2 rounded-xl text-xs font-semibold bg-white/5 text-white hover:bg-white/10 transition-colors">
-                                                                    Suspend
-                                                                </button>
-                                                            ) : (
-                                                                <button onClick={() => handleTherapistStatus(therapist.id, true)} className="flex-1 py-2 rounded-xl text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-                                                                    Approve
-                                                                </button>
-                                                            )}
-                                                            <button onClick={() => handleDeleteTherapist(therapist.id)} className="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors">
-                                                                <Trash2 size={16} />
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                ))}
+                                            <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full text-left border-collapse">
+                                                        <thead>
+                                                            <tr className="border-b border-white/10 text-xs uppercase tracking-wider text-white/50">
+                                                                <th className="p-4 font-medium">Therapist</th>
+                                                                <th className="p-4 font-medium">Brand</th>
+                                                                <th className="p-4 font-medium">Bio</th>
+                                                                <th className="p-4 font-medium">Status</th>
+                                                                <th className="p-4 font-medium text-right">Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="divide-y divide-white/5">
+                                                            {allTherapists.map(therapist => {
+                                                                const isEditing = editingTherapistId === therapist.id;
+                                                                return (
+                                                                <tr key={therapist.id} className="hover:bg-white/5 transition-colors group">
+                                                                    <td className="p-4 align-top">
+                                                                        <div className="flex items-center gap-3 min-w-[200px]">
+                                                                            <div className="w-10 h-10 bg-white/10 rounded-full flex shrink-0 items-center justify-center overflow-hidden border border-white/10">
+                                                                                {therapist.image_url ? (
+                                                                                    <img src={therapist.image_url} alt={therapist.name} className="w-full h-full object-cover" />
+                                                                                ) : (
+                                                                                    <Users size={16} className="text-white/50" />
+                                                                                )}
+                                                                            </div>
+                                                                            {isEditing ? (
+                                                                                <input type="text" value={editTherapistData.name || ''} onChange={e => setEditTherapistData({...editTherapistData, name: e.target.value})} className="w-full bg-black/50 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-white/50 transition-all appearance-none" />
+                                                                            ) : (
+                                                                                <span className="font-medium text-white">{therapist.name}</span>
+                                                                            )}
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="p-4 align-top text-white/70 text-sm">
+                                                                        {isEditing ? (
+                                                                            <input type="text" value={editTherapistData.brand || ''} onChange={e => setEditTherapistData({...editTherapistData, brand: e.target.value})} className="w-32 bg-black/50 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-white/50 transition-all appearance-none" />
+                                                                        ) : (
+                                                                            therapist.brand || '-'
+                                                                        )}
+                                                                    </td>
+                                                                    <td className="p-4 align-top text-white/60 text-sm max-w-xs">
+                                                                        {isEditing ? (
+                                                                            <textarea value={editTherapistData.bio || ''} onChange={e => setEditTherapistData({...editTherapistData, bio: e.target.value})} className="w-full bg-black/50 border border-white/20 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-white/50 transition-all appearance-none min-h-[80px]" />
+                                                                        ) : (
+                                                                            <p className="line-clamp-2">{therapist.bio || '-'}</p>
+                                                                        )}
+                                                                    </td>
+                                                                    <td className="p-4 align-top">
+                                                                        <button 
+                                                                            onClick={() => handleTherapistStatus(therapist.id, !therapist.is_active)}
+                                                                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${therapist.is_active ? 'bg-primary' : 'bg-white/20'}`}
+                                                                        >
+                                                                            <span className={`inline-block h-4 w-4 transform rounded-full bg-black transition-transform ${therapist.is_active ? 'translate-x-6' : 'translate-x-1'}`} />
+                                                                        </button>
+                                                                    </td>
+                                                                    <td className="p-4 align-top text-right">
+                                                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                            {isEditing ? (
+                                                                                <>
+                                                                                    <button onClick={() => setEditingTherapistId(null)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors">
+                                                                                        <LogOut size={14} className="rotate-180" />
+                                                                                    </button>
+                                                                                    <button onClick={() => handleSaveTherapist(therapist.id)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-black hover:bg-primary/90 transition-colors">
+                                                                                        <CheckCircle size={14} />
+                                                                                    </button>
+                                                                                </>
+                                                                            ) : (
+                                                                                <>
+                                                                                    <button onClick={() => { setEditingTherapistId(therapist.id); setEditTherapistData(therapist); }} className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-colors">
+                                                                                        <Edit3 size={14} />
+                                                                                    </button>
+                                                                                    <button onClick={() => handleDeleteTherapist(therapist.id)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors">
+                                                                                        <Trash2 size={14} />
+                                                                                    </button>
+                                                                                </>
+                                                                            )}
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            )})}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         )}
                                     </div>
@@ -997,7 +1058,7 @@ export default function AdminDashboard() {
                                 {activeTab === 'list' && (
                                     <div className="space-y-8">
                                         {/* Segmented Control for View Selection */}
-                                        <div className="flex bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] p-1.5 rounded-2xl w-full max-w-xl shadow-sm mb-6">
+                                        <div className="flex bg-white/5 border border-white/20 p-1.5 rounded-2xl w-full max-w-xl shadow-sm mb-6">
                                             {['campaign', 'treatments', 'store'].map((view) => (
                                                 <button
                                                     key={view}
@@ -1038,14 +1099,14 @@ export default function AdminDashboard() {
                                                             <button 
                                                                 onClick={handleEditCampaign}
                                                                 type="button"
-                                                                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-white/90-muted hover:text-white hover:bg-surface flex items-center justify-center transition-colors"
+                                                                className="w-10 h-10 rounded-full bg-white/5 border border-white/20 text-white/90-muted hover:text-white hover:bg-surface flex items-center justify-center transition-colors"
                                                             >
                                                                 <Edit3 size={16} />
                                                             </button>
                                                             <button 
                                                                 onClick={handleRemoveCampaign}
                                                                 type="button"
-                                                                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                className="w-10 h-10 rounded-full bg-white/5 border border-white/20 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                                                             >
                                                                 <Trash2 size={16} />
                                                             </button>
@@ -1127,14 +1188,14 @@ export default function AdminDashboard() {
                                                                     <button 
                                                                         type="button"
                                                                         onClick={() => handleEditTreatment(t)}
-                                                                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-white/90-muted hover:text-white hover:bg-surface flex items-center justify-center transition-colors"
+                                                                        className="w-10 h-10 rounded-full bg-white/5 border border-white/20 text-white/90-muted hover:text-white hover:bg-surface flex items-center justify-center transition-colors"
                                                                     >
                                                                         <Edit3 size={16} />
                                                                     </button>
                                                                     <button 
                                                                         type="button"
                                                                         onClick={() => handleRemoveTreatment(t.id)}
-                                                                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                        className="w-10 h-10 rounded-full bg-white/5 border border-white/20 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                                                                     >
                                                                         <Trash2 size={16} />
                                                                     </button>
@@ -1189,14 +1250,14 @@ export default function AdminDashboard() {
                                                                 <button 
                                                                     type="button"
                                                                     onClick={() => handleEditProduct(p)}
-                                                                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-white/90-muted hover:text-white hover:bg-surface flex items-center justify-center transition-colors"
+                                                                    className="w-8 h-8 rounded-full bg-white/5 border border-white/20 text-white/90-muted hover:text-white hover:bg-surface flex items-center justify-center transition-colors"
                                                                 >
                                                                     <Edit3 size={14} />
                                                                 </button>
                                                                 <button 
                                                                     type="button"
                                                                     onClick={() => handleRemoveProduct(p.id)}
-                                                                    className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+                                                                    className="w-8 h-8 rounded-full bg-white/5 border border-white/20 text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
                                                                 >
                                                                     <Trash2 size={14} />
                                                                 </button>
