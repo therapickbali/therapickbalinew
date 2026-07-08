@@ -216,8 +216,59 @@ ${treatmentsList}
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
+                {/* Location Filter for Therapists */}
+                <div className="md:hidden mt-4 mb-4 relative z-30 -mx-6 px-2">
+                    <div className="bg-[#111]/80 backdrop-blur-xl border border-white/20 rounded-full p-1.5 flex items-center shadow-inner overflow-x-auto no-scrollbar gap-1">
+                        
+                        {/* Region Toggle Button */}
+                        <button 
+                            onClick={() => {
+                                setSelectedRegion(selectedRegion === 'Bali' ? 'Dubai' : 'Bali');
+                                setSelectedAreaFilter('All');
+                            }}
+                            className={`flex items-center gap-1 shrink-0 px-4 h-10 rounded-full transition-all duration-300 font-serif font-bold tracking-wide ${selectedAreaFilter === 'All' ? 'bg-white/20 shadow-md text-white' : 'text-white/60 hover:bg-white/10'}`}
+                        >
+                            <span>{selectedRegion}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
 
+                        <div className="w-px h-6 bg-white/20 shrink-0 mx-1"></div>
 
+                        {REGION_AREAS[selectedRegion as keyof typeof REGION_AREAS].filter(a => a !== 'All').map(area => (
+                            <button
+                                key={area}
+                                onClick={() => setSelectedAreaFilter(area)}
+                                className={`px-5 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all duration-300 ${selectedAreaFilter === area ? 'bg-white/20 shadow-md text-white' : 'text-white/60 hover:text-white'}`}
+                            >
+                                {area}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Therapist Stories */}
+                {therapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || t.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).length > 0 && (
+                <div className="md:hidden mt-2 mb-6 relative z-20 -mx-6">
+                    <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
+                        {therapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || t.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).map(t => (
+                            <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setViewingTherapist(t)}>
+                                <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-sm ${selectedTherapists.includes(t.id) ? 'bg-gradient-to-tr from-white via-white/80 to-white shadow-[0_8px_20px_rgb(0,0,0,0.3)] scale-110' : 'bg-gradient-to-tr from-white/40 to-white/10 hover:scale-105'}`}>
+                                    <div className="w-full h-full rounded-full border-[3px] border-[#111] overflow-hidden bg-black">
+                                        {t.image_url ? (
+                                            <img src={t.image_url} alt={t.name} className="w-full h-full object-cover object-top" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center"><User size={24} className="text-white/20" /></div>
+                                        )}
+                                    </div>
+                                </div>
+                                <span className={`text-[11px] text-center max-w-[72px] truncate transition-all ${selectedTherapists.includes(t.id) ? 'text-white font-bold' : 'text-white/70 font-medium'}`}>
+                                    {t.name}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                )}
                 {/* Cinematic Campaign Card (Below Search) */}
                 {campaign && (
                 <div onClick={() => setIsCampaignModalOpen(true)} className="block outline-none">
