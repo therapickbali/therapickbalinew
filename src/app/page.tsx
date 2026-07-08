@@ -22,7 +22,7 @@ const CATEGORIES = [
 
 
 export default function Home() {
-    const { treatments, campaign, products, isLoading } = useSpa();
+    const { treatments, therapists, campaign, products, isLoading } = useSpa();
 
     const [activeCategory, setActiveCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
@@ -77,15 +77,7 @@ export default function Home() {
     const [selectedRegion, setSelectedRegion] = useState('Bali');
     const [selectedAreaFilter, setSelectedAreaFilter] = useState('All');
 
-    const MOCK_THERAPISTS = [
-        { id: 't1', name: 'Sarah J.', location: 'Seminyak', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop', desc: 'Expert in deep tissue and sports massage.', reviews: [{ author: 'Emily R.', text: 'Sarah was incredible. Best deep tissue massage I have ever had.' }], availability: { today: ['10:00', '13:00', '16:30'], days: ['Mon', 'Tue', 'Thu', 'Fri'] }, status: 'Online' },
-        { id: 't2', name: 'Dewi K.', location: 'Ubud', region: 'Bali', rating: 5, avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98a?w=150&h=150&fit=crop', desc: 'Specializes in traditional Balinese healing rituals.', reviews: [{ author: 'Michael B.', text: 'Dewi brings such a calming, authentic Balinese energy.' }], availability: { today: ['11:30', '14:00', '18:00'], days: ['Wed', 'Thu', 'Sat', 'Sun'] }, status: 'Busy', availableAt: '13:00' },
-        { id: 't3', name: 'Wayan M.', location: 'Canggu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop', desc: 'Aromatherapy and relaxation massage specialist.', reviews: [{ author: 'Sophie T.', text: 'Wayan knew exactly what I needed. Highly recommend.' }], availability: { today: ['09:00', '15:00'], days: ['Mon', 'Wed', 'Fri', 'Sat'] }, status: 'Off' },
-        { id: 't4', name: 'Ketut A.', location: 'Ubud', region: 'Bali', rating: 4.8, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop', desc: 'Holistic massage therapist with 10 years experience.', reviews: [{ author: 'David W.', text: 'Amazing technique and completely dissolved my tension.' }], availability: { today: ['12:00', '17:00'], days: ['Tue', 'Wed', 'Thu', 'Sun'] }, status: 'Online' },
-        { id: 't5', name: 'Made B.', location: 'Uluwatu', region: 'Bali', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', desc: 'Known for incredibly relaxing Hawaiian Lomi-Lomi.', reviews: [{ author: 'Anna K.', text: 'The Lomi-Lomi was life-changing. Made is a master.' }], availability: { today: ['10:30', '14:30', '19:00'], days: ['Mon', 'Tue', 'Fri', 'Sun'] }, status: 'Busy', availableAt: '13:00' },
-        { id: 't6', name: 'Aisha F.', location: 'Downtown', region: 'Dubai', rating: 5, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop', desc: 'Specialist in Swedish and deep tissue.', reviews: [{ author: 'Sarah L.', text: 'Aisha is phenomenal! Perfect pressure.' }], availability: { today: ['09:00', '13:00', '16:00'], days: ['Mon', 'Tue', 'Wed', 'Thu'] }, status: 'Online' },
-        { id: 't7', name: 'Fatima R.', location: 'Marina', region: 'Dubai', rating: 4.9, avatar: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop', desc: 'Holistic healing and relaxation.', reviews: [{ author: 'Chloe M.', text: 'So soothing and relaxing, Fatima is the best.' }], availability: { today: ['11:00', '15:00', '18:30'], days: ['Thu', 'Fri', 'Sat', 'Sun'] }, status: 'Off' },
-    ];
+
     
     const REGION_AREAS = {
         'Bali': ['All', 'Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'],
@@ -172,7 +164,7 @@ export default function Home() {
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
             const therapistMsg = selectedTherapists.length > 0
-                ? `\n*Therapist Request:* ${selectedTherapists.map(id => MOCK_THERAPISTS.find(t => t.id === id)?.name).join(', ')}`
+                ? `\n*Therapist Request:* ${selectedTherapists.map(id => therapists.find(t => t.id === id)?.name).join(', ')}`
                 : `\n*Therapist Request:* Assign Automatically`;
 
             const whatsappUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(`*NEW RESERVATION*
@@ -224,53 +216,7 @@ ${treatmentsList}
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-36">
                 
-                {/* Location Filter for Therapists */}
-                <div className="md:hidden mt-4 mb-4 relative z-30 -mx-6 px-2">
-                    <div className="bg-[#111]/80 backdrop-blur-xl border border-white/80 rounded-full p-1.5 flex items-center shadow-inner overflow-x-auto no-scrollbar gap-1">
-                        
-                        {/* Region Toggle Button */}
-                        <button 
-                            onClick={() => {
-                                setSelectedRegion(selectedRegion === 'Bali' ? 'Dubai' : 'Bali');
-                                setSelectedAreaFilter('All');
-                            }}
-                            className={`flex items-center gap-1 shrink-0 px-4 h-10 rounded-full transition-all duration-300 font-serif font-bold tracking-wide ${selectedAreaFilter === 'All' ? 'bg-white/20 shadow-md text-white' : 'text-white/90-muted hover:bg-white/50'}`}
-                        >
-                            <span>{selectedRegion}</span>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5"><path d="m6 9 6 6 6-6"/></svg>
-                        </button>
 
-                        <div className="w-px h-6 bg-border/40 shrink-0 mx-1"></div>
-
-                        {REGION_AREAS[selectedRegion as keyof typeof REGION_AREAS].filter(a => a !== 'All').map(area => (
-                            <button
-                                key={area}
-                                onClick={() => setSelectedAreaFilter(area)}
-                                className={`px-5 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all duration-300 ${selectedAreaFilter === area ? 'bg-white/20 shadow-md text-white' : 'text-white/90-muted hover:text-white'}`}
-                            >
-                                {area}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Therapist Stories */}
-                <div className="md:hidden mt-2 mb-6 relative z-20 -mx-6">
-                    <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
-                        {MOCK_THERAPISTS.filter(t => t.region === selectedRegion && (selectedAreaFilter === 'All' || t.location === selectedAreaFilter)).map(t => (
-                            <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setViewingTherapist(t)}>
-                                <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-soft ${selectedTherapists.includes(t.id) ? 'bg-gradient-to-tr from-primary via-highlight to-primary shadow-[0_8px_20px_rgb(0,0,0,0.15)] scale-110' : 'bg-gradient-to-tr from-gray-200 to-gray-100 hover:scale-105'}`}>
-                                    <div className="w-full h-full rounded-full border-[3px] border-[#FDFBF7] overflow-hidden bg-white">
-                                        <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
-                                    </div>
-                                </div>
-                                <span className={`text-[11px] text-center max-w-[72px] truncate transition-all ${selectedTherapists.includes(t.id) ? 'text-white font-bold' : 'text-white/90-muted font-medium'}`}>
-                                    {t.name}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
 
                 {/* Cinematic Campaign Card (Below Search) */}
                 {campaign && (
@@ -505,32 +451,7 @@ ${treatmentsList}
             </div>
             
             <div className="hidden md:block pb-12">
-                {/* Therapists Section */}
-                <div className="mb-24 flex flex-col items-center max-w-7xl mx-auto px-6">
-                    <span className="text-xs font-bold uppercase tracking-widest text-white/50 mb-4 block text-center">Meet Our Therapists</span>
-                    <h3 className="font-serif text-3xl md:text-5xl text-white font-medium mb-12 text-center leading-tight">
-                        Expert <span className="italic">Healers</span>
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-                        {MOCK_THERAPISTS.slice(0, 4).map(t => (
-                            <div key={t.id} className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 flex flex-col items-center text-center shadow-sm hover:shadow-none transition-all duration-300 group">
-                                <div className="w-24 h-24 rounded-full overflow-hidden mb-5 border-4 border-surface shadow-sm group-hover:scale-105 transition-transform duration-500">
-                                    <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
-                                </div>
-                                <h4 className="font-bold text-lg text-white mb-1">{t.name}</h4>
-                                <div className="text-xs font-bold uppercase tracking-widest text-white/90-muted mb-3">{t.location}</div>
-                                <div className="flex items-center gap-1 mb-4 text-amber-500">
-                                    {Array(5).fill(0).map((_, i) => (
-                                        <svg key={i} className={`w-4 h-4 ${i < Math.floor(t.rating) ? 'fill-current' : 'fill-transparent stroke-current'}`} viewBox="0 0 24 24">
-                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                        </svg>
-                                    ))}
-                                </div>
-                                <p className="text-sm text-white/90-muted leading-relaxed">{t.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+
 
                 {/* About Us */}
                 <div className="mb-24 flex flex-col md:flex-row gap-12 md:gap-24 items-center max-w-7xl mx-auto px-6">
@@ -973,7 +894,7 @@ ${treatmentsList}
                                             <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Therapists Needed</span>
                                             <span className="text-sm font-bold text-white bg-white/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
                                         </div>
-                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).map(rawT => {
+                                        {therapists.map(rawT => {
                                             const isFuture = formData.date && formData.date !== todayStr;
                                             const t = { ...rawT } as any;
                                             if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
@@ -1023,7 +944,7 @@ ${treatmentsList}
                                                 }`}
                                             >
                                                 <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border-2 border-white/50 shadow-sm w-16 h-16">
-                                                    <img src={t.avatar} alt={t.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
+                                                    <img src={t.image_url} alt={t.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
                                                     <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity backdrop-blur-sm">
                                                         <span className="text-[9px] font-bold text-white uppercase tracking-wider">View</span>
                                                     </div>
@@ -1047,7 +968,7 @@ ${treatmentsList}
                                                             <BadgeCheck className="w-4 h-4" />
                                                         </div>
                                                     </div>
-                                                    <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.desc}</p>
+                                                    <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio}</p>
                                                     <div className="flex items-center gap-2">
                                                         {t.status === "Off" ? (
                                                             <span className="text-[10px] font-semibold text-red-400 flex items-center gap-1.5 bg-red-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>Offline</span>
@@ -1060,7 +981,7 @@ ${treatmentsList}
                                                 </div>
                                             </button>
                                         );})}
-                                        {MOCK_THERAPISTS.filter(t => t.location === selectedArea).length === 0 && (
+                                        {therapists.length === 0 && (
                                             <div className="p-6 text-center text-sm text-white/90-muted border border-dashed border-white/20/50 rounded-xl bg-surface/50">
                                                 No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
                                             </div>
@@ -1101,12 +1022,12 @@ ${treatmentsList}
                                                 <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-3">Selected Therapist{selectedTherapists.length > 1 ? 's' : ''}</p>
                                                 <div className="space-y-3">
                                                     {selectedTherapists.map((tid, i) => {
-                                                        const t = MOCK_THERAPISTS.find(th => th.id === tid);
+                                                        const t = therapists.find(th => th.id === tid);
                                                         if (!t) return null;
                                                         return (
                                                             <div key={i} className="flex gap-3 items-center">
                                                                 <img 
-                                                                    src={t.avatar} 
+                                                                    src={t.image_url} 
                                                                     className="w-10 h-10 rounded-full object-cover border border-white/20"
                                                                     alt={t.name}
                                                                 />
