@@ -11,17 +11,10 @@ export default function TopNav() {
     const [isScrolled, setIsScrolled] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const leftNavItems = [
+    const navItems = [
         { href: '/', label: 'HOME' },
+        { href: '/store', label: 'STORE' },
         { href: '/rituals', label: 'TREATMENT' },
-    ];
-
-    const rightNavItems = [
-        { href: '/contact', label: 'CONTACT' },
-    ];
-
-    const mobileNavItems = [
-        { href: '/', label: 'HOME' },
         { href: '/philosophy', label: 'PHILOSOPHY' },
         { href: '/why-choose-us', label: 'WHY CHOOSE US' },
         { href: '/service-areas', label: 'SERVICE AREAS' },
@@ -72,38 +65,17 @@ export default function TopNav() {
                 ref={dropdownRef}
                 style={{ transformOrigin: 'top center' }}
             >
-                {/* Left Side Container */}
-                <div className="flex-1 flex items-center justify-start gap-4 md:gap-8">
-                    {/* Brand / Store */}
-                    <a href="/store" className="flex items-center gap-2 bg-[#111111] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-white shrink-0">
-                        <Store size={16} strokeWidth={2.5} />
-                        <span className="text-[10px] md:text-[11px] font-bold tracking-widest uppercase mt-0.5">
-                            STORE
-                        </span>
-                    </a>
+                {/* Brand / Store (Left) */}
+                <a href="/store" className="flex items-center gap-2 bg-[#111111] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-full pl-3 pr-4 h-9 transition-colors hover:bg-white/30 text-white shrink-0">
+                    <Store size={16} strokeWidth={2.5} />
+                    <span className="text-[10px] md:text-[11px] font-bold tracking-widest uppercase mt-0.5">
+                        STORE
+                    </span>
+                </a>
 
-                    {/* Left Inline Links */}
-                    <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-                        {leftNavItems.map((item) => {
-                            const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-                            return (
-                                <a 
-                                    key={item.href}
-                                    href={item.href} 
-                                    className={`text-[11px] md:text-[13px] font-semibold tracking-wider transition-colors whitespace-nowrap ${
-                                        isActive ? 'text-white' : 'text-white/60 hover:text-white'
-                                    }`}
-                                >
-                                    {item.label}
-                                </a>
-                            );
-                        })}
-                    </nav>
-                </div>
-
-                {/* Center Logo */}
-                <div className="shrink-0 flex items-center justify-center px-4">
-                    <a href="/" className="flex items-center justify-center h-16 md:h-20 w-40 md:w-56 transition-transform hover:scale-105">
+                {/* Logo (Center) - Absolute positioned to not stretch navbar height */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-auto mt-0 md:mt-1">
+                    <a href="/" className="flex items-center justify-center h-20 md:h-32 w-48 md:w-80 transition-transform hover:scale-105">
                         <img 
                             src="/logo.png" 
                             alt="Therapick Logo" 
@@ -112,45 +84,16 @@ export default function TopNav() {
                     </a>
                 </div>
 
-                {/* Right Side Container */}
-                <div className="flex-1 flex items-center justify-end gap-4 md:gap-8">
-                    {/* Right Inline Links */}
-                    <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-                        {rightNavItems.map((item) => {
-                            const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-                            return (
-                                <a 
-                                    key={item.href}
-                                    href={item.href} 
-                                    className={`text-[11px] md:text-[13px] font-semibold tracking-wider transition-colors whitespace-nowrap ${
-                                        isActive ? 'text-white' : 'text-white/60 hover:text-white'
-                                    }`}
-                                >
-                                    {item.label}
-                                </a>
-                            );
-                        })}
-                    </nav>
+                {/* Dropdown Toggle Button (Visible everywhere) */}
+                <button 
+                    onClick={() => setIsOpen(!isOpen)}
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-white transition-colors hover:bg-black/5 shrink-0 ml-auto`}
+                    aria-label="Toggle Navigation"
+                >
+                    {isOpen ? <X size={18} /> : <Menu size={18} />}
+                </button>
 
-                    {/* Desktop Therapist Portal Button */}
-                    <a 
-                        href="/therapist-login"
-                        className="hidden md:flex items-center justify-center bg-white/40 hover:bg-white/60 text-white border border-white/60 px-4 py-2 rounded-full text-[11px] font-bold tracking-widest uppercase transition-colors shadow-sm"
-                    >
-                        THERAPIST PORTAL
-                    </a>
-
-                    {/* Dropdown Toggle Button (Visible on mobile ALWAYS) */}
-                    <button 
-                        onClick={() => setIsOpen(!isOpen)}
-                        className={`w-9 h-9 rounded-full flex items-center justify-center text-white transition-colors hover:bg-black/5 shrink-0 md:hidden`}
-                        aria-label="Toggle Navigation"
-                    >
-                        {isOpen ? <X size={18} /> : <Menu size={18} />}
-                    </button>
-                </div>
-
-                {/* Dropdown Menu (Mobile Only) */}
+                {/* Dropdown Menu (Mobile & Desktop) */}
                 <AnimatePresence>
                     {isOpen && (
                         <motion.div
@@ -158,9 +101,9 @@ export default function TopNav() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
                             transition={{ duration: 0.2 }}
-                            className={`absolute top-[120%] right-0 w-48 shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col p-2 bg-[#111111] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-2xl z-50 md:hidden`}
+                            className={`absolute top-[120%] right-0 md:right-4 w-48 shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col p-2 bg-[#111111] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-2xl z-50`}
                         >
-                            {mobileNavItems.map((item) => {
+                            {navItems.map((item) => {
                                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                                 return (
                                     <a 
