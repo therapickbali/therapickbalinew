@@ -28,6 +28,7 @@ export default function AdminDashboard() {
     const [editingTherapistId, setEditingTherapistId] = useState<string | null>(null);
     const [editTherapistData, setEditTherapistData] = useState<Partial<Therapist>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [locationFilter, setLocationFilter] = useState<string>('All');
 
     useEffect(() => {
         async function checkAuth() {
@@ -995,130 +996,136 @@ export default function AdminDashboard() {
 
                                 {activeTab === 'therapists' && (
                                     <div className="space-y-6">
-                                        <div className="flex items-center justify-between mb-4">
+                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                                             <h2 className="text-xl font-medium text-white">Registered Therapists</h2>
+                                            <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+                                                {['All', 'Ubud', 'Canggu', 'Seminyak'].map(loc => (
+                                                    <button 
+                                                        key={loc}
+                                                        onClick={() => setLocationFilter(loc)}
+                                                        className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${locationFilter === loc ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                                                    >
+                                                        {loc}
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
-                                        {allTherapists.length === 0 ? (
-                                            <div className="text-white/60 text-center py-12">No therapists found.</div>
+                                        {allTherapists.filter(t => locationFilter === 'All' || t.location === locationFilter).length === 0 ? (
+                                            <div className="text-white/60 text-center py-16 bg-white/5 rounded-[32px] border border-white/10">No therapists found in this area.</div>
                                         ) : (
-                                            <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-                                                <div className="overflow-x-auto">
-                                                    <table className="w-full text-left border-collapse">
-                                                        <thead>
-                                                            <tr className="border-b border-white/10 text-xs uppercase tracking-wider text-white/50">
-                                                                <th className="p-4 font-medium">Therapist</th>
-                                                                <th className="p-4 font-medium">Contact & Location</th>
-                                                                <th className="p-4 font-medium">Brand</th>
-                                                                <th className="p-4 font-medium">Bio</th>
-                                                                <th className="p-4 font-medium">Status</th>
-                                                                <th className="p-4 font-medium text-right">Actions</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody className="divide-y divide-white/5">
-                                                            {allTherapists.map(therapist => {
-                                                                const isEditing = editingTherapistId === therapist.id;
-                                                                return (
-                                                                <tr key={therapist.id} className="hover:bg-white/5 transition-colors group">
-                                                                    <td className="p-4 align-top">
-                                                                        <div className="flex items-center gap-3 min-w-[200px]">
-                                                                            <div 
-                                                                                className="w-10 h-10 bg-white/10 rounded-full flex shrink-0 items-center justify-center overflow-hidden border border-white/10 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all hover:scale-105"
-                                                                                onClick={() => therapist.image_url && setSelectedImage(therapist.image_url)}
-                                                                            >
-                                                                                {therapist.image_url ? (
-                                                                                    <img src={therapist.image_url} alt={therapist.name} className="w-full h-full object-cover" />
-                                                                                ) : (
-                                                                                    <Users size={16} className="text-white/50" />
-                                                                                )}
-                                                                            </div>
-                                                                            {isEditing ? (
-                                                                                <input type="text" value={editTherapistData.name || ''} onChange={e => setEditTherapistData({...editTherapistData, name: e.target.value})} className="w-full bg-black/50 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-white/50 transition-all appearance-none" />
-                                                                            ) : (
-                                                                                <span className="font-medium text-white">{therapist.name}</span>
-                                                                            )}
-                                                                        </div>
-                                                                    </td>
-                                                                    <td className="p-4 align-top text-white/70 text-sm">
-                                                                        <div className="flex flex-col gap-2">
-                                                                            {therapist.location && (
-                                                                                <div className="flex items-center gap-1.5 text-xs">
-                                                                                    <MapPin size={12} className="text-white/40" />
-                                                                                    {isEditing ? (
-                                                                                        <select value={editTherapistData.location || ''} onChange={e => setEditTherapistData({...editTherapistData, location: e.target.value})} className="bg-black/50 border border-white/20 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-white/50 appearance-none">
-                                                                                            <option value="Ubud">Ubud</option>
-                                                                                            <option value="Canggu">Canggu</option>
-                                                                                            <option value="Seminyak">Seminyak</option>
-                                                                                        </select>
-                                                                                    ) : (
-                                                                                        therapist.location
-                                                                                    )}
-                                                                                </div>
-                                                                            )}
-                                                                            {therapist.whatsapp && (
-                                                                                <div className="flex items-center gap-1.5 text-xs">
-                                                                                    <MessageCircle size={12} className="text-[#25D366]" />
-                                                                                    {isEditing ? (
-                                                                                        <input type="text" value={editTherapistData.whatsapp || ''} onChange={e => setEditTherapistData({...editTherapistData, whatsapp: e.target.value})} className="bg-black/50 border border-white/20 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-white/50 w-24 appearance-none" />
-                                                                                    ) : (
-                                                                                        <a href={`https://wa.me/${therapist.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-2">
-                                                                                            {therapist.whatsapp}
-                                                                                        </a>
-                                                                                    )}
-                                                                                </div>
-                                                                            )}
-                                                                            {!therapist.location && !therapist.whatsapp && <span className="text-white/30 text-xs italic">No contact info</span>}
-                                                                        </div>
-                                                                    </td>
-                                                                    <td className="p-4 align-top text-white/70 text-sm">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                                {allTherapists.filter(t => locationFilter === 'All' || t.location === locationFilter).map(therapist => {
+                                                    const isEditing = editingTherapistId === therapist.id;
+                                                    return (
+                                                        <div key={therapist.id} className="bg-white/5 border border-white/10 rounded-[24px] overflow-hidden group hover:border-white/20 hover:shadow-[0_8px_30px_rgb(255,255,255,0.05)] transition-all duration-300 flex flex-col h-full relative">
+                                                            
+                                                            {/* Delete/Edit Actions Floating Top Right */}
+                                                            <div className="absolute top-4 right-4 z-20 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                                {isEditing ? (
+                                                                    <>
+                                                                        <button onClick={() => setEditingTherapistId(null)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-black/60 text-white hover:bg-black transition-colors backdrop-blur-md">
+                                                                            <LogOut size={14} className="rotate-180" />
+                                                                        </button>
+                                                                        <button onClick={() => handleSaveTherapist(therapist.id)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-black hover:bg-primary/90 transition-colors shadow-lg">
+                                                                            <CheckCircle size={14} />
+                                                                        </button>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <button onClick={() => { setEditingTherapistId(therapist.id); setEditTherapistData(therapist); }} className="w-8 h-8 flex items-center justify-center rounded-lg bg-black/60 text-white hover:bg-black transition-colors backdrop-blur-md">
+                                                                            <Edit3 size={14} />
+                                                                        </button>
+                                                                        <button onClick={() => handleDeleteTherapist(therapist.id)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/80 text-white hover:bg-red-500 transition-colors backdrop-blur-md">
+                                                                            <Trash2 size={14} />
+                                                                        </button>
+                                                                    </>
+                                                                )}
+                                                            </div>
+
+                                                            {/* Big Image Top */}
+                                                            <div 
+                                                                className="w-full h-64 bg-black/20 relative cursor-pointer overflow-hidden group/img shrink-0"
+                                                                onClick={() => therapist.image_url && setSelectedImage(therapist.image_url)}
+                                                            >
+                                                                {therapist.image_url ? (
+                                                                    <img src={therapist.image_url} alt={therapist.name} className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-700 ease-out" />
+                                                                ) : (
+                                                                    <div className="w-full h-full flex items-center justify-center bg-white/5"><Users size={32} className="text-white/30" /></div>
+                                                                )}
+                                                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
+                                                                
+                                                                {/* Name and Status Toggle */}
+                                                                <div className="absolute bottom-4 left-5 right-5 z-10 flex items-end justify-between gap-2">
+                                                                    <div className="flex-1">
                                                                         {isEditing ? (
-                                                                            <input type="text" value={editTherapistData.brand || ''} onChange={e => setEditTherapistData({...editTherapistData, brand: e.target.value})} className="w-32 bg-black/50 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-white/50 transition-all appearance-none" />
+                                                                            <input type="text" value={editTherapistData.name || ''} onChange={e => setEditTherapistData({...editTherapistData, name: e.target.value})} className="bg-black/80 border border-white/20 rounded-lg px-2 py-1 text-base font-bold text-white focus:outline-none w-full backdrop-blur-sm" onClick={e => e.stopPropagation()} />
+                                                                        ) : (
+                                                                            <h3 className="font-serif text-2xl text-white drop-shadow-md leading-none">{therapist.name}</h3>
+                                                                        )}
+                                                                    </div>
+                                                                    
+                                                                    <button 
+                                                                        onClick={(e) => { e.stopPropagation(); handleTherapistStatus(therapist.id, !therapist.is_active); }}
+                                                                        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors focus:outline-none shadow-[0_0_15px_rgba(0,0,0,0.5)] ${therapist.is_active ? 'bg-primary' : 'bg-white/30 backdrop-blur-md border border-white/20'}`}
+                                                                    >
+                                                                        <span className={`inline-block h-5 w-5 transform rounded-full bg-black transition-transform ${therapist.is_active ? 'translate-x-6' : 'translate-x-1'}`} />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Details Bottom */}
+                                                            <div className="p-5 flex-1 flex flex-col gap-4 bg-white/[0.02]">
+                                                                <div className="flex flex-wrap items-center gap-3">
+                                                                    {/* Location */}
+                                                                    <div className="flex items-center gap-1.5 text-xs text-white/80 bg-white/10 px-2.5 py-1 rounded-md border border-white/10">
+                                                                        <MapPin size={12} className="text-white/50" />
+                                                                        {isEditing ? (
+                                                                            <select value={editTherapistData.location || ''} onChange={e => setEditTherapistData({...editTherapistData, location: e.target.value})} className="bg-transparent text-white focus:outline-none appearance-none cursor-pointer">
+                                                                                <option value="Ubud" className="text-black">Ubud</option>
+                                                                                <option value="Canggu" className="text-black">Canggu</option>
+                                                                                <option value="Seminyak" className="text-black">Seminyak</option>
+                                                                            </select>
+                                                                        ) : (
+                                                                            therapist.location || 'Unknown'
+                                                                        )}
+                                                                    </div>
+                                                                    
+                                                                    {/* Brand */}
+                                                                    <div className="flex items-center gap-1.5 text-xs text-white/80 bg-white/10 px-2.5 py-1 rounded-md border border-white/10">
+                                                                        <Store size={12} className="text-white/50" />
+                                                                        {isEditing ? (
+                                                                            <input type="text" value={editTherapistData.brand || ''} onChange={e => setEditTherapistData({...editTherapistData, brand: e.target.value})} className="w-24 bg-transparent text-white focus:outline-none" placeholder="Brand" />
                                                                         ) : (
                                                                             therapist.brand || '-'
                                                                         )}
-                                                                    </td>
-                                                                    <td className="p-4 align-top text-white/60 text-sm max-w-xs">
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* WhatsApp */}
+                                                                {therapist.whatsapp && (
+                                                                    <div className="flex items-center gap-2 text-sm bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-colors w-full px-4 py-3 rounded-xl border border-[#25D366]/20">
+                                                                        <MessageCircle size={16} className="text-[#25D366]" />
                                                                         {isEditing ? (
-                                                                            <textarea value={editTherapistData.bio || ''} onChange={e => setEditTherapistData({...editTherapistData, bio: e.target.value})} className="w-full bg-black/50 border border-white/20 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-white/50 transition-all appearance-none min-h-[80px]" />
+                                                                            <input type="text" value={editTherapistData.whatsapp || ''} onChange={e => setEditTherapistData({...editTherapistData, whatsapp: e.target.value})} className="bg-transparent text-white focus:outline-none w-full appearance-none" placeholder="WhatsApp" />
                                                                         ) : (
-                                                                            <p className="line-clamp-2">{therapist.bio || '-'}</p>
+                                                                            <a href={`https://wa.me/${therapist.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-white font-medium hover:text-[#25D366] transition-colors">
+                                                                                {therapist.whatsapp}
+                                                                            </a>
                                                                         )}
-                                                                    </td>
-                                                                    <td className="p-4 align-top">
-                                                                        <button 
-                                                                            onClick={() => handleTherapistStatus(therapist.id, !therapist.is_active)}
-                                                                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${therapist.is_active ? 'bg-primary' : 'bg-white/20'}`}
-                                                                        >
-                                                                            <span className={`inline-block h-4 w-4 transform rounded-full bg-black transition-transform ${therapist.is_active ? 'translate-x-6' : 'translate-x-1'}`} />
-                                                                        </button>
-                                                                    </td>
-                                                                    <td className="p-4 align-top text-right">
-                                                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                            {isEditing ? (
-                                                                                <>
-                                                                                    <button onClick={() => setEditingTherapistId(null)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors">
-                                                                                        <LogOut size={14} className="rotate-180" />
-                                                                                    </button>
-                                                                                    <button onClick={() => handleSaveTherapist(therapist.id)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-black hover:bg-primary/90 transition-colors">
-                                                                                        <CheckCircle size={14} />
-                                                                                    </button>
-                                                                                </>
-                                                                            ) : (
-                                                                                <>
-                                                                                    <button onClick={() => { setEditingTherapistId(therapist.id); setEditTherapistData(therapist); }} className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-colors">
-                                                                                        <Edit3 size={14} />
-                                                                                    </button>
-                                                                                    <button onClick={() => handleDeleteTherapist(therapist.id)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors">
-                                                                                        <Trash2 size={14} />
-                                                                                    </button>
-                                                                                </>
-                                                                            )}
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            )})}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                                    </div>
+                                                                )}
+                                                                
+                                                                <div className="flex-1 mt-1">
+                                                                    {isEditing ? (
+                                                                        <textarea value={editTherapistData.bio || ''} onChange={e => setEditTherapistData({...editTherapistData, bio: e.target.value})} className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white/30 transition-all appearance-none min-h-[100px]" placeholder="Therapist Bio..." />
+                                                                    ) : (
+                                                                        <p className="text-white/60 text-sm leading-relaxed line-clamp-3">{therapist.bio || 'No bio provided.'}</p>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })}
                                             </div>
                                         )}
                                     </div>
