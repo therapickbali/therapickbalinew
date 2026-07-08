@@ -57,7 +57,7 @@ export default function AdminDashboard() {
             }
         }
         fetchData();
-    }, []);
+    }, [isCheckingAuth]);
 
     // Campaign specific fields
     const [campaignTitle, setCampaignTitle] = useState(campaign?.title || '');
