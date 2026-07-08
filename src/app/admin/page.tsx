@@ -537,32 +537,34 @@ export default function AdminDashboard() {
                 <div className={`${activeTab === 'therapists' ? 'max-w-[95%] xl:max-w-[1400px]' : 'max-w-4xl'} mx-auto p-6 md:p-12 relative z-10 pt-12 md:pt-12 pb-32 md:pb-12 transition-all duration-300`}>
                     
                     {/* Mobile Header (Hidden on Desktop) */}
-                    <div className="md:hidden flex items-center justify-between mb-8">
-                        <Link href="/" className="flex items-center gap-2 text-white">
-                            <Store size={20} strokeWidth={2.5} />
-                            <span className="text-[13px] font-bold tracking-widest uppercase mt-1">Therapick</span>
-                        </Link>
-                        {/* Tab buttons removed in favor of bottom nav bar */}
-                    </div>
+                    {activeTab !== 'therapists' && (
+                        <div className="md:hidden flex items-center justify-between mb-8">
+                            <Link href="/" className="flex items-center gap-2 text-white">
+                                <Store size={20} strokeWidth={2.5} />
+                                <span className="text-[13px] font-bold tracking-widest uppercase mt-1">Therapick</span>
+                            </Link>
+                            {/* Tab buttons removed in favor of bottom nav bar */}
+                        </div>
+                    )}
 
-                    <header className="mb-10">
-                        <h1 className="font-serif text-3xl md:text-4xl text-white font-medium mb-2">
-                            {activeTab === 'treatment' ? (editingTreatmentId ? 'Edit Treatment' : 'Create New Treatment') : 
-                             activeTab === 'campaign' ? 'Create Campaign Card' : 
-                             activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') : 
-                             activeTab === 'fees' ? 'Set Therapist Fee' :
-                             activeTab === 'therapists' ? 'Therapist Management' :
-                             activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
-                        </h1>
-                        <p className="text-white/90-muted text-sm">
-                            {activeTab === 'treatment' ? 'Add or edit a massage or ritual to your spa menu.' : 
-                             activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
-                             activeTab === 'store' ? 'Add physical products like oils or candles to the Therapick Store.' :
-                             activeTab === 'fees' ? 'Configure fees paid to therapists based on the duration of the treatment.' :
-                             activeTab === 'therapists' ? 'Approve, manage, or remove therapists.' :
-                             activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : ''}
-                        </p>
-                    </header>
+                    {activeTab !== 'therapists' && (
+                        <header className="mb-10">
+                            <h1 className="font-serif text-3xl md:text-4xl text-white font-medium mb-2">
+                                {activeTab === 'treatment' ? (editingTreatmentId ? 'Edit Treatment' : 'Create New Treatment') : 
+                                 activeTab === 'campaign' ? 'Create Campaign Card' : 
+                                 activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') : 
+                                 activeTab === 'fees' ? 'Set Therapist Fee' :
+                                 activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
+                            </h1>
+                            <p className="text-white/90-muted text-sm">
+                                {activeTab === 'treatment' ? 'Add or edit a massage or ritual to your spa menu.' : 
+                                 activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
+                                 activeTab === 'store' ? 'Add physical products like oils or candles to the Therapick Store.' :
+                                 activeTab === 'fees' ? 'Configure fees paid to therapists based on the duration of the treatment.' :
+                                 activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : ''}
+                            </p>
+                        </header>
+                    )}
 
                     <AnimatePresence mode="wait">
                         <motion.div 
@@ -1003,22 +1005,23 @@ export default function AdminDashboard() {
                                 {activeTab === 'therapists' && (
                                     <div className="space-y-6">
                                         <div className="flex flex-col gap-4 mb-4">
-                                            <div className="flex items-center justify-between">
-                                                <h2 className="text-xl font-medium text-white">Registered Therapists</h2>
-                                            </div>
                                             
                                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                                 {/* Status Filter */}
-                                                <div className="flex bg-white/5 border border-white/20 p-1.5 rounded-2xl w-full md:w-auto shadow-sm">
+                                                <div className="flex bg-white/5 border border-white/20 p-1.5 rounded-[20px] w-full md:w-auto shadow-inner">
                                                     {[
-                                                        { id: 'All', label: 'All' },
-                                                        { id: 'Working', label: 'Already Working' },
-                                                        { id: 'New', label: 'New Signups' }
+                                                        { id: 'All', label: 'Directory' },
+                                                        { id: 'Working', label: 'Active Team' },
+                                                        { id: 'New', label: 'Pending Approval' }
                                                     ].map((filter) => (
                                                         <button
                                                             key={filter.id}
                                                             onClick={() => setStatusFilter(filter.id as any)}
-                                                            className={`flex-1 md:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${statusFilter === filter.id ? 'bg-white text-black shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+                                                            className={`flex-1 md:flex-none px-5 py-2.5 rounded-[14px] text-[11px] font-bold uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
+                                                                statusFilter === filter.id 
+                                                                ? 'bg-white text-black shadow-md scale-[1.02]' 
+                                                                : 'text-white/60 hover:text-white hover:bg-white/10'
+                                                            }`}
                                                         >
                                                             {filter.label}
                                                         </button>
@@ -1404,9 +1407,9 @@ export default function AdminDashboard() {
                             className="w-full max-w-2xl bg-[#111] border border-white/10 rounded-[32px] overflow-hidden flex flex-col max-h-[90vh]"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <div className="relative w-full h-72 bg-black/50 shrink-0">
+                            <div className="relative w-full h-[400px] bg-[#111] shrink-0">
                                 {detailedTherapist.image_url ? (
-                                    <img src={detailedTherapist.image_url} alt={detailedTherapist.name} className="w-full h-full object-cover" />
+                                    <img src={detailedTherapist.image_url} alt={detailedTherapist.name} className="w-full h-full object-cover object-top" />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center"><Users size={48} className="text-white/20" /></div>
                                 )}
@@ -1439,11 +1442,11 @@ export default function AdminDashboard() {
                                 {detailedTherapist.whatsapp && (
                                     <div>
                                         <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">WhatsApp Contact</label>
-                                        <a href={`https://wa.me/${detailedTherapist.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-colors px-6 py-4 rounded-2xl border border-[#25D366]/20">
-                                            <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg">
-                                                <MessageCircle size={20} />
+                                        <a href={`https://wa.me/${detailedTherapist.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-colors px-4 py-2.5 rounded-xl border border-[#25D366]/20">
+                                            <div className="w-7 h-7 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-md">
+                                                <MessageCircle size={14} />
                                             </div>
-                                            <span className="text-white font-medium text-lg tracking-wide">{detailedTherapist.whatsapp}</span>
+                                            <span className="text-white font-medium text-sm tracking-wide">{detailedTherapist.whatsapp}</span>
                                         </a>
                                     </div>
                                 )}
