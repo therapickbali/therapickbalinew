@@ -450,6 +450,39 @@ ${treatmentsList}
                 )}
             </div>
             
+            {/* Therapists Section */}
+            {therapists.filter(t => t.is_active).length > 0 && (
+                <div className="mb-24 flex flex-col items-center max-w-7xl mx-auto px-6 relative z-10">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-4 block text-center">Meet Our Therapists</span>
+                    <h3 className="font-serif text-3xl md:text-5xl text-white font-medium mb-12 text-center leading-tight">
+                        Expert <span className="italic">Healers</span>
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 w-full">
+                        {therapists.filter(t => t.is_active).slice(0, 4).map(t => (
+                            <div key={t.id} className="bg-[#111] border border-white/10 rounded-[32px] p-6 flex flex-col items-center text-center hover:border-white/20 transition-all duration-300 group cursor-pointer" onClick={() => setViewingTherapist(t)}>
+                                <div className="w-24 h-24 rounded-full overflow-hidden mb-5 border-2 border-white/10 group-hover:scale-105 transition-transform duration-500 bg-black">
+                                    {t.image_url ? (
+                                        <img src={t.image_url} alt={t.name} className="w-full h-full object-cover object-top" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center"><User size={32} className="text-white/20" /></div>
+                                    )}
+                                </div>
+                                <h4 className="font-bold text-lg text-white mb-1">{t.name}</h4>
+                                <div className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-3">{t.location}</div>
+                                <div className="flex items-center gap-1 mb-4 text-amber-500">
+                                    {Array(5).fill(0).map((_, i) => (
+                                        <svg key={i} className={`w-3.5 h-3.5 ${i < Math.floor(t.rating || 5) ? 'fill-current' : 'fill-transparent stroke-current'}`} viewBox="0 0 24 24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                        </svg>
+                                    ))}
+                                </div>
+                                <p className="text-xs text-white/60 leading-relaxed line-clamp-3 font-light">{t.bio || 'Certified professional therapist providing a 5-star spa experience in your own sanctuary.'}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
             <div className="hidden md:block pb-12">
 
 
