@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail, ArrowRight } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminLogin() {
     const [email, setEmail] = useState('');
@@ -13,8 +14,26 @@ export default function AdminLogin() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        router.push('/admin');
-        router.refresh();
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (error) {
+                setError(error.message);
+                setIsLoading(false);
+            } else {
+                router.push('/admin');
+                router.refresh();
+            }
+        } catch (err: any) {
+            setError(err.message || 'An error occurred during login.');
+            setIsLoading(false);
+        }
     };
 
     return (

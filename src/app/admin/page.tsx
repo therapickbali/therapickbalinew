@@ -6,8 +6,11 @@ import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle
 import Link from 'next/link';
 import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee, Therapist } from '@/context/SpaContext';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 export default function AdminDashboard() {
+    const router = useRouter();
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store' | 'fees' | 'therapists'>('treatment');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -26,6 +29,20 @@ export default function AdminDashboard() {
     const [editTherapistData, setEditTherapistData] = useState<Partial<Therapist>>({});
 
     useEffect(() => {
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                router.push('/admin/login');
+            } else {
+                setIsCheckingAuth(false);
+            }
+        }
+        checkAuth();
+    }, [router]);
+
+    useEffect(() => {
+        if (isCheckingAuth) return;
+
         async function fetchData() {
             const [feesRes, therapistsRes] = await Promise.all([
                 supabase.from('therapist_fees').select('*').order('created_at', { ascending: false }),
@@ -418,6 +435,19 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        router.push('/admin/login');
+    };
+
+    if (isCheckingAuth) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-black flex overflow-hidden font-sans text-white/90">
             
@@ -480,7 +510,10 @@ export default function AdminDashboard() {
                 </nav>
 
                 <div className="p-4">
-                    <button className="w-full flex items-center justify-center gap-2 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl text-sm font-semibold transition-colors">
+                    <button 
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-colors font-semibold text-sm w-full"
+                    >
                         <LogOut size={18} />
                         Logout
                     </button>
