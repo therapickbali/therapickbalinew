@@ -27,6 +27,7 @@ export default function AdminDashboard() {
     const [allTherapists, setAllTherapists] = useState<Therapist[]>([]);
     const [editingTherapistId, setEditingTherapistId] = useState<string | null>(null);
     const [editTherapistData, setEditTherapistData] = useState<Partial<Therapist>>({});
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     useEffect(() => {
         async function checkAuth() {
@@ -526,7 +527,7 @@ export default function AdminDashboard() {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[100px] pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-highlight/20 rounded-full blur-[100px] pointer-events-none" />
 
-                <div className="max-w-4xl mx-auto p-6 md:p-12 relative z-10 pt-12 md:pt-12 pb-32 md:pb-12">
+                <div className={`${activeTab === 'therapists' ? 'max-w-[95%] xl:max-w-[1400px]' : 'max-w-4xl'} mx-auto p-6 md:p-12 relative z-10 pt-12 md:pt-12 pb-32 md:pb-12 transition-all duration-300`}>
                     
                     {/* Mobile Header (Hidden on Desktop) */}
                     <div className="md:hidden flex items-center justify-between mb-8">
@@ -1020,7 +1021,10 @@ export default function AdminDashboard() {
                                                                 <tr key={therapist.id} className="hover:bg-white/5 transition-colors group">
                                                                     <td className="p-4 align-top">
                                                                         <div className="flex items-center gap-3 min-w-[200px]">
-                                                                            <div className="w-10 h-10 bg-white/10 rounded-full flex shrink-0 items-center justify-center overflow-hidden border border-white/10">
+                                                                            <div 
+                                                                                className="w-10 h-10 bg-white/10 rounded-full flex shrink-0 items-center justify-center overflow-hidden border border-white/10 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all hover:scale-105"
+                                                                                onClick={() => therapist.image_url && setSelectedImage(therapist.image_url)}
+                                                                            >
                                                                                 {therapist.image_url ? (
                                                                                     <img src={therapist.image_url} alt={therapist.name} className="w-full h-full object-cover" />
                                                                                 ) : (
@@ -1392,6 +1396,36 @@ export default function AdminDashboard() {
                     </AnimatePresence>
                 </div>
             </main>
+
+            {/* Image Viewer Modal */}
+            <AnimatePresence>
+                {selectedImage && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedImage(null)}
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 cursor-zoom-out"
+                    >
+                        <motion.img 
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                            src={selectedImage} 
+                            alt="Full size view" 
+                            className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl cursor-default border border-white/10"
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                        <button 
+                            className="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-colors"
+                            onClick={() => setSelectedImage(null)}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Mobile Bottom Navigation Bar */}
             <div className="md:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-2xl border-t border-white/20/50 z-50 px-6 pb-safe">
