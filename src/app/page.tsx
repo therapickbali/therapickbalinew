@@ -1199,7 +1199,7 @@ ${treatmentsList}
                             {/* Header Image */}
                             <div className="relative h-[60vh] sm:h-80 shrink-0">
                                 {viewingTherapist.image_url ? (
-                                    <img src={viewingTherapist.image_url} alt={viewingTherapist.name} className="w-full h-full object-cover object-center" />
+                                    <img src={viewingTherapist.image_url} alt={viewingTherapist.name} className="w-full h-full object-contain object-center" />
                                 ) : (
                                     <div className="w-full h-full bg-[#111] flex items-center justify-center">
                                         <User size={64} className="text-white/20" />
@@ -1235,7 +1235,7 @@ ${treatmentsList}
                                         <div className="flex-1">
                                             <div className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-1">Rating</div>
                                             <div className="flex items-center gap-1.5 text-white font-medium">
-                                                <span className="text-amber-500">★</span> {viewingTherapist.rating}
+                                                <span className="text-amber-500">★</span> {Number(viewingTherapist.rating || 5).toFixed(1).replace('.', ',')}
                                             </div>
                                         </div>
                                         <div className="w-px h-8 bg-white/10"></div>
