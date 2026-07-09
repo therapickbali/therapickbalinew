@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck, Share, PlusSquare, X } from 'lucide-react';
+import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck, Share, PlusSquare, X, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
@@ -17,6 +17,7 @@ export default function TherapistDashboard() {
     const [isPending, setIsPending] = useState(false);
     const [therapistId, setTherapistId] = useState<string | null>(null);
     const [showInstallPopup, setShowInstallPopup] = useState(false);
+    const [showSamsungWarning, setShowSamsungWarning] = useState(false);
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
     useEffect(() => {
@@ -29,6 +30,13 @@ export default function TherapistDashboard() {
     }, []);
 
     const handleAndroidInstall = async () => {
+        const isSamsungBrowser = navigator.userAgent.match(/SamsungBrowser/i);
+        
+        if (isSamsungBrowser) {
+            setShowSamsungWarning(true);
+            return;
+        }
+
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
@@ -36,7 +44,7 @@ export default function TherapistDashboard() {
                 setDeferredPrompt(null);
             }
         } else {
-            alert('To install the app on Android, tap the menu (three dots) in Chrome and select "Add to Home screen" or "Install app".');
+            alert('To install the app on Android, tap the menu (three dots) in your browser and select "Add to Home screen" or "Install app".');
         }
     };
     
@@ -535,6 +543,68 @@ export default function TherapistDashboard() {
                             >
                                 GOT IT
                             </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Samsung Internet Warning Popup */}
+            <AnimatePresence>
+                {showSamsungWarning && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[130] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-sm bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-3xl p-6 sm:p-8 overflow-hidden"
+                        >
+                            <button 
+                                onClick={() => setShowSamsungWarning(false)}
+                                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                            
+                            <div className="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center mx-auto mb-6 shadow-sm">
+                                <AlertTriangle className="w-8 h-8" />
+                            </div>
+                            
+                            <h3 className="font-serif text-xl text-white mb-2 text-center">Samsung Browser Detected</h3>
+                            <p className="text-sm text-white/70 mb-6 text-center leading-relaxed">
+                                Samsung's app installer often shows a <strong className="text-red-400">"Built for older version of Android"</strong> warning due to their outdated installation service. 
+                            </p>
+                            <p className="text-sm text-white/90 mb-8 text-center bg-black/20 p-4 rounded-xl border border-white/5">
+                                For a fast, secure, and warning-free installation, please open <strong className="text-green-400">www.booktherapick.com</strong> in <strong className="text-white font-bold tracking-wide">Google Chrome</strong> instead.
+                            </p>
+                            
+                            <div className="flex gap-3">
+                                <button 
+                                    onClick={async () => {
+                                        setShowSamsungWarning(false);
+                                        if (deferredPrompt) {
+                                            deferredPrompt.prompt();
+                                            const { outcome } = await deferredPrompt.userChoice;
+                                            if (outcome === 'accepted') {
+                                                setDeferredPrompt(null);
+                                            }
+                                        }
+                                    }}
+                                    className="flex-1 bg-white/5 border border-white/10 text-white/80 px-4 py-4 rounded-2xl text-sm font-bold shadow-sm hover:bg-white/10 hover:text-white active:scale-95 transition-all"
+                                >
+                                    Try Anyway
+                                </button>
+                                <button 
+                                    onClick={() => setShowSamsungWarning(false)}
+                                    className="flex-[1.5] bg-[#3DDC84] text-black px-4 py-4 rounded-2xl text-sm font-bold shadow-md hover:bg-[#3DDC84]/90 active:scale-95 transition-all"
+                                >
+                                    Use Chrome
+                                </button>
+                            </div>
                         </motion.div>
                     </motion.div>
                 )}
