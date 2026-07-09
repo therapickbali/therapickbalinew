@@ -99,22 +99,24 @@ export default function BookingModal({
                 : `\n*Therapist Request:* Assign Automatically`;
 
             // 1. Insert into Supabase
-            const { error: dbError } = await supabase.from('website_bookings').insert({
-                customer_name: formData.name,
-                date: formData.date,
-                time: formData.time,
-                location_area: selectedArea,
-                address: formData.location,
-                room_number: formData.room || '',
-                treatments: cartItems,
-                total_price: totalPriceNum,
-                requested_therapist_ids: selectedTherapists,
-                status: 'pending'
-            });
-
-            if (dbError) {
-                console.error('Failed to save booking to database:', dbError);
-                // Proceed with WhatsApp anyway as a fallback
+            try {
+                fetch('/api/bookings/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer_name: formData.name,
+                        date: formData.date,
+                        time: formData.time,
+                        location_area: selectedArea,
+                        address: formData.location,
+                        room_number: formData.room || '',
+                        treatments: cartItems,
+                        total_price: totalPriceNum,
+                        requested_therapist_ids: selectedTherapists
+                    })
+                });
+            } catch(e) {
+                console.error('API call failed:', e);
             }
 
             const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
@@ -362,7 +364,15 @@ export default function BookingModal({
                                             const todayStr = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
                                             const isFuture = formData.date && formData.date !== todayStr;
                                             const t = { ...rawT } as any;
-                                            if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
+                                            
+                                            // Handle late night closing hours (23:00 - 08:00)
+                                            const currentHour = new Date().getHours();
+                                            const isLateNight = currentHour >= 23 || currentHour < 8;
+                                            
+                                            if (isLateNight && !isFuture) {
+                                                t.online_status = 'Busy';
+                                                t.available_at = '08:00';
+                                            } else if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
                                                 t.online_status = 'Online';
                                             } else if (!isFuture && t.online_status === 'Busy' && t.available_at && formData.time && formData.time >= t.available_at) {
                                                 t.online_status = 'Online';

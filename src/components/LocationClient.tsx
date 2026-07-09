@@ -105,22 +105,25 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
 
             const waNumber = '6285174119423';
             
-            // Insert into Supabase
+            // Insert into DB via API
             try {
-                await supabase.from('website_bookings').insert({
-                    customer_name: formData.name,
-                    date: formData.date,
-                    time: formData.time,
-                    location_area: locationName,
-                    address: formData.location,
-                    room_number: formData.room || '',
-                    treatments: cartItems,
-                    total_price: totalPrice,
-                    requested_therapist_ids: [],
-                    status: 'pending'
+                fetch('/api/bookings/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer_name: formData.name,
+                        date: formData.date,
+                        time: formData.time,
+                        location_area: locationName,
+                        address: formData.location,
+                        room_number: formData.room || '',
+                        treatments: cartItems,
+                        total_price: totalPrice,
+                        requested_therapist_ids: []
+                    })
                 });
             } catch(e) {
-                console.error("DB Error", e);
+                console.error("API call failed:", e);
             }
 
             
