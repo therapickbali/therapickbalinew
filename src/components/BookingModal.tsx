@@ -75,7 +75,7 @@ export default function BookingModal({
 
         try {
             const treatmentsList = cartItems.map(item => {
-                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k));
                 const multiplier = isCouple ? (item.guests / 2) : item.guests;
                 const price = (item.price * multiplier).toLocaleString('en-US');
                 const itemTreatment = treatments.find(t => t.id === item.treatmentId);
@@ -241,7 +241,7 @@ export default function BookingModal({
                                                     <div className="text-right">
                                                         <div className="font-serif text-white">IDR {item.price.toLocaleString('en-US')}</div>
                                                         <div className="text-[9px] uppercase tracking-wider text-white/90-muted/70">
-                                                            {['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
+                                                            {['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -252,7 +252,7 @@ export default function BookingModal({
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => {
                                                                 if (i.id !== item.id) return i;
-                                                                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => i.title.toLowerCase().includes(k));
+                                                                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => i.title.toLowerCase().includes(k));
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: Math.max(step, i.guests - step) };
                                                             }))}
@@ -265,7 +265,7 @@ export default function BookingModal({
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => {
                                                                 if (i.id !== item.id) return i;
-                                                                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => i.title.toLowerCase().includes(k));
+                                                                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => i.title.toLowerCase().includes(k));
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: i.guests + step };
                                                             }))}

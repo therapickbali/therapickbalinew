@@ -128,7 +128,7 @@ export default function Home() {
         
         try {
             const totalPrice = cartItems.reduce((acc, item) => {
-                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k));
                 const multiplier = isCouple ? (item.guests / 2) : item.guests;
                 return acc + (item.price * multiplier);
             }, 0);
@@ -138,7 +138,7 @@ export default function Home() {
             const waNumber = '6285174119423';
             
             const treatmentsList = cartItems.map(item => {
-                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k));
                 const multiplier = isCouple ? (item.guests / 2) : item.guests;
                 const price = (item.price * multiplier).toLocaleString('en-US');
                 const itemTreatment = treatments.find(t => t.id === item.treatmentId);
@@ -154,7 +154,7 @@ export default function Home() {
 
                 if (item.isCampaign) {
                     const originalPriceNum = item.price / (1 - (item.discountPercentage / 100));
-                    const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+                    const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k));
                     const multiplier = isCouple ? (item.guests / 2) : item.guests;
                     const originalPrice = (originalPriceNum * multiplier).toLocaleString('en-US');
                     return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nIDR ${price} ~IDR ${originalPrice}~${whatsIncludedText}`;
@@ -834,7 +834,7 @@ ${treatmentsList}
                                                     <span className="font-serif text-white font-medium text-right flex flex-col shrink-0">
                                                         IDR {item.price.toLocaleString('en-US')}
                                                         <span className="text-[10px] font-sans text-white/90-muted font-normal uppercase tracking-wider">
-                                                            {['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
+                                                            {['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
                                                         </span>
                                                     </span>
                                                 </div>
@@ -845,7 +845,7 @@ ${treatmentsList}
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => {
                                                                 if (i.id !== item.id) return i;
-                                                                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => i.title.toLowerCase().includes(k));
+                                                                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => i.title.toLowerCase().includes(k));
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: Math.max(step, i.guests - step) };
                                                             }))}
@@ -858,7 +858,7 @@ ${treatmentsList}
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => {
                                                                 if (i.id !== item.id) return i;
-                                                                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => i.title.toLowerCase().includes(k));
+                                                                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => i.title.toLowerCase().includes(k));
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: i.guests + step };
                                                             }))}

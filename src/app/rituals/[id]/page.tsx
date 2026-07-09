@@ -63,11 +63,11 @@ export default function RitualsDetails() {
     }
 
     const selectedOption = treatment.options[selectedOptionIdx] || treatment.options[0];
-    const isCoupleTreatment = ['couple', 'honeymoon', 'rejuvenation'].some(k => treatment.title.toLowerCase().includes(k));
+    const isCoupleTreatment = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => treatment.title.toLowerCase().includes(k));
 
     // Calculate smart price
     const totalPrice = cartItems.reduce((acc, item) => {
-        const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+        const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k));
         const multiplier = isCouple ? (item.guests / 2) : item.guests;
         return acc + (item.price * multiplier);
     }, 0);
@@ -91,7 +91,7 @@ export default function RitualsDetails() {
 
             const waNumber = '6285174119423';
             const treatmentsList = cartItems.map(item => {
-                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k));
+                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k));
                 const multiplier = isCouple ? (item.guests / 2) : item.guests;
                 const price = (item.price * multiplier).toLocaleString('en-US');
                 const itemTreatment = treatments.find(t => t.id === item.treatmentId);
@@ -483,7 +483,7 @@ export default function RitualsDetails() {
                                                     <span className="font-serif text-white font-medium text-right flex flex-col shrink-0">
                                                         IDR {item.price.toLocaleString('en-US')}
                                                         <span className="text-[9px] font-sans text-white/90-muted font-normal uppercase tracking-wider">
-                                                            {['couple', 'honeymoon', 'rejuvenation'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
+                                                            {['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
                                                         </span>
                                                     </span>
                                                 </div>
@@ -494,7 +494,7 @@ export default function RitualsDetails() {
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => {
                                                                 if (i.id !== item.id) return i;
-                                                                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => i.title.toLowerCase().includes(k));
+                                                                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => i.title.toLowerCase().includes(k));
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: Math.max(step, i.guests - step) };
                                                             }))}
@@ -507,7 +507,7 @@ export default function RitualsDetails() {
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => {
                                                                 if (i.id !== item.id) return i;
-                                                                const isCouple = ['couple', 'honeymoon', 'rejuvenation'].some(k => i.title.toLowerCase().includes(k));
+                                                                const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => i.title.toLowerCase().includes(k));
                                                                 const step = isCouple ? 2 : 1;
                                                                 return { ...i, guests: i.guests + step };
                                                             }))}
