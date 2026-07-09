@@ -330,7 +330,27 @@ export default function BookingModal({
                                         {therapists.filter(t => !selectedArea || t.location === selectedArea).map(t => (
                                             <button 
                                                 key={t.id}
-                                                onClick={() => toggleTherapist(t.id)}
+                                                type="button"
+                                                onClick={() => {
+                                                    if (t.online_status === 'Off') {
+                                                        return;
+                                                    }
+                                                    if (selectedTherapists.includes(t.id)) {
+                                                        setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
+                                                    } else if (selectedTherapists.length < totalGuests) {
+                                                        if (t.online_status === 'Busy') {
+                                                            if (totalGuests > 1) {
+                                                                alert("For group bookings, please select therapists who are currently 'ONLINE'.");
+                                                                return;
+                                                            }
+                                                            if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Do you still want to request them?`)) {
+                                                                setSelectedTherapists([...selectedTherapists, t.id]);
+                                                            }
+                                                        } else {
+                                                            setSelectedTherapists([...selectedTherapists, t.id]);
+                                                        }
+                                                    }
+                                                }}
                                                 className={`w-full p-4 rounded-[24px] border text-left transition-all duration-300 flex items-start gap-4 ${
                                                     selectedTherapists.includes(t.id)
                                                     ? 'bg-white/10 border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]'
@@ -347,7 +367,13 @@ export default function BookingModal({
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="mb-1">
-                                                        <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Available</span>
+                                                        {t.online_status === "Off" ? (
+                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
+                                                        ) : t.online_status === "Busy" ? (
+                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Handling Customer</span>
+                                                        ) : (
+                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
+                                                        )}
                                                     </div>
                                                     <div className="flex items-center justify-between mb-1.5">
                                                         <div className="flex items-center gap-2">
@@ -359,7 +385,13 @@ export default function BookingModal({
                                                     </div>
                                                     <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio || "Therapist professional"}</p>
                                                     <div className="flex items-center gap-2">
-                                                        <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>READY TO ACCEPT JOBS</span>
+                                                        {t.online_status === "Off" ? (
+                                                            <span className="text-[10px] font-semibold text-red-400 flex items-center gap-1.5 bg-red-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>Offline</span>
+                                                        ) : t.online_status === "Busy" ? (
+                                                            <span className="text-[10px] font-semibold text-amber-500 flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>Busy</span>
+                                                        ) : (
+                                                            <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>Ready</span>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </button>

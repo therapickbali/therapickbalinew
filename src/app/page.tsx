@@ -1296,7 +1296,7 @@ ${treatmentsList}
                                     </div>
                                     <h3 className="font-serif text-xl text-white mb-2">Group Booking Alert</h3>
                                     <p className="text-sm text-white/90-muted mb-8 leading-relaxed">
-                                        For group bookings, please select therapists who are currently <strong className="text-white font-bold">'READY TO ACCEPT JOBS'</strong> to ensure synchronized scheduling.
+                                        For group bookings, please select therapists who are currently <strong className="text-white font-bold">'ONLINE'</strong> to ensure synchronized scheduling.
                                     </p>
                                     <button 
                                         onClick={() => setPopupState({ ...popupState, isOpen: false })}
