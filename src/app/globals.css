@@ -24,7 +24,6 @@ html, body {
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overscroll-behavior-y: none; /* Prevent bounce on mobile for app feel */
 }
 
 h1, h2, h3, h4, h5, h6, .font-serif {
@@ -55,6 +54,4 @@ body[data-domain="ubud"] .domain-bali-only {
 }
 
 
-body, html {
-  overflow-x: hidden;
-}
+

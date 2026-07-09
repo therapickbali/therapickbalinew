@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     siteName: 'Therapick Bali',
     images: [
       {
-        url: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
+        url: 'https://therapickbali.vercel.app/logo.png',
         width: 1200,
         height: 630,
         alt: 'Therapick Bali - Find Massage Therapists',
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Therapick Bali | Choose Available Therapists in Your Area',
     description: 'Find and book available professional massage therapists in your area on-demand. Browse therapist profiles and check availability.',
-    images: ['https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg'],
+    images: ['https://therapickbali.vercel.app/logo.png'],
   },
   alternates: {
     canonical: '/',
@@ -107,7 +107,7 @@ export default async function RootLayout({
     '@context': 'https://schema.org',
     '@type': ['HealthAndBeautyBusiness', 'DaySpa'],
     name: name,
-    image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg',
+    image: 'https://therapickbali.vercel.app/logo.png',
     '@id': url,
     url: url,
     telephone: '+6285174119423',
@@ -164,7 +164,7 @@ export default async function RootLayout({
     provider: {
       '@type': 'LocalBusiness',
       name: name,
-      image: 'https://images.pexels.com/photos/6724391/pexels-photo-6724391.jpeg'
+      image: 'https://therapickbali.vercel.app/logo.png'
     },
     areaServed: {
       '@type': 'GeoCircle',
