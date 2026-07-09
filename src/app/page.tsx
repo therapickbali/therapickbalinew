@@ -503,7 +503,7 @@ ${treatmentsList}
             
             {/* Therapists Section */}
             {therapists.filter(t => t.is_active).length > 0 && (
-                <div className="mb-24 flex flex-col items-center max-w-7xl mx-auto px-6 relative z-10">
+                <div className="hidden md:flex mb-24 flex-col items-center max-w-7xl mx-auto px-6 relative z-10">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-4 block text-center">Meet Our Therapists</span>
                     <h3 className="font-serif text-3xl md:text-5xl text-white font-medium mb-12 text-center leading-tight">
                         Expert <span className="italic">Healers</span>
@@ -1198,7 +1198,13 @@ ${treatmentsList}
                         >
                             {/* Header Image */}
                             <div className="relative h-64 shrink-0">
-                                <img src={viewingTherapist.avatar} alt={viewingTherapist.name} className="w-full h-full object-cover object-top" />
+                                {viewingTherapist.image_url ? (
+                                    <img src={viewingTherapist.image_url} alt={viewingTherapist.name} className="w-full h-full object-cover object-center" />
+                                ) : (
+                                    <div className="w-full h-full bg-[#111] flex items-center justify-center">
+                                        <User size={48} className="text-white/20" />
+                                    </div>
+                                )}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                                 <button onClick={() => setViewingTherapist(null)} className="absolute top-4 right-4 w-8 h-8 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-full flex items-center justify-center text-white">
                                     <X className="w-5 h-5" />
@@ -1217,20 +1223,10 @@ ${treatmentsList}
                             {/* Scrollable Content */}
                             <div className="overflow-y-auto no-scrollbar flex-1 pb-24">
                                 
-                                {/* Bio & Reviews */}
+                                {/* Bio */}
                                 <div className="px-6 py-6 border-b border-white/20/40">
                                     <h4 className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-3">About</h4>
                                     <p className="text-sm text-white/90-muted leading-relaxed mb-6">{viewingTherapist.desc}</p>
-                                    
-                                    {viewingTherapist.reviews && viewingTherapist.reviews.length > 0 && (
-                                        <div className="bg-white/5 rounded-2xl p-5 relative">
-                                            <div className="text-white/20 absolute top-4 left-4 font-serif text-4xl leading-none">"</div>
-                                            <p className="text-white/90 text-sm font-medium italic relative z-10 pl-6 leading-relaxed">
-                                                {viewingTherapist.reviews[0].text}
-                                            </p>
-                                            <p className="text-xs text-white/60 font-bold tracking-wide mt-3 pl-6">— {viewingTherapist.reviews[0].author}</p>
-                                        </div>
-                                    )}
                                 </div>
 
                             </div>

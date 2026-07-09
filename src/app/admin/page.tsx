@@ -29,7 +29,7 @@ export default function AdminDashboard() {
     const [editTherapistData, setEditTherapistData] = useState<Partial<Therapist>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [locationFilter, setLocationFilter] = useState<string>('All');
-    const [statusFilter, setStatusFilter] = useState<'All' | 'New' | 'Working'>('All');
+    const [statusFilter, setStatusFilter] = useState<'New' | 'Working'>('Working');
     const [detailedTherapist, setDetailedTherapist] = useState<Therapist | null>(null);
 
     useEffect(() => {
@@ -389,6 +389,20 @@ export default function AdminDashboard() {
     const handleDeleteTherapist = async (id: string) => {
         if (!confirm('Are you sure you want to completely remove this therapist?')) return;
         try {
+            const res = await fetch('/api/admin/delete-therapist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+
+            if (!res.ok) {
+                const errData = await res.json();
+                console.error('Failed to delete auth user:', errData.error);
+                alert(`Warning: Could not delete authentication record. ${errData.error}. Please ensure SUPABASE_SERVICE_ROLE_KEY is set.`);
+                // We'll return here to prevent orphaned auth users if the db delete succeeds but auth fails
+                return;
+            }
+
             await supabase.from('therapists').delete().eq('id', id);
             setAllTherapists(allTherapists.filter(t => t.id !== id));
         } catch (error) {
@@ -530,9 +544,7 @@ export default function AdminDashboard() {
 
             {/* Main Content */}
             <main className="flex-1 relative overflow-y-auto">
-                {/* Background Details */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[100px] pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-highlight/20 rounded-full blur-[100px] pointer-events-none" />
+                {/* Background Details Removed for solid black background */}
 
                 <div className={`${activeTab === 'therapists' ? 'max-w-[95%] xl:max-w-[1400px]' : 'max-w-4xl'} mx-auto p-6 md:p-12 relative z-10 pt-12 md:pt-12 pb-32 md:pb-12 transition-all duration-300`}>
                     
@@ -1010,9 +1022,8 @@ export default function AdminDashboard() {
                                                 {/* Status Filter */}
                                                 <div className="flex bg-white/5 border border-white/20 p-1.5 rounded-[20px] w-full md:w-auto shadow-inner">
                                                     {[
-                                                        { id: 'All', label: 'Directory' },
                                                         { id: 'Working', label: 'Active Team' },
-                                                        { id: 'New', label: 'Pending Approval' }
+                                                        { id: 'New', label: 'Pending App' }
                                                     ].map((filter) => (
                                                         <button
                                                             key={filter.id}
@@ -1045,7 +1056,7 @@ export default function AdminDashboard() {
 
                                         {allTherapists
                                             .filter(t => locationFilter === 'All' || t.location === locationFilter)
-                                            .filter(t => statusFilter === 'All' || (statusFilter === 'Working' && t.is_active) || (statusFilter === 'New' && !t.is_active))
+                                            .filter(t => (statusFilter === 'Working' && t.is_active) || (statusFilter === 'New' && !t.is_active))
                                             .length === 0 ? (
                                             <div className="text-white/60 text-center py-16 bg-white/5 rounded-[32px] border border-white/10">No therapists found for this filter.</div>
                                         ) : (
@@ -1063,7 +1074,7 @@ export default function AdminDashboard() {
                                                         <tbody className="divide-y divide-white/5">
                                                             {allTherapists
                                                                 .filter(t => locationFilter === 'All' || t.location === locationFilter)
-                                                                .filter(t => statusFilter === 'All' || (statusFilter === 'Working' && t.is_active) || (statusFilter === 'New' && !t.is_active))
+                                                                .filter(t => (statusFilter === 'Working' && t.is_active) || (statusFilter === 'New' && !t.is_active))
                                                                 .map(therapist => (
                                                                 <tr key={therapist.id} className="hover:bg-white/5 transition-colors group">
                                                                     <td className="p-4 align-middle">
