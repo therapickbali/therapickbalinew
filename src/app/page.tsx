@@ -328,11 +328,11 @@ ${treatmentsList}
                 </div>
                 )}
 
-                {/* Pinned / Most Booked Treatments (Mobile Only, Hidden until DB connected) */}
+                {/* Pinned / Most Booked Treatments */}
                 {showPinnedTreatments && (
-                    <div className="md:hidden mb-8 w-full relative z-20">
+                    <div className="mb-8 w-full relative z-20">
                         <h3 className="text-xs font-semibold text-white/90-muted mb-3 uppercase tracking-wider">Most Booked</h3>
-                        <div className="flex overflow-x-auto gap-4 no-scrollbar -mx-6 px-6 pb-4 snap-x snap-mandatory">
+                        <div className="flex overflow-x-auto gap-4 md:gap-6 no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 pb-4 snap-x snap-mandatory">
                             {treatments.filter(t => t.is_pinned).map(treatment => (
                                 <a href={`/rituals/${treatment.id}`} key={treatment.id} className="w-[65vw] sm:w-[220px] shrink-0 snap-center outline-none">
                                     <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[24px] p-2 flex flex-col h-full hover:shadow-none transition-all duration-300 relative group">
