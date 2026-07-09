@@ -184,7 +184,15 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 }
                 
                 if (therapistsRes.data) {
-                    setTherapists(therapistsRes.data);
+                    const now = new Date();
+                    const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+                    const processedTherapists = therapistsRes.data.map(t => {
+                        if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
+                            return { ...t, online_status: 'Online', available_at: null };
+                        }
+                        return t;
+                    });
+                    setTherapists(processedTherapists as Therapist[]);
                 } else if (therapistsRes.error) {
                     setTherapists([]);
                 }
@@ -210,11 +218,20 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 'postgres_changes',
                 { event: 'UPDATE', schema: 'public', table: 'therapists' },
                 (payload) => {
-                    setTherapists((currentTherapists) => 
-                        currentTherapists.map((t) => 
-                            t.id === payload.new.id ? { ...t, ...payload.new } as Therapist : t
-                        )
-                    );
+                    setTherapists((currentTherapists) => {
+                        const now = new Date();
+                        const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+                        return currentTherapists.map((t) => {
+                            if (t.id === payload.new.id) {
+                                const updatedT = { ...t, ...payload.new } as Therapist;
+                                if (updatedT.online_status === 'Busy' && updatedT.available_at && currentTimeStr >= updatedT.available_at) {
+                                    return { ...updatedT, online_status: 'Online', available_at: null };
+                                }
+                                return updatedT;
+                            }
+                            return t;
+                        });
+                    });
                 }
             )
             .subscribe();
@@ -223,6 +240,26 @@ export function SpaProvider({ children }: { children: ReactNode }) {
             supabase.removeChannel(therapistsSubscription);
         };
     }, [siteBrandFilter]);
+
+    // Interval to dynamically update therapist status if their available_at time is reached
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTherapists((current) => {
+                const now = new Date();
+                const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+                let changed = false;
+                const next = current.map(t => {
+                    if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
+                        changed = true;
+                        return { ...t, online_status: 'Online' as const, available_at: null };
+                    }
+                    return t;
+                });
+                return changed ? next : current;
+            });
+        }, 15000);
+        return () => clearInterval(interval);
+    }, []);
 
     const toggleSavedProduct = (productId: string) => {
         setSavedProducts(prev => 

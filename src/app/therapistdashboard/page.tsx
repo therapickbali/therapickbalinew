@@ -70,6 +70,9 @@ export default function TherapistDashboard() {
                 if (therapistData.online_status) {
                     setStatus(therapistData.online_status);
                 }
+                if (therapistData.available_at) {
+                    setAvailableAt(therapistData.available_at);
+                }
                 setProfile({
                     name: therapistData.name,
                     location: therapistData.location || '',

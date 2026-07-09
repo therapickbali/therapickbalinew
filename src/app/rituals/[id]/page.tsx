@@ -628,7 +628,17 @@ export default function RitualsDetails() {
                                     <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
                                     
                                     <div className="flex flex-col gap-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
-                                        {therapists.filter(t => t.location === selectedArea).map(t => {
+                                        {therapists.filter(t => t.location === selectedArea).map(rawT => {
+                                            const todayStr = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+                                            const isFuture = formData.date && formData.date !== todayStr;
+                                            const t = { ...rawT } as any;
+                                            if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
+                                                t.online_status = 'Online';
+                                            } else if (t.online_status === 'Busy' && t.available_at) {
+                                                if (formData.time && formData.time >= t.available_at) {
+                                                    t.online_status = 'Online';
+                                                }
+                                            }
                                             return (
                                             <button 
                                                 key={t.id}

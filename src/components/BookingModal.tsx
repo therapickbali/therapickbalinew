@@ -327,7 +327,19 @@ export default function BookingModal({
                                 {bookingStep === 4 && (
                                     <div className="space-y-4 pb-24">
                                         <p className="text-xs text-white/90-muted mb-4 font-light">Select {totalGuests} therapist{totalGuests > 1 ? 's' : ''} based on your selected area and time, or skip to let us assign automatically.</p>
-                                        {therapists.filter(t => !selectedArea || t.location === selectedArea).map(t => (
+                                        {therapists.filter(t => !selectedArea || t.location === selectedArea).map(rawT => {
+                                            const todayStr = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+                                            const isFuture = formData.date && formData.date !== todayStr;
+                                            const t = { ...rawT } as any;
+                                            if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
+                                                t.online_status = 'Online';
+                                            } else if (t.online_status === 'Busy' && t.available_at) {
+                                                if (formData.time && formData.time >= t.available_at) {
+                                                    t.online_status = 'Online';
+                                                }
+                                            }
+                                            
+                                            return (
                                             <button 
                                                 key={t.id}
                                                 type="button"
@@ -392,7 +404,7 @@ export default function BookingModal({
 
                                                 </div>
                                             </button>
-                                        ))}
+                                        )})}
                                         {therapists.filter(t => !selectedArea || t.location === selectedArea).length === 0 && (
                                             <div className="p-6 text-center text-sm text-white/90-muted border border-dashed border-white/20/50 rounded-xl bg-surface/50">
                                                 No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
