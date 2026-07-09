@@ -626,8 +626,18 @@ export default function RitualsDetails() {
                                     </div>
                                     <p className="text-xs text-white/90-muted mb-4 shrink-0">Therapists available in {selectedArea}.</p>
                                     <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
-                                    
+                                    <div className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] p-4 rounded-2xl flex items-center justify-between my-2">
+                                        <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Therapists Needed</span>
+                                        <span className="text-sm font-bold text-white bg-white/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
+                                    </div>
                                     <div className="flex flex-col gap-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                                        <button
+                                            onClick={() => { setSelectedTherapists([]); setBookingStep(5 as any); }}
+                                            className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${selectedTherapists.length === 0 ? 'border-primary bg-white/5 shadow-sm' : 'border-white/20/50 hover:border-primary/30 bg-surface'}`}
+                                        >
+                                            <span className="font-bold text-white text-sm tracking-wide">Assign Automatically</span>
+                                            <ArrowRight className="w-4 h-4 text-white/90-muted" />
+                                        </button>
                                         {therapists.filter(t => t.location === selectedArea).map(rawT => {
                                             const todayStr = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
                                             const isFuture = formData.date && formData.date !== todayStr;
@@ -655,7 +665,10 @@ export default function RitualsDetails() {
                                                                 alert("For group bookings, please select therapists who are currently 'ONLINE'.");
                                                                 return;
                                                             }
-                                                            if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Do you still want to request them?`)) {
+                                                            if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Your booking time will be adjusted to ${t.available_at}. Do you still want to request them?`)) {
+                                                                if (t.available_at) {
+                                                                    setFormData(prev => ({ ...prev, time: t.available_at }));
+                                                                }
                                                                 setSelectedTherapists([...selectedTherapists, t.id]);
                                                             }
                                                         } else {

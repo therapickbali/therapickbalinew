@@ -1016,7 +1016,10 @@ ${treatmentsList}
                                                                     alert("For group bookings, please select therapists who are currently 'ONLINE'.");
                                                                     return;
                                                                 }
-                                                                if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Do you still want to request them?`)) {
+                                                                if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Your booking time will be adjusted to ${t.available_at}. Do you still want to request them?`)) {
+                                                                    if (t.available_at) {
+                                                                        setFormData(prev => ({ ...prev, time: t.available_at }));
+                                                                    }
                                                                     setSelectedTherapists([...selectedTherapists, t.id]);
                                                                 }
                                                             } else {
