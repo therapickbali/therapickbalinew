@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans, Newsreader } from "next/font/google";
 import "./globals.css";
 import TopNav from "@/components/TopNav";
 import { SpaProvider } from "@/context/SpaContext";
-
+import PwaInit from "@/components/PwaInit";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
   openGraph: {
     title: "Therapick Bali | Choose Available Therapists in Your Area",
@@ -243,6 +243,7 @@ export default async function RootLayout({
         data-domain="therapick"
         className={`${jakarta.variable} ${newsreader.variable} font-sans bg-transparent text-white/90 min-h-screen selection:bg-white selection:text-white pb-20`}
       >
+        <PwaInit />
         <SpaProvider>
           <TopNav />
           <main className="w-full relative min-h-[100dvh] bg-black overflow-x-hidden">
