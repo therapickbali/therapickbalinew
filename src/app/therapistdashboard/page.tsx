@@ -22,7 +22,7 @@ export default function TherapistDashboard() {
 
     useEffect(() => {
         const handleBeforeInstallPrompt = (e: any) => {
-            e.preventDefault();
+            // e.preventDefault(); // Removed to allow automatic Chrome prompt
             setDeferredPrompt(e);
         };
         window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
