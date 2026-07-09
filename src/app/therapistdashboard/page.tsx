@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Home, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck, Share, PlusSquare, X, AlertTriangle, MapPin, Navigation } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Therapist } from '@/context/SpaContext';
 
-type Tab = 'home' | 'location' | 'booking' | 'profile';
+type Tab = 'home' | 'booking' | 'profile';
 
 
 const MapContainer = dynamic(
@@ -43,7 +43,57 @@ export default function TherapistDashboard() {
     const [isPending, setIsPending] = useState(false);
     const [therapistId, setTherapistId] = useState<string | null>(null);
     const [showInstallPopup, setShowInstallPopup] = useState(false);
-    const [locationLoading, setLocationLoading] = useState(false);
+    const [isTrackingLocation, setIsTrackingLocation] = useState(false);
+    const watchId = useRef<number | null>(null);
+
+    // Cleanup watcher on unmount
+    useEffect(() => {
+        return () => {
+            if (watchId.current !== null) {
+                navigator.geolocation.clearWatch(watchId.current);
+            }
+        };
+    }, []);
+
+    const toggleLocationTracking = async () => {
+        if (!navigator.geolocation) {
+            alert('Geolocation is not supported by your browser.');
+            return;
+        }
+
+        if (isTrackingLocation) {
+            // Turn OFF tracking
+            if (watchId.current !== null) {
+                navigator.geolocation.clearWatch(watchId.current);
+                watchId.current = null;
+            }
+            setIsTrackingLocation(false);
+            setProfile(prev => ({ ...prev, latitude: undefined, longitude: undefined }));
+            
+            if (therapistId) {
+                await supabase.from('therapists').update({ latitude: null, longitude: null }).eq('id', therapistId);
+            }
+        } else {
+            // Turn ON tracking
+            setIsTrackingLocation(true);
+            watchId.current = navigator.geolocation.watchPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setProfile(prev => ({ ...prev, latitude, longitude }));
+                    
+                    if (therapistId) {
+                        await supabase.from('therapists').update({ latitude, longitude }).eq('id', therapistId);
+                    }
+                },
+                (error) => {
+                    console.error('Geolocation error:', error);
+                    alert('Unable to retrieve your location. Please check your device permissions.');
+                    setIsTrackingLocation(false);
+                },
+                { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+            );
+        }
+    };
     const [showSamsungWarning, setShowSamsungWarning] = useState(false);
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
@@ -57,33 +107,6 @@ export default function TherapistDashboard() {
     }, []);
 
     
-    const handleBroadcastLocation = () => {
-        if (!navigator.geolocation) {
-            alert('Geolocation is not supported by your browser.');
-            return;
-        }
-        
-        setLocationLoading(true);
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const { latitude, longitude } = position.coords;
-                setProfile(prev => ({ ...prev, latitude, longitude }));
-                
-                if (therapistId) {
-                    await supabase.from('therapists').update({ latitude, longitude }).eq('id', therapistId);
-                }
-                setLocationLoading(false);
-                setSaved(true);
-                setTimeout(() => setSaved(false), 3000);
-            },
-            (error) => {
-                console.error('Geolocation error:', error);
-                alert('Unable to retrieve your location. Please check your device permissions.');
-                setLocationLoading(false);
-            },
-            { enableHighAccuracy: true }
-        );
-    };
 
     const handleAndroidInstall = async () => {
         const isSamsungBrowser = navigator.userAgent.match(/SamsungBrowser/i);
@@ -373,49 +396,6 @@ export default function TherapistDashboard() {
     );
 
 
-    // Render Location Tab
-    const renderLocation = () => {
-        const centerLat = profile.latitude || -8.409518;
-        const centerLng = profile.longitude || 115.188919;
-        
-        return (
-            <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="flex flex-col"
-            >
-                <div className="h-[450px] w-full rounded-3xl overflow-hidden shadow-inner border border-white/5 bg-black/20 mb-6 relative z-0">
-                    {typeof window !== 'undefined' && (
-                        <MapContainer center={[centerLat, centerLng]} zoom={profile.latitude ? 15 : 10} style={{ height: '100%', width: '100%', zIndex: 0 }} attributionControl={false}>
-                            <TileLayer
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
-                            {profile.latitude && profile.longitude && (
-                                <Marker position={[profile.latitude, profile.longitude]} />
-                            )}
-                        </MapContainer>
-                    )}
-                </div>
-                
-                <button 
-                    onClick={handleBroadcastLocation}
-                    disabled={locationLoading}
-                    className="w-full bg-[#34C759] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(52,199,89,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#34C759]/50 disabled:opacity-50 disabled:scale-100"
-                >
-                    {locationLoading ? (
-                        <span className="animate-pulse">Finding GPS Location...</span>
-                    ) : profile.latitude ? (
-                        <><Navigation className="w-5 h-5 fill-current" /> Update Live Location</>
-                    ) : (
-                        <><Navigation className="w-5 h-5" /> Start Broadcasting</>
-                    )}
-                </button>
-                {saved && <p className="text-[#34C759] text-sm mt-3 text-center flex items-center justify-center gap-1 font-medium"><CheckCircle2 className="w-4 h-4" /> Location Broadcasted!</p>}
-            </motion.div>
-        );
-    };
-
     // Render Profile Tab
     const renderProfile = () => (
         <motion.div 
@@ -477,6 +457,22 @@ export default function TherapistDashboard() {
                             <option value="Canggu">Canggu</option>
                             <option value="Seminyak">Seminyak</option>
                         </select>
+                    </div>
+                    <div className="mt-4 bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3.5 px-4 shadow-inner flex items-center justify-between">
+                        <div className="flex flex-col">
+                            <span className="text-[15px] font-semibold text-white flex items-center gap-2">
+                                <Navigation className="w-4 h-4 text-[#0A84FF]" />
+                                Share Live Location
+                            </span>
+                            <span className="text-xs text-white/50 mt-1">Updates map while app is open</span>
+                        </div>
+                        
+                        <button 
+                            onClick={toggleLocationTracking}
+                            className={`w-14 h-8 rounded-full transition-colors duration-300 relative ${isTrackingLocation ? 'bg-[#34C759]' : 'bg-[#3A3A3C]'}`}
+                        >
+                            <div className={`w-7 h-7 bg-white rounded-full shadow-md absolute top-0.5 transition-transform duration-300 ${isTrackingLocation ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                        </button>
                     </div>
                 </div>
                 
@@ -557,7 +553,7 @@ export default function TherapistDashboard() {
                 <AnimatePresence mode="wait">
                     {activeTab === 'home' && <motion.div key="home">{renderHome()}</motion.div>}
                     {activeTab === 'booking' && <motion.div key="booking">{renderBooking()}</motion.div>}
-                    {activeTab === 'location' && <motion.div key="location">{renderLocation()}</motion.div>}
+                    
                     {activeTab === 'profile' && <motion.div key="profile">{renderProfile()}</motion.div>}
                 </AnimatePresence>
             </main>
@@ -582,13 +578,7 @@ export default function TherapistDashboard() {
                         <span className="text-[9px] font-bold tracking-widest uppercase">Live</span>
                     </button>
 
-                    <button 
-                        onClick={() => setActiveTab('location')}
-                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'location' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
-                    >
-                        <MapPin className="w-5 h-5 mb-1" strokeWidth={activeTab === 'location' ? 2.5 : 2} />
-                        <span className="text-[9px] font-bold tracking-widest uppercase">Location</span>
-                    </button>
+
                     
                     <button 
                         onClick={() => setActiveTab('profile')}
