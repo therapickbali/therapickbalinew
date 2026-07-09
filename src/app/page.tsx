@@ -1023,22 +1023,23 @@ ${treatmentsList}
                                                         if (selectedTherapists.includes(t.id)) {
                                                             setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
                                                         } else if (selectedTherapists.length < totalGuests) {
-                                                            if (t.online_status === 'Busy') {
-                                                                if (totalGuests > 1) {
-                                                                    alert("For group bookings, please select therapists who are currently 'ONLINE'.");
-                                                                    return;
-                                                                }
-                                                                if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Your booking time will be adjusted to ${t.available_at}. Do you still want to request them?`)) {
-                                                                    if (t.available_at) {
-                                                                        setFormData(prev => ({ ...prev, time: t.available_at }));
-                                                                    }
-                                                                    setSelectedTherapists([...selectedTherapists, t.id]);
-                                                                }
-                                                            } else {
-                                                                setSelectedTherapists([...selectedTherapists, t.id]);
+                                                        if (t.online_status === 'Busy') {
+                                                            if (totalGuests > 1) {
+                                                                setPopupState({ isOpen: true, type: 'group', therapistId: null, availableAt: '' });
+                                                                return;
                                                             }
+                                                            setPopupState({ 
+                                                                isOpen: true, 
+                                                                type: 'time', 
+                                                                therapistId: t.id, 
+                                                                availableAt: t.available_at || '',
+                                                                availableDate: t.availableDate
+                                                            });
+                                                        } else {
+                                                            setSelectedTherapists([...selectedTherapists, t.id]);
                                                         }
-                                                    }}
+                                                    }
+                                                }}
                                                     className={`w-full p-4 sm:p-5 rounded-3xl text-left flex gap-5 transition-all duration-300 relative overflow-hidden ${
                                                         selectedTherapists.includes(t.id) 
                                                         ? "bg-[#292831] border-[#292831] text-white shadow-xl scale-[1.02]" 

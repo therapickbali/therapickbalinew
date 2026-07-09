@@ -681,15 +681,16 @@ export default function RitualsDetails() {
                                                     } else if (selectedTherapists.length < totalGuests) {
                                                         if (t.online_status === 'Busy') {
                                                             if (totalGuests > 1) {
-                                                                alert("For group bookings, please select therapists who are currently 'ONLINE'.");
+                                                                setPopupState({ isOpen: true, type: 'group', therapistId: null, availableAt: '' });
                                                                 return;
                                                             }
-                                                            if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Your booking time will be adjusted to ${t.available_at}. Do you still want to request them?`)) {
-                                                                if (t.available_at) {
-                                                                    setFormData(prev => ({ ...prev, time: t.available_at }));
-                                                                }
-                                                                setSelectedTherapists([...selectedTherapists, t.id]);
-                                                            }
+                                                            setPopupState({ 
+                                                                isOpen: true, 
+                                                                type: 'time', 
+                                                                therapistId: t.id, 
+                                                                availableAt: t.available_at || '',
+                                                                availableDate: t.availableDate
+                                                            });
                                                         } else {
                                                             setSelectedTherapists([...selectedTherapists, t.id]);
                                                         }

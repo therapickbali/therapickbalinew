@@ -48,6 +48,7 @@ export default function BookingModal({
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedTherapists, setSelectedTherapists] = useState<string[]>([]);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [popupState, setPopupState] = useState<{isOpen: boolean, type: 'group' | 'time' | null, therapistId: string | null, availableAt: string, availableDate?: string}>({isOpen: false, type: null, therapistId: null, availableAt: ''});
 
     const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
     const totalGuests = cartItems.reduce((acc, item) => acc + item.guests, 0);
@@ -360,15 +361,16 @@ export default function BookingModal({
                                                         } else if (selectedTherapists.length < totalGuests) {
                                                             if (t.online_status === 'Busy') {
                                                                 if (totalGuests > 1) {
-                                                                    alert("For group bookings, please select therapists who are currently 'ONLINE'.");
+                                                                    setPopupState({ isOpen: true, type: 'group', therapistId: null, availableAt: '' });
                                                                     return;
                                                                 }
-                                                                if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Your booking time will be adjusted to ${t.available_at}. Do you still want to request them?`)) {
-                                                                    if (t.available_at) {
-                                                                        setFormData(prev => ({ ...prev, time: t.available_at }));
-                                                                    }
-                                                                    setSelectedTherapists([...selectedTherapists, t.id]);
-                                                                }
+                                                                setPopupState({ 
+                                                                    isOpen: true, 
+                                                                    type: 'time', 
+                                                                    therapistId: t.id, 
+                                                                    availableAt: t.available_at || '',
+                                                                    availableDate: t.availableDate
+                                                                });
                                                             } else {
                                                                 setSelectedTherapists([...selectedTherapists, t.id]);
                                                             }
@@ -476,6 +478,71 @@ export default function BookingModal({
                     )}
                 </motion.div>
             </motion.div>
+
+            {/* Custom Popup for Group Alert & Busy Therapist */}
+            <AnimatePresence>
+                {popupState.isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-sm bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-3xl p-6 sm:p-8 overflow-hidden text-center"
+                        >
+                            {popupState.type === 'group' ? (
+                                <>
+                                    <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                    </div>
+                                    <h3 className="font-serif text-xl text-white mb-2">Group Booking Alert</h3>
+                                    <p className="text-sm text-white/90-muted mb-8 leading-relaxed">
+                                        For group bookings, please select therapists who are currently <strong className="text-white font-bold">'ONLINE'</strong> to ensure synchronized scheduling.
+                                    </p>
+                                    <button 
+                                        onClick={() => setPopupState({ ...popupState, isOpen: false })}
+                                        className="w-full bg-[#292831] text-white px-6 py-3.5 rounded-2xl text-sm font-bold shadow-md hover:bg-[#292831]/90 active:scale-95 transition-all"
+                                    >
+                                        Understood
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    </div>
+                                    <h3 className="font-serif text-xl text-white mb-2">Adjust Booking Time?</h3>
+                                    <p className="text-sm text-white/90-muted mb-8 leading-relaxed">
+                                        This therapist will be ready at <strong className="text-white font-bold">{popupState.availableAt}</strong>. Your booking time will be automatically updated to match their availability.
+                                    </p>
+                                    <div className="flex gap-3">
+                                        <button 
+                                            onClick={() => setPopupState({ ...popupState, isOpen: false })}
+                                            className="flex-1 bg-white/20 border border-white/40 text-white px-4 py-3.5 rounded-2xl text-sm font-bold shadow-sm hover:bg-white/40 active:scale-95 transition-all"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button 
+                                            onClick={() => {
+                                                setFormData({ ...formData, time: popupState.availableAt, date: popupState.availableDate || formData.date });
+                                                setSelectedTherapists([...selectedTherapists, popupState.therapistId as string]);
+                                                setPopupState({ ...popupState, isOpen: false });
+                                            }}
+                                            className="flex-1 bg-[#292831] text-white px-4 py-3.5 rounded-2xl text-sm font-bold shadow-md hover:bg-[#292831]/90 active:scale-95 transition-all"
+                                        >
+                                            Proceed
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </AnimatePresence>
     );
 }
