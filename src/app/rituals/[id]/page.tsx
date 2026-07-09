@@ -626,28 +626,25 @@ export default function RitualsDetails() {
                                     </div>
                                     <p className="text-xs text-white/90-muted mb-4 shrink-0">Therapists available in {selectedArea}.</p>
                                     <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
-                                    <div className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] p-4 rounded-2xl flex items-center justify-between my-2">
-                                        <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Therapists Needed</span>
-                                        <span className="text-sm font-bold text-white bg-white/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
-                                    </div>
+
                                     <div className="flex flex-col gap-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
                                         <button
                                             onClick={() => { setSelectedTherapists([]); setBookingStep(5 as any); }}
                                             className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all ${selectedTherapists.length === 0 ? 'border-primary bg-white/5 shadow-sm' : 'border-white/20/50 hover:border-primary/30 bg-surface'}`}
                                         >
-                                            <span className="font-bold text-white text-sm tracking-wide">Assign Automatically</span>
+                                            <span className="font-bold text-white text-sm tracking-wide">ASSIGN AUTOMATICALLY</span>
                                             <ArrowRight className="w-4 h-4 text-white/90-muted" />
                                         </button>
+                                        <div className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] p-4 rounded-2xl flex items-center justify-between my-2">
+                                            <span className="text-xs font-bold text-white/80 uppercase tracking-widest">THERAPISTS NEEDED</span>
+                                            <span className="text-sm font-bold text-white bg-white/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
+                                        </div>
                                         {therapists.filter(t => t.location === selectedArea).map(rawT => {
                                             const todayStr = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
                                             const isFuture = formData.date && formData.date !== todayStr;
                                             const t = { ...rawT } as any;
                                             if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
                                                 t.online_status = 'Online';
-                                            } else if (t.online_status === 'Busy' && t.available_at) {
-                                                if (formData.time && formData.time >= t.available_at) {
-                                                    t.online_status = 'Online';
-                                                }
                                             }
                                             return (
                                             <button 
