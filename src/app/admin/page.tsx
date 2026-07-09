@@ -648,6 +648,13 @@ export default function AdminDashboard() {
                         Live Map
                     </button>
                     <button 
+                        onClick={() => setActiveTab('book')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${activeTab === 'book' ? 'bg-[#0A84FF]/20 text-[#0A84FF]' : 'text-white/90-muted hover:bg-surface/50 hover:text-white'}`}
+                    >
+                        <CalendarCheck size={18} />
+                        Bookings
+                    </button>
+                    <button 
                         onClick={() => setActiveTab('list')}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${activeTab === 'list' ? 'bg-surface/80 text-white' : 'text-white/90-muted hover:bg-surface/50 hover:text-white'}`}
                     >
@@ -675,7 +682,7 @@ export default function AdminDashboard() {
             <main className="flex-1 relative overflow-y-auto">
                 {/* Background Details Removed for solid black background */}
 
-                <div className={`${activeTab === 'livemap' ? 'w-full h-full p-0' : activeTab === 'therapists' ? 'max-w-[95%] xl:max-w-[1400px] mx-auto p-6 md:p-12 pb-32 md:pb-12 pt-12 md:pt-12' : 'max-w-4xl mx-auto p-6 md:p-12 pt-12 md:pt-12 pb-32 md:pb-12'} relative z-10 transition-all duration-300`}>
+                <div className={`${activeTab === 'livemap' ? 'w-full h-full p-0' : activeTab === 'book' ? 'max-w-4xl mx-auto p-4 md:p-12 pb-32 pt-4 md:pt-12' : activeTab === 'therapists' ? 'max-w-[95%] xl:max-w-[1400px] mx-auto p-6 md:p-12 pb-32 md:pb-12 pt-12 md:pt-12' : 'max-w-4xl mx-auto p-6 md:p-12 pt-12 md:pt-12 pb-32 md:pb-12'} relative z-10 transition-all duration-300`}>
                     
                     {/* Mobile Header (Hidden on Desktop) */}
                     {activeTab !== 'therapists' && activeTab !== 'livemap' && (
@@ -690,18 +697,20 @@ export default function AdminDashboard() {
 
                     {activeTab !== 'therapists' && activeTab !== 'livemap' && (
                         <header className="mb-10">
-                            <h1 className="font-serif text-3xl md:text-4xl text-white font-medium mb-2">
+                            <h1 className="font-serif text-3xl md:text-4xl text-white font-medium mb-2 hidden md:block">
                                 {activeTab === 'treatment' ? (editingTreatmentId ? 'Edit Treatment' : 'Create New Treatment') : 
                                  activeTab === 'campaign' ? 'Create Campaign Card' : 
                                  activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') : 
                                  activeTab === 'fees' ? 'Set Therapist Fee' :
+                                 activeTab === 'book' ? 'Real-Time Bookings' :
                                  activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
                             </h1>
-                            <p className="text-white/90-muted text-sm">
+                            <p className="text-white/90-muted text-sm hidden md:block">
                                 {activeTab === 'treatment' ? 'Add or edit a massage or ritual to your spa menu.' : 
                                  activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
                                  activeTab === 'store' ? 'Add physical products like oils or candles to the Therapick Store.' :
                                  activeTab === 'fees' ? 'Configure fees paid to therapists based on the duration of the treatment.' :
+                                 activeTab === 'book' ? 'Monitor and dispatch incoming bookings to your therapists in real-time.' :
                                  activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : ''}
                             </p>
                         </header>
@@ -1497,6 +1506,94 @@ export default function AdminDashboard() {
                                             </div>
                                         )}
                                     </div>
+                                )}
+
+
+                                {activeTab === 'book' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        className="flex flex-col gap-4 md:gap-6 w-full"
+                                    >
+                                        <div className="flex items-center justify-between mb-2 md:hidden">
+                                            <h2 className="font-serif text-2xl text-white font-medium">Bookings</h2>
+                                            <div className="bg-[#0A84FF]/10 text-[#0A84FF] px-3 py-1 rounded-full text-xs font-bold tracking-wider">
+                                                {bookings.length} TOTAL
+                                            </div>
+                                        </div>
+
+                                        {bookings.length === 0 ? (
+                                            <div className="bg-[#1C1C1E] border border-white/[0.08] rounded-3xl p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
+                                                <CalendarCheck className="w-12 h-12 text-white/30 mb-4" />
+                                                <h3 className="text-white font-bold text-lg">No Bookings Yet</h3>
+                                                <p className="text-white/50 text-sm mt-2">New bookings from the website will appear here instantly.</p>
+                                            </div>
+                                        ) : (
+                                            bookings.map((booking) => {
+                                                const requestedTherapistsNames = (booking.requested_therapist_ids || [])
+                                                    .map(id => allTherapists.find(t => t.id === id)?.name || 'Unknown')
+                                                    .join(', ');
+                                                    
+                                                const treatmentsList = booking.treatments.map((t: any) => `${t.title} (${t.duration}m x${t.guests})`).join(', ');
+
+                                                return (
+                                                    <div key={booking.id} className="bg-[#1C1C1E] border border-white/[0.08] rounded-3xl p-5 md:p-6 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+                                                        <div className="flex justify-between items-start mb-4">
+                                                            <div>
+                                                                <h3 className="text-white font-bold text-lg md:text-xl">{booking.customer_name}</h3>
+                                                                <p className="text-[#0A84FF] text-xs md:text-sm font-semibold mt-1">IDR {booking.total_price.toLocaleString('en-US')}</p>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <span className="bg-[#34C759]/20 text-[#34C759] px-2 py-1 md:px-3 md:py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider">
+                                                                    {booking.status}
+                                                                </span>
+                                                                <p className="text-white/40 text-[9px] md:text-[10px] mt-2">{new Date(booking.created_at).toLocaleString()}</p>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-5">
+                                                            <div className="bg-white/5 rounded-2xl p-3 md:p-4 border border-white/5">
+                                                                <div className="flex items-center gap-1 md:gap-2 text-white/50 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1"><Clock className="w-3 h-3"/> Time</div>
+                                                                <p className="text-white font-medium text-xs md:text-sm">{booking.date} at {booking.time}</p>
+                                                            </div>
+                                                            <div className="bg-white/5 rounded-2xl p-3 md:p-4 border border-white/5">
+                                                                <div className="flex items-center gap-1 md:gap-2 text-white/50 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1"><MapPin className="w-3 h-3"/> Area</div>
+                                                                <p className="text-white font-medium text-xs md:text-sm line-clamp-1">{booking.location_area}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="space-y-1.5 md:space-y-2 mb-5">
+                                                            <p className="text-xs md:text-sm text-white/80"><strong className="text-white/50 uppercase text-[9px] md:text-[10px] tracking-widest mr-2">Address:</strong> {booking.address} {booking.room_number ? `(Room: ${booking.room_number})` : ''}</p>
+                                                            <p className="text-xs md:text-sm text-white/80"><strong className="text-white/50 uppercase text-[9px] md:text-[10px] tracking-widest mr-2">Treatments:</strong> {treatmentsList}</p>
+                                                            <p className="text-xs md:text-sm text-white/80"><strong className="text-white/50 uppercase text-[9px] md:text-[10px] tracking-widest mr-2">Therapists:</strong> {requestedTherapistsNames || 'Auto Assign'}</p>
+                                                        </div>
+                                                        
+                                                        <button 
+                                                            onClick={() => {
+                                                                const msg = `*NEW SPA BOOKING ASSIGNMENT*\n\n*CLIENT DETAILS:*\n- Name: ${booking.customer_name}\n- Date: ${booking.date}\n- Time: ${booking.time}\n- Location Area: ${booking.location_area}\n- Address: ${booking.address}\n- Room Number: ${booking.room_number || 'N/A'}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${booking.total_price.toLocaleString('en-US')}\n\nPlease confirm if you can take this booking!`;
+                                                                if (booking.requested_therapist_ids && booking.requested_therapist_ids.length > 0) {
+                                                                    const tId = booking.requested_therapist_ids[0];
+                                                                    const therapist = allTherapists.find(t => t.id === tId);
+                                                                    if (therapist && therapist.whatsapp) {
+                                                                        const phone = therapist.whatsapp.replace(/[^0-9]/g, '');
+                                                                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+                                                                    } else {
+                                                                        alert("Therapist has no valid WhatsApp number.");
+                                                                    }
+                                                                } else {
+                                                                    alert("No specific therapist requested. Please assign manually.");
+                                                                }
+                                                            }}
+                                                            className="w-full bg-[#25D366] text-white rounded-2xl py-3 md:py-4 font-bold text-sm md:text-base tracking-wide shadow-[0_8px_32px_rgba(37,211,102,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                                        >
+                                                            <Share className="w-4 h-4 md:w-5 md:h-5" /> Dispatch (WhatsApp)
+                                                        </button>
+                                                    </div>
+                                                );
+                                            })
+                                        )}
+                                    </motion.div>
                                 )}
 
                                 {activeTab === 'settings' && (
