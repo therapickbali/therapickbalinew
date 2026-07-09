@@ -201,6 +201,26 @@ export function SpaProvider({ children }: { children: ReactNode }) {
         }
 
         loadData();
+
+        // Subscribe to real-time updates for therapists table
+        const therapistsSubscription = supabase
+            .channel('public:therapists')
+            .on(
+                'postgres_changes',
+                { event: 'UPDATE', schema: 'public', table: 'therapists' },
+                (payload) => {
+                    setTherapists((currentTherapists) => 
+                        currentTherapists.map((t) => 
+                            t.id === payload.new.id ? { ...t, ...payload.new } as Therapist : t
+                        )
+                    );
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(therapistsSubscription);
+        };
     }, [siteBrandFilter]);
 
     const toggleSavedProduct = (productId: string) => {

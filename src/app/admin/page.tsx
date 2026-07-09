@@ -61,6 +61,21 @@ export default function AdminDashboard() {
             }
         }
         fetchData();
+
+        const subscription = supabase
+            .channel('admin_therapists')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'therapists' },
+                () => {
+                    fetchData();
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(subscription);
+        };
     }, [isCheckingAuth]);
 
     // Campaign specific fields
