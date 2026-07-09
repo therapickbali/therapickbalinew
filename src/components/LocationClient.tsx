@@ -1,5 +1,6 @@
 'use client';
 
+import { supabase } from '@/lib/supabase';
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Search, Heart, Cloud, Sparkles, Droplet, User, Flame, Clock, ArrowRight, X, ShoppingBag, Plus, Minus, MessageCircle, ChevronLeft, Bitcoin } from 'lucide-react';
@@ -103,6 +104,25 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
             const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration} MINS)`).join(', ');
 
             const waNumber = '6285174119423';
+            
+            // Insert into Supabase
+            try {
+                await supabase.from('website_bookings').insert({
+                    customer_name: formData.name,
+                    date: formData.date,
+                    time: formData.time,
+                    location_area: locationName,
+                    address: formData.location,
+                    room_number: formData.room || '',
+                    treatments: cartItems,
+                    total_price: totalPrice,
+                    requested_therapist_ids: [],
+                    status: 'pending'
+                });
+            } catch(e) {
+                console.error("DB Error", e);
+            }
+
             
             const treatmentsList = cartItems.map(item => {
                 const price = (item.price * item.guests).toLocaleString('en-US');
