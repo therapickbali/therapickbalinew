@@ -207,6 +207,26 @@ ${treatmentsList}
     return (
         <div className="min-h-screen bg-black relative overflow-hidden font-sans text-white/90">
             
+            {/* Global Loading Splash Screen for New Users */}
+            <AnimatePresence>
+                {isLoading && (
+                    <motion.div 
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center"
+                    >
+                        <div className="w-16 h-16 relative flex items-center justify-center mb-8">
+                            <div className="absolute inset-0 rounded-full border-t-2 border-white/20 animate-spin" style={{ animationDuration: '3s' }}></div>
+                            <div className="absolute inset-2 rounded-full border-r-2 border-white/40 animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }}></div>
+                            <div className="absolute inset-4 rounded-full border-b-2 border-white/60 animate-spin" style={{ animationDuration: '1s' }}></div>
+                        </div>
+                        <h1 className="font-serif text-2xl text-white tracking-widest uppercase mb-2">Therapick</h1>
+                        <p className="text-[10px] text-white/50 tracking-[0.2em] uppercase font-semibold">Preparing Your Sanctuary</p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+            
             {/* Top Gradient Background */}
             <div className="absolute top-0 left-0 right-0 h-[400px] md:h-[500px] bg-gradient-to-b from-transparent to-transparent z-0 pointer-events-none"></div>
 
