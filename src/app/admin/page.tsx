@@ -640,10 +640,10 @@ export default function AdminDashboard() {
             <main className="flex-1 relative overflow-y-auto">
                 {/* Background Details Removed for solid black background */}
 
-                <div className={`${activeTab === 'therapists' ? 'max-w-[95%] xl:max-w-[1400px]' : 'max-w-4xl'} mx-auto p-6 md:p-12 relative z-10 pt-12 md:pt-12 pb-32 md:pb-12 transition-all duration-300`}>
+                <div className={`${activeTab === 'livemap' ? 'w-full h-full p-0' : activeTab === 'therapists' ? 'max-w-[95%] xl:max-w-[1400px] mx-auto p-6 md:p-12 pb-32 md:pb-12 pt-12 md:pt-12' : 'max-w-4xl mx-auto p-6 md:p-12 pt-12 md:pt-12 pb-32 md:pb-12'} relative z-10 transition-all duration-300`}>
                     
                     {/* Mobile Header (Hidden on Desktop) */}
-                    {activeTab !== 'therapists' && (
+                    {activeTab !== 'therapists' && activeTab !== 'livemap' && (
                         <div className="md:hidden flex items-center justify-between mb-8">
                             <Link href="/" className="flex items-center gap-2 text-white">
                                 <Store size={20} strokeWidth={2.5} />
@@ -653,21 +653,21 @@ export default function AdminDashboard() {
                         </div>
                     )}
 
-                    {activeTab !== 'therapists' && (
+                    {activeTab !== 'therapists' && activeTab !== 'livemap' && (
                         <header className="mb-10">
                             <h1 className="font-serif text-3xl md:text-4xl text-white font-medium mb-2">
                                 {activeTab === 'treatment' ? (editingTreatmentId ? 'Edit Treatment' : 'Create New Treatment') : 
                                  activeTab === 'campaign' ? 'Create Campaign Card' : 
                                  activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') : 
                                  activeTab === 'fees' ? 'Set Therapist Fee' :
-                                 activeTab === 'list' ? 'Menu & Offers Management' : activeTab === 'livemap' ? 'Live Therapist Map' : 'Settings'}
+                                 activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
                             </h1>
                             <p className="text-white/90-muted text-sm">
                                 {activeTab === 'treatment' ? 'Add or edit a massage or ritual to your spa menu.' : 
                                  activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
                                  activeTab === 'store' ? 'Add physical products like oils or candles to the Therapick Store.' :
                                  activeTab === 'fees' ? 'Configure fees paid to therapists based on the duration of the treatment.' :
-                                 activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : activeTab === 'livemap' ? 'Monitor real-time locations of active therapists.' : ''}
+                                 activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : ''}
                             </p>
                         </header>
                     )}
@@ -1473,22 +1473,20 @@ export default function AdminDashboard() {
 
                                 
                                 {activeTab === 'livemap' && (
-                                    <div className="flex flex-col gap-6 h-[calc(100vh-250px)]">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <div className="bg-surface/50 border border-white/10 px-4 py-2 rounded-xl flex items-center gap-3">
-                                                <span className="relative flex h-3 w-3">
-                                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                                </span>
-                                                <span className="text-sm text-white/90 font-medium">{allTherapists.filter(t => t.latitude && t.longitude).length} Broadcasting</span>
-                                            </div>
+                                    <div className="absolute inset-0 z-0">
+                                        <div className="absolute top-6 right-6 z-[1000] bg-black/80 backdrop-blur-md border border-white/10 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+                                            <span className="relative flex h-3 w-3">
+                                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                            </span>
+                                            <span className="text-sm text-white font-semibold tracking-wide">{allTherapists.filter(t => t.latitude && t.longitude).length} Broadcasting</span>
                                         </div>
 
-                                        <div className="flex-1 bg-surface border border-white/10 rounded-3xl overflow-hidden relative shadow-xl">
+                                        <div className="w-full h-[100vh] rounded-none overflow-hidden relative shadow-2xl border-0">
                                             {typeof window !== 'undefined' && (
                                                 <MapContainer center={[-8.409518, 115.188919]} zoom={10} style={{ height: '100%', width: '100%', zIndex: 0 }} attributionControl={false}>
                                                     <TileLayer
-                                                        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                                     />
                                                     {allTherapists.filter(t => t.latitude && t.longitude).map(therapist => {
                                                         const icon = createTherapistIcon(therapist.image_url);
