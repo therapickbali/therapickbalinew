@@ -17,6 +17,28 @@ export default function TherapistDashboard() {
     const [isPending, setIsPending] = useState(false);
     const [therapistId, setTherapistId] = useState<string | null>(null);
     const [showInstallPopup, setShowInstallPopup] = useState(false);
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+    useEffect(() => {
+        const handleBeforeInstallPrompt = (e: any) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    }, []);
+
+    const handleAndroidInstall = async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                setDeferredPrompt(null);
+            }
+        } else {
+            alert('To install the app on Android, tap the menu (three dots) in Chrome and select "Add to Home screen" or "Install app".');
+        }
+    };
     
     // Status State
     const [status, setStatus] = useState<'Online' | 'Busy' | 'Off'>('Online');
@@ -349,7 +371,7 @@ export default function TherapistDashboard() {
             <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
                 <h3 className="text-xs font-bold text-white/60 uppercase tracking-widest mb-4">Install Therapist App</h3>
                 <div className="space-y-3">
-                    <button className="w-full bg-[#3DDC84] text-black rounded-2xl py-3.5 px-4 font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                    <button onClick={handleAndroidInstall} className="w-full bg-[#3DDC84] text-black rounded-2xl py-3.5 px-4 font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                         <Download className="w-5 h-5" /> Download for Android
                     </button>
                     <button className="w-full bg-white/5 text-white border border-white/20 rounded-2xl py-3.5 px-4 font-bold shadow-sm hover:bg-white/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2" onClick={() => setShowInstallPopup(true)}>
