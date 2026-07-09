@@ -36,6 +36,7 @@ export type Therapist = {
     location?: string;
     email?: string;
     online_status?: 'Online' | 'Busy' | 'Off';
+    available_at?: string;
 };
 
 export type SelectedCampaignTreatment = {

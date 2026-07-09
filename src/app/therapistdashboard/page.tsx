@@ -85,7 +85,14 @@ export default function TherapistDashboard() {
     const handleSave = async () => {
         if (!therapistId) return;
         try {
-            await supabase.from('therapists').update({ online_status: status }).eq('id', therapistId);
+            const updatePayload: any = { online_status: status };
+            if (status === 'Busy') {
+                updatePayload.available_at = availableAt;
+            } else {
+                updatePayload.available_at = null;
+            }
+            
+            await supabase.from('therapists').update(updatePayload).eq('id', therapistId);
             setSaved(true);
             setTimeout(() => setSaved(false), 3000);
         } catch (error) {

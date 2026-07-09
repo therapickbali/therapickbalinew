@@ -989,13 +989,13 @@ ${treatmentsList}
                                             const t = { ...rawT } as any;
                                             if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
                                                 t.online_status = 'Online';
-                                            } else if (t.online_status === 'Busy' && t.availableAt) {
-                                                if (formData.time && formData.time >= t.availableAt) {
+                                            } else if (t.online_status === 'Busy' && t.available_at) {
+                                                if (formData.time && formData.time >= t.available_at) {
                                                     t.online_status = 'Online';
                                                 } else {
                                                     const now = new Date();
                                                     const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
-                                                    if ((!formData.date || formData.date === todayStr) && currentTimeStr >= t.availableAt) {
+                                                    if ((!formData.date || formData.date === todayStr) && currentTimeStr >= t.available_at) {
                                                         t.online_status = 'Online';
                                                     }
                                                 }
@@ -1003,8 +1003,9 @@ ${treatmentsList}
                                             return (
                                                 <button
                                                     key={t.id}
-                                                    onClick={() => { 
+                                                    onClick={(e) => {
                                                         if (t.online_status === 'Off') {
+                                                            e.preventDefault();
                                                             return;
                                                         }
                                                         if (selectedTherapists.includes(t.id)) {
@@ -1015,7 +1016,7 @@ ${treatmentsList}
                                                                     alert("For group bookings, please select therapists who are currently 'ONLINE'.");
                                                                     return;
                                                                 }
-                                                                if (confirm(`${t.name} is currently handling a customer. They may be available by ${t.availableAt || 'later'}. Do you still want to request them?`)) {
+                                                                if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Do you still want to request them?`)) {
                                                                     setSelectedTherapists([...selectedTherapists, t.id]);
                                                                 }
                                                             } else {
