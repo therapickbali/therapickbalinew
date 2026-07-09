@@ -55,6 +55,7 @@ export default function AdminDashboard() {
     const router = useRouter();
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store' | 'fees' | 'therapists' | 'livemap'>('list');
+    const [showMobileMore, setShowMobileMore] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
     
@@ -659,14 +660,14 @@ export default function AdminDashboard() {
                                  activeTab === 'campaign' ? 'Create Campaign Card' : 
                                  activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') : 
                                  activeTab === 'fees' ? 'Set Therapist Fee' :
-                                 activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
+                                 activeTab === 'list' ? 'Menu & Offers Management' : activeTab === 'livemap' ? 'Live Therapist Map' : 'Settings'}
                             </h1>
                             <p className="text-white/90-muted text-sm">
                                 {activeTab === 'treatment' ? 'Add or edit a massage or ritual to your spa menu.' : 
                                  activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
                                  activeTab === 'store' ? 'Add physical products like oils or candles to the Therapick Store.' :
                                  activeTab === 'fees' ? 'Configure fees paid to therapists based on the duration of the treatment.' :
-                                 activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : ''}
+                                 activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : activeTab === 'livemap' ? 'Monitor real-time locations of active therapists.' : ''}
                             </p>
                         </header>
                     )}
@@ -1470,8 +1471,53 @@ export default function AdminDashboard() {
                                     </div>
                                 )}
 
+                                
+                                {activeTab === 'livemap' && (
+                                    <div className="flex flex-col gap-6 h-[calc(100vh-250px)]">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="bg-surface/50 border border-white/10 px-4 py-2 rounded-xl flex items-center gap-3">
+                                                <span className="relative flex h-3 w-3">
+                                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                                </span>
+                                                <span className="text-sm text-white/90 font-medium">{allTherapists.filter(t => t.latitude && t.longitude).length} Broadcasting</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-1 bg-surface border border-white/10 rounded-3xl overflow-hidden relative shadow-xl">
+                                            {typeof window !== 'undefined' && (
+                                                <MapContainer center={[-8.409518, 115.188919]} zoom={10} style={{ height: '100%', width: '100%', zIndex: 0 }} attributionControl={false}>
+                                                    <TileLayer
+                                                        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                                                    />
+                                                    {allTherapists.filter(t => t.latitude && t.longitude).map(therapist => {
+                                                        const icon = createTherapistIcon(therapist.image_url);
+                                                        return (
+                                                            <Marker 
+                                                                key={therapist.id} 
+                                                                position={[therapist.latitude!, therapist.longitude!]}
+                                                                icon={icon || undefined}
+                                                            >
+                                                                <Popup className="custom-popup">
+                                                                    <div className="p-1">
+                                                                        <h3 className="font-bold text-[15px] text-black">{therapist.name}</h3>
+                                                                        <p className="text-sm text-gray-500">{therapist.location}</p>
+                                                                        <div className="mt-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full inline-block font-medium">
+                                                                            {therapist.online_status || 'Online'}
+                                                                        </div>
+                                                                    </div>
+                                                                </Popup>
+                                                            </Marker>
+                                                        );
+                                                    })}
+                                                </MapContainer>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
                                 {/* Submit Area */}
-                                {activeTab !== 'fees' && (
+                                {activeTab !== 'fees' && activeTab !== 'livemap' && (
                                     <div className="pt-6 border-t border-white/20/30 flex items-center justify-end gap-4">
                                         {success && (
                                         <motion.span 
@@ -1629,38 +1675,80 @@ export default function AdminDashboard() {
                 )}
             </AnimatePresence>
 
-            {/* Mobile Bottom Navigation Bar */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-2xl border-t border-white/20/50 z-50 px-6 pb-safe">
-                <div className="flex items-center justify-between h-full max-w-md mx-auto">
-                    {[
-                        { id: 'treatment', icon: PlusCircle, label: 'Add' },
-                        { id: 'store', icon: Store, label: 'Store' },
-                        { id: 'campaign', icon: Megaphone, label: 'Promo' },
-                        { id: 'fees', icon: Settings, label: 'Fees' },
-                        { id: 'therapists', icon: Users, label: 'Staff' },
-                        { id: 'list', icon: LayoutDashboard, label: 'Menu' },
-                    ].map((tab) => {
-                        const isActive = activeTab === tab.id;
-                        const Icon = tab.icon;
-                        return (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
-                                className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${
-                                    isActive ? 'text-white' : 'text-white/90-muted hover:text-white/70'
-                                }`}
-                            >
-                                <div className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 scale-110' : 'bg-transparent'}`}>
-                                    <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
-                                </div>
-                                <span className={`text-[10px] font-bold tracking-wider ${isActive ? 'opacity-100' : 'opacity-60'}`}>
-                                    {tab.label}
-                                </span>
-                            </button>
-                        );
-                    })}
-                </div>
-            </div>
+            {/* Mobile Bottom Navigation Bar (Redesigned) */}
+            <nav className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-sm bg-[#1C1C1E]/95 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.37)] rounded-[32px] px-6 py-4 flex items-center justify-between z-50">
+                
+                {/* Add Dropdown Menu overlay */}
+                <AnimatePresence>
+                    {showMobileMore && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            className="absolute bottom-full left-0 right-0 mb-4 bg-[#1C1C1E]/95 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.37)] rounded-3xl p-4 flex flex-col gap-2 z-50"
+                        >
+                            {[
+                                { id: 'campaign', icon: Megaphone, label: 'Promo Campaigns' },
+                                { id: 'store', icon: Store, label: 'Therapick Store' },
+                                { id: 'fees', icon: Settings, label: 'Therapist Fees' },
+                                { id: 'therapists', icon: Users, label: 'Manage Staff' },
+                            ].map((tab) => {
+                                const isActive = activeTab === tab.id;
+                                const Icon = tab.icon;
+                                return (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => {
+                                            setActiveTab(tab.id as any);
+                                            setShowMobileMore(false);
+                                        }}
+                                        className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all ${isActive ? 'bg-[#0A84FF]/20 text-[#0A84FF]' : 'text-white/80 hover:bg-white/5'}`}
+                                    >
+                                        <Icon size={20} />
+                                        <span className="text-sm font-semibold tracking-wide">{tab.label}</span>
+                                    </button>
+                                );
+                            })}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Main Visible Tabs */}
+                {[
+                    { id: 'treatment', icon: PlusCircle, label: 'Add' },
+                    { id: 'list', icon: LayoutDashboard, label: 'Menu' },
+                    { id: 'livemap', icon: MapPin, label: 'Map' },
+                ].map((tab) => {
+                    const isActive = activeTab === tab.id;
+                    const Icon = tab.icon;
+                    return (
+                        <button 
+                            key={tab.id}
+                            onClick={() => {
+                                setActiveTab(tab.id as any);
+                                setShowMobileMore(false);
+                            }}
+                            className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${isActive ? 'text-[#0A84FF] scale-110' : 'text-white/40 hover:text-white/70'}`}
+                        >
+                            <Icon className="w-5 h-5 mb-1" strokeWidth={isActive ? 2.5 : 2} />
+                            <span className="text-[9px] font-bold tracking-widest uppercase">{tab.label}</span>
+                        </button>
+                    );
+                })}
+
+                {/* More Button */}
+                <button 
+                    onClick={() => setShowMobileMore(!showMobileMore)}
+                    className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${showMobileMore ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
+                >
+                    <div className="flex gap-1 mb-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-current"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-current"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-current"></div>
+                    </div>
+                    <span className="text-[9px] font-bold tracking-widest uppercase">More</span>
+                </button>
+            </nav>
 
             {/* Hidden File Input for Pinning Images */}
             <input 
