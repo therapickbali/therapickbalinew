@@ -665,6 +665,8 @@ export default function RitualsDetails() {
                                             const t = { ...rawT } as any;
                                             if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
                                                 t.online_status = 'Online';
+                                            } else if (!isFuture && t.online_status === 'Busy' && t.available_at && formData.time && formData.time >= t.available_at) {
+                                                t.online_status = 'Online';
                                             }
                                             return (
                                             <button 
