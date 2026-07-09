@@ -616,24 +616,24 @@ ${treatmentsList}
                         className="bg-black w-full h-[90dvh] md:h-auto md:max-h-[85vh] md:max-w-3xl md:rounded-[40px] rounded-t-[40px] shadow-2xl relative overflow-hidden flex flex-col"
                     >
                         {/* Modal Header */}
-                        <div className="p-6 md:p-8 flex items-center justify-between border-b border-white/20/50 bg-white shrink-0">
-                            <div>
-                                <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-[9px] font-bold tracking-widest uppercase text-white mb-2">
+                        <div className="p-6 md:p-8 flex items-start justify-between border-b border-white/10 bg-black shrink-0 relative z-10">
+                            <div className="pr-4">
+                                <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-[9px] font-bold tracking-widest uppercase text-white mb-3">
                                     {campaign?.title}
                                 </div>
-                                <h2 className="font-serif text-2xl text-white">{campaign?.label}</h2>
+                                <h2 className="font-serif text-2xl md:text-3xl text-white leading-tight">{campaign?.label}</h2>
                             </div>
                             <button 
                                 onClick={() => setIsCampaignModalOpen(false)}
-                                className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-white hover:bg-border transition-colors"
+                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors shrink-0"
                             >
                                 <X size={20} />
                             </button>
                         </div>
                         
                         {/* Modal Content (Campaign Treatments) */}
-                        <div className="p-6 md:p-8 overflow-y-auto bg-black">
-                            <p className="text-sm text-white/90-muted mb-6">{campaign?.description}</p>
+                        <div className="p-6 md:p-8 overflow-y-auto bg-[#0a0a0a]">
+                            <p className="text-base text-white/80 leading-relaxed mb-8">{campaign?.description}</p>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {campaign?.selectedTreatments.flatMap(ct => {
@@ -671,11 +671,11 @@ ${treatmentsList}
                                                             -{campaign.discountPercentage}%
                                                         </div>
                                                     </div>
-                                                    <h4 className="font-serif text-xl font-medium text-white mb-2 leading-tight">{treatment.title}</h4>
-                                                    <p className="text-xs text-white/90-muted leading-relaxed font-light mb-6 flex-grow">{treatment.desc}</p>
+                                                    <h4 className="font-serif text-xl md:text-2xl font-medium text-white mb-3 leading-tight">{treatment.title}</h4>
+                                                    <p className="text-sm text-white/70 leading-relaxed font-light mb-8 flex-grow">{treatment.desc}</p>
                                                     
-                                                    <div className="mt-auto pt-4 border-t border-white/20/50">
-                                                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/90-muted mb-2.5 uppercase tracking-widest"><Clock className="w-3.5 h-3.5" /> {duration} MINS</div>
+                                                    <div className="mt-auto pt-5 border-t border-white/10">
+                                                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/60 mb-3 uppercase tracking-widest"><Clock className="w-3.5 h-3.5" /> {duration} MINS</div>
                                                         <div className="flex items-end justify-between">
                                                             <div>
                                                                 <span className="text-[10px] text-white/90-muted line-through mr-2">Rp {option.price}</span>
