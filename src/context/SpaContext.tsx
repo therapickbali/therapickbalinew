@@ -37,6 +37,8 @@ export type Therapist = {
     email?: string;
     online_status?: 'Online' | 'Busy' | 'Off';
     available_at?: string;
+    latitude?: number;
+    longitude?: number;
 };
 
 export type SelectedCampaignTreatment = {

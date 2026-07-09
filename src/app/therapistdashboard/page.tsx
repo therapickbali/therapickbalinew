@@ -1,14 +1,40 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck, Share, PlusSquare, X, AlertTriangle } from 'lucide-react';
+import { Home, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck, Share, PlusSquare, X, AlertTriangle, MapPin, Navigation } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import 'leaflet/dist/leaflet.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Therapist } from '@/context/SpaContext';
-import FloatingCalendar from '@/components/FloatingCalendar';
 
-type Tab = 'home' | 'schedule' | 'booking' | 'profile';
+type Tab = 'home' | 'location' | 'booking' | 'profile';
+
+
+const MapContainer = dynamic(
+    () => import('react-leaflet').then((mod) => mod.MapContainer),
+    { ssr: false }
+);
+const TileLayer = dynamic(
+    () => import('react-leaflet').then((mod) => mod.TileLayer),
+    { ssr: false }
+);
+const Marker = dynamic(
+    () => import('react-leaflet').then((mod) => mod.Marker),
+    { ssr: false }
+);
+
+// Fix Leaflet Default Icon Issue
+if (typeof window !== 'undefined') {
+    const L = require('leaflet');
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default?.src || 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        iconUrl: require('leaflet/dist/images/marker-icon.png').default?.src || 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        shadowUrl: require('leaflet/dist/images/marker-shadow.png').default?.src || 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    });
+}
 
 export default function TherapistDashboard() {
     const router = useRouter();
@@ -17,6 +43,7 @@ export default function TherapistDashboard() {
     const [isPending, setIsPending] = useState(false);
     const [therapistId, setTherapistId] = useState<string | null>(null);
     const [showInstallPopup, setShowInstallPopup] = useState(false);
+    const [locationLoading, setLocationLoading] = useState(false);
     const [showSamsungWarning, setShowSamsungWarning] = useState(false);
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
@@ -28,6 +55,35 @@ export default function TherapistDashboard() {
         window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
         return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     }, []);
+
+    
+    const handleBroadcastLocation = () => {
+        if (!navigator.geolocation) {
+            alert('Geolocation is not supported by your browser.');
+            return;
+        }
+        
+        setLocationLoading(true);
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords;
+                setProfile(prev => ({ ...prev, latitude, longitude }));
+                
+                if (therapistId) {
+                    await supabase.from('therapists').update({ latitude, longitude }).eq('id', therapistId);
+                }
+                setLocationLoading(false);
+                setSaved(true);
+                setTimeout(() => setSaved(false), 3000);
+            },
+            (error) => {
+                console.error('Geolocation error:', error);
+                alert('Unable to retrieve your location. Please check your device permissions.');
+                setLocationLoading(false);
+            },
+            { enableHighAccuracy: true }
+        );
+    };
 
     const handleAndroidInstall = async () => {
         const isSamsungBrowser = navigator.userAgent.match(/SamsungBrowser/i);
@@ -90,7 +146,7 @@ export default function TherapistDashboard() {
     };
 
     // Profile State
-    const [profile, setProfile] = useState({
+    const [profile, setProfile] = useState<{name: string, bio: string, location: string, avatar: string, latitude?: number, longitude?: number}>({
         name: '',
         location: '',
         bio: '',
@@ -124,6 +180,8 @@ export default function TherapistDashboard() {
                     setAvailableAt(therapistData.available_at);
                 }
                 setProfile({
+                        latitude: therapistData.latitude,
+                        longitude: therapistData.longitude,
                     name: therapistData.name,
                     location: therapistData.location || '',
                     bio: therapistData.bio,
@@ -314,55 +372,58 @@ export default function TherapistDashboard() {
         </motion.div>
     );
 
-    // Render Schedule Tab
-    const renderSchedule = () => (
-        <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="flex flex-col gap-6"
-        >
-            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
-                <h2 className="font-serif text-3xl text-white font-medium">Your Schedule</h2>
-                <p className="text-sm text-white/70 mt-1">Set future availability</p>
-            </div>
 
-            {/* Calendar & Time Setter */}
-            <div className="relative mt-4">
-                <FloatingCalendar 
-                    value={selectedDate} 
-                    onChange={(date) => setSelectedDate(date)} 
-                    currentTime={currentScheduleTime}
-                />
-                
-                {/* Time Setter Below Calendar */}
-                <div className="mt-6 bg-[#1C1C1E]/60 backdrop-blur-3xl border border-white/5 rounded-2xl p-5 shadow-lg flex items-center justify-between">
-                    <div>
-                        <label className="text-xs font-medium text-white/60 uppercase tracking-widest block mb-1">Set Time for</label>
-                        <span className="text-sm font-semibold text-white/90">{new Date(selectedDate).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-white/10 rounded-2xl p-2 px-3 border border-white/10 shadow-inner">
-                        <Clock className="w-5 h-5 text-[#0A84FF]" />
-                        <input 
-                            type="time" 
-                            value={currentScheduleTime}
-                            onChange={(e) => handleTimeChange(e.target.value)}
-                            className="bg-transparent border-none focus:outline-none text-white font-bold text-lg [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert cursor-pointer"
-                        />
-                    </div>
+    // Render Location Tab
+    const renderLocation = () => {
+        const centerLat = profile.latitude || -8.409518;
+        const centerLng = profile.longitude || 115.188919;
+        
+        return (
+            <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col gap-6"
+            >
+                <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+                    <h2 className="font-serif text-3xl text-white font-medium">Live Location</h2>
+                    <p className="text-sm text-white/70 mt-1">Broadcast your real-time position</p>
                 </div>
-            </div>
-            
-            <div className="fixed bottom-[104px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[408px] z-40">
-                <button 
-                    onClick={handleSave}
-                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
-                >
-                    {saved ? <><CheckCircle2 className="w-5 h-5" /> Schedule Saved</> : <><Save className="w-5 h-5" /> Save Schedule</>}
-                </button>
-            </div>
-        </motion.div>
-    );
+
+                <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-4 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col items-center">
+                    
+                    <div className="h-[350px] w-full rounded-3xl overflow-hidden shadow-inner border border-white/5 bg-black/20 mb-6 relative z-0">
+                        {typeof window !== 'undefined' && (
+                            <MapContainer center={[centerLat, centerLng]} zoom={profile.latitude ? 15 : 10} style={{ height: '100%', width: '100%', zIndex: 0 }}>
+                                <TileLayer
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    attribution='&copy; OpenStreetMap'
+                                />
+                                {profile.latitude && profile.longitude && (
+                                    <Marker position={[profile.latitude, profile.longitude]} />
+                                )}
+                            </MapContainer>
+                        )}
+                    </div>
+                    
+                    <button 
+                        onClick={handleBroadcastLocation}
+                        disabled={locationLoading}
+                        className="w-full bg-[#34C759] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(52,199,89,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#34C759]/50 disabled:opacity-50 disabled:scale-100"
+                    >
+                        {locationLoading ? (
+                            <span className="animate-pulse">Finding GPS Location...</span>
+                        ) : profile.latitude ? (
+                            <><Navigation className="w-5 h-5 fill-current" /> Update Live Location</>
+                        ) : (
+                            <><Navigation className="w-5 h-5" /> Start Broadcasting</>
+                        )}
+                    </button>
+                    {saved && <p className="text-[#34C759] text-sm mt-3 flex items-center gap-1 font-medium"><CheckCircle2 className="w-4 h-4" /> Location Broadcasted!</p>}
+                </div>
+            </motion.div>
+        );
+    };
 
     // Render Profile Tab
     const renderProfile = () => (
@@ -505,7 +566,7 @@ export default function TherapistDashboard() {
                 <AnimatePresence mode="wait">
                     {activeTab === 'home' && <motion.div key="home">{renderHome()}</motion.div>}
                     {activeTab === 'booking' && <motion.div key="booking">{renderBooking()}</motion.div>}
-                    {activeTab === 'schedule' && <motion.div key="schedule">{renderSchedule()}</motion.div>}
+                    {activeTab === 'location' && <motion.div key="location">{renderLocation()}</motion.div>}
                     {activeTab === 'profile' && <motion.div key="profile">{renderProfile()}</motion.div>}
                 </AnimatePresence>
             </main>
@@ -531,11 +592,11 @@ export default function TherapistDashboard() {
                     </button>
 
                     <button 
-                        onClick={() => setActiveTab('schedule')}
-                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'schedule' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
+                        onClick={() => setActiveTab('location')}
+                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'location' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
                     >
-                        <Calendar className="w-5 h-5 mb-1" strokeWidth={activeTab === 'schedule' ? 2.5 : 2} />
-                        <span className="text-[9px] font-bold tracking-widest uppercase">Schedule</span>
+                        <MapPin className="w-5 h-5 mb-1" strokeWidth={activeTab === 'location' ? 2.5 : 2} />
+                        <span className="text-[9px] font-bold tracking-widest uppercase">Location</span>
                     </button>
                     
                     <button 
