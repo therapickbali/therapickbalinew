@@ -36,14 +36,14 @@ export default function BookingModal({
     const [bookingStep, setBookingStep] = useState<1 | 2 | 3 | 4 | 5>(1);
     const [isSelectingMore, setIsSelectingMore] = useState(false);
     const [expandedTreatmentId, setExpandedTreatmentId] = useState<string | null>(null);
-    
+
     const getInitialDateTime = () => {
         const now = new Date();
         const date = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
         const time = now.toTimeString().split(' ')[0].substring(0, 5);
         return { date, time };
     };
-    
+
     const [formData, setFormData] = useState({ name: '', location: '', room: '', ...getInitialDateTime() });
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedTherapists, setSelectedTherapists] = useState<string[]>([]);
@@ -64,7 +64,7 @@ export default function BookingModal({
 
     const handleBooking = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!formData.name || !formData.date || !formData.time || !formData.location) {
             alert('Please fill in all required fields (Name, Date, Time, Location).');
             return;
@@ -79,7 +79,7 @@ export default function BookingModal({
                 const multiplier = isCouple ? (item.guests / 2) : item.guests;
                 const price = (item.price * multiplier).toLocaleString('en-US');
                 const itemTreatment = treatments.find(t => t.id === item.treatmentId);
-                
+
                 let whatsIncludedText = '';
                 if (itemTreatment && itemTreatment.desc) {
                     const parts = itemTreatment.desc.split(/What's Included\s*:?\s*/i);
@@ -90,21 +90,21 @@ export default function BookingModal({
                 }
                 return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
             }).join('\n\n------------------------\n\n');
-            
+
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
             const therapistMsg = selectedTherapists.length > 0
                 ? `\n*Therapist Request:* ${selectedTherapists.map(id => therapists.find(t => t.id === id)?.name).join(', ')}`
                 : `\n*Therapist Request:* Assign Automatically`;
 
             const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
-            
+
             const waUrl = `https://wa.me/6285174119423?text=${encodeURIComponent(baseMessage)}`;
             if (newWindow) {
                 newWindow.location.href = waUrl;
             } else {
                 window.location.href = waUrl;
             }
-            
+
             onClose();
             setBookingStep(1);
             setSelectedArea('');
@@ -124,13 +124,13 @@ export default function BookingModal({
 
     return (
         <AnimatePresence>
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="fixed inset-0 z-[110] flex items-center justify-center px-0 md:px-4 bg-black/40 backdrop-blur-sm"
             >
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, scale: 0.9, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -152,11 +152,11 @@ export default function BookingModal({
                                 {isSelectingMore ? 'Add Treatment' : `Step ${bookingStep} of 5`}
                             </span>
                             <h2 className="font-serif text-xl text-white mt-1">
-                                {isSelectingMore ? 'Menu' : 
-                                 bookingStep === 1 ? 'Review Treatments' :
-                                 bookingStep === 2 ? 'Date & Time' :
-                                 bookingStep === 3 ? 'Location Area' :
-                                 bookingStep === 4 ? 'Therapist' : 'Final Details'}
+                                {isSelectingMore ? 'Menu' :
+                                    bookingStep === 1 ? 'Review Treatments' :
+                                        bookingStep === 2 ? 'Date & Time' :
+                                            bookingStep === 3 ? 'Location Area' :
+                                                bookingStep === 4 ? 'Therapist' : 'Final Details'}
                             </h2>
                         </div>
                         <button onClick={onClose} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center text-white/90-muted hover:bg-border transition-colors">
@@ -248,7 +248,7 @@ export default function BookingModal({
                                                 <div className="flex items-center justify-between pt-4 border-t border-white/30">
                                                     <span className="text-[10px] font-bold uppercase tracking-widest text-white/80">Guests</span>
                                                     <div className="flex items-center gap-3">
-                                                        <button 
+                                                        <button
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => {
                                                                 if (i.id !== item.id) return i;
@@ -261,7 +261,7 @@ export default function BookingModal({
                                                             <Minus className="w-3 h-3" />
                                                         </button>
                                                         <span className="font-bold text-sm text-white w-4 text-center">{item.guests}</span>
-                                                        <button 
+                                                        <button
                                                             type="button"
                                                             onClick={() => setCartItems(cartItems.map(i => {
                                                                 if (i.id !== item.id) return i;
@@ -277,7 +277,7 @@ export default function BookingModal({
                                                 </div>
                                             </div>
                                         ))}
-                                        <button 
+                                        <button
                                             onClick={() => setIsSelectingMore(true)}
                                             className="w-full flex items-center justify-center gap-2 py-4 border border-dashed border-primary/30 rounded-2xl text-xs font-bold text-white hover:bg-white/5 transition-colors uppercase tracking-widest"
                                         >
@@ -290,13 +290,13 @@ export default function BookingModal({
                                     <div className="space-y-6 pb-24">
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-white/80 ml-1">Select Date</label>
-                                            <FloatingCalendar value={formData.date} onChange={(date) => setFormData({...formData, date})} />
+                                            <FloatingCalendar value={formData.date} onChange={(date) => setFormData({ ...formData, date })} />
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-white/80 ml-1">Time</label>
-                                            <input 
-                                                type="time" required 
-                                                value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})}
+                                            <input
+                                                type="time" required
+                                                value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })}
                                                 className={`w-48 mx-auto block ${liquidGlassClasses} rounded-[24px] px-4 py-4 text-sm text-white text-center focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all`}
                                             />
                                         </div>
@@ -311,11 +311,10 @@ export default function BookingModal({
                                                 <button
                                                     key={loc}
                                                     onClick={() => setSelectedArea(loc)}
-                                                    className={`py-4 px-3 rounded-2xl border text-sm font-bold transition-all duration-300 ${
-                                                        selectedArea === loc 
-                                                        ? 'bg-white border-primary text-black shadow-md' 
-                                                        : `${liquidGlassClasses} text-white hover:bg-white/40`
-                                                    }`}
+                                                    className={`py-4 px-3 rounded-2xl border text-sm font-bold transition-all duration-300 ${selectedArea === loc
+                                                            ? 'bg-white border-primary text-black shadow-md'
+                                                            : `${liquidGlassClasses} text-white hover:bg-white/40`
+                                                        }`}
                                                 >
                                                     {loc}
                                                 </button>
@@ -344,77 +343,79 @@ export default function BookingModal({
                                             const t = { ...rawT } as any;
                                             if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
                                                 t.online_status = 'Online';
+                                            } else if (!isFuture && t.online_status === 'Busy' && t.available_at && formData.time && formData.time >= t.available_at) {
+                                                t.online_status = 'Online';
                                             }
-                                            
+
                                             return (
-                                            <button 
-                                                key={t.id}
-                                                type="button"
-                                                onClick={() => {
-                                                    if (t.online_status === 'Off') {
-                                                        return;
-                                                    }
-                                                    if (selectedTherapists.includes(t.id)) {
-                                                        setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
-                                                    } else if (selectedTherapists.length < totalGuests) {
-                                                        if (t.online_status === 'Busy') {
-                                                            if (totalGuests > 1) {
-                                                                alert("For group bookings, please select therapists who are currently 'ONLINE'.");
-                                                                return;
-                                                            }
-                                                            if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Your booking time will be adjusted to ${t.available_at}. Do you still want to request them?`)) {
-                                                                if (t.available_at) {
-                                                                    setFormData(prev => ({ ...prev, time: t.available_at }));
+                                                <button
+                                                    key={t.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        if (t.online_status === 'Off') {
+                                                            return;
+                                                        }
+                                                        if (selectedTherapists.includes(t.id)) {
+                                                            setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
+                                                        } else if (selectedTherapists.length < totalGuests) {
+                                                            if (t.online_status === 'Busy') {
+                                                                if (totalGuests > 1) {
+                                                                    alert("For group bookings, please select therapists who are currently 'ONLINE'.");
+                                                                    return;
                                                                 }
+                                                                if (window.confirm(`${t.name} is currently handling a customer. They may be available by ${t.available_at || 'later'}. Your booking time will be adjusted to ${t.available_at}. Do you still want to request them?`)) {
+                                                                    if (t.available_at) {
+                                                                        setFormData(prev => ({ ...prev, time: t.available_at }));
+                                                                    }
+                                                                    setSelectedTherapists([...selectedTherapists, t.id]);
+                                                                }
+                                                            } else {
                                                                 setSelectedTherapists([...selectedTherapists, t.id]);
                                                             }
-                                                        } else {
-                                                            setSelectedTherapists([...selectedTherapists, t.id]);
                                                         }
-                                                    }
-                                                }}
-                                                className={`w-full p-4 rounded-[24px] border text-left transition-all duration-300 flex items-start gap-4 ${
-                                                    selectedTherapists.includes(t.id)
-                                                    ? 'bg-white/10 border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]'
-                                                    : 'bg-surface/50 border-white/10 hover:border-white/20 hover:bg-surface'
-                                                }`}
-                                            >
-                                                <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-white/10 relative bg-white/5 flex items-center justify-center">
-                                                    {t.image_url ? (
-                                                        <img src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <span className="text-white/50 text-xs font-bold uppercase">{t.name.substring(0, 2)}</span>
-                                                    )}
-                                                    <div className="absolute inset-0 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] pointer-events-none rounded-full" />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="mb-1">
-                                                        {t.online_status === "Off" ? (
-                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
-                                                        ) : t.online_status === "Busy" ? (
-                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Busy</span>
+                                                    }}
+                                                    className={`w-full p-4 rounded-[24px] border text-left transition-all duration-300 flex items-start gap-4 ${selectedTherapists.includes(t.id)
+                                                            ? 'bg-white/10 border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]'
+                                                            : 'bg-surface/50 border-white/10 hover:border-white/20 hover:bg-surface'
+                                                        }`}
+                                                >
+                                                    <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-white/10 relative bg-white/5 flex items-center justify-center">
+                                                        {t.image_url ? (
+                                                            <img src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
                                                         ) : (
-                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
+                                                            <span className="text-white/50 text-xs font-bold uppercase">{t.name.substring(0, 2)}</span>
                                                         )}
+                                                        <div className="absolute inset-0 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] pointer-events-none rounded-full" />
                                                     </div>
-                                                    <div className="flex items-center justify-between mb-1">
-                                                        <div className="flex items-center gap-2">
-                                                            <h4 className={`font-serif text-lg leading-none ${selectedTherapists.includes(t.id) ? "text-white" : "text-white"}`}>{t.name}</h4>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="mb-1">
+                                                            {t.online_status === "Off" ? (
+                                                                <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
+                                                            ) : t.online_status === "Busy" ? (
+                                                                <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Busy</span>
+                                                            ) : (
+                                                                <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
+                                                            )}
                                                         </div>
-                                                        <div className="flex items-center text-[#2563eb]">
-                                                            <BadgeCheck className="w-4 h-4" />
+                                                        <div className="flex items-center justify-between mb-1">
+                                                            <div className="flex items-center gap-2">
+                                                                <h4 className={`font-serif text-lg leading-none ${selectedTherapists.includes(t.id) ? "text-white" : "text-white"}`}>{t.name}</h4>
+                                                            </div>
+                                                            <div className="flex items-center text-[#2563eb]">
+                                                                <BadgeCheck className="w-4 h-4" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    {t.online_status === "Busy" && t.available_at && (
-                                                        <div className="mb-2 text-[10px] font-bold text-amber-400/90 tracking-wide uppercase">
-                                                            Will be ready at {t.available_at}
-                                                        </div>
-                                                    )}
-                                                    <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio || "Therapist professional"}</p>
+                                                        {t.online_status === "Busy" && t.available_at && (
+                                                            <div className="mb-2 text-[10px] font-bold text-amber-400/90 tracking-wide uppercase">
+                                                                Will be ready at {t.available_at}
+                                                            </div>
+                                                        )}
+                                                        <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio || "Therapist professional"}</p>
 
-                                                </div>
-                                            </button>
-                                        )})}
+                                                    </div>
+                                                </button>
+                                            )
+                                        })}
                                         {therapists.filter(t => !selectedArea || t.location === selectedArea).length === 0 && (
                                             <div className="p-6 text-center text-sm text-white/90-muted border border-dashed border-white/20/50 rounded-xl bg-surface/50">
                                                 No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
@@ -427,15 +428,15 @@ export default function BookingModal({
                                     <div className="space-y-4 pb-24">
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-white/80 ml-1">Full Name</label>
-                                            <input required type="text" placeholder="Your Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className={`w-full ${liquidGlassClasses} rounded-xl px-4 py-4 text-sm focus:outline-none`} />
+                                            <input required type="text" placeholder="Your Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className={`w-full ${liquidGlassClasses} rounded-xl px-4 py-4 text-sm focus:outline-none`} />
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-white/80 ml-1">Detailed Address</label>
-                                            <input required type="text" placeholder="Villa/Hotel Name, Street" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} className={`w-full ${liquidGlassClasses} rounded-xl px-4 py-4 text-sm focus:outline-none`} />
+                                            <input required type="text" placeholder="Villa/Hotel Name, Street" value={formData.location} onChange={e => setFormData({ ...formData, location: e.target.value })} className={`w-full ${liquidGlassClasses} rounded-xl px-4 py-4 text-sm focus:outline-none`} />
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-white/80 ml-1">Room/Villa Number (Optional)</label>
-                                            <input type="text" placeholder="e.g. 101" value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})} className={`w-full ${liquidGlassClasses} rounded-xl px-4 py-4 text-sm focus:outline-none`} />
+                                            <input type="text" placeholder="e.g. 101" value={formData.room} onChange={e => setFormData({ ...formData, room: e.target.value })} className={`w-full ${liquidGlassClasses} rounded-xl px-4 py-4 text-sm focus:outline-none`} />
                                         </div>
                                     </div>
                                 )}

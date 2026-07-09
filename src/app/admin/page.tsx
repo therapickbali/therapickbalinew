@@ -57,7 +57,15 @@ export default function AdminDashboard() {
                 setTherapistFees(feesRes.data);
             }
             if (therapistsRes.data) {
-                setAllTherapists(therapistsRes.data);
+                const now = new Date();
+                const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+                const processedTherapists = therapistsRes.data.map(t => {
+                    if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
+                        return { ...t, online_status: 'Online', available_at: undefined };
+                    }
+                    return t;
+                });
+                setAllTherapists(processedTherapists as Therapist[]);
             }
         }
         fetchData();
@@ -77,6 +85,26 @@ export default function AdminDashboard() {
             supabase.removeChannel(subscription);
         };
     }, [isCheckingAuth]);
+
+    // Interval to dynamically update therapist status if their available_at time is reached
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setAllTherapists((current) => {
+                const now = new Date();
+                const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+                let changed = false;
+                const next = current.map(t => {
+                    if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
+                        changed = true;
+                        return { ...t, online_status: 'Online' as const, available_at: undefined };
+                    }
+                    return t;
+                });
+                return changed ? next : current;
+            });
+        }, 15000);
+        return () => clearInterval(interval);
+    }, []);
 
     // Campaign specific fields
     const [campaignTitle, setCampaignTitle] = useState(campaign?.title || '');
