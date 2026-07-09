@@ -691,13 +691,7 @@ export default function RitualsDetails() {
                                                         </div>
                                                     )}
                                                     <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio || "Therapist professional"}</p>
-                                                    <div className="flex items-center gap-2">
-                                                        {t.online_status === "Off" ? (
-                                                            <span className="text-[10px] font-semibold text-red-400 flex items-center gap-1.5 bg-red-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>Offline</span>
-                                                        ) : t.online_status === "Busy" ? null : (
-                                                            <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>Ready</span>
-                                                        )}
-                                                    </div>
+
                                                 </div>
                                             </button>
                                         );})}

@@ -1104,16 +1104,27 @@ export default function AdminDashboard() {
                                                                                     <Users size={16} className="text-white/50" />
                                                                                 )}
                                                                             </div>
-                                                                            <div className="flex flex-col">
-                                                                                <div className="flex items-center gap-2">
-                                                                                    <span className="font-bold text-white">{therapist.name}</span>
-                                                                                    {therapist.online_status === 'Online' && <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]" title="Online" />}
-                                                                                    {therapist.online_status === 'Busy' && <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]" title="Busy" />}
-                                                                                    {therapist.online_status === 'Off' && <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]" title="Offline" />}
-                                                                                </div>
-                                                                                <span className="text-xs text-white/50 font-medium">{therapist.brand || 'No Brand'}</span>
-                                                                            </div>
-                                                                        </div>
+                                                                                <div className="flex flex-col justify-center">
+                                                                                    <div className="mb-0.5">
+                                                                                        {therapist.online_status === "Off" ? (
+                                                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
+                                                                                        ) : therapist.online_status === "Busy" ? (
+                                                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Busy</span>
+                                                                                        ) : (
+                                                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
+                                                                                        )}
+                                                                                    </div>
+                                                                                    <div className="flex items-center gap-2">
+                                                                                        <span className="font-bold text-white">{therapist.name}</span>
+                                                                                        {therapist.online_status === 'Online' && <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse" title="Online" />}
+                                                                                    </div>
+                                                                                    {therapist.online_status === 'Busy' && therapist.available_at && (
+                                                                                        <div className="mt-0.5 mb-0.5 text-[9px] font-bold text-amber-400/90 tracking-wide uppercase">
+                                                                                            Will be ready at {therapist.available_at}
+                                                                                        </div>
+                                                                                    )}
+                                                                                    <span className="text-[10px] text-white/50 font-medium">{therapist.brand || 'No Brand'}</span>
+                                                                                </div></div>
                                                                     </td>
                                                                     <td className="p-4 align-middle text-white/80 text-sm font-medium">
                                                                         <div className="flex items-center gap-1.5">
