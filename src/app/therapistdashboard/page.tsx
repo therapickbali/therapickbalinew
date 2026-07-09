@@ -67,6 +67,9 @@ export default function TherapistDashboard() {
                 setIsPending(true);
             } else {
                 setTherapistId(therapistData.id);
+                if (therapistData.online_status) {
+                    setStatus(therapistData.online_status);
+                }
                 setProfile({
                     name: therapistData.name,
                     location: therapistData.location || '',
@@ -79,9 +82,15 @@ export default function TherapistDashboard() {
         checkAuthAndStatus();
     }, [router]);
 
-    const handleSave = () => {
-        setSaved(true);
-        setTimeout(() => setSaved(false), 3000);
+    const handleSave = async () => {
+        if (!therapistId) return;
+        try {
+            await supabase.from('therapists').update({ online_status: status }).eq('id', therapistId);
+            setSaved(true);
+            setTimeout(() => setSaved(false), 3000);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     // Render Home Tab
@@ -248,11 +257,6 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
-                <h2 className="font-serif text-3xl text-white font-medium">Your Profile</h2>
-                <p className="text-sm text-white/70 mt-1">Manage your identity & app</p>
-            </div>
-
             <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col items-center">
                 
                 {/* Avatar Uploader (UI Only) */}

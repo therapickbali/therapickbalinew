@@ -1090,7 +1090,12 @@ export default function AdminDashboard() {
                                                                                 )}
                                                                             </div>
                                                                             <div className="flex flex-col">
-                                                                                <span className="font-bold text-white">{therapist.name}</span>
+                                                                                <div className="flex items-center gap-2">
+                                                                                    <span className="font-bold text-white">{therapist.name}</span>
+                                                                                    {therapist.online_status === 'Online' && <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]" title="Online" />}
+                                                                                    {therapist.online_status === 'Busy' && <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]" title="Busy" />}
+                                                                                    {therapist.online_status === 'Off' && <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]" title="Offline" />}
+                                                                                </div>
                                                                                 <span className="text-xs text-white/50 font-medium">{therapist.brand || 'No Brand'}</span>
                                                                             </div>
                                                                         </div>

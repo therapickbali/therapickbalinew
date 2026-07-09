@@ -252,7 +252,7 @@ ${treatmentsList}
                     <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
                         {therapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || t.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).map(t => (
                             <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setViewingTherapist(t)}>
-                                <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-sm ${selectedTherapists.includes(t.id) ? 'bg-gradient-to-tr from-white via-white/80 to-white shadow-[0_8px_20px_rgb(0,0,0,0.3)] scale-110' : 'bg-gradient-to-tr from-white/40 to-white/10 hover:scale-105'}`}>
+                                <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-sm relative ${selectedTherapists.includes(t.id) ? 'bg-gradient-to-tr from-white via-white/80 to-white shadow-[0_8px_20px_rgb(0,0,0,0.3)] scale-110' : 'bg-gradient-to-tr from-white/40 to-white/10 hover:scale-105'}`}>
                                     <div className="w-full h-full rounded-full border-[3px] border-[#111] overflow-hidden bg-black">
                                         {t.image_url ? (
                                             <img src={t.image_url} alt={t.name} className="w-full h-full object-cover object-top" />
@@ -260,6 +260,8 @@ ${treatmentsList}
                                             <div className="w-full h-full flex items-center justify-center"><User size={24} className="text-white/20" /></div>
                                         )}
                                     </div>
+                                    {t.online_status === 'Online' && <div className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[#111]" />}
+                                    {t.online_status === 'Busy' && <div className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-amber-500 rounded-full border-2 border-[#111]" />}
                                 </div>
                                 <span className={`text-[11px] text-center max-w-[72px] truncate transition-all ${selectedTherapists.includes(t.id) ? 'text-white font-bold' : 'text-white/70 font-medium'}`}>
                                     {t.name}
@@ -511,12 +513,16 @@ ${treatmentsList}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 w-full">
                         {therapists.filter(t => t.is_active).slice(0, 4).map(t => (
                             <div key={t.id} className="bg-[#111] border border-white/10 rounded-[32px] p-6 flex flex-col items-center text-center hover:border-white/20 transition-all duration-300 group cursor-pointer" onClick={() => setViewingTherapist(t)}>
-                                <div className="w-24 h-24 rounded-full overflow-hidden mb-5 border-2 border-white/10 group-hover:scale-105 transition-transform duration-500 bg-black">
-                                    {t.image_url ? (
-                                        <img src={t.image_url} alt={t.name} className="w-full h-full object-cover object-top" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center"><User size={32} className="text-white/20" /></div>
-                                    )}
+                                <div className="relative mb-5 group-hover:scale-105 transition-transform duration-500">
+                                    <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 bg-black">
+                                        {t.image_url ? (
+                                            <img src={t.image_url} alt={t.name} className="w-full h-full object-cover object-top" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center"><User size={32} className="text-white/20" /></div>
+                                        )}
+                                    </div>
+                                    {t.online_status === 'Online' && <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-[#111] shadow-sm" />}
+                                    {t.online_status === 'Busy' && <div className="absolute bottom-1 right-1 w-4 h-4 bg-amber-500 rounded-full border-2 border-[#111] shadow-sm" />}
                                 </div>
                                 <h4 className="font-bold text-lg text-white mb-1">{t.name}</h4>
                                 <div className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-3">{t.location}</div>
@@ -1218,8 +1224,8 @@ ${treatmentsList}
                                                 <BadgeCheck className="w-6 h-6 text-blue-400 shrink-0" />
                                             </div>
                                             <p className="text-white/80 text-sm tracking-wide flex items-center gap-1.5">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                                Available in {viewingTherapist.location}
+                                                <span className={`w-2 h-2 rounded-full ${viewingTherapist.online_status === 'Online' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]' : viewingTherapist.online_status === 'Busy' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]' : 'bg-white/30'}`}></span>
+                                                {viewingTherapist.online_status === 'Online' ? 'Online' : viewingTherapist.online_status === 'Busy' ? 'Busy' : 'Offline'} • Available in {viewingTherapist.location}
                                             </p>
                                         </div>
                                     </div>

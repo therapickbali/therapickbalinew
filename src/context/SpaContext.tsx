@@ -35,6 +35,7 @@ export type Therapist = {
     whatsapp?: string;
     location?: string;
     email?: string;
+    online_status?: 'Online' | 'Busy' | 'Off';
 };
 
 export type SelectedCampaignTreatment = {
