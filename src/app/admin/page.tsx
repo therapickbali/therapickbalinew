@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin, ChevronDown, ChevronUp, Users, MessageCircle, MapPin } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin, ChevronDown, ChevronUp, Users, MessageCircle, MapPin, CalendarCheck, Share, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee, Therapist } from '@/context/SpaContext';
 import { supabase } from '@/lib/supabase';
@@ -54,7 +54,7 @@ const createTherapistIcon = (imageUrl: string) => {
 export default function AdminDashboard() {
     const router = useRouter();
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
-    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store' | 'fees' | 'therapists' | 'livemap'>('list');
+    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store' | 'fees' | 'therapists' | 'livemap' | 'book'>('book');
     const [showMobileMore, setShowMobileMore] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -68,6 +68,23 @@ export default function AdminDashboard() {
     // Local state for Therapist Fees (private to admin dashboard)
     // Local state for Therapist Fees (private to admin dashboard)
     const [therapistFees, setTherapistFees] = useState<TherapistFee[]>([]);
+    
+    // Bookings State
+    interface Booking {
+        id: string;
+        created_at: string;
+        customer_name: string;
+        date: string;
+        time: string;
+        location_area: string;
+        address: string;
+        room_number: string;
+        treatments: any[];
+        total_price: number;
+        requested_therapist_ids: string[];
+        status: string;
+    }
+    const [bookings, setBookings] = useState<Booking[]>([]);
     const [allTherapists, setAllTherapists] = useState<Therapist[]>([]);
     const [editingTherapistId, setEditingTherapistId] = useState<string | null>(null);
     const [editTherapistData, setEditTherapistData] = useState<Partial<Therapist>>({});
@@ -92,10 +109,15 @@ export default function AdminDashboard() {
         if (isCheckingAuth) return;
 
         async function fetchData() {
-            const [feesRes, therapistsRes] = await Promise.all([
+            const [feesRes, therapistsRes, bookingsRes] = await Promise.all([
                 supabase.from('therapist_fees').select('*').order('created_at', { ascending: false }),
-                supabase.from('therapists').select('*').order('created_at', { ascending: false })
+                supabase.from('therapists').select('*').order('created_at', { ascending: false }),
+                supabase.from('bookings').select('*').order('created_at', { ascending: false })
             ]);
+            
+            if (bookingsRes.data) {
+                setBookings(bookingsRes.data);
+            }
             
             if (feesRes.data) {
                 setTherapistFees(feesRes.data);
@@ -124,9 +146,22 @@ export default function AdminDashboard() {
                 }
             )
             .subscribe();
+            
+        const bookingsSubscription = supabase.channel('public:bookings')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, payload => {
+                if (payload.eventType === 'INSERT') {
+                    setBookings(prev => [payload.new as Booking, ...prev]);
+                } else if (payload.eventType === 'UPDATE') {
+                    setBookings(prev => prev.map(b => b.id === payload.new.id ? payload.new as Booking : b));
+                } else if (payload.eventType === 'DELETE') {
+                    setBookings(prev => prev.filter(b => b.id !== payload.old.id));
+                }
+            })
+            .subscribe();
 
         return () => {
             supabase.removeChannel(subscription);
+            supabase.removeChannel(bookingsSubscription);
         };
     }, [isCheckingAuth]);
 
@@ -1686,10 +1721,11 @@ export default function AdminDashboard() {
                             className="absolute bottom-full left-0 right-0 mb-4 bg-[#1C1C1E]/95 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.37)] rounded-3xl p-4 flex flex-col gap-2 z-50"
                         >
                             {[
+                                { id: 'treatment', icon: PlusCircle, label: 'Add Treatment' },
+                                { id: 'list', icon: LayoutDashboard, label: 'Menu Dashboard' },
                                 { id: 'campaign', icon: Megaphone, label: 'Promo Campaigns' },
                                 { id: 'store', icon: Store, label: 'Therapick Store' },
-                                { id: 'fees', icon: Settings, label: 'Therapist Fees' },
-                                { id: 'therapists', icon: Users, label: 'Manage Staff' },
+                                { id: 'settings', icon: Settings, label: 'Settings' },
                             ].map((tab) => {
                                 const isActive = activeTab === tab.id;
                                 const Icon = tab.icon;
@@ -1713,9 +1749,10 @@ export default function AdminDashboard() {
 
                 {/* Main Visible Tabs */}
                 {[
-                    { id: 'treatment', icon: PlusCircle, label: 'Add' },
-                    { id: 'list', icon: LayoutDashboard, label: 'Menu' },
+                    { id: 'therapists', icon: Users, label: 'Staff' },
+                    { id: 'fees', icon: Settings, label: 'Fees' },
                     { id: 'livemap', icon: MapPin, label: 'Map' },
+                    { id: 'book', icon: CalendarCheck, label: 'Book' },
                 ].map((tab) => {
                     const isActive = activeTab === tab.id;
                     const Icon = tab.icon;

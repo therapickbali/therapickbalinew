@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, X, Clock, Plus, Minus, ArrowRight, MapPin, Search, BadgeCheck } from 'lucide-react';
 import FloatingCalendar from '@/components/FloatingCalendar';
 import { useSpa } from '@/context/SpaContext';
+import { supabase } from '@/lib/supabase';
 
 interface CartItem {
     id: string;
@@ -96,6 +97,25 @@ export default function BookingModal({
             const therapistMsg = selectedTherapists.length > 0
                 ? `\n*Therapist Request:* ${selectedTherapists.map(id => therapists.find(t => t.id === id)?.name).join(', ')}`
                 : `\n*Therapist Request:* Assign Automatically`;
+
+            // 1. Insert into Supabase
+            const { error: dbError } = await supabase.from('bookings').insert({
+                customer_name: formData.name,
+                date: formData.date,
+                time: formData.time,
+                location_area: selectedArea,
+                address: formData.location,
+                room_number: formData.room || '',
+                treatments: cartItems,
+                total_price: totalPriceNum,
+                requested_therapist_ids: selectedTherapists,
+                status: 'pending'
+            });
+
+            if (dbError) {
+                console.error('Failed to save booking to database:', dbError);
+                // Proceed with WhatsApp anyway as a fallback
+            }
 
             const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
 
