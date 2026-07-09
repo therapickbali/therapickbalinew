@@ -138,7 +138,13 @@ export default function TherapistDashboard() {
     const handleSave = async () => {
         if (!therapistId) return;
         try {
-            const updatePayload: any = { online_status: status };
+            const updatePayload: any = { 
+                online_status: status,
+                name: profile.name,
+                location: profile.location,
+                bio: profile.bio,
+                image_url: profile.avatar
+            };
             if (status === 'Busy') {
                 updatePayload.available_at = availableAt;
             } else {
@@ -153,6 +159,49 @@ export default function TherapistDashboard() {
         }
     };
 
+    const resizeImage = (file: File): Promise<string> => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let { width, height } = img;
+                    const MAX_WIDTH = 600;
+                    const MAX_HEIGHT = 600;
+                    
+                    if (width > height && width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    } else if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx?.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.8));
+                };
+                img.src = e.target?.result as string;
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+            const resizedBase64 = await resizeImage(file);
+            setProfile({ ...profile, avatar: resizedBase64 });
+        } catch (error) {
+            console.error('Error resizing image:', error);
+            alert('Failed to process image. Please try another.');
+        }
+    };
+
     // Render Home Tab
     const renderHome = () => (
         <motion.div 
@@ -161,7 +210,7 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
                 <h2 className="font-serif text-3xl text-white font-medium">Your Status</h2>
                 <p className="text-sm text-white/70 mt-1">Set your real-time availability</p>
             </div>
@@ -170,28 +219,28 @@ export default function TherapistDashboard() {
                 {/* Online Button */}
                 <button
                     onClick={() => setStatus('Online')}
-                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Online' ? 'bg-white/20 border-white/40 shadow-[0_8px_32px_rgba(255,255,255,0.1)] scale-[1.02]' : 'bg-white/5 border-white/10 shadow-sm border hover:bg-white/10'} backdrop-blur-xl`}
+                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Online' ? 'bg-green-500/10 border-green-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] scale-[1.02]' : 'bg-white/5 border-white/10 shadow-sm border hover:bg-white/10'} backdrop-blur-xl`}
                 >
                     <div className="relative z-10 flex items-center justify-between">
                         <div>
-                            <h3 className={`font-bold text-lg text-white`}>READY TO ACCEPT JOBS</h3>
+                            <h3 className={`font-semibold text-lg text-white`}>READY TO ACCEPT JOBS</h3>
                             <p className={`text-xs mt-1 font-medium ${status === 'Online' ? 'text-white/90' : 'text-white/50'}`}>You will appear online immediately</p>
                         </div>
-                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Online' ? 'border-white bg-green-400 shadow-[0_0_12px_rgba(74,222,128,1)]' : 'border-white/20 bg-transparent'}`} />
+                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Online' ? 'border-white bg-[#34C759] shadow-[0_0_12px_rgba(52,199,89,0.8)]' : 'border-white/20 bg-transparent'}`} />
                     </div>
                 </button>
 
                 {/* Handling Customer Button */}
                 <button
                     onClick={() => setStatus('Busy')}
-                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Busy' ? 'bg-amber-500/80 border-amber-300/50 shadow-[0_8px_32px_rgba(245,158,11,0.3)] scale-[1.02]' : 'bg-white/5 border-white/10 shadow-sm border hover:bg-white/10'} backdrop-blur-xl`}
+                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Busy' ? 'bg-orange-500/10 border-orange-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] scale-[1.02]' : 'bg-white/5 border-white/10 shadow-sm border hover:bg-white/10'} backdrop-blur-xl`}
                 >
                     <div className="relative z-10 flex items-center justify-between">
                         <div>
-                            <h3 className={`font-bold text-lg text-white`}>HANDLING CUSTOMER</h3>
+                            <h3 className={`font-semibold text-lg text-white`}>HANDLING CUSTOMER</h3>
                             <p className={`text-xs mt-1 font-medium ${status === 'Busy' ? 'text-white/90' : 'text-white/50'}`}>You are currently busy</p>
                         </div>
-                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Busy' ? 'border-white bg-amber-200' : 'border-white/20 bg-transparent'}`} />
+                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Busy' ? 'border-white bg-[#FF9500]' : 'border-white/20 bg-transparent'}`} />
                     </div>
                 </button>
 
@@ -202,9 +251,9 @@ export default function TherapistDashboard() {
                             initial={{ opacity: 0, height: 0, marginTop: -10 }}
                             animate={{ opacity: 1, height: 'auto', marginTop: 0 }}
                             exit={{ opacity: 0, height: 0, marginTop: -10 }}
-                            className="bg-amber-500/20 backdrop-blur-xl border border-amber-300/30 rounded-[24px] p-5 shadow-lg overflow-hidden"
+                            className="bg-[#1C1C1E]/60 backdrop-blur-3xl border border-white/5 rounded-2xl p-5 shadow-lg overflow-hidden"
                         >
-                            <label className="text-xs font-bold text-amber-100 uppercase tracking-widest block mb-3">When will you be ready?</label>
+                            <label className="text-xs font-medium text-amber-100 uppercase tracking-widest block mb-3">When will you be ready?</label>
                             <div className="flex items-center gap-3 bg-white/10 rounded-2xl p-2 border border-amber-200/20 shadow-inner">
                                 <Clock className="w-5 h-5 text-amber-300 ml-2" />
                                 <input 
@@ -221,21 +270,21 @@ export default function TherapistDashboard() {
                 {/* Offline Button */}
                 <button
                     onClick={() => setStatus('Off')}
-                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Off' ? 'bg-red-500/40 border-red-400/50 shadow-[0_8px_32px_rgba(239,68,68,0.2)] scale-[1.02]' : 'bg-white/5 border-white/10 shadow-sm border hover:bg-white/10'} backdrop-blur-xl`}
+                    className={`relative overflow-hidden rounded-[24px] p-6 text-left transition-all duration-300 ${status === 'Off' ? 'bg-red-500/10 border-red-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] scale-[1.02]' : 'bg-white/5 border-white/10 shadow-sm border hover:bg-white/10'} backdrop-blur-xl`}
                 >
                     <div className="relative z-10 flex items-center justify-between">
                         <div>
-                            <h3 className={`font-bold text-lg text-white`}>OFFLINE</h3>
+                            <h3 className={`font-semibold text-lg text-white`}>OFFLINE</h3>
                             <p className={`text-xs mt-1 font-medium ${status === 'Off' ? 'text-white/90' : 'text-white/50'}`}>You will not appear in the app</p>
                         </div>
-                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Off' ? 'border-white bg-red-400' : 'border-white/20 bg-transparent'}`} />
+                        <div className={`w-4 h-4 rounded-full border-4 ${status === 'Off' ? 'border-white bg-[#FF3B30]' : 'border-white/20 bg-transparent'}`} />
                     </div>
                 </button>
             </div>
             
             <button 
                 onClick={handleSave}
-                className="mt-4 w-full bg-white text-black rounded-2xl py-4 font-bold shadow-[0_8px_32px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                className="mt-4 w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
             >
                 {saved ? <><CheckCircle2 className="w-5 h-5" /> Saved Successfully</> : <><Save className="w-5 h-5" /> Update Status</>}
             </button>
@@ -250,12 +299,12 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
                 <h2 className="font-serif text-3xl text-white font-medium">Live Bookings</h2>
                 <p className="text-sm text-white/70 mt-1">Manage real-time requests</p>
             </div>
             
-            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
+            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
                 <CalendarCheck className="w-12 h-12 text-white/30 mb-4" />
                 <h3 className="text-white font-bold text-lg">No Active Requests</h3>
                 <p className="text-white/50 text-sm mt-2">When a customer books you in real-time, it will appear here.</p>
@@ -271,7 +320,7 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
                 <h2 className="font-serif text-3xl text-white font-medium">Your Schedule</h2>
                 <p className="text-sm text-white/70 mt-1">Set future availability</p>
             </div>
@@ -302,7 +351,7 @@ export default function TherapistDashboard() {
             
             <button 
                 onClick={handleSave}
-                className="w-full bg-white text-black rounded-2xl py-4 font-bold shadow-[0_8px_32px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
             >
                 {saved ? <><CheckCircle2 className="w-5 h-5" /> Schedule Saved</> : <><Save className="w-5 h-5" /> Save Schedule</>}
             </button>
@@ -317,11 +366,11 @@ export default function TherapistDashboard() {
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
-            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col items-center">
+            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col items-center">
                 
-                {/* Avatar Uploader (UI Only) */}
+                {/* Avatar Uploader */}
                 <div className="relative mb-8 group cursor-pointer">
-                    <div className="w-28 h-28 rounded-full bg-white/5 border-4 border-white/20 shadow-lg flex items-center justify-center overflow-hidden relative backdrop-blur-md">
+                    <div className="w-28 h-28 rounded-full bg-[#1C1C1E]/80 border border-white/10 shadow-lg flex items-center justify-center overflow-hidden relative backdrop-blur-md">
                         {profile.avatar ? (
                             <img src={profile.avatar} alt="Profile" className="w-full h-full object-cover" />
                         ) : (
@@ -330,6 +379,12 @@ export default function TherapistDashboard() {
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <Camera className="w-8 h-8 text-white" />
                         </div>
+                        <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={handleImageUpload}
+                            className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                        />
                     </div>
                 </div>
 
@@ -341,7 +396,7 @@ export default function TherapistDashboard() {
                             type="text" 
                             value={profile.name}
                             onChange={(e) => setProfile({...profile, name: e.target.value})}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-white/30 transition-all shadow-inner"
+                            className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3.5 px-4 text-[17px] font-medium text-white focus:outline-none focus:bg-[#3A3A3C] transition-all shadow-inner"
                         />
                     </div>
                     <div>
@@ -350,7 +405,7 @@ export default function TherapistDashboard() {
                             value={profile.bio}
                             onChange={(e) => setProfile({...profile, bio: e.target.value})}
                             rows={3}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-white/30 transition-all shadow-inner resize-none"
+                            className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3.5 px-4 text-[17px] font-medium text-white focus:outline-none focus:bg-[#3A3A3C] transition-all shadow-inner resize-none text-[17px]"
                         />
                     </div>
                     <div>
@@ -358,7 +413,7 @@ export default function TherapistDashboard() {
                         <select 
                             value={profile.location}
                             onChange={(e) => setProfile({...profile, location: e.target.value})}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 px-4 text-sm font-semibold text-white focus:outline-none focus:border-white/30 transition-all shadow-inner appearance-none [&>option]:text-black"
+                            className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3.5 px-4 text-[17px] font-medium text-white focus:outline-none focus:bg-[#3A3A3C] transition-all shadow-inner appearance-none text-[17px] [&>option]:text-black"
                         >
                             <option value="Ubud">Ubud</option>
                             <option value="Canggu">Canggu</option>
@@ -369,17 +424,17 @@ export default function TherapistDashboard() {
                 
                 <button 
                     onClick={handleSave}
-                    className="mt-6 w-full bg-white text-black rounded-2xl py-4 font-bold shadow-[0_8px_32px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                    className="mt-6 w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
                 >
                     {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Profile</>}
                 </button>
             </div>
 
             {/* App Installation Section */}
-            <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
-                <h3 className="text-xs font-bold text-white/60 uppercase tracking-widest mb-4">Install Therapist App</h3>
+            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+                <h3 className="text-xs font-medium text-white/60 uppercase tracking-widest mb-4">Install Therapist App</h3>
                 <div className="space-y-3">
-                    <button onClick={handleAndroidInstall} className="w-full bg-[#3DDC84] text-black rounded-2xl py-3.5 px-4 font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                    <button onClick={handleAndroidInstall} className="w-full bg-[#34C759] text-white border border-[#34C759]/50 font-medium rounded-2xl py-3.5 px-4 font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                         <Download className="w-5 h-5" /> Download for Android
                     </button>
                     <button className="w-full bg-white/5 text-white border border-white/20 rounded-2xl py-3.5 px-4 font-bold shadow-sm hover:bg-white/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2" onClick={() => setShowInstallPopup(true)}>
@@ -449,7 +504,7 @@ export default function TherapistDashboard() {
 
             {/* Floating Bottom Navbar */}
             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-sm z-50">
-                <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[32px] flex items-center justify-between p-2 px-3">
+                <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] flex items-center justify-between p-2 px-3">
                     
                     <button 
                         onClick={() => setActiveTab('home')}
@@ -600,7 +655,7 @@ export default function TherapistDashboard() {
                                 </button>
                                 <button 
                                     onClick={() => setShowSamsungWarning(false)}
-                                    className="flex-[1.5] bg-[#3DDC84] text-black px-4 py-4 rounded-2xl text-sm font-bold shadow-md hover:bg-[#3DDC84]/90 active:scale-95 transition-all"
+                                    className="flex-[1.5] bg-[#34C759] text-white border border-[#34C759]/50 font-medium px-4 py-4 rounded-2xl text-sm font-bold shadow-md hover:bg-[#3DDC84]/90 active:scale-95 transition-all"
                                 >
                                     Use Chrome
                                 </button>
