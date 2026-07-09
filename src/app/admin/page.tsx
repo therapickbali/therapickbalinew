@@ -112,7 +112,7 @@ export default function AdminDashboard() {
             const [feesRes, therapistsRes, bookingsRes] = await Promise.all([
                 supabase.from('therapist_fees').select('*').order('created_at', { ascending: false }),
                 supabase.from('therapists').select('*').order('created_at', { ascending: false }),
-                supabase.from('bookings').select('*').order('created_at', { ascending: false })
+                supabase.from('website_bookings').select('*').order('created_at', { ascending: false })
             ]);
             
             if (bookingsRes.data) {
@@ -147,8 +147,8 @@ export default function AdminDashboard() {
             )
             .subscribe();
             
-        const bookingsSubscription = supabase.channel('public:bookings')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, payload => {
+        const bookingsSubscription = supabase.channel('public:website_bookings')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'website_bookings' }, payload => {
                 if (payload.eventType === 'INSERT') {
                     setBookings(prev => [payload.new as Booking, ...prev]);
                 } else if (payload.eventType === 'UPDATE') {

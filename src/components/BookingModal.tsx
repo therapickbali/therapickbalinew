@@ -99,7 +99,7 @@ export default function BookingModal({
                 : `\n*Therapist Request:* Assign Automatically`;
 
             // 1. Insert into Supabase
-            const { error: dbError } = await supabase.from('bookings').insert({
+            const { error: dbError } = await supabase.from('website_bookings').insert({
                 customer_name: formData.name,
                 date: formData.date,
                 time: formData.time,
