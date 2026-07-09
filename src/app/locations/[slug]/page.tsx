@@ -10,11 +10,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const locationName = slug.split('-').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
     return {
-        title: `Available Massage Therapists in ${locationName} | Therapick Bali`,
-        description: `Looking for the best massage in ${locationName}? Therapick allows you to choose and book available premium professional massage therapists directly to your villa or hotel in ${locationName}, Bali.`,
+        title: "Therapick Bali | Choose Available Therapists in Your Area",
+        description: `Premium home massage and mobile spa services in ${locationName}, Bali. Therapick allows you to book professional, available massage therapists directly to your villa, hotel, or home in ${locationName}.`,
+        keywords: [`Home Massage ${locationName}`, `Home Spa ${locationName}`, `Mobile Massage ${locationName}`, `Mobile Spa ${locationName}`, `In-Villa Massage ${locationName}`, `Massage Delivery ${locationName}`, `Bali Home Massage`, `Bali Home Spa`, `${locationName} Massage Therapist`],
         openGraph: {
-            title: `Choose Available Therapists in ${locationName} | Therapick Bali`,
-            description: `Find and book available professional massage therapists in ${locationName}, Bali on-demand.`,
+            title: "Therapick Bali | Choose Available Therapists in Your Area",
+            description: `Premium home massage and mobile spa services in ${locationName}, Bali. Book available professional therapists directly to your villa or hotel.`,
             url: `https://therapickbali.vercel.app/locations/${slug}`,
         },
         alternates: {
@@ -28,11 +29,17 @@ export function generateStaticParams() {
         { slug: 'ubud' },
         { slug: 'canggu' },
         { slug: 'seminyak' },
-        { slug: 'uluwatu' },
+        { slug: 'kuta' },
         { slug: 'sanur' },
+        { slug: 'uluwatu' },
         { slug: 'nusa-dua' },
         { slug: 'jimbaran' },
-        { slug: 'kuta' },
+        { slug: 'legian' },
+        { slug: 'kerobokan' },
+        { slug: 'pererenan' },
+        { slug: 'berawa' },
+        { slug: 'bingin' },
+        { slug: 'pecatu' },
     ];
 }
 
@@ -40,5 +47,41 @@ export default async function LocationPage({ params }: Props) {
     const { slug } = await params;
     const locationName = slug.split('-').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     
-    return <LocationClient locationName={locationName} locationSlug={slug} />;
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': ['HealthAndBeautyBusiness', 'DaySpa'],
+        name: 'Therapick Bali',
+        image: 'https://therapickbali.vercel.app/logo.png',
+        '@id': `https://therapickbali.vercel.app/locations/${slug}`,
+        url: `https://therapickbali.vercel.app/locations/${slug}`,
+        telephone: '+6285174119423',
+        areaServed: { '@type': 'City', name: locationName },
+        description: `Premium home massage and mobile spa services in ${locationName}, Bali.`
+    };
+    
+    const serviceJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        serviceType: `Mobile Massage and In-Villa Spa Service in ${locationName}`,
+        provider: {
+            '@type': 'LocalBusiness',
+            name: 'Therapick Bali',
+            image: 'https://therapickbali.vercel.app/logo.png'
+        },
+        areaServed: { '@type': 'City', name: locationName }
+    };
+    
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+            />
+            <LocationClient locationName={locationName} locationSlug={slug} />
+        </>
+    );
 }

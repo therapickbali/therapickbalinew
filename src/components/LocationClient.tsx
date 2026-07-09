@@ -148,6 +148,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
 
     return (
         <div className="min-h-screen bg-black relative overflow-hidden font-sans text-white/90 pb-24 md:pb-12">
+            <h1 className="sr-only">{`Premium Home Massage and Mobile Spa Services in ${locationName}, Bali`}</h1>
             
             {/* Top Gradient Background */}
             <div className="absolute top-0 left-0 right-0 h-[400px] md:h-[500px] bg-gradient-to-b from-[#D2F34C]/20 to-black z-0 pointer-events-none"></div>
@@ -180,7 +181,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                         {/* Background Image */}
                         <img 
                             src={campaign.image || "https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop&crop=center"} 
-                            alt={campaign.title} 
+                            alt={campaign.title ? `${campaign.title} - Mobile Spa ${locationName}` : `Premium Home Massage ${locationName}`} 
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
                         />
                         
@@ -389,7 +390,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                     
                                     {/* Image */}
                                     <div className="aspect-[4/5] relative bg-[#111] overflow-hidden rounded-[16px]">
-                                        <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                        <img src={product.image} alt={`${product.title} - Home Spa Product ${locationName}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     </div>
                                     
                                     {/* Text Info */}
@@ -437,6 +438,26 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                     </div>
                 </div>
                 
+            </div>
+
+            
+            {/* Deep SEO Content Block */}
+            <div className="max-w-7xl mx-auto px-6 py-12 relative z-10 border-t border-white/10 mt-12">
+                <article className="prose prose-invert max-w-none">
+                    <h2 className="text-2xl md:text-3xl font-serif mb-4">Best Mobile Spa & Home Massage in {locationName}</h2>
+                    <p className="text-white/70 text-sm leading-relaxed mb-6">
+                        Experience the ultimate relaxation with our premium <strong>mobile spa and home massage services in {locationName}</strong>. 
+                        Whether you are staying in a luxury villa, a hotel, or your own home in {locationName}, our certified professional therapists 
+                        bring the ultimate 5-star spa experience directly to your doorstep. Skip the traffic and enjoy a 
+                        <strong>professional massage in {locationName}</strong> without leaving your sanctuary.
+                    </p>
+                    <h3 className="text-xl font-serif mb-3">In-Villa Massage Services {locationName}</h3>
+                    <p className="text-white/70 text-sm leading-relaxed mb-6">
+                        We specialize in traditional Balinese Massage, Deep Tissue therapies, and exclusive Couples Massage packages. 
+                        Using only premium, organic massage oils and authentic holistic healing techniques, our bespoke spa treatments in {locationName} 
+                        transform your private space into a tranquil sanctuary of rejuvenation. Book your <strong>in-villa massage {locationName}</strong> today.
+                    </p>
+                </article>
             </div>
 
             {/* Campaign Modal */}

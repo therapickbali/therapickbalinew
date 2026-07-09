@@ -23,10 +23,15 @@ export const metadata: Metadata = {
   },
   description: "Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Bali today.",
   keywords: [
-    "Therapick Bali", "Choose Massage Therapist Bali", "Book Available Therapist Bali", 
-    "On-Demand Massage Bali", "Mobile Spa Bali", "In Villa Massage Bali", 
-    "Bali Therapist Booking", "Professional Massage Bali", "Ubud Massage Therapist", 
-    "Canggu Massage Therapist", "Seminyak Massage Therapist", "Massage near me Bali"
+    "Therapick Bali", "Home Massage Bali", "Home Spa Bali", "Bali Home Massage", 
+    "Bali Home Spa", "Mobile Massage Bali", "Mobile Spa Bali", "In-Villa Massage Bali",
+    "Hotel Massage Bali", "Villa Spa Service Bali", "Massage Delivery Bali",
+    "Home Massage Ubud", "Home Spa Ubud", "Home Massage Canggu", "Home Spa Canggu",
+    "Home Massage Seminyak", "Home Massage Kuta", "Home Massage Sanur", 
+    "Home Massage Uluwatu", "Home Massage Nusa Dua", "Home Massage Jimbaran",
+    "Home Massage Legian", "Home Massage Kerobokan", "Home Massage Pererenan",
+    "Home Massage Berawa", "Home Massage Bingin", "Home Massage Pecatu",
+    "Choose Massage Therapist Bali", "Book Available Therapist Bali", "Massage near me Bali"
   ],
   authors: [{ name: "Therapick Bali" }],
   creator: "Therapick Bali",
@@ -206,18 +211,18 @@ export default async function RootLayout({
       },
       {
         '@type': 'Question',
-        name: 'Do you offer couples massage?',
+        name: 'Can I get a massage delivered to my hotel or villa in Bali?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Absolutely. Our couples massage packages are perfect for honeymooners and partners wanting to relax together in the comfort of their own accommodation.'
+          text: 'Yes! Therapick provides premium massage delivery and mobile spa services directly to your hotel, villa, or home in Canggu, Seminyak, Ubud, Uluwatu, and other major areas in Bali.'
         }
       },
       {
         '@type': 'Question',
-        name: 'Can therapists come to hotels?',
+        name: 'What types of mobile massage services do you offer in Bali?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, our certified professional therapists can provide mobile massage services directly to your hotel room or private villa with instant confirmation.'
+          text: 'We offer Traditional Balinese Massage, Deep Tissue therapies, couples massage packages, and facial treatments all brought to your location by professional therapists.'
         }
       }
     ]

@@ -206,6 +206,7 @@ ${treatmentsList}
 
     return (
         <div className="min-h-screen bg-black relative overflow-x-hidden font-sans text-white/90">
+            <h1 className="sr-only">Premium Home Massage, Mobile Spa, and In-Villa Massage Services in Bali</h1>
             
             {/* Global Loading Splash Screen for New Users */}
             <AnimatePresence>
@@ -275,7 +276,7 @@ ${treatmentsList}
                                 <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-sm relative ${selectedTherapists.includes(t.id) ? 'bg-gradient-to-tr from-white via-white/80 to-white shadow-[0_8px_20px_rgb(0,0,0,0.3)] scale-110' : 'bg-gradient-to-tr from-white/40 to-white/10 hover:scale-105'}`}>
                                     <div className="w-full h-full rounded-full border-[3px] border-[#111] overflow-hidden bg-black">
                                         {t.image_url ? (
-                                            <img src={t.image_url} alt={t.name} className="w-full h-full object-cover object-top" />
+                                            <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Bali`} className="w-full h-full object-cover object-top" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center"><User size={24} className="text-white/20" /></div>
                                         )}
@@ -305,7 +306,7 @@ ${treatmentsList}
                         {/* Background Image */}
                         <img 
                             src={campaign.image || "https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop&crop=center"} 
-                            alt={campaign.title} 
+                            alt={campaign.title ? `${campaign.title} - Mobile Spa Bali` : "Premium Home Massage in Bali"} 
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
                         />
                         
@@ -358,7 +359,7 @@ ${treatmentsList}
                                     <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[24px] p-2 flex flex-col h-full hover:shadow-none transition-all duration-300 relative group">
                                         <div className="aspect-[4/3] relative bg-[#111] overflow-hidden rounded-[16px]">
                                             {treatment.pinned_image ? (
-                                                <img src={treatment.pinned_image} alt={treatment.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                <img src={treatment.pinned_image} alt={`${treatment.title} - In-Villa Massage Bali`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                             ) : (
                                                 <div className={`w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black opacity-30 group-hover:opacity-50 transition-opacity duration-500`}></div>
                                             )}
@@ -499,7 +500,7 @@ ${treatmentsList}
                                     
                                     {/* Image */}
                                     <div className="aspect-[4/5] relative bg-[#111] overflow-hidden rounded-[16px]">
-                                        <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                        <img src={product.image} alt={`${product.title} - Home Spa Product Bali`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     </div>
                                     
                                     {/* Text Info */}
@@ -536,7 +537,7 @@ ${treatmentsList}
                                 <div className="relative mb-5 group-hover:scale-105 transition-transform duration-500">
                                     <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 bg-black">
                                         {t.image_url ? (
-                                            <img src={t.image_url} alt={t.name} className="w-full h-full object-cover object-top" />
+                                            <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Bali`} className="w-full h-full object-cover object-top" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center"><User size={32} className="text-white/20" /></div>
                                         )}
@@ -1049,7 +1050,7 @@ ${treatmentsList}
                                                     }`}
                                                 >
                                                     <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border-2 border-white/50 shadow-sm w-16 h-16">
-                                                        <img src={t.image_url} alt={t.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
+                                                        <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Bali`} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
                                                         <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity backdrop-blur-sm">
                                                             <span className="text-[9px] font-bold text-white uppercase tracking-wider">View</span>
                                                         </div>
@@ -1131,7 +1132,7 @@ ${treatmentsList}
                                                                 <img 
                                                                     src={t.image_url} 
                                                                     className="w-10 h-10 rounded-full object-cover border border-white/20"
-                                                                    alt={t.name}
+                                                                    alt={`${t.name} - Professional Massage Therapist in Bali`}
                                                                 />
                                                                 <div>
                                                                     <p className="text-sm font-bold text-white flex items-center gap-2">

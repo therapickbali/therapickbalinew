@@ -16,14 +16,20 @@ const ServiceMap = dynamic(() => import('./ServiceMap'), {
 
 export default function ServiceAreas() {
   const areas = [
-    { name: "Ubud", slug: "ubud", desc: "Premium mobile spa in the cultural heart of Bali." },
-    { name: "Canggu", slug: "canggu", desc: "Luxury home massage for the vibrant coastal lifestyle." },
-    { name: "Seminyak", slug: "seminyak", desc: "Exclusive in-villa spa treatments in Seminyak." },
-    { name: "Uluwatu", slug: "uluwatu", desc: "Relaxing cliff-side villa massage experiences." },
-    { name: "Sanur", slug: "sanur", desc: "Tranquil mobile wellness brought to your Sanur hotel." },
-    { name: "Nusa Dua", slug: "nusa-dua", desc: "5-star spa delivery to Nusa Dua resorts and villas." },
-    { name: "Jimbaran", slug: "jimbaran", desc: "Sunset relaxation with our Jimbaran mobile spa." },
-    { name: "Kuta", slug: "kuta", desc: "Professional massage therapies delivered to Kuta." }
+    { name: "Ubud", slug: "ubud", desc: "Premium Home Massage & Spa in Ubud." },
+    { name: "Canggu", slug: "canggu", desc: "Luxury Mobile Massage for Canggu villas." },
+    { name: "Seminyak", slug: "seminyak", desc: "Exclusive In-Villa Spa Treatments in Seminyak." },
+    { name: "Uluwatu", slug: "uluwatu", desc: "Relaxing Home Massage experiences in Uluwatu." },
+    { name: "Sanur", slug: "sanur", desc: "Tranquil Mobile Spa brought to your Sanur hotel." },
+    { name: "Nusa Dua", slug: "nusa-dua", desc: "5-star Spa Delivery to Nusa Dua resorts." },
+    { name: "Jimbaran", slug: "jimbaran", desc: "Sunset relaxation with our Jimbaran Home Massage." },
+    { name: "Kuta", slug: "kuta", desc: "Professional Mobile Massage delivered to Kuta." },
+    { name: "Legian", slug: "legian", desc: "Best Home Spa and Massage Delivery in Legian." },
+    { name: "Kerobokan", slug: "kerobokan", desc: "Premium In-Villa Massage in Kerobokan." },
+    { name: "Pererenan", slug: "pererenan", desc: "Luxury Home Massage services in Pererenan." },
+    { name: "Berawa", slug: "berawa", desc: "Mobile Spa and Wellness delivered to Berawa." },
+    { name: "Bingin", slug: "bingin", desc: "Cliff-side Home Massage in Bingin." },
+    { name: "Pecatu", slug: "pecatu", desc: "Exclusive Mobile Massage therapies in Pecatu." }
   ];
 
   return (
