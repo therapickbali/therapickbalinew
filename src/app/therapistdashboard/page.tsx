@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck } from 'lucide-react';
+import { Home, Calendar, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck, Share, PlusSquare, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
@@ -16,6 +16,7 @@ export default function TherapistDashboard() {
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const [isPending, setIsPending] = useState(false);
     const [therapistId, setTherapistId] = useState<string | null>(null);
+    const [showInstallPopup, setShowInstallPopup] = useState(false);
     
     // Status State
     const [status, setStatus] = useState<'Online' | 'Busy' | 'Off'>('Online');
@@ -332,7 +333,7 @@ export default function TherapistDashboard() {
                     <button className="w-full bg-[#3DDC84] text-black rounded-2xl py-3.5 px-4 font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                         <Download className="w-5 h-5" /> Download for Android
                     </button>
-                    <button className="w-full bg-white/5 text-white border border-white/20 rounded-2xl py-3.5 px-4 font-bold shadow-sm hover:bg-white/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2" onClick={() => alert("To install on iPhone: Tap the 'Share' icon at the bottom of Safari, then tap 'Add to Home Screen'.")}>
+                    <button className="w-full bg-white/5 text-white border border-white/20 rounded-2xl py-3.5 px-4 font-bold shadow-sm hover:bg-white/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2" onClick={() => setShowInstallPopup(true)}>
                         <Smartphone className="w-5 h-5" /> Add to iPhone (PWA)
                     </button>
                 </div>
@@ -435,6 +436,68 @@ export default function TherapistDashboard() {
 
                 </div>
             </div>
+
+            {/* Install PWA iOS Popup */}
+            <AnimatePresence>
+                {showInstallPopup && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-sm bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-3xl p-6 sm:p-8 overflow-hidden"
+                        >
+                            <button 
+                                onClick={() => setShowInstallPopup(false)}
+                                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                            
+                            <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 flex items-center justify-center mx-auto mb-6 shadow-sm">
+                                <Smartphone className="w-8 h-8" />
+                            </div>
+                            
+                            <h3 className="font-serif text-xl text-white mb-2 text-center">Install on iPhone</h3>
+                            <p className="text-sm text-white/70 mb-6 text-center leading-relaxed">
+                                Install the Therapick Dashboard on your iPhone for quick access.
+                            </p>
+                            
+                            <div className="space-y-4 mb-8 bg-black/20 rounded-2xl p-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                                        <Share className="w-5 h-5 text-white" />
+                                    </div>
+                                    <p className="text-sm text-white/90">
+                                        <span className="font-bold text-white">Step 1:</span> Tap the <strong className="text-blue-400">Share</strong> icon at the bottom of Safari.
+                                    </p>
+                                </div>
+                                <div className="h-px w-full bg-white/10" />
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                                        <PlusSquare className="w-5 h-5 text-white" />
+                                    </div>
+                                    <p className="text-sm text-white/90">
+                                        <span className="font-bold text-white">Step 2:</span> Tap <strong className="text-blue-400">Add to Home Screen</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <button 
+                                onClick={() => setShowInstallPopup(false)}
+                                className="w-full bg-[#292831] text-white px-6 py-4 rounded-2xl text-sm font-bold shadow-md hover:bg-[#292831]/90 active:scale-95 transition-all"
+                            >
+                                GOT IT
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
