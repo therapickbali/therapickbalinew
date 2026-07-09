@@ -282,10 +282,10 @@ export default function TherapistDashboard() {
                 </button>
             </div>
             
-            <div className="sticky bottom-[104px] z-40 mt-4">
+            <div className="fixed bottom-[104px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[408px] z-40">
                 <button 
                     onClick={handleSave}
-                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
+                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
                 >
                     {saved ? <><CheckCircle2 className="w-5 h-5" /> Saved Successfully</> : <><Save className="w-5 h-5" /> Update Status</>}
                 </button>
@@ -353,10 +353,10 @@ export default function TherapistDashboard() {
                 </div>
             </div>
             
-            <div className="sticky bottom-[104px] z-40 mt-4">
+            <div className="fixed bottom-[104px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[408px] z-40">
                 <button 
                     onClick={handleSave}
-                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
+                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
                 >
                     {saved ? <><CheckCircle2 className="w-5 h-5" /> Schedule Saved</> : <><Save className="w-5 h-5" /> Save Schedule</>}
                 </button>
@@ -428,10 +428,10 @@ export default function TherapistDashboard() {
                     </div>
                 </div>
                 
-            <div className="sticky bottom-[104px] z-40 mt-6 w-full">
+            <div className="fixed bottom-[104px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[408px] z-40">
                 <button 
                     onClick={handleSave}
-                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
+                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
                 >
                     {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Profile</>}
                 </button>
@@ -501,7 +501,7 @@ export default function TherapistDashboard() {
             <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-white/5 rounded-full blur-[100px] pointer-events-none fixed" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-white/5 rounded-full blur-[120px] pointer-events-none fixed" />
 
-            <main className="max-w-md mx-auto px-5 pt-12 relative z-10 min-h-screen">
+            <main className="max-w-md mx-auto px-5 pt-12 pb-48 relative z-10 min-h-screen">
                 <AnimatePresence mode="wait">
                     {activeTab === 'home' && <motion.div key="home">{renderHome()}</motion.div>}
                     {activeTab === 'booking' && <motion.div key="booking">{renderBooking()}</motion.div>}
