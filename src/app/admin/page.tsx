@@ -7,11 +7,54 @@ import Link from 'next/link';
 import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee, Therapist } from '@/context/SpaContext';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import 'leaflet/dist/leaflet.css';
+
+
+const MapContainer = dynamic(
+    () => import('react-leaflet').then((mod) => mod.MapContainer),
+    { ssr: false }
+);
+const TileLayer = dynamic(
+    () => import('react-leaflet').then((mod) => mod.TileLayer),
+    { ssr: false }
+);
+const Marker = dynamic(
+    () => import('react-leaflet').then((mod) => mod.Marker),
+    { ssr: false }
+);
+const Popup = dynamic(
+    () => import('react-leaflet').then((mod) => mod.Popup),
+    { ssr: false }
+);
+
+// Create custom icon function for therapists
+let L: any = null;
+if (typeof window !== 'undefined') {
+    L = require('leaflet');
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default?.src || 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        iconUrl: require('leaflet/dist/images/marker-icon.png').default?.src || 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        shadowUrl: require('leaflet/dist/images/marker-shadow.png').default?.src || 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    });
+}
+
+const createTherapistIcon = (imageUrl: string) => {
+    if (!L) return null;
+    return L.divIcon({
+        html: `<div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 3px solid #0A84FF; box-shadow: 0 8px 16px rgba(0,0,0,0.4); background: white;"><img src="${imageUrl || 'https://ui-avatars.com/api/?name=T&background=random'}" style="width: 100%; height: 100%; object-fit: cover;" /></div>`,
+        className: 'custom-therapist-icon',
+        iconSize: [48, 48],
+        iconAnchor: [24, 24],
+        popupAnchor: [0, -24]
+    });
+};
 
 export default function AdminDashboard() {
     const router = useRouter();
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
-    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store' | 'fees' | 'therapists'>('treatment');
+    const [activeTab, setActiveTab] = useState<'treatment' | 'campaign' | 'list' | 'settings' | 'store' | 'fees' | 'therapists' | 'livemap'>('list');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
     
@@ -560,6 +603,13 @@ export default function AdminDashboard() {
                     >
                         <Users size={18} />
                         Therapists
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('livemap')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${activeTab === 'livemap' ? 'bg-[#0A84FF]/20 text-[#0A84FF]' : 'text-white/90-muted hover:bg-surface/50 hover:text-white'}`}
+                    >
+                        <MapPin size={18} />
+                        Live Map
                     </button>
                     <button 
                         onClick={() => setActiveTab('list')}

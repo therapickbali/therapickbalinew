@@ -383,44 +383,35 @@ export default function TherapistDashboard() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="flex flex-col gap-6"
+                className="flex flex-col"
             >
-                <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
-                    <h2 className="font-serif text-3xl text-white font-medium">Live Location</h2>
-                    <p className="text-sm text-white/70 mt-1">Broadcast your real-time position</p>
+                <div className="h-[450px] w-full rounded-3xl overflow-hidden shadow-inner border border-white/5 bg-black/20 mb-6 relative z-0">
+                    {typeof window !== 'undefined' && (
+                        <MapContainer center={[centerLat, centerLng]} zoom={profile.latitude ? 15 : 10} style={{ height: '100%', width: '100%', zIndex: 0 }} attributionControl={false}>
+                            <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            {profile.latitude && profile.longitude && (
+                                <Marker position={[profile.latitude, profile.longitude]} />
+                            )}
+                        </MapContainer>
+                    )}
                 </div>
-
-                <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-4 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col items-center">
-                    
-                    <div className="h-[350px] w-full rounded-3xl overflow-hidden shadow-inner border border-white/5 bg-black/20 mb-6 relative z-0">
-                        {typeof window !== 'undefined' && (
-                            <MapContainer center={[centerLat, centerLng]} zoom={profile.latitude ? 15 : 10} style={{ height: '100%', width: '100%', zIndex: 0 }}>
-                                <TileLayer
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    attribution='&copy; OpenStreetMap'
-                                />
-                                {profile.latitude && profile.longitude && (
-                                    <Marker position={[profile.latitude, profile.longitude]} />
-                                )}
-                            </MapContainer>
-                        )}
-                    </div>
-                    
-                    <button 
-                        onClick={handleBroadcastLocation}
-                        disabled={locationLoading}
-                        className="w-full bg-[#34C759] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(52,199,89,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#34C759]/50 disabled:opacity-50 disabled:scale-100"
-                    >
-                        {locationLoading ? (
-                            <span className="animate-pulse">Finding GPS Location...</span>
-                        ) : profile.latitude ? (
-                            <><Navigation className="w-5 h-5 fill-current" /> Update Live Location</>
-                        ) : (
-                            <><Navigation className="w-5 h-5" /> Start Broadcasting</>
-                        )}
-                    </button>
-                    {saved && <p className="text-[#34C759] text-sm mt-3 flex items-center gap-1 font-medium"><CheckCircle2 className="w-4 h-4" /> Location Broadcasted!</p>}
-                </div>
+                
+                <button 
+                    onClick={handleBroadcastLocation}
+                    disabled={locationLoading}
+                    className="w-full bg-[#34C759] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(52,199,89,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#34C759]/50 disabled:opacity-50 disabled:scale-100"
+                >
+                    {locationLoading ? (
+                        <span className="animate-pulse">Finding GPS Location...</span>
+                    ) : profile.latitude ? (
+                        <><Navigation className="w-5 h-5 fill-current" /> Update Live Location</>
+                    ) : (
+                        <><Navigation className="w-5 h-5" /> Start Broadcasting</>
+                    )}
+                </button>
+                {saved && <p className="text-[#34C759] text-sm mt-3 text-center flex items-center justify-center gap-1 font-medium"><CheckCircle2 className="w-4 h-4" /> Location Broadcasted!</p>}
             </motion.div>
         );
     };
@@ -489,7 +480,7 @@ export default function TherapistDashboard() {
                     </div>
                 </div>
                 
-            <div className="fixed bottom-[104px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[408px] z-40">
+            <div className="mt-6 w-full z-40 pb-6">
                 <button 
                     onClick={handleSave}
                     className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
