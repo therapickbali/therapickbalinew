@@ -205,7 +205,7 @@ ${treatmentsList}
     };
 
     return (
-        <div className="min-h-screen bg-black relative overflow-hidden font-sans text-white/90">
+        <div className="min-h-screen bg-black relative overflow-x-hidden font-sans text-white/90">
             
             {/* Global Loading Splash Screen for New Users */}
             <AnimatePresence>

@@ -172,7 +172,7 @@ export default function RitualsDetails() {
     const relatedTreatments = treatments.filter(t => t.id !== treatment.id).slice(0, 3);
 
     return (
-        <div className="min-h-screen bg-black relative overflow-hidden font-sans text-white/90 pb-24 md:pb-12 pt-16 md:pt-24">
+        <div className="min-h-screen bg-black relative overflow-x-hidden font-sans text-white/90 pb-24 md:pb-12 pt-16 md:pt-24">
             
             {/* Global Loading Splash Screen for New Users */}
             <AnimatePresence>
