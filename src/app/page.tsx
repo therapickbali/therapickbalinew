@@ -1192,46 +1192,67 @@ ${treatmentsList}
                             initial={{ y: '100%' }} 
                             animate={{ y: 0 }} 
                             exit={{ y: '100%' }} 
-                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="w-full sm:max-w-md bg-black rounded-t-[32px] sm:rounded-[32px] overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col"
+                            transition={{ type: "spring", damping: 30, stiffness: 200 }}
+                            className="w-full sm:max-w-md bg-black sm:rounded-[32px] overflow-hidden shadow-2xl relative h-[100dvh] sm:h-auto sm:max-h-[90vh] flex flex-col"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Header Image */}
-                            <div className="relative h-64 shrink-0">
+                            <div className="relative h-[60vh] sm:h-80 shrink-0">
                                 {viewingTherapist.image_url ? (
                                     <img src={viewingTherapist.image_url} alt={viewingTherapist.name} className="w-full h-full object-cover object-center" />
                                 ) : (
                                     <div className="w-full h-full bg-[#111] flex items-center justify-center">
-                                        <User size={48} className="text-white/20" />
+                                        <User size={64} className="text-white/20" />
                                     </div>
                                 )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                                <button onClick={() => setViewingTherapist(null)} className="absolute top-4 right-4 w-8 h-8 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-full flex items-center justify-center text-white">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                                <button onClick={() => setViewingTherapist(null)} className="absolute top-6 right-6 w-10 h-10 bg-black/20 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-black/40 transition-colors z-10">
                                     <X className="w-5 h-5" />
                                 </button>
-                                <div className="absolute bottom-4 left-6 right-6 flex justify-between items-end">
-                                    <div>
-                                        <h2 className="text-3xl font-serif text-white font-medium">{viewingTherapist.name}</h2>
-                                        <p className="text-white/80 text-sm tracking-wide mt-1">{viewingTherapist.location}</p>
-                                    </div>
-                                    <div className="flex items-center gap-1 text-xs font-bold bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-white px-2.5 py-1 rounded-full border border-white/20">
-                                        ★ {viewingTherapist.rating}
+                                
+                                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 flex flex-col z-10">
+                                    <div className="flex justify-between items-end gap-4">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <h2 className="text-4xl font-serif text-white font-medium leading-none">{viewingTherapist.name}</h2>
+                                                <BadgeCheck className="w-6 h-6 text-blue-400 shrink-0" />
+                                            </div>
+                                            <p className="text-white/80 text-sm tracking-wide flex items-center gap-1.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                                Available in {viewingTherapist.location}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Scrollable Content */}
-                            <div className="overflow-y-auto no-scrollbar flex-1 pb-24">
-                                
-                                {/* Bio */}
-                                <div className="px-6 py-6 border-b border-white/20/40">
-                                    <h4 className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-3">About</h4>
-                                    <p className="text-sm text-white/90-muted leading-relaxed mb-6">{viewingTherapist.desc}</p>
+                            <div className="overflow-y-auto no-scrollbar flex-1 bg-black pb-12 sm:pb-8">
+                                <div className="p-6 sm:p-8 space-y-8">
+                                    
+                                    {/* Stats Row */}
+                                    <div className="flex items-center gap-4 border-y border-white/10 py-4">
+                                        <div className="flex-1">
+                                            <div className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-1">Rating</div>
+                                            <div className="flex items-center gap-1.5 text-white font-medium">
+                                                <span className="text-amber-500">★</span> {viewingTherapist.rating}
+                                            </div>
+                                        </div>
+                                        <div className="w-px h-8 bg-white/10"></div>
+                                        <div className="flex-1">
+                                            <div className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-1">Status</div>
+                                            <div className="text-white font-medium">Verified Therapist</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Bio */}
+                                    <div>
+                                        <h4 className="text-[11px] font-bold text-white uppercase tracking-widest mb-4">About Therapist</h4>
+                                        <p className="text-sm text-white/70 leading-relaxed font-light">{viewingTherapist.bio || viewingTherapist.desc || 'Professional therapist dedicated to providing the best wellness experience.'}</p>
+                                    </div>
+
                                 </div>
-
                             </div>
-
-                            {/* Sticky Bottom Action removed as requested */}
                         </motion.div>
                     </motion.div>
                 )}
