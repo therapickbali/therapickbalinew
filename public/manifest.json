@@ -2,7 +2,7 @@
   "name": "Therapick Dashboard",
   "short_name": "Therapick",
   "description": "Therapick Dashboard for Therapists",
-  "start_url": "/admin",
+  "start_url": "/therapistdashboard",
   "display": "standalone",
   "background_color": "#111111",
   "theme_color": "#111111",

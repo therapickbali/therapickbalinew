@@ -29,6 +29,25 @@ export default function TherapistDashboard() {
             setAvailableAt(now.toTimeString().substring(0, 5));
         }
     }, [status, availableAt]);
+
+    // Auto-switch to Online when time passes
+    useEffect(() => {
+        if (status === 'Busy' && availableAt && therapistId) {
+            const interval = setInterval(() => {
+                const now = new Date();
+                const currentTime = now.toTimeString().substring(0, 5);
+                if (currentTime >= availableAt) {
+                    setStatus('Online');
+                    setAvailableAt('');
+                    supabase.from('therapists')
+                        .update({ online_status: 'Online', available_at: null })
+                        .eq('id', therapistId)
+                        .then();
+                }
+            }, 10000);
+            return () => clearInterval(interval);
+        }
+    }, [status, availableAt, therapistId]);
     
     // Schedule State
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
