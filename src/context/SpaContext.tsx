@@ -188,7 +188,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                     const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
                     const processedTherapists = therapistsRes.data.map(t => {
                         if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
-                            return { ...t, online_status: 'Online', available_at: null };
+                            return { ...t, online_status: 'Online', available_at: undefined };
                         }
                         return t;
                     });
@@ -225,7 +225,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                             if (t.id === payload.new.id) {
                                 const updatedT = { ...t, ...payload.new } as Therapist;
                                 if (updatedT.online_status === 'Busy' && updatedT.available_at && currentTimeStr >= updatedT.available_at) {
-                                    return { ...updatedT, online_status: 'Online', available_at: null };
+                                    return { ...updatedT, online_status: 'Online', available_at: undefined };
                                 }
                                 return updatedT;
                             }
@@ -251,7 +251,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 const next = current.map(t => {
                     if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
                         changed = true;
-                        return { ...t, online_status: 'Online' as const, available_at: null };
+                        return { ...t, online_status: 'Online' as const, available_at: undefined };
                     }
                     return t;
                 });
