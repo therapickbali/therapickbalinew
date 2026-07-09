@@ -370,12 +370,12 @@ export default function BookingModal({
                                                         {t.online_status === "Off" ? (
                                                             <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
                                                         ) : t.online_status === "Busy" ? (
-                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Handling Customer</span>
+                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Busy</span>
                                                         ) : (
                                                             <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
                                                         )}
                                                     </div>
-                                                    <div className="flex items-center justify-between mb-1.5">
+                                                    <div className="flex items-center justify-between mb-1">
                                                         <div className="flex items-center gap-2">
                                                             <h4 className={`font-serif text-lg leading-none ${selectedTherapists.includes(t.id) ? "text-white" : "text-white"}`}>{t.name}</h4>
                                                         </div>
@@ -383,13 +383,16 @@ export default function BookingModal({
                                                             <BadgeCheck className="w-4 h-4" />
                                                         </div>
                                                     </div>
+                                                    {t.online_status === "Busy" && t.available_at && (
+                                                        <div className="mb-2 text-[10px] font-bold text-amber-400/90 tracking-wide uppercase">
+                                                            Will be ready at {t.available_at}
+                                                        </div>
+                                                    )}
                                                     <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio || "Therapist professional"}</p>
                                                     <div className="flex items-center gap-2">
                                                         {t.online_status === "Off" ? (
                                                             <span className="text-[10px] font-semibold text-red-400 flex items-center gap-1.5 bg-red-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>Offline</span>
-                                                        ) : t.online_status === "Busy" ? (
-                                                            <span className="text-[10px] font-semibold text-amber-500 flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>Busy</span>
-                                                        ) : (
+                                                        ) : t.online_status === "Busy" ? null : (
                                                             <span className="text-[10px] font-semibold text-green-500 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-1 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>Ready</span>
                                                         )}
                                                     </div>
