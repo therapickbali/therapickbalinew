@@ -282,12 +282,14 @@ export default function TherapistDashboard() {
                 </button>
             </div>
             
-            <button 
-                onClick={handleSave}
-                className="mt-4 w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
-            >
-                {saved ? <><CheckCircle2 className="w-5 h-5" /> Saved Successfully</> : <><Save className="w-5 h-5" /> Update Status</>}
-            </button>
+            <div className="sticky bottom-[104px] z-40 mt-4">
+                <button 
+                    onClick={handleSave}
+                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
+                >
+                    {saved ? <><CheckCircle2 className="w-5 h-5" /> Saved Successfully</> : <><Save className="w-5 h-5" /> Update Status</>}
+                </button>
+            </div>
         </motion.div>
     );
 
@@ -325,13 +327,22 @@ export default function TherapistDashboard() {
                 <p className="text-sm text-white/70 mt-1">Set future availability</p>
             </div>
 
-            {/* Floating Calendar */}
-            <div className="relative mt-8">
-                {/* Floating Time Setter Above Date */}
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20 bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] text-white px-5 py-2.5 rounded-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col items-center min-w-[160px]">
-                    <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest mb-1">{new Date(selectedDate).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                    <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-white/90" />
+            {/* Calendar & Time Setter */}
+            <div className="relative mt-4">
+                <FloatingCalendar 
+                    value={selectedDate} 
+                    onChange={(date) => setSelectedDate(date)} 
+                    currentTime={currentScheduleTime}
+                />
+                
+                {/* Time Setter Below Calendar */}
+                <div className="mt-6 bg-[#1C1C1E]/60 backdrop-blur-3xl border border-white/5 rounded-2xl p-5 shadow-lg flex items-center justify-between">
+                    <div>
+                        <label className="text-xs font-medium text-white/60 uppercase tracking-widest block mb-1">Set Time for</label>
+                        <span className="text-sm font-semibold text-white/90">{new Date(selectedDate).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white/10 rounded-2xl p-2 px-3 border border-white/10 shadow-inner">
+                        <Clock className="w-5 h-5 text-[#0A84FF]" />
                         <input 
                             type="time" 
                             value={currentScheduleTime}
@@ -340,21 +351,16 @@ export default function TherapistDashboard() {
                         />
                     </div>
                 </div>
-
-                <div className="pt-6">
-                    <FloatingCalendar 
-                        value={selectedDate} 
-                        onChange={(date) => setSelectedDate(date)} 
-                    />
-                </div>
             </div>
             
-            <button 
-                onClick={handleSave}
-                className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
-            >
-                {saved ? <><CheckCircle2 className="w-5 h-5" /> Schedule Saved</> : <><Save className="w-5 h-5" /> Save Schedule</>}
-            </button>
+            <div className="sticky bottom-[104px] z-40 mt-4">
+                <button 
+                    onClick={handleSave}
+                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
+                >
+                    {saved ? <><CheckCircle2 className="w-5 h-5" /> Schedule Saved</> : <><Save className="w-5 h-5" /> Save Schedule</>}
+                </button>
+            </div>
         </motion.div>
     );
 
@@ -422,12 +428,14 @@ export default function TherapistDashboard() {
                     </div>
                 </div>
                 
+            <div className="sticky bottom-[104px] z-40 mt-6 w-full">
                 <button 
                     onClick={handleSave}
-                    className="mt-6 w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
+                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-medium shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
                 >
                     {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Profile</>}
                 </button>
+            </div>
             </div>
 
             {/* App Installation Section */}

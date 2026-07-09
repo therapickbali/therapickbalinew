@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface FloatingCalendarProps {
     value: string;
     onChange: (date: string) => void;
+    currentTime?: string;
 }
 
-export default function FloatingCalendar({ value, onChange }: FloatingCalendarProps) {
+export default function FloatingCalendar({ value, onChange, currentTime }: FloatingCalendarProps) {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDateObj, setSelectedDateObj] = useState<Date | null>(value ? new Date(value) : null);
     const [isSelectingMonth, setIsSelectingMonth] = useState(false);
@@ -90,13 +91,16 @@ export default function FloatingCalendar({ value, onChange }: FloatingCalendarPr
                     disabled={isPast}
                     onClick={() => handleDateSelect(i)}
                     className={`
-                        h-10 w-full rounded-xl flex items-center justify-center text-sm font-medium transition-all duration-300 relative
+                        h-14 w-full rounded-xl flex flex-col items-center justify-center text-sm font-medium transition-all duration-300 relative
                         ${isPast ? 'text-white/20 cursor-not-allowed' : 'hover:bg-white/10 cursor-pointer'}
                         ${isSelected ? 'bg-white/20 border border-white/40 text-white shadow-[0_4px_12px_rgba(255,255,255,0.2)] hover:bg-white/30' : 'text-white'}
                         ${isToday && !isSelected ? 'border border-white/20 bg-white/5' : ''}
                     `}
                 >
-                    <span className="relative z-10">{i}</span>
+                    {isSelected && currentTime && (
+                        <span className="text-[10px] leading-none mb-1 text-[#0A84FF] font-bold">{currentTime}</span>
+                    )}
+                    <span className="relative z-10 leading-none">{i}</span>
                 </button>
             );
         }
