@@ -112,6 +112,41 @@ type SpaContextType = {
 
 
 
+function processTherapistStatus(t: Therapist): Therapist {
+    const now = new Date();
+    const localNow = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+    const todayStr = localNow.toISOString().split('T')[0];
+    const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+
+    let finalStatus = t.online_status;
+    let finalAvailableAt = t.available_at;
+
+    if (finalStatus === 'Busy' && finalAvailableAt) {
+        const parts = finalAvailableAt.split('|');
+        const dateStr = parts.length === 2 ? parts[0] : null;
+        const timeStr = parts.length === 2 ? parts[1] : finalAvailableAt;
+        
+        finalAvailableAt = timeStr;
+
+        if (dateStr) {
+            if (dateStr < todayStr) {
+                finalStatus = 'Online';
+                finalAvailableAt = undefined;
+            } else if (dateStr === todayStr && currentTimeStr >= timeStr) {
+                finalStatus = 'Online';
+                finalAvailableAt = undefined;
+            }
+        } else {
+            if (currentTimeStr >= timeStr) {
+                finalStatus = 'Online';
+                finalAvailableAt = undefined;
+            }
+        }
+    }
+
+    return { ...t, online_status: finalStatus, available_at: finalAvailableAt };
+}
+
 const SpaContext = createContext<SpaContextType | undefined>(undefined);
 
 export function SpaProvider({ children }: { children: ReactNode }) {
@@ -186,15 +221,8 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 }
                 
                 if (therapistsRes.data) {
-                    const now = new Date();
-                    const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
-                    const processedTherapists = therapistsRes.data.map(t => {
-                        if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
-                            return { ...t, online_status: 'Online', available_at: undefined };
-                        }
-                        return t;
-                    });
-                    setTherapists(processedTherapists as Therapist[]);
+                    const processedTherapists = therapistsRes.data.map(t => processTherapistStatus(t as Therapist));
+                    setTherapists(processedTherapists);
                 } else if (therapistsRes.error) {
                     setTherapists([]);
                 }
@@ -221,15 +249,10 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 { event: 'UPDATE', schema: 'public', table: 'therapists' },
                 (payload) => {
                     setTherapists((currentTherapists) => {
-                        const now = new Date();
-                        const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
                         return currentTherapists.map((t) => {
                             if (t.id === payload.new.id) {
                                 const updatedT = { ...t, ...payload.new } as Therapist;
-                                if (updatedT.online_status === 'Busy' && updatedT.available_at && currentTimeStr >= updatedT.available_at) {
-                                    return { ...updatedT, online_status: 'Online', available_at: undefined };
-                                }
-                                return updatedT;
+                                return processTherapistStatus(updatedT);
                             }
                             return t;
                         });
@@ -243,19 +266,16 @@ export function SpaProvider({ children }: { children: ReactNode }) {
         };
     }, [siteBrandFilter]);
 
-    // Interval to dynamically update therapist status if their available_at time is reached
     useEffect(() => {
         const interval = setInterval(() => {
             setTherapists((current) => {
-                const now = new Date();
-                const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
                 let changed = false;
                 const next = current.map(t => {
-                    if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
+                    const nextT = processTherapistStatus(t);
+                    if (nextT.online_status !== t.online_status || nextT.available_at !== t.available_at) {
                         changed = true;
-                        return { ...t, online_status: 'Online' as const, available_at: undefined };
                     }
-                    return t;
+                    return nextT;
                 });
                 return changed ? next : current;
             });

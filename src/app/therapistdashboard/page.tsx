@@ -200,7 +200,8 @@ export default function TherapistDashboard() {
                     setStatus(therapistData.online_status);
                 }
                 if (therapistData.available_at) {
-                    setAvailableAt(therapistData.available_at);
+                    const parts = therapistData.available_at.split('|');
+                    setAvailableAt(parts.length === 2 ? parts[1] : therapistData.available_at);
                 }
                 setProfile({
                         latitude: therapistData.latitude,
@@ -226,8 +227,19 @@ export default function TherapistDashboard() {
                 bio: profile.bio,
                 image_url: profile.avatar
             };
-            if (status === 'Busy') {
-                updatePayload.available_at = availableAt;
+            if (status === 'Busy' && availableAt) {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const currentMin = now.getMinutes();
+                const [ah, am] = availableAt.split(':').map(Number);
+                let targetDate = new Date(now);
+                
+                if (ah < currentHour || (ah === currentHour && am < currentMin)) {
+                    targetDate.setDate(targetDate.getDate() + 1);
+                }
+                
+                const targetDateStr = new Date(targetDate.getTime() - (targetDate.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+                updatePayload.available_at = `${targetDateStr}|${availableAt}`;
             } else {
                 updatePayload.available_at = null;
             }
