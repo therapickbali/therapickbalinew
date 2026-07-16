@@ -1762,8 +1762,8 @@ export default function AdminDashboard() {
                                     </>
                                 )}
                                 
-                                <div className="pt-4 flex items-center justify-between border-t border-white/5">
-                                    <div className="flex items-center gap-3">
+                                <div className="pt-6 flex flex-col sm:flex-row items-center justify-between border-t border-white/5 gap-4">
+                                    <div className="flex items-center gap-3 w-full sm:w-auto">
                                         {editingTherapistId === detailedTherapist.id ? (
                                             <>
                                                 <button 
@@ -1771,13 +1771,13 @@ export default function AdminDashboard() {
                                                         await handleSaveTherapist(detailedTherapist.id);
                                                         setDetailedTherapist({ ...detailedTherapist, ...editTherapistData });
                                                     }}
-                                                    className="px-6 py-3 bg-primary hover:bg-primary/90 text-black font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
+                                                    className="flex-1 sm:flex-none px-4 py-3 bg-primary hover:bg-primary/90 text-black font-bold text-sm rounded-xl transition-colors inline-flex justify-center items-center gap-2"
                                                 >
-                                                    <CheckCircle size={16} /> Save Changes
+                                                    <CheckCircle size={16} /> Save
                                                 </button>
                                                 <button 
                                                     onClick={() => { setEditingTherapistId(null); setEditTherapistData({}); }}
-                                                    className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
+                                                    className="flex-1 sm:flex-none px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl transition-colors inline-flex justify-center items-center gap-2"
                                                 >
                                                     Cancel
                                                 </button>
@@ -1786,20 +1786,20 @@ export default function AdminDashboard() {
                                             <>
                                                 <button 
                                                     onClick={() => handleDeleteTherapist(detailedTherapist.id)}
-                                                    className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
+                                                    className="flex-1 sm:flex-none px-4 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-sm rounded-xl transition-colors inline-flex justify-center items-center gap-2"
                                                 >
                                                     <Trash2 size={16} /> Delete
                                                 </button>
                                                 <button 
                                                     onClick={() => { setEditingTherapistId(detailedTherapist.id); setEditTherapistData(detailedTherapist); }}
-                                                    className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
+                                                    className="flex-1 sm:flex-none px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl transition-colors inline-flex justify-center items-center gap-2"
                                                 >
                                                     <Edit3 size={16} /> Edit Profile
                                                 </button>
                                             </>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex items-center justify-between w-full sm:w-auto bg-white/5 sm:bg-transparent px-4 py-3 sm:p-0 rounded-xl sm:rounded-none">
                                         <span className="text-xs font-bold uppercase tracking-widest text-white/50">Status</span>
                                         <button 
                                             onClick={() => {
