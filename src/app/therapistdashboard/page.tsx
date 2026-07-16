@@ -46,11 +46,19 @@ export default function TherapistDashboard() {
     const [isTrackingLocation, setIsTrackingLocation] = useState(false);
     const watchId = useRef<number | null>(null);
 
-    // Cleanup watcher on unmount and try to clear location on app close
+    // Cleanup watcher ONLY on actual component unmount
+    useEffect(() => {
+        return () => {
+            if (watchId.current !== null) {
+                navigator.geolocation.clearWatch(watchId.current);
+            }
+        };
+    }, []);
+
+    // Try to clear location on app close (pagehide/beforeunload)
     useEffect(() => {
         const handleUnload = () => {
             if (isTrackingLocation && therapistId) {
-                // Fire and forget update to clear location
                 supabase.from('therapists').update({ latitude: null, longitude: null }).eq('id', therapistId).then();
             }
         };
@@ -61,9 +69,6 @@ export default function TherapistDashboard() {
         return () => {
             window.removeEventListener('pagehide', handleUnload);
             window.removeEventListener('beforeunload', handleUnload);
-            if (watchId.current !== null) {
-                navigator.geolocation.clearWatch(watchId.current);
-            }
         };
     }, [isTrackingLocation, therapistId]);
 
