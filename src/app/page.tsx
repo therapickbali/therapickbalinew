@@ -1065,89 +1065,106 @@ ${treatmentsList}
                                             <span className="text-xs font-bold text-white/80 uppercase tracking-widest">THERAPISTS NEEDED</span>
                                             <span className="text-sm font-bold text-white bg-white/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
                                         </div>
-                                        {therapists.map(rawT => {
-                                            const isFuture = formData.date && formData.date !== todayStr;
-                                            const t = { ...rawT } as any;
-                                            if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
-                                                t.online_status = 'Online';
-                                            } else if (!isFuture && t.online_status === 'Busy' && t.available_at && formData.time && formData.time >= t.available_at) {
-                                                t.online_status = 'Online';
-                                            }
-                                            return (
-                                                <button
-                                                    key={t.id}
-                                                    onClick={(e) => {
-                                                        if (t.online_status === 'Off') {
-                                                            e.preventDefault();
-                                                            return;
-                                                        }
-                                                        if (selectedTherapists.includes(t.id)) {
-                                                            setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
-                                                        } else if (selectedTherapists.length < totalGuests) {
-                                                        if (t.online_status === 'Busy') {
-                                                            if (totalGuests > 1) {
-                                                                setPopupState({ isOpen: true, type: 'group', therapistId: null, availableAt: '' });
-                                                                return;
-                                                            }
-                                                            setPopupState({ 
-                                                                isOpen: true, 
-                                                                type: 'time', 
-                                                                therapistId: t.id, 
-                                                                availableAt: t.available_at || '',
-                                                                availableDate: t.availableDate
-                                                            });
-                                                        } else {
-                                                            setSelectedTherapists([...selectedTherapists, t.id]);
-                                                        }
+                                        {isFetchingTherapists ? (
+                                            <>
+                                                {[1, 2, 3].map((i) => (
+                                                    <div key={i} className="w-full p-4 sm:p-5 rounded-3xl flex gap-5 bg-white/5 border border-white/10 mt-2">
+                                                        <div className="w-16 h-16 rounded-full bg-white/10 animate-pulse shrink-0" />
+                                                        <div className="flex-1 flex flex-col justify-center gap-2">
+                                                            <div className="w-12 h-2 bg-white/20 rounded-full animate-pulse" />
+                                                            <div className="w-32 h-3 bg-white/20 rounded-full animate-pulse" />
+                                                            <div className="w-full h-2 bg-white/10 rounded-full animate-pulse mt-1" />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <>
+                                                {therapists.map(rawT => {
+                                                    const isFuture = formData.date && formData.date !== todayStr;
+                                                    const t = { ...rawT } as any;
+                                                    if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
+                                                        t.online_status = 'Online';
+                                                    } else if (!isFuture && t.online_status === 'Busy' && t.available_at && formData.time && formData.time >= t.available_at) {
+                                                        t.online_status = 'Online';
                                                     }
-                                                }}
-                                                    className={`w-full p-4 sm:p-5 rounded-3xl text-left flex gap-5 transition-all duration-300 relative overflow-hidden ${
-                                                        selectedTherapists.includes(t.id) 
-                                                        ? "bg-[#292831] border-[#292831] text-white shadow-xl scale-[1.02]" 
-                                                        : (selectedTherapists.length >= totalGuests && !selectedTherapists.includes(t.id) 
-                                                            ? "bg-white/5 border-white/10 opacity-40 cursor-not-allowed" 
-                                                            : "bg-white/10 backdrop-blur-[40px] border border-white/40 hover:bg-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] hover:-translate-y-1")
-                                                    }`}
-                                                >
-                                                    <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border-2 border-white/50 shadow-sm w-16 h-16">
-                                                        <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Bali`} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
-                                                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity backdrop-blur-sm">
-                                                            <span className="text-[9px] font-bold text-white uppercase tracking-wider">View</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex-1 min-w-0 flex flex-col justify-center">
-                                                        <div className="mb-1">
-                                                            {t.online_status === "Off" ? (
-                                                                <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
-                                                            ) : t.online_status === "Busy" ? (
-                                                                <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Busy</span>
-                                                            ) : (
-                                                                <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
-                                                            )}
-                                                        </div>
-                                                        <div className="flex items-center justify-between mb-1">
-                                                            <div className="flex items-center gap-2">
-                                                                <h4 className={`font-serif text-lg leading-none ${selectedTherapists.includes(t.id) ? "text-white" : "text-white"}`}>{t.name}</h4>
+                                                    return (
+                                                        <button
+                                                            key={t.id}
+                                                            onClick={(e) => {
+                                                                if (t.online_status === 'Off') {
+                                                                    e.preventDefault();
+                                                                    return;
+                                                                }
+                                                                if (selectedTherapists.includes(t.id)) {
+                                                                    setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
+                                                                } else if (selectedTherapists.length < totalGuests) {
+                                                                if (t.online_status === 'Busy') {
+                                                                    if (totalGuests > 1) {
+                                                                        setPopupState({ isOpen: true, type: 'group', therapistId: null, availableAt: '' });
+                                                                        return;
+                                                                    }
+                                                                    setPopupState({ 
+                                                                        isOpen: true, 
+                                                                        type: 'time', 
+                                                                        therapistId: t.id, 
+                                                                        availableAt: t.available_at || '',
+                                                                        availableDate: t.availableDate
+                                                                    });
+                                                                } else {
+                                                                    setSelectedTherapists([...selectedTherapists, t.id]);
+                                                                }
+                                                            }
+                                                        }}
+                                                            className={`w-full p-4 sm:p-5 rounded-3xl text-left flex gap-5 transition-all duration-300 relative overflow-hidden ${
+                                                                selectedTherapists.includes(t.id) 
+                                                                ? "bg-[#292831] border-[#292831] text-white shadow-xl scale-[1.02]" 
+                                                                : (selectedTherapists.length >= totalGuests && !selectedTherapists.includes(t.id) 
+                                                                    ? "bg-white/5 border-white/10 opacity-40 cursor-not-allowed" 
+                                                                    : "bg-white/10 backdrop-blur-[40px] border border-white/40 hover:bg-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] hover:-translate-y-1")
+                                                            }`}
+                                                        >
+                                                            <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border-2 border-white/50 shadow-sm w-16 h-16">
+                                                                <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Bali`} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
+                                                                <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity backdrop-blur-sm">
+                                                                    <span className="text-[9px] font-bold text-white uppercase tracking-wider">View</span>
+                                                                </div>
                                                             </div>
-                                                            <div className="flex items-center text-[#2563eb]">
-                                                                <BadgeCheck className="w-4 h-4" />
-                                                            </div>
-                                                        </div>
-                                                        {t.online_status === "Busy" && t.available_at && (
-                                                            <div className="mb-2 text-[10px] font-bold text-amber-400/90 tracking-wide uppercase">
-                                                                Will be ready at {t.available_at}
-                                                            </div>
-                                                        )}
-                                                        <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio}</p>
+                                                            <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                                                <div className="mb-1">
+                                                                    {t.online_status === "Off" ? (
+                                                                        <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
+                                                                    ) : t.online_status === "Busy" ? (
+                                                                        <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Busy</span>
+                                                                    ) : (
+                                                                        <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
+                                                                    )}
+                                                                </div>
+                                                                <div className="flex items-center justify-between mb-1">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <h4 className={`font-serif text-lg leading-none ${selectedTherapists.includes(t.id) ? "text-white" : "text-white"}`}>{t.name}</h4>
+                                                                    </div>
+                                                                    <div className="flex items-center text-[#2563eb]">
+                                                                        <BadgeCheck className="w-4 h-4" />
+                                                                    </div>
+                                                                </div>
+                                                                {t.online_status === "Busy" && t.available_at && (
+                                                                    <div className="mb-2 text-[10px] font-bold text-amber-400/90 tracking-wide uppercase">
+                                                                        Will be ready at {t.available_at}
+                                                                    </div>
+                                                                )}
+                                                                <p className={`text-[11px] leading-relaxed line-clamp-1 mb-2.5 ${selectedTherapists.includes(t.id) ? "text-white/80" : "text-white/60"}`}>{t.bio}</p>
 
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })}
+                                                {therapists.length === 0 && (
+                                                    <div className="p-6 text-center text-sm text-white/90-muted border border-dashed border-white/20/50 rounded-xl bg-surface/50 mt-2">
+                                                        No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
                                                     </div>
-                                                </button>
-                                            );
-                                        })}
-                                        {therapists.length === 0 && (
-                                            <div className="p-6 text-center text-sm text-white/90-muted border border-dashed border-white/20/50 rounded-xl bg-surface/50">
-                                                No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
-                                            </div>
+                                                )}
+                                            </>
                                         )}
                                     </div>
                                 </div>
