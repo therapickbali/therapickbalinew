@@ -587,7 +587,7 @@ export default function RitualsDetails() {
                             )}
 
                                                         {bookingStep === 2 && (
-                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                                <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col relative">
                                     <div className="flex items-center gap-4 mb-6 shrink-0">
                                         <button onClick={() => setBookingStep(1)} className="w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-border transition-colors shrink-0">
                                             <ChevronLeft className="w-4 h-4" />
@@ -597,7 +597,7 @@ export default function RitualsDetails() {
                                     <p className="text-xs text-white/90-muted mb-4 shrink-0">Select the date and time for your booking.</p>
                                     <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
                                     
-                                    <div className="flex flex-col space-y-5 flex-1">
+                                    <div className="flex flex-col space-y-5 flex-1 overflow-y-auto no-scrollbar pb-28">
                                         <div className="space-y-3">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-white/80 ml-1">Select Date</label>
                                             <FloatingCalendar 
@@ -605,7 +605,7 @@ export default function RitualsDetails() {
                                                 onChange={(date) => setFormData({...formData, date})}
                                             />
                                         </div>
-                                        <div className="space-y-1.5">
+                                        <div className="space-y-1.5 pb-8">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-white/80 ml-1">Time</label>
                                             <input 
                                                 type="time" required 
@@ -615,7 +615,7 @@ export default function RitualsDetails() {
                                         </div>
                                     </div>
 
-                                    <div className="mt-8 pt-6 border-t border-white/20/50">
+                                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#111111] via-[#111111] to-transparent pt-12 pb-2 mt-auto">
                                         <button 
                                             type="button"
                                             onClick={() => setBookingStep(3)}
