@@ -374,15 +374,6 @@ export default function TherapistDashboard() {
                     </div>
                 </button>
             </div>
-            
-            <div className="fixed bottom-[104px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[408px] z-40">
-                <button 
-                    onClick={handleSave}
-                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
-                >
-                    {saved ? <><CheckCircle2 className="w-5 h-5" /> Saved Successfully</> : <><Save className="w-5 h-5" /> Update Status</>}
-                </button>
-            </div>
         </motion.div>
     );
 
@@ -569,6 +560,25 @@ export default function TherapistDashboard() {
                     {activeTab === 'profile' && <motion.div key="profile">{renderProfile()}</motion.div>}
                 </AnimatePresence>
             </main>
+
+            {/* Floating Update Status Button */}
+            <AnimatePresence>
+                {activeTab === 'home' && (
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        className="fixed bottom-[104px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[408px] z-40"
+                    >
+                        <button 
+                            onClick={handleSave}
+                            className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
+                        >
+                            {saved ? <><CheckCircle2 className="w-5 h-5" /> Saved Successfully</> : <><Save className="w-5 h-5" /> Update Status</>}
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Floating Bottom Navbar */}
             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-sm z-50">
