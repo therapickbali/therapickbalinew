@@ -114,7 +114,7 @@ type SpaContextType = {
 
 
 
-function processTherapistStatus(t: Therapist): Therapist {
+export function processTherapistStatus(t: Therapist): Therapist {
     const now = new Date();
     const localNow = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
     const todayStr = localNow.toISOString().split('T')[0];

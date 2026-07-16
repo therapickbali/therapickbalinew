@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin, ChevronDown, ChevronUp, Users, MessageCircle, MapPin, CalendarCheck, Share, Clock } from 'lucide-react';
 import Link from 'next/link';
-import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee, Therapist } from '@/context/SpaContext';
+import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee, Therapist, processTherapistStatus } from '@/context/SpaContext';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -123,14 +123,7 @@ export default function AdminDashboard() {
                 setTherapistFees(feesRes.data);
             }
             if (therapistsRes.data) {
-                const now = new Date();
-                const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
-                const processedTherapists = therapistsRes.data.map(t => {
-                    if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
-                        return { ...t, online_status: 'Online', available_at: undefined };
-                    }
-                    return t;
-                });
+                const processedTherapists = therapistsRes.data.map(t => processTherapistStatus(t as Therapist));
                 setAllTherapists(processedTherapists as Therapist[]);
             }
         }
@@ -169,15 +162,13 @@ export default function AdminDashboard() {
     useEffect(() => {
         const interval = setInterval(() => {
             setAllTherapists((current) => {
-                const now = new Date();
-                const currentTimeStr = now.toTimeString().split(' ')[0].substring(0, 5);
                 let changed = false;
                 const next = current.map(t => {
-                    if (t.online_status === 'Busy' && t.available_at && currentTimeStr >= t.available_at) {
+                    const nextT = processTherapistStatus(t);
+                    if (nextT.online_status !== t.online_status || nextT.available_at !== t.available_at) {
                         changed = true;
-                        return { ...t, online_status: 'Online' as const, available_at: undefined };
                     }
-                    return t;
+                    return nextT;
                 });
                 return changed ? next : current;
             });
@@ -1198,84 +1189,73 @@ export default function AdminDashboard() {
                                             .length === 0 ? (
                                             <div className="text-white/60 text-center py-16 bg-white/5 rounded-[32px] border border-white/10">No therapists found for this filter.</div>
                                         ) : (
-                                            <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
-                                                <div className="overflow-x-auto">
-                                                    <table className="w-full text-left border-collapse min-w-[600px]">
-                                                        <thead>
-                                                            <tr className="border-b border-white/10 text-[10px] font-bold uppercase tracking-widest text-white/50 bg-black/20">
-                                                                <th className="p-4 rounded-tl-3xl">Therapist</th>
-                                                                <th className="p-4">Location</th>
-                                                                <th className="p-4">Status</th>
-                                                                <th className="p-4 text-right rounded-tr-3xl">Actions</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody className="divide-y divide-white/5">
-                                                            {allTherapists
-                                                                .filter(t => locationFilter === 'All' || t.location === locationFilter)
-                                                                .filter(t => (statusFilter === 'Working' && t.is_active) || (statusFilter === 'New' && !t.is_active))
-                                                                .map(therapist => (
-                                                                <tr key={therapist.id} className="hover:bg-white/5 transition-colors group">
-                                                                    <td className="p-4 align-middle">
-                                                                        <div className="flex items-center gap-3">
-                                                                            <div 
-                                                                                className="w-12 h-12 bg-white/10 rounded-2xl flex shrink-0 items-center justify-center overflow-hidden border border-white/10 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all hover:scale-105"
-                                                                                onClick={() => therapist.image_url && setSelectedImage(therapist.image_url)}
-                                                                            >
-                                                                                {therapist.image_url ? (
-                                                                                    <img src={therapist.image_url} alt={therapist.name} className="w-full h-full object-cover" />
-                                                                                ) : (
-                                                                                    <Users size={16} className="text-white/50" />
-                                                                                )}
-                                                                            </div>
-                                                                                <div className="flex flex-col justify-center">
-                                                                                    <div className="mb-0.5">
-                                                                                        {therapist.online_status === "Off" ? (
-                                                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
-                                                                                        ) : therapist.online_status === "Busy" ? (
-                                                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Busy</span>
-                                                                                        ) : (
-                                                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
-                                                                                        )}
-                                                                                    </div>
-                                                                                    <div className="flex items-center gap-2">
-                                                                                        <span className="font-bold text-white">{therapist.name}</span>
-                                                                                        {therapist.online_status === 'Online' && <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse" title="Online" />}
-                                                                                    </div>
-                                                                                    {therapist.online_status === 'Busy' && therapist.available_at && (
-                                                                                        <div className="mt-0.5 mb-0.5 text-[9px] font-bold text-amber-400/90 tracking-wide uppercase">
-                                                                                            Will be ready at {therapist.available_at}
-                                                                                        </div>
-                                                                                    )}
-                                                                                    <span className="text-[10px] text-white/50 font-medium">{therapist.brand || 'No Brand'}</span>
-                                                                                </div></div>
-                                                                    </td>
-                                                                    <td className="p-4 align-middle text-white/80 text-sm font-medium">
-                                                                        <div className="flex items-center gap-1.5">
-                                                                            <MapPin size={14} className="text-white/40" />
-                                                                            {therapist.location || 'Unknown'}
+                                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6">
+                                                {allTherapists
+                                                    .filter(t => locationFilter === 'All' || t.location === locationFilter)
+                                                    .filter(t => (statusFilter === 'Working' && t.is_active) || (statusFilter === 'New' && !t.is_active))
+                                                    .map(therapist => (
+                                                        <div 
+                                                            key={therapist.id}
+                                                            onClick={() => setDetailedTherapist(therapist)}
+                                                            className="group relative bg-surface/40 hover:bg-surface/80 border border-white/5 hover:border-white/20 rounded-3xl p-5 cursor-pointer transition-all duration-500 overflow-hidden"
+                                                        >
+                                                            {/* Status indicator top right */}
+                                                            <div className="absolute top-5 right-5 flex items-center gap-1.5 z-10">
+                                                                <button 
+                                                                    onClick={(e) => { e.stopPropagation(); handleTherapistStatus(therapist.id, !therapist.is_active); }}
+                                                                    className={`relative inline-flex h-6 w-10 items-center rounded-full transition-colors focus:outline-none shadow-sm ${therapist.is_active ? 'bg-primary/90' : 'bg-white/10'}`}
+                                                                >
+                                                                    <span className={`inline-block h-4 w-4 transform rounded-full bg-black transition-transform ${therapist.is_active ? 'translate-x-5' : 'translate-x-1'}`} />
+                                                                </button>
+                                                            </div>
+                                                            
+                                                            <div className="flex items-start gap-4">
+                                                                <div 
+                                                                    className="w-16 h-16 rounded-2xl overflow-hidden border border-white/10 shrink-0 cursor-pointer"
+                                                                    onClick={(e) => { e.stopPropagation(); therapist.image_url && setSelectedImage(therapist.image_url); }}
+                                                                >
+                                                                    {therapist.image_url ? (
+                                                                        <img src={therapist.image_url} alt={therapist.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                                                    ) : (
+                                                                        <div className="w-full h-full bg-white/5 flex items-center justify-center"><Users size={20} className="text-white/30" /></div>
+                                                                    )}
+                                                                </div>
+                                                                
+                                                                <div className="flex-1 min-w-0 pr-12">
+                                                                    <div className="flex items-center gap-2 mb-1">
+                                                                        {therapist.online_status === "Off" ? (
+                                                                            <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">Offline</span>
+                                                                        ) : therapist.online_status === "Busy" ? (
+                                                                            <span className="text-[10px] font-bold uppercase tracking-widest text-amber-500">Busy</span>
+                                                                        ) : (
+                                                                            <span className="text-[10px] font-bold uppercase tracking-widest text-green-500">Online</span>
+                                                                        )}
+                                                                        {therapist.online_status === 'Online' && <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse" />}
+                                                                    </div>
+                                                                    
+                                                                    <h3 className="text-white font-bold text-lg truncate mb-1">{therapist.name}</h3>
+                                                                    
+                                                                    {therapist.online_status === 'Busy' && therapist.available_at && (
+                                                                        <div className="text-[10px] font-bold text-amber-400/90 tracking-wide uppercase mb-1">
+                                                                            Will be ready at {therapist.available_at}
                                                                         </div>
-                                                                    </td>
-                                                                    <td className="p-4 align-middle">
-                                                                        <button 
-                                                                            onClick={(e) => { e.stopPropagation(); handleTherapistStatus(therapist.id, !therapist.is_active); }}
-                                                                            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none ${therapist.is_active ? 'bg-primary' : 'bg-white/20'}`}
-                                                                        >
-                                                                            <span className={`inline-block h-5 w-5 transform rounded-full bg-black transition-transform ${therapist.is_active ? 'translate-x-6' : 'translate-x-1'}`} />
-                                                                        </button>
-                                                                    </td>
-                                                                    <td className="p-4 align-middle text-right">
-                                                                        <button 
-                                                                            onClick={() => setDetailedTherapist(therapist)}
-                                                                            className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-colors inline-flex items-center gap-2"
-                                                                        >
-                                                                            See Details
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                                    )}
+                                                                    
+                                                                    <p className="text-[11px] text-white/50 font-medium truncate">{therapist.brand || 'No Brand'}</p>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+                                                                <div className="flex items-center gap-1.5 text-white/40 text-xs font-medium">
+                                                                    <MapPin size={14} />
+                                                                    {therapist.location || 'Unknown'}
+                                                                </div>
+                                                                <div className="text-[10px] font-bold uppercase tracking-widest text-white/30 group-hover:text-primary transition-colors">
+                                                                    See Details
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                             </div>
                                         )}
                                     </div>
@@ -1712,7 +1692,7 @@ export default function AdminDashboard() {
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent pointer-events-none" />
                                 <button 
                                     className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-colors"
-                                    onClick={() => setDetailedTherapist(null)}
+                                    onClick={() => { setDetailedTherapist(null); setEditingTherapistId(null); setEditTherapistData({}); }}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                 </button>
@@ -1730,31 +1710,94 @@ export default function AdminDashboard() {
                             </div>
                             
                             <div className="p-8 overflow-y-auto flex-1 space-y-6">
-                                <div>
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Biography</label>
-                                    <p className="text-white/80 leading-relaxed text-sm">{detailedTherapist.bio || 'No biography provided by this therapist.'}</p>
-                                </div>
-                                
-                                {detailedTherapist.whatsapp && (
-                                    <div>
-                                        <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">WhatsApp Contact</label>
-                                        <a href={`https://wa.me/${detailedTherapist.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-colors px-4 py-2.5 rounded-xl border border-[#25D366]/20">
-                                            <div className="w-7 h-7 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-md">
-                                                <MessageCircle size={14} />
-                                            </div>
-                                            <span className="text-white font-medium text-sm tracking-wide">{detailedTherapist.whatsapp}</span>
-                                        </a>
+                                {editingTherapistId === detailedTherapist.id ? (
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Name</label>
+                                            <input type="text" value={editTherapistData.name || ''} onChange={e => setEditTherapistData({ ...editTherapistData, name: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-primary transition-colors" />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Location</label>
+                                            <select value={editTherapistData.location || ''} onChange={e => setEditTherapistData({ ...editTherapistData, location: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-primary transition-colors appearance-none">
+                                                <option value="Ubud">Ubud</option>
+                                                <option value="Canggu">Canggu</option>
+                                                <option value="Seminyak">Seminyak</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Brand</label>
+                                            <input type="text" value={editTherapistData.brand || ''} onChange={e => setEditTherapistData({ ...editTherapistData, brand: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-primary transition-colors" />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">WhatsApp Contact</label>
+                                            <input type="text" value={editTherapistData.whatsapp || ''} onChange={e => setEditTherapistData({ ...editTherapistData, whatsapp: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-primary transition-colors" placeholder="+62..." />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Biography</label>
+                                            <textarea value={editTherapistData.bio || ''} onChange={e => setEditTherapistData({ ...editTherapistData, bio: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-primary transition-colors h-32 resize-none" />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Image URL (Optional)</label>
+                                            <input type="text" value={editTherapistData.image_url || ''} onChange={e => setEditTherapistData({ ...editTherapistData, image_url: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-primary transition-colors" />
+                                        </div>
                                     </div>
+                                ) : (
+                                    <>
+                                        <div>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Biography</label>
+                                            <p className="text-white/80 leading-relaxed text-sm">{detailedTherapist.bio || 'No biography provided by this therapist.'}</p>
+                                        </div>
+                                        
+                                        {detailedTherapist.whatsapp && (
+                                            <div>
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">WhatsApp Contact</label>
+                                                <a href={`https://wa.me/${detailedTherapist.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-colors px-4 py-2.5 rounded-xl border border-[#25D366]/20">
+                                                    <div className="w-7 h-7 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-md">
+                                                        <MessageCircle size={14} />
+                                                    </div>
+                                                    <span className="text-white font-medium text-sm tracking-wide">{detailedTherapist.whatsapp}</span>
+                                                </a>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                                 
                                 <div className="pt-4 flex items-center justify-between border-t border-white/5">
                                     <div className="flex items-center gap-3">
-                                        <button 
-                                            onClick={() => handleDeleteTherapist(detailedTherapist.id)}
-                                            className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
-                                        >
-                                            <Trash2 size={16} /> Delete Therapist
-                                        </button>
+                                        {editingTherapistId === detailedTherapist.id ? (
+                                            <>
+                                                <button 
+                                                    onClick={async () => {
+                                                        await handleSaveTherapist(detailedTherapist.id);
+                                                        setDetailedTherapist({ ...detailedTherapist, ...editTherapistData });
+                                                    }}
+                                                    className="px-6 py-3 bg-primary hover:bg-primary/90 text-black font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
+                                                >
+                                                    <CheckCircle size={16} /> Save Changes
+                                                </button>
+                                                <button 
+                                                    onClick={() => { setEditingTherapistId(null); setEditTherapistData({}); }}
+                                                    className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <button 
+                                                    onClick={() => handleDeleteTherapist(detailedTherapist.id)}
+                                                    className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
+                                                >
+                                                    <Trash2 size={16} /> Delete
+                                                </button>
+                                                <button 
+                                                    onClick={() => { setEditingTherapistId(detailedTherapist.id); setEditTherapistData(detailedTherapist); }}
+                                                    className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl transition-colors inline-flex items-center gap-2"
+                                                >
+                                                    <Edit3 size={16} /> Edit Profile
+                                                </button>
+                                            </>
+                                        )}
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <span className="text-xs font-bold uppercase tracking-widest text-white/50">Status</span>
