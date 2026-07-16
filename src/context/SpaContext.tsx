@@ -110,6 +110,7 @@ type SpaContextType = {
     setSiteBrandFilter: (brand: string) => void;
     therapists: Therapist[];
     setTherapists: React.Dispatch<React.SetStateAction<Therapist[]>>;
+    isFetchingTherapists: boolean;
 };
 
 
@@ -172,6 +173,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [siteBrandFilter, setSiteBrandFilter] = useState<string>(process.env.NEXT_PUBLIC_SITE_BRAND || 'elexoir');
     const [therapists, setTherapists] = useState<Therapist[]>([]);
+    const [isFetchingTherapists, setIsFetchingTherapists] = useState<boolean>(true);
 
     useEffect(() => {
         async function loadData() {
@@ -240,6 +242,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                 } else if (therapistsRes.error) {
                     setTherapists([]);
                 }
+                setIsFetchingTherapists(false);
 
                 if (hasCache) {
                     setIsLoading(false);
@@ -333,7 +336,9 @@ export function SpaProvider({ children }: { children: ReactNode }) {
             isLoading,
             siteBrandFilter,
             setSiteBrandFilter,
-            therapists, setTherapists
+            therapists,
+            setTherapists,
+            isFetchingTherapists
         }}>
             {children}
         </SpaContext.Provider>

@@ -23,7 +23,7 @@ const CATEGORIES = [
 
 
 export default function Home() {
-    const { treatments, therapists, campaign, products, isLoading } = useSpa();
+    const { treatments, therapists, campaign, products, isLoading, isFetchingTherapists } = useSpa();
 
     const [activeCategory, setActiveCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
@@ -290,8 +290,22 @@ ${treatmentsList}
                     </div>
                 </div>
 
+                {/* Therapist Stories Loading Skeleton */}
+                {isFetchingTherapists && (
+                    <div className="md:hidden mt-2 mb-6 relative z-20 -mx-6">
+                        <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <div key={i} className="flex flex-col items-center gap-2 shrink-0">
+                                    <div className="w-[72px] h-[72px] rounded-full bg-white/5 animate-pulse border-[3px] border-[#111]" />
+                                    <div className="w-12 h-2.5 bg-white/10 rounded-full animate-pulse mt-1" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Therapist Stories */}
-                {therapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || t.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).length > 0 && (
+                {!isFetchingTherapists && therapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || t.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).length > 0 && (
                 <div className="md:hidden mt-2 mb-6 relative z-20 -mx-6">
                     <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
                         {therapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || t.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).map(t => (
@@ -547,8 +561,31 @@ ${treatmentsList}
                 )}
             </div>
             
+            {/* Therapists Section Loading Skeleton */}
+            {isFetchingTherapists && (
+                <div className="hidden md:flex mb-24 flex-col items-center max-w-7xl mx-auto px-6 relative z-10">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-4 block text-center animate-pulse">Meet Our Therapists</span>
+                    <h3 className="font-serif text-3xl md:text-5xl text-white/20 font-medium mb-12 text-center leading-tight animate-pulse bg-white/10 rounded-xl w-64 h-12"></h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 w-full">
+                        {[1, 2, 3, 4].map((i) => (
+                            <div key={i} className="bg-[#111] border border-white/5 rounded-[32px] p-6 flex flex-col items-center text-center">
+                                <div className="w-24 h-24 rounded-full bg-white/5 animate-pulse mb-5 border-2 border-white/10" />
+                                <div className="w-24 h-4 bg-white/10 rounded-full animate-pulse mb-3" />
+                                <div className="w-16 h-3 bg-white/5 rounded-full animate-pulse mb-4" />
+                                <div className="w-20 h-3 bg-white/10 rounded-full animate-pulse mb-4" />
+                                <div className="w-full space-y-2 mt-2">
+                                    <div className="w-full h-2 bg-white/5 rounded-full animate-pulse" />
+                                    <div className="w-5/6 h-2 bg-white/5 rounded-full animate-pulse mx-auto" />
+                                    <div className="w-4/6 h-2 bg-white/5 rounded-full animate-pulse mx-auto" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
             {/* Therapists Section */}
-            {therapists.filter(t => t.is_active).length > 0 && (
+            {!isFetchingTherapists && therapists.filter(t => t.is_active).length > 0 && (
                 <div className="hidden md:flex mb-24 flex-col items-center max-w-7xl mx-auto px-6 relative z-10">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-4 block text-center">Meet Our Therapists</span>
                     <h3 className="font-serif text-3xl md:text-5xl text-white font-medium mb-12 text-center leading-tight">
