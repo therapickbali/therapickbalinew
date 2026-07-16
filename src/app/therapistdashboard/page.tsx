@@ -46,14 +46,26 @@ export default function TherapistDashboard() {
     const [isTrackingLocation, setIsTrackingLocation] = useState(false);
     const watchId = useRef<number | null>(null);
 
-    // Cleanup watcher on unmount
+    // Cleanup watcher on unmount and try to clear location on app close
     useEffect(() => {
+        const handleUnload = () => {
+            if (isTrackingLocation && therapistId) {
+                // Fire and forget update to clear location
+                supabase.from('therapists').update({ latitude: null, longitude: null }).eq('id', therapistId).then();
+            }
+        };
+
+        window.addEventListener('pagehide', handleUnload);
+        window.addEventListener('beforeunload', handleUnload);
+
         return () => {
+            window.removeEventListener('pagehide', handleUnload);
+            window.removeEventListener('beforeunload', handleUnload);
             if (watchId.current !== null) {
                 navigator.geolocation.clearWatch(watchId.current);
             }
         };
-    }, []);
+    }, [isTrackingLocation, therapistId]);
 
     const toggleLocationTracking = async () => {
         if (!navigator.geolocation) {
@@ -204,13 +216,18 @@ export default function TherapistDashboard() {
                     setAvailableAt(parts.length === 2 ? parts[1] : therapistData.available_at);
                 }
                 setProfile({
-                        latitude: therapistData.latitude,
-                        longitude: therapistData.longitude,
+                    latitude: undefined,
+                    longitude: undefined,
                     name: therapistData.name,
                     location: therapistData.location || '',
                     bio: therapistData.bio,
                     avatar: therapistData.image_url || ''
                 });
+
+                // Clear stale location data if it exists, since tracking defaults to OFF on load
+                if (therapistData.latitude || therapistData.longitude) {
+                    supabase.from('therapists').update({ latitude: null, longitude: null }).eq('id', therapistData.id).then();
+                }
             }
             setIsCheckingAuth(false);
         }
