@@ -39,6 +39,8 @@ export type Therapist = {
     available_at?: string;
     latitude?: number;
     longitude?: number;
+    created_at?: string;
+    updated_at?: string;
 };
 
 export type SelectedCampaignTreatment = {
@@ -120,6 +122,18 @@ function processTherapistStatus(t: Therapist): Therapist {
 
     let finalStatus = t.online_status;
     let finalAvailableAt = t.available_at;
+
+    // Auto-reset to Online if the status was updated on a previous calendar day
+    if (t.updated_at) {
+        const updatedDate = new Date(t.updated_at);
+        const localUpdated = new Date(updatedDate.getTime() - (now.getTimezoneOffset() * 60000));
+        const updatedDateStr = localUpdated.toISOString().split('T')[0];
+
+        if (updatedDateStr < todayStr) {
+            finalStatus = 'Online';
+            finalAvailableAt = undefined;
+        }
+    }
 
     if (finalStatus === 'Busy' && finalAvailableAt) {
         const parts = finalAvailableAt.split('|');
