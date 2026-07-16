@@ -10,9 +10,16 @@ import { useSpa } from '@/context/SpaContext';
 
 export default function RitualsDetails() {
     const params = useParams();
-    const id = params?.id as string;
+    const id = (params?.id || params?.slug) as string;
     const { treatments, therapists, isLoading } = useSpa();
-    const treatment = treatments.find(t => t.id === id);
+    const treatment = treatments.find(t => {
+        if (!id) return false;
+        if (t.id === id) return true;
+        // Generate a clean slug from the title: e.g. "Balinese Massage" -> "balinesemassage"
+        const slug = t.title.toLowerCase().replace(/[^a-z0-9]+/g, '');
+        const targetSlug = id.toLowerCase().replace(/[^a-z0-9]+/g, '');
+        return slug === targetSlug;
+    });
 
     const [selectedOptionIdx, setSelectedOptionIdx] = useState(0);
     const [cartItems, setCartItems] = useState<{
@@ -59,6 +66,16 @@ export default function RitualsDetails() {
     const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
 
     if (!treatment) {
+        if (!isLoading) {
+            return (
+                <div className="min-h-screen bg-black flex flex-col items-center justify-center font-serif text-white">
+                    <h2 className="text-3xl mb-4 text-white/50">Treatment Not Found</h2>
+                    <Link href="/" className="px-6 py-3 bg-white text-black rounded-full text-sm font-bold tracking-widest uppercase hover:scale-105 transition-transform">
+                        Return to Homepage
+                    </Link>
+                </div>
+            );
+        }
         return <div className="min-h-screen bg-black flex items-center justify-center font-serif text-2xl text-white">Loading...</div>;
     }
 
@@ -151,17 +168,21 @@ export default function RitualsDetails() {
 
 
     const handleShare = async () => {
+        // Generate a clean slug from the title: e.g. "Balinese Massage" -> "balinesemassage"
+        const slug = treatment.title.toLowerCase().replace(/[^a-z0-9]+/g, '');
+        const shareUrl = `${window.location.origin}/${slug}`;
+        
         const shareData = {
             title: `${treatment.title} - Therapick`,
             text: `Book the ${treatment.title} at Therapick Ubud!`,
-            url: window.location.href,
+            url: shareUrl,
         };
 
         try {
             if (navigator.share) {
                 await navigator.share(shareData);
             } else {
-                await navigator.clipboard.writeText(window.location.href);
+                await navigator.clipboard.writeText(shareUrl);
                 alert('Link copied to clipboard!');
             }
         } catch (err) {
