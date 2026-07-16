@@ -30,8 +30,8 @@ export default function FloatingCalendar({ value, onChange, currentTime }: Float
         onChange(`${year}-${month}-${dateStr}`);
     };
 
-    // Generate next 7 days
-    const next7Days = Array.from({ length: 7 }).map((_, i) => {
+    // Generate next 30 days
+    const nextDays = Array.from({ length: 30 }).map((_, i) => {
         const d = new Date();
         d.setDate(d.getDate() + i);
         return d;
@@ -44,9 +44,9 @@ export default function FloatingCalendar({ value, onChange, currentTime }: Float
         <div className="w-full relative">
             <div 
                 ref={scrollContainerRef}
-                className="flex overflow-x-auto gap-3 no-scrollbar snap-x snap-mandatory pb-2 px-1"
+                className="grid grid-cols-4 gap-2 overflow-y-auto no-scrollbar max-h-[200px] pb-4 px-1"
             >
-                {next7Days.map((date, i) => {
+                {nextDays.map((date, i) => {
                     const isSelected = selectedDateObj && 
                         selectedDateObj.getDate() === date.getDate() && 
                         selectedDateObj.getMonth() === date.getMonth() && 
@@ -59,26 +59,28 @@ export default function FloatingCalendar({ value, onChange, currentTime }: Float
                             key={i}
                             onClick={() => handleDateSelect(date)}
                             className={`
-                                shrink-0 snap-center w-[72px] h-[90px] rounded-2xl flex flex-col items-center justify-center transition-all duration-300 relative border
+                                w-full aspect-[4/5] rounded-2xl flex flex-col items-center justify-center transition-all duration-300 relative border
                                 ${isSelected 
-                                    ? 'bg-white/20 border-white/50 text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),0_8px_16px_rgba(0,0,0,0.4)] scale-105' 
+                                    ? 'bg-white/20 border-white/50 text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),0_8px_16px_rgba(0,0,0,0.4)] scale-[1.03]' 
                                     : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20'
                                 }
                             `}
                         >
-                            <span className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isSelected ? 'text-white' : 'text-white/50'}`}>
+                            <span className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 ${isSelected ? 'text-white' : 'text-white/50'}`}>
                                 {isToday ? 'Today' : weekDays[date.getDay()]}
                             </span>
-                            <span className={`text-2xl font-serif leading-none mb-1 ${isSelected ? 'text-white font-medium' : 'text-white/90'}`}>
+                            <span className={`text-xl font-serif leading-none mb-1 ${isSelected ? 'text-white font-medium' : 'text-white/90'}`}>
                                 {date.getDate()}
                             </span>
-                            <span className={`text-[9px] font-medium tracking-wider uppercase ${isSelected ? 'text-white/90' : 'text-white/40'}`}>
+                            <span className={`text-[8px] font-medium tracking-wider uppercase ${isSelected ? 'text-white/90' : 'text-white/40'}`}>
                                 {monthNames[date.getMonth()]}
                             </span>
                         </button>
                     );
                 })}
             </div>
+            {/* Fade effect at bottom to indicate scroll */}
+            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#111111] to-transparent pointer-events-none" />
         </div>
     );
 }
