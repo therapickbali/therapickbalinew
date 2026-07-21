@@ -71,7 +71,7 @@ export default function TherapistLogin() {
                 });
                 
                 if (error) throw error;
-                router.push('/therapistdashboard');
+                router.push('/partnerportal');
                 
             } else {
                 // 1. Sign Up the User

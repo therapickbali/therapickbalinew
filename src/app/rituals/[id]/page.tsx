@@ -11,7 +11,7 @@ import { useSpa } from '@/context/SpaContext';
 export default function RitualsDetails() {
     const params = useParams();
     const id = (params?.id || params?.slug) as string;
-    const { treatments, therapists, isLoading } = useSpa();
+    const { treatments, therapists, partnerTherapists, isLoading } = useSpa();
     const treatment = treatments.find(t => {
         if (!id) return false;
         if (t.id === id) return true;
@@ -127,7 +127,7 @@ export default function RitualsDetails() {
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
             const therapistMsg = selectedTherapists.length > 0
-                ? `\n*Therapist Request:* ${selectedTherapists.map(id => therapists.find(t => t.id === id)?.name).join(', ')}`
+                ? `\n*Therapist Request:* ${selectedTherapists.map(id => partnerTherapists.find(t => t.id === id)?.name).join(', ')}`
                 : `\n*Therapist Request:* Assign Automatically`;
 
             const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
@@ -680,27 +680,27 @@ export default function RitualsDetails() {
                                             <span className="text-xs font-bold text-white/80 uppercase tracking-widest">THERAPISTS NEEDED</span>
                                             <span className="text-sm font-bold text-white bg-white/10 px-3 py-1 rounded-full">{selectedTherapists.length} / {totalGuests}</span>
                                         </div>
-                                        {therapists.filter(t => t.location === selectedArea).map(rawT => {
+                                        {partnerTherapists.filter(t => therapists.find(th => th.id === t.partner_id)?.location === selectedArea).map(rawT => {
                                             const todayStr = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
                                             const isFuture = formData.date && formData.date !== todayStr;
                                             const t = { ...rawT } as any;
                                             if (isFuture && (!t.availableDate || t.availableDate !== formData.date)) {
-                                                t.online_status = 'Online';
-                                            } else if (!isFuture && t.online_status === 'Busy' && t.available_at && formData.time && formData.time >= t.available_at) {
-                                                t.online_status = 'Online';
+                                                t.online_status = 'READY TO ACCEPT JOBS';
+                                            } else if (!isFuture && t.online_status === 'HANDLING CUSTOMER' && t.available_at && formData.time && formData.time >= t.available_at) {
+                                                t.online_status = 'READY TO ACCEPT JOBS';
                                             }
                                             return (
                                             <button 
                                                 key={t.id}
                                                 type="button"
                                                 onClick={() => {
-                                                    if (t.online_status === 'Off') {
+                                                    if (t.online_status === 'OFFLINE') {
                                                         return;
                                                     }
                                                     if (selectedTherapists.includes(t.id)) {
                                                         setSelectedTherapists(selectedTherapists.filter(id => id !== t.id));
                                                     } else if (selectedTherapists.length < totalGuests) {
-                                                        if (t.online_status === 'Busy') {
+                                                        if (t.online_status === 'HANDLING CUSTOMER') {
                                                             if (totalGuests > 1) {
                                                                 setPopupState({ isOpen: true, type: 'group', therapistId: null, availableAt: '' });
                                                                 return;
@@ -733,12 +733,12 @@ export default function RitualsDetails() {
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="mb-1">
-                                                        {t.online_status === "Off" ? (
+                                                        {t.online_status === "OFFLINE" ? (
                                                             <span className="text-[9px] font-bold uppercase tracking-widest text-red-400">Offline</span>
-                                                        ) : t.online_status === "Busy" ? (
-                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Busy</span>
+                                                        ) : t.online_status === "HANDLING CUSTOMER" ? (
+                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-amber-500">Handling Customer</span>
                                                         ) : (
-                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Online</span>
+                                                            <span className="text-[9px] font-bold uppercase tracking-widest text-green-500">Ready to accept jobs</span>
                                                         )}
                                                     </div>
                                                     <div className="flex items-center justify-between mb-1">
@@ -759,7 +759,7 @@ export default function RitualsDetails() {
                                                 </div>
                                             </button>
                                         );})}
-                                        {therapists.filter(t => t.location === selectedArea).length === 0 && (
+                                        {partnerTherapists.filter(t => therapists.find(th => th.id === t.partner_id)?.location === selectedArea).length === 0 && (
                                             <div className="p-6 text-center text-sm text-white/90-muted border border-dashed border-white/20/50 rounded-xl bg-surface/50">
                                                 No specific therapists found for {selectedArea}. We will assign the best available therapist for you.
                                             </div>
@@ -811,7 +811,7 @@ export default function RitualsDetails() {
                                                 <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-3">Selected Therapist{selectedTherapists.length > 1 ? 's' : ''}</p>
                                                 <div className="space-y-3">
                                                 {selectedTherapists.map(tid => {
-                                                    const t = therapists.find(th => th.id === tid);
+                                                    const t = partnerTherapists.find(th => th.id === tid);
                                                     if (!t) return null;
                                                     return (
                                                         <div key={tid} className="flex gap-3 items-center bg-white/5 border border-white/10 p-2 rounded-xl">

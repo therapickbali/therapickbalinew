@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, PlusCircle, Settings, LogOut, UploadCloud, CheckCircle, Store, Sparkles, Plus, Trash2, Megaphone, Edit3, Pin, ChevronDown, ChevronUp, Users, MessageCircle, MapPin, CalendarCheck, Share, Clock } from 'lucide-react';
 import Link from 'next/link';
-import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee, Therapist, processTherapistStatus } from '@/context/SpaContext';
+import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee, Therapist, PartnerTherapist, processTherapistStatus } from '@/context/SpaContext';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -86,6 +86,7 @@ export default function AdminDashboard() {
     }
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [allTherapists, setAllTherapists] = useState<Therapist[]>([]);
+    const [allPartnerTherapists, setAllPartnerTherapists] = useState<PartnerTherapist[]>([]);
     const [editingTherapistId, setEditingTherapistId] = useState<string | null>(null);
     const [editTherapistData, setEditTherapistData] = useState<Partial<Therapist>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -109,10 +110,11 @@ export default function AdminDashboard() {
         if (isCheckingAuth) return;
 
         async function fetchData() {
-            const [feesRes, therapistsRes, bookingsRes] = await Promise.all([
+            const [feesRes, therapistsRes, bookingsRes, partnerTherapistsRes] = await Promise.all([
                 supabase.from('therapist_fees').select('*').order('created_at', { ascending: false }),
                 supabase.from('therapists').select('*').order('created_at', { ascending: false }),
-                supabase.from('website_bookings').select('*').order('created_at', { ascending: false })
+                supabase.from('website_bookings').select('*').order('created_at', { ascending: false }),
+                supabase.from('partner_therapists').select('*')
             ]);
             
             if (bookingsRes.data) {
@@ -125,6 +127,9 @@ export default function AdminDashboard() {
             if (therapistsRes.data) {
                 const processedTherapists = therapistsRes.data.map(t => processTherapistStatus(t as Therapist));
                 setAllTherapists(processedTherapists as Therapist[]);
+            }
+            if (partnerTherapistsRes.data) {
+                setAllPartnerTherapists(partnerTherapistsRes.data as PartnerTherapist[]);
             }
         }
         fetchData();
@@ -1512,7 +1517,7 @@ export default function AdminDashboard() {
                                         ) : (
                                             bookings.map((booking) => {
                                                 const requestedTherapistsNames = (booking.requested_therapist_ids || [])
-                                                    .map(id => allTherapists.find(t => t.id === id)?.name || 'Unknown')
+                                                    .map(id => allPartnerTherapists.find(t => t.id === id)?.name || 'Unknown')
                                                     .join(', ');
                                                     
                                                 const treatmentsList = booking.treatments.map((t: any) => `${t.title} (${t.duration}m x${t.guests})`).join(', ');
@@ -1554,12 +1559,15 @@ export default function AdminDashboard() {
                                                                 const msg = `*NEW SPA BOOKING ASSIGNMENT*\n\n*CLIENT DETAILS:*\n- Name: ${booking.customer_name}\n- Date: ${booking.date}\n- Time: ${booking.time}\n- Location Area: ${booking.location_area}\n- Address: ${booking.address}\n- Room Number: ${booking.room_number || 'N/A'}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${booking.total_price.toLocaleString('en-US')}\n\nPlease confirm if you can take this booking!`;
                                                                 if (booking.requested_therapist_ids && booking.requested_therapist_ids.length > 0) {
                                                                     const tId = booking.requested_therapist_ids[0];
-                                                                    const therapist = allTherapists.find(t => t.id === tId);
+                                                                    const subTherapist = allPartnerTherapists.find(t => t.id === tId);
+                                                                    const partnerId = subTherapist?.partner_id;
+                                                                    const therapist = allTherapists.find(t => t.id === partnerId);
                                                                     if (therapist && therapist.whatsapp) {
+                                                                        const msgWithSub = msg.replace('ASSIGNMENT', `ASSIGNMENT\n\n*REQUESTED THERAPIST:* ${subTherapist?.name}`);
                                                                         const phone = therapist.whatsapp.replace(/[^0-9]/g, '');
-                                                                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+                                                                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msgWithSub)}`, '_blank');
                                                                     } else {
-                                                                        alert("Therapist has no valid WhatsApp number.");
+                                                                        alert("Partner has no valid WhatsApp number.");
                                                                     }
                                                                 } else {
                                                                     alert("No specific therapist requested. Please assign manually.");

@@ -49,7 +49,7 @@ export default function TopNav() {
         pathname?.startsWith('/admin') || 
         pathname?.startsWith('/store') || 
         pathname?.startsWith('/therapist-login') || 
-        pathname?.startsWith('/therapistdashboard')
+        pathname?.startsWith('/partnerportal')
     ) {
         return null;
     }

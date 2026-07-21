@@ -23,7 +23,7 @@ const CATEGORIES = [
 
 
 export default function Home() {
-    const { treatments, therapists, campaign, products, isLoading, isFetchingTherapists } = useSpa();
+    const { treatments, products, campaigns, siteBrandFilter, setSiteBrandFilter, partnerTherapists, isFetchingTherapists } = useSpa();
 
     const [activeCategory, setActiveCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
@@ -305,12 +305,15 @@ ${treatmentsList}
                 )}
 
                 {/* Therapist Stories */}
-                {!isFetchingTherapists && therapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || t.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).length > 0 && (
+                {!isFetchingTherapists && partnerTherapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || therapists.find(th => th.id === t.partner_id)?.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).length > 0 && (
                 <div className="md:hidden mt-2 mb-6 relative z-20 -mx-6">
                     <div className="flex overflow-x-auto gap-4 no-scrollbar px-6 pb-2 snap-x snap-mandatory">
-                        {therapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || t.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).map(t => (
-                            <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => setViewingTherapist(t)}>
-                                <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-sm relative ${selectedTherapists.includes(t.id) ? 'bg-gradient-to-tr from-white via-white/80 to-white shadow-[0_8px_20px_rgb(0,0,0,0.3)] scale-110' : 'bg-gradient-to-tr from-white/40 to-white/10 hover:scale-105'}`}>
+                        {partnerTherapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || therapists.find(th => th.id === t.partner_id)?.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).map(t => (
+                            <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => {
+                                const parentTherapist = therapists.find(th => th.id === t.partner_id);
+                                if (parentTherapist) setViewingTherapist(parentTherapist);
+                            }}>
+                                <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-sm relative ${selectedTherapists.includes(t.partner_id) ? 'bg-gradient-to-tr from-white via-white/80 to-white shadow-[0_8px_20px_rgb(0,0,0,0.3)] scale-110' : 'bg-gradient-to-tr from-white/40 to-white/10 hover:scale-105'}`}>
                                     <div className="w-full h-full rounded-full border-[3px] border-[#111] overflow-hidden bg-black">
                                         {t.image_url ? (
                                             <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Bali`} className="w-full h-full object-cover object-top" />
@@ -318,10 +321,10 @@ ${treatmentsList}
                                             <div className="w-full h-full flex items-center justify-center"><User size={24} className="text-white/20" /></div>
                                         )}
                                     </div>
-                                    {t.online_status === 'Online' && <div className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[#111]" />}
-                                    {t.online_status === 'Busy' && <div className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-amber-500 rounded-full border-2 border-[#111]" />}
+                                    {(t.online_status === 'READY TO ACCEPT JOBS' || t.online_status === 'Online') && <div className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[#111]" />}
+                                    {t.online_status === 'HANDLING CUSTOMER' && <div className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-amber-500 rounded-full border-2 border-[#111]" />}
                                 </div>
-                                <span className={`text-[11px] text-center max-w-[72px] truncate transition-all ${selectedTherapists.includes(t.id) ? 'text-white font-bold' : 'text-white/70 font-medium'}`}>
+                                <span className={`text-[11px] text-center max-w-[72px] truncate transition-all ${selectedTherapists.includes(t.partner_id) ? 'text-white font-bold' : 'text-white/70 font-medium'}`}>
                                     {t.name}
                                 </span>
                             </div>
@@ -406,11 +409,11 @@ ${treatmentsList}
                                                 <p className="text-white/50 text-[10px] font-bold line-clamp-1 uppercase tracking-widest">{treatment.category}</p>
                                                 {treatment.therapist_id && (
                                                     (() => {
-                                                        const partner = therapists.find(t => t.id === treatment.therapist_id);
-                                                        return partner ? (
+                                                        const pTherapist = partnerTherapists.find(t => t.partner_id === treatment.therapist_id && (t.online_status === 'READY TO ACCEPT JOBS' || t.online_status === 'Online')) || partnerTherapists.find(t => t.partner_id === treatment.therapist_id);
+                                                        return pTherapist ? (
                                                             <div className="flex items-center gap-1.5">
-                                                                {partner.image_url && <img src={partner.image_url} alt={partner.brand} className="w-4 h-4 rounded-full object-cover" />}
-                                                                <span className="text-[9px] font-medium text-white/70">{partner.brand || partner.name}</span>
+                                                                {pTherapist.image_url && <img src={pTherapist.image_url} alt={pTherapist.name} className="w-4 h-4 rounded-full object-cover" />}
+                                                                <span className="text-[9px] font-medium text-white/70">{pTherapist.name}</span>
                                                             </div>
                                                         ) : null;
                                                     })()
@@ -506,11 +509,11 @@ ${treatmentsList}
                                         </div>
                                         {item.therapist_id && (
                                             (() => {
-                                                const partner = therapists.find(t => t.id === item.therapist_id);
-                                                return partner ? (
+                                                const pTherapist = partnerTherapists.find(t => t.partner_id === item.therapist_id && (t.online_status === 'READY TO ACCEPT JOBS' || t.online_status === 'Online')) || partnerTherapists.find(t => t.partner_id === item.therapist_id);
+                                                return pTherapist ? (
                                                     <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full py-1.5 px-3 border border-white/10">
-                                                        {partner.image_url && <img src={partner.image_url} alt={partner.brand} className="w-5 h-5 rounded-full object-cover" />}
-                                                        <span className="text-[11px] font-medium text-white/90">{partner.brand || partner.name}</span>
+                                                        {pTherapist.image_url && <img src={pTherapist.image_url} alt={pTherapist.name} className="w-5 h-5 rounded-full object-cover" />}
+                                                        <span className="text-[11px] font-medium text-white/90">{pTherapist.name}</span>
                                                     </div>
                                                 ) : null;
                                             })()

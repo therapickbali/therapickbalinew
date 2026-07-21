@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Plus, Edit2, Trash2, X, Save } from 'lucide-react';
 import { Treatment } from '@/context/SpaContext';
+import PartnerTreatmentForm from './PartnerTreatmentForm';
 
 interface PartnerTreatmentsProps {
     therapistId: string;
@@ -14,17 +15,7 @@ export default function PartnerTreatments({ therapistId }: PartnerTreatmentsProp
     const [isLoading, setIsLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     
-    // Form state
-    const [editingId, setEditingId] = useState<string | null>(null);
-    const [title, setTitle] = useState('');
-    const [category, setCategory] = useState('massage');
-    const [desc, setDesc] = useState('');
-    const [duration1, setDuration1] = useState('60');
-    const [price1, setPrice1] = useState('');
-    const [duration2, setDuration2] = useState('');
-    const [price2, setPrice2] = useState('');
-    const [bgPattern, setBgPattern] = useState('pattern1');
-    const [isPublished, setIsPublished] = useState(true);
+    const [editingTreatment, setEditingTreatment] = useState<Treatment | undefined>(undefined);
 
     useEffect(() => {
         fetchTreatments();
@@ -45,35 +36,12 @@ export default function PartnerTreatments({ therapistId }: PartnerTreatmentsProp
     };
 
     const handleAddNew = () => {
-        setEditingId(null);
-        setTitle('');
-        setCategory('massage');
-        setDesc('');
-        setDuration1('60');
-        setPrice1('');
-        setDuration2('');
-        setPrice2('');
-        setBgPattern('pattern1');
-        setIsPublished(true);
+        setEditingTreatment(undefined);
         setIsEditing(true);
     };
 
     const handleEdit = (t: Treatment) => {
-        setEditingId(t.id);
-        setTitle(t.title);
-        setCategory(t.category);
-        setDesc(t.desc);
-        setDuration1(t.options[0]?.duration?.replace(/\D/g, '') || '60');
-        setPrice1(t.options[0]?.price || '');
-        if (t.options.length > 1) {
-            setDuration2(t.options[1]?.duration?.replace(/\D/g, '') || '');
-            setPrice2(t.options[1]?.price || '');
-        } else {
-            setDuration2('');
-            setPrice2('');
-        }
-        setBgPattern(t.bgPattern || 'pattern1');
-        setIsPublished(t.is_published ?? true);
+        setEditingTreatment(t);
         setIsEditing(true);
     };
 
@@ -84,96 +52,17 @@ export default function PartnerTreatments({ therapistId }: PartnerTreatmentsProp
         }
     };
 
-    const handleSave = async () => {
-        if (!title || !desc || !price1) {
-            alert('Please fill out Title, Description, and at least one Price.');
-            return;
-        }
-
-        const options = [{ duration: `${duration1} Min`, price: price1 }];
-        if (duration2 && price2) {
-            options.push({ duration: `${duration2} Min`, price: price2 });
-        }
-
-        const payload = {
-            title,
-            category,
-            desc,
-            options,
-            bgPattern,
-            is_published: isPublished,
-            therapist_id: therapistId
-        };
-
-        if (editingId) {
-            await supabase.from('treatments').update(payload).eq('id', editingId);
-        } else {
-            await supabase.from('treatments').insert([payload]);
-        }
-
-        setIsEditing(false);
-        fetchTreatments();
-    };
-
     if (isEditing) {
         return (
-            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="font-serif text-2xl text-white font-medium">{editingId ? 'Edit Treatment' : 'New Treatment'}</h2>
-                    <button onClick={() => setIsEditing(false)} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white"><X size={16} /></button>
-                </div>
-                
-                <div className="space-y-4">
-                    <div>
-                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Title</label>
-                        <input type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3 px-4 text-white focus:outline-none" />
-                    </div>
-                    <div>
-                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Category</label>
-                        <select value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3 px-4 text-white focus:outline-none [&>option]:text-black">
-                            <option value="massage">Massage</option>
-                            <option value="body">Body</option>
-                            <option value="beauty">Beauty</option>
-                            <option value="packages">Packages</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Description</label>
-                        <textarea value={desc} onChange={e => setDesc(e.target.value)} rows={3} className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3 px-4 text-white focus:outline-none resize-none" />
-                    </div>
-                    
-                    <div className="flex gap-4">
-                        <div className="flex-1">
-                            <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Duration 1 (Min)</label>
-                            <input type="text" value={duration1} onChange={e => setDuration1(e.target.value)} placeholder="60" className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3 px-4 text-white focus:outline-none" />
-                        </div>
-                        <div className="flex-1">
-                            <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Price 1 (e.g. 450,000)</label>
-                            <input type="text" value={price1} onChange={e => setPrice1(e.target.value)} className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3 px-4 text-white focus:outline-none" />
-                        </div>
-                    </div>
-                    
-                    <div className="flex gap-4">
-                        <div className="flex-1">
-                            <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Duration 2 (Optional)</label>
-                            <input type="text" value={duration2} onChange={e => setDuration2(e.target.value)} placeholder="90" className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3 px-4 text-white focus:outline-none" />
-                        </div>
-                        <div className="flex-1">
-                            <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Price 2</label>
-                            <input type="text" value={price2} onChange={e => setPrice2(e.target.value)} className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3 px-4 text-white focus:outline-none" />
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 mt-2 ml-4">
-                        <input type="checkbox" checked={isPublished} onChange={e => setIsPublished(e.target.checked)} id="isPublished" />
-                        <label htmlFor="isPublished" className="text-sm text-white/80">Published</label>
-                    </div>
-
-                    <button onClick={handleSave} className="w-full mt-4 bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                        <Save className="w-5 h-5" /> Save Treatment
-                    </button>
-                </div>
-            </div>
+            <PartnerTreatmentForm 
+                partnerId={therapistId} 
+                treatmentToEdit={editingTreatment}
+                onSaveSuccess={() => {
+                    setIsEditing(false);
+                    fetchTreatments();
+                }}
+                onCancel={() => setIsEditing(false)}
+            />
         );
     }
 

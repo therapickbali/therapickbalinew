@@ -44,6 +44,18 @@ export type Therapist = {
     updated_at?: string;
 };
 
+export type PartnerTherapist = {
+    id: string;
+    partner_id: string;
+    name: string;
+    bio?: string;
+    image_url?: string;
+    online_status?: string;
+    available_at?: string;
+    is_active?: boolean;
+    created_at?: string;
+};
+
 export type SelectedCampaignTreatment = {
     treatmentId: string;
     durations: string[]; // which durations are discounted
@@ -112,6 +124,8 @@ type SpaContextType = {
     therapists: Therapist[];
     setTherapists: React.Dispatch<React.SetStateAction<Therapist[]>>;
     isFetchingTherapists: boolean;
+    partnerTherapists: PartnerTherapist[];
+    setPartnerTherapists: React.Dispatch<React.SetStateAction<PartnerTherapist[]>>;
 };
 
 
@@ -175,6 +189,7 @@ export function SpaProvider({ children }: { children: ReactNode }) {
     const [siteBrandFilter, setSiteBrandFilter] = useState<string>(process.env.NEXT_PUBLIC_SITE_BRAND || 'elexoir');
     const [therapists, setTherapists] = useState<Therapist[]>([]);
     const [isFetchingTherapists, setIsFetchingTherapists] = useState<boolean>(true);
+    const [partnerTherapists, setPartnerTherapists] = useState<PartnerTherapist[]>([]);
 
     useEffect(() => {
         async function loadData() {
@@ -206,11 +221,12 @@ export function SpaProvider({ children }: { children: ReactNode }) {
 
             try {
                 const siteBrand = siteBrandFilter;
-                const [treatmentsRes, productsRes, campaignsRes, therapistsRes] = await Promise.all([
+                const [treatmentsRes, productsRes, campaignsRes, therapistsRes, partnerTherapistsRes] = await Promise.all([
                     supabase.from('treatments').select('*').eq('is_published', true).order('created_at', { ascending: false }),
                     supabase.from('products').select('*').eq('is_published', true).order('created_at', { ascending: false }),
                     supabase.from('campaigns').select('*').eq('is_published', true).order('created_at', { ascending: false }),
-                    supabase.from('therapists').select('*').eq('is_active', true).order('created_at', { ascending: false })
+                    supabase.from('therapists').select('*').eq('is_active', true).order('created_at', { ascending: false }),
+                    supabase.from('partner_therapists').select('*').order('created_at', { ascending: false })
                 ]);
 
                 if (treatmentsRes.data) {
@@ -242,6 +258,12 @@ export function SpaProvider({ children }: { children: ReactNode }) {
                     setTherapists(processedTherapists);
                 } else if (therapistsRes.error) {
                     setTherapists([]);
+                }
+                
+                if (partnerTherapistsRes.data) {
+                    setPartnerTherapists(partnerTherapistsRes.data);
+                } else if (partnerTherapistsRes.error) {
+                    setPartnerTherapists([]);
                 }
                 setIsFetchingTherapists(false);
 
@@ -339,7 +361,9 @@ export function SpaProvider({ children }: { children: ReactNode }) {
             setSiteBrandFilter,
             therapists,
             setTherapists,
-            isFetchingTherapists
+            isFetchingTherapists,
+            partnerTherapists,
+            setPartnerTherapists
         }}>
             {children}
         </SpaContext.Provider>
