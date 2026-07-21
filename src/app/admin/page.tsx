@@ -8,6 +8,7 @@ import { useSpa, SelectedCampaignTreatment, Treatment, Product, TherapistFee, Th
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import InvoiceGenerator from '@/components/InvoiceGenerator';
 import 'leaflet/dist/leaflet.css';
 
 
@@ -685,14 +686,13 @@ export default function AdminDashboard() {
                         </div>
                     )}
 
-                    {activeTab !== 'therapists' && activeTab !== 'livemap' && (
+                    {activeTab !== 'therapists' && activeTab !== 'livemap' && activeTab !== 'book' && (
                         <header className="mb-10">
                             <h1 className="font-serif text-3xl md:text-4xl text-white font-medium mb-2 hidden md:block">
                                 {activeTab === 'treatment' ? (editingTreatmentId ? 'Edit Treatment' : 'Create New Treatment') : 
                                  activeTab === 'campaign' ? 'Create Campaign Card' : 
                                  activeTab === 'store' ? (editingProductId ? 'Edit Product' : 'Add New Product') : 
                                  activeTab === 'fees' ? 'Set Therapist Fee' :
-                                 activeTab === 'book' ? 'Real-Time Bookings' :
                                  activeTab === 'list' ? 'Menu & Offers Management' : 'Settings'}
                             </h1>
                             <p className="text-white/90-muted text-sm hidden md:block">
@@ -700,7 +700,6 @@ export default function AdminDashboard() {
                                  activeTab === 'campaign' ? 'Design a stunning new promotional banner for the homepage.' :
                                  activeTab === 'store' ? 'Add physical products like oils or candles to the Therapick Store.' :
                                  activeTab === 'fees' ? 'Configure fees paid to therapists based on the duration of the treatment.' :
-                                 activeTab === 'book' ? 'Monitor and dispatch incoming bookings to your therapists in real-time.' :
                                  activeTab === 'list' ? 'Manage your published treatments, campaigns, and store products.' : ''}
                             </p>
                         </header>
@@ -1506,93 +1505,124 @@ export default function AdminDashboard() {
 
 
                                 {activeTab === 'book' && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        className="flex flex-col gap-4 md:gap-6 w-full"
-                                    >
-                                        <div className="flex items-center justify-between mb-2 md:hidden">
-                                            <h2 className="font-serif text-2xl text-white font-medium">Bookings</h2>
-                                            <div className="bg-[#0A84FF]/10 text-[#0A84FF] px-3 py-1 rounded-full text-xs font-bold tracking-wider">
-                                                {bookings.length} TOTAL
+                                    <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 w-full">
+                                        <div className="w-full lg:w-[320px] shrink-0">
+                                            <div className="bg-[#1C1C1E] border border-white/[0.08] rounded-[32px] p-6 lg:p-8 sticky top-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+                                                <h3 className="text-white font-bold text-xl mb-6">Calendar</h3>
+                                                <div className="grid grid-cols-7 gap-1 text-center mb-3">
+                                                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => (
+                                                        <div key={d} className="text-white/40 text-[10px] font-bold uppercase">{d}</div>
+                                                    ))}
+                                                </div>
+                                                <div className="grid grid-cols-7 gap-1">
+                                                    {Array.from({ length: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() }).map((_, i) => (
+                                                        <button 
+                                                            key={i} 
+                                                            className={`aspect-square rounded-full flex items-center justify-center text-xs font-bold transition-colors ${i+1 === new Date().getDate() ? 'bg-[#0A84FF] text-white shadow-[0_4px_16px_rgba(10,132,255,0.4)]' : 'text-white/80 hover:bg-white/10'}`}
+                                                        >
+                                                            {i + 1}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                                <div className="mt-8 pt-6 border-t border-white/[0.08]">
+                                                    <p className="text-xs text-white/50 uppercase tracking-widest font-bold mb-2">Total Bookings</p>
+                                                    <p className="text-4xl font-serif text-white">{bookings.length}</p>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        {bookings.length === 0 ? (
-                                            <div className="bg-[#1C1C1E] border border-white/[0.08] rounded-3xl p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
-                                                <CalendarCheck className="w-12 h-12 text-white/30 mb-4" />
-                                                <h3 className="text-white font-bold text-lg">No Bookings Yet</h3>
-                                                <p className="text-white/50 text-sm mt-2">New bookings from the website will appear here instantly.</p>
-                                            </div>
-                                        ) : (
-                                            bookings.map((booking) => {
-                                                const requestedTherapistsNames = (booking.requested_therapist_ids || [])
-                                                    .map(id => allPartnerTherapists.find(t => t.id === id)?.name || 'Unknown')
-                                                    .join(', ');
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className="flex flex-col gap-4 md:gap-6 w-full flex-grow"
+                                        >
+                                            {bookings.length === 0 ? (
+                                                <div className="bg-[#1C1C1E] border border-white/[0.08] rounded-[32px] p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
+                                                    <CalendarCheck className="w-12 h-12 text-white/30 mb-4" />
+                                                    <h3 className="text-white font-bold text-lg">No Bookings Yet</h3>
+                                                    <p className="text-white/50 text-sm mt-2">New bookings from the website will appear here instantly.</p>
+                                                </div>
+                                            ) : (
+                                                bookings.map((booking) => {
+                                                    let companyName = 'Unknown Company';
+                                                    let companyPhone = '6285174119423';
                                                     
-                                                const treatmentsList = booking.treatments.map((t: any) => `${t.title} (${t.duration}m x${t.guests})`).join(', ');
+                                                    if (booking.treatments && booking.treatments.length > 0) {
+                                                        const firstTreatment = booking.treatments[0];
+                                                        const treatmentDetails = treatments.find((t: any) => t.id === firstTreatment.treatmentId);
+                                                        if (treatmentDetails && treatmentDetails.therapist_id) {
+                                                            const partner = allTherapists.find(t => t.id === treatmentDetails.therapist_id);
+                                                            if (partner) {
+                                                                companyName = partner.brand || partner.name;
+                                                                if (partner.whatsapp) companyPhone = partner.whatsapp;
+                                                            }
+                                                        }
+                                                    }
 
-                                                return (
-                                                    <div key={booking.id} className="bg-[#1C1C1E] border border-white/[0.08] rounded-3xl p-5 md:p-6 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
-                                                        <div className="flex justify-between items-start mb-4">
-                                                            <div>
-                                                                <h3 className="text-white font-bold text-lg md:text-xl">{booking.customer_name}</h3>
-                                                                <p className="text-[#0A84FF] text-xs md:text-sm font-semibold mt-1">IDR {booking.total_price.toLocaleString('en-US')}</p>
-                                                            </div>
-                                                            <div className="text-right">
-                                                                <span className="bg-[#34C759]/20 text-[#34C759] px-2 py-1 md:px-3 md:py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider">
-                                                                    {booking.status}
-                                                                </span>
-                                                                <p className="text-white/40 text-[9px] md:text-[10px] mt-2">{new Date(booking.created_at).toLocaleString()}</p>
-                                                            </div>
-                                                        </div>
+                                                    const requestedTherapistsNames = (booking.requested_therapist_ids || [])
+                                                        .map(id => allPartnerTherapists.find(t => t.id === id)?.name || 'Unknown')
+                                                        .join(', ');
                                                         
-                                                        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-5">
-                                                            <div className="bg-white/5 rounded-2xl p-3 md:p-4 border border-white/5">
-                                                                <div className="flex items-center gap-1 md:gap-2 text-white/50 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1"><Clock className="w-3 h-3"/> Time</div>
-                                                                <p className="text-white font-medium text-xs md:text-sm">{booking.date} at {booking.time}</p>
-                                                            </div>
-                                                            <div className="bg-white/5 rounded-2xl p-3 md:p-4 border border-white/5">
-                                                                <div className="flex items-center gap-1 md:gap-2 text-white/50 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1"><MapPin className="w-3 h-3"/> Area</div>
-                                                                <p className="text-white font-medium text-xs md:text-sm line-clamp-1">{booking.location_area}</p>
-                                                            </div>
-                                                        </div>
+                                                    const treatmentsList = booking.treatments.map((t: any) => `${t.title} (${t.duration}m x${t.guests})`).join(', ');
 
-                                                        <div className="space-y-1.5 md:space-y-2 mb-5">
-                                                            <p className="text-xs md:text-sm text-white/80"><strong className="text-white/50 uppercase text-[9px] md:text-[10px] tracking-widest mr-2">Address:</strong> {booking.address} {booking.room_number ? `(Room: ${booking.room_number})` : ''}</p>
-                                                            <p className="text-xs md:text-sm text-white/80"><strong className="text-white/50 uppercase text-[9px] md:text-[10px] tracking-widest mr-2">Treatments:</strong> {treatmentsList}</p>
-                                                            <p className="text-xs md:text-sm text-white/80"><strong className="text-white/50 uppercase text-[9px] md:text-[10px] tracking-widest mr-2">Therapists:</strong> {requestedTherapistsNames || 'Auto Assign'}</p>
+                                                    return (
+                                                        <div key={booking.id} className="bg-[#1C1C1E] border border-white/[0.08] rounded-[32px] p-5 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+                                                            <div className="flex justify-between items-start mb-6">
+                                                                <div>
+                                                                    <span className="bg-[#0A84FF]/20 text-[#0A84FF] px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4 inline-block shadow-sm">
+                                                                        {companyName}
+                                                                    </span>
+                                                                    <h3 className="text-white font-bold text-xl md:text-2xl">{booking.customer_name}</h3>
+                                                                    <p className="text-[#0A84FF] text-sm md:text-base font-semibold mt-2">AED {booking.total_price.toLocaleString('en-US')}</p>
+                                                                </div>
+                                                                <div className="text-right">
+                                                                    <span className="bg-[#34C759]/20 text-[#34C759] px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider">
+                                                                        {booking.status}
+                                                                    </span>
+                                                                    <p className="text-white/40 text-[10px] mt-3 font-medium">{new Date(booking.created_at).toLocaleString()}</p>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6">
+                                                                <div className="bg-white/5 rounded-2xl p-4 md:p-5 border border-white/5">
+                                                                    <div className="flex items-center gap-2 text-white/50 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-2"><Clock className="w-3.5 h-3.5"/> Time</div>
+                                                                    <p className="text-white font-bold text-xs md:text-sm">{booking.date} at {booking.time}</p>
+                                                                </div>
+                                                                <div className="bg-white/5 rounded-2xl p-4 md:p-5 border border-white/5">
+                                                                    <div className="flex items-center gap-2 text-white/50 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-2"><MapPin className="w-3.5 h-3.5"/> Area</div>
+                                                                    <p className="text-white font-bold text-xs md:text-sm line-clamp-1">{booking.location_area}</p>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="space-y-3 mb-8 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
+                                                                <p className="text-xs md:text-sm text-white/90 flex flex-col md:flex-row md:items-start gap-1 md:gap-4"><strong className="text-white/40 uppercase text-[10px] tracking-widest md:w-28 shrink-0 mt-0.5">Address:</strong> <span>{booking.address} {booking.room_number ? `(Room: ${booking.room_number})` : ''}</span></p>
+                                                                <p className="text-xs md:text-sm text-white/90 flex flex-col md:flex-row md:items-start gap-1 md:gap-4"><strong className="text-white/40 uppercase text-[10px] tracking-widest md:w-28 shrink-0 mt-0.5">Treatments:</strong> <span>{treatmentsList}</span></p>
+                                                                <p className="text-xs md:text-sm text-white/90 flex flex-col md:flex-row md:items-start gap-1 md:gap-4"><strong className="text-white/40 uppercase text-[10px] tracking-widest md:w-28 shrink-0 mt-0.5">Therapists:</strong> <span>{requestedTherapistsNames || 'Auto Assign'}</span></p>
+                                                            </div>
+                                                            
+                                                            <div className="flex flex-col md:flex-row gap-3">
+                                                                <button 
+                                                                    onClick={() => {
+                                                                        const msg = `*NEW SPA BOOKING ASSIGNMENT*\n\n*CLIENT DETAILS:*\n- Name: ${booking.customer_name}\n- Date: ${booking.date}\n- Time: ${booking.time}\n- Location Area: ${booking.location_area}\n- Address: ${booking.address}\n- Room Number: ${booking.room_number || 'N/A'}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* AED ${booking.total_price.toLocaleString('en-US')}\n\nPlease confirm if you can take this booking!`;
+                                                                        const phone = companyPhone.replace(/[^0-9]/g, '');
+                                                                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+                                                                    }}
+                                                                    className="flex-1 bg-[#25D366] text-white rounded-xl py-3.5 font-bold text-sm tracking-wide shadow-[0_8px_24px_rgba(37,211,102,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                                                >
+                                                                    <Share className="w-5 h-5" /> Dispatch to Partner
+                                                                </button>
+                                                                
+                                                                <div className="flex-1">
+                                                                    <InvoiceGenerator booking={booking} companyName={companyName} />
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        
-                                                        <button 
-                                                            onClick={() => {
-                                                                const msg = `*NEW SPA BOOKING ASSIGNMENT*\n\n*CLIENT DETAILS:*\n- Name: ${booking.customer_name}\n- Date: ${booking.date}\n- Time: ${booking.time}\n- Location Area: ${booking.location_area}\n- Address: ${booking.address}\n- Room Number: ${booking.room_number || 'N/A'}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${booking.total_price.toLocaleString('en-US')}\n\nPlease confirm if you can take this booking!`;
-                                                                if (booking.requested_therapist_ids && booking.requested_therapist_ids.length > 0) {
-                                                                    const tId = booking.requested_therapist_ids[0];
-                                                                    const subTherapist = allPartnerTherapists.find(t => t.id === tId);
-                                                                    const partnerId = subTherapist?.partner_id;
-                                                                    const therapist = allTherapists.find(t => t.id === partnerId);
-                                                                    if (therapist && therapist.whatsapp) {
-                                                                        const msgWithSub = msg.replace('ASSIGNMENT', `ASSIGNMENT\n\n*REQUESTED THERAPIST:* ${subTherapist?.name}`);
-                                                                        const phone = therapist.whatsapp.replace(/[^0-9]/g, '');
-                                                                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msgWithSub)}`, '_blank');
-                                                                    } else {
-                                                                        alert("Partner has no valid WhatsApp number.");
-                                                                    }
-                                                                } else {
-                                                                    alert("No specific therapist requested. Please assign manually.");
-                                                                }
-                                                            }}
-                                                            className="w-full bg-[#25D366] text-white rounded-2xl py-3 md:py-4 font-bold text-sm md:text-base tracking-wide shadow-[0_8px_32px_rgba(37,211,102,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-                                                        >
-                                                            <Share className="w-4 h-4 md:w-5 md:h-5" /> Dispatch (WhatsApp)
-                                                        </button>
-                                                    </div>
-                                                );
-                                            })
-                                        )}
-                                    </motion.div>
+                                                    );
+                                                })
+                                            )}
+                                        </motion.div>
+                                    </div>
                                 )}
 
                                 {activeTab === 'settings' && (
