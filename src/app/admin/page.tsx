@@ -1633,62 +1633,96 @@ export default function AdminDashboard() {
                                                         const yearNum = dateObj.getFullYear();
 
                                                         return (
-                                                            <div key={booking.id} className="bg-[#1C1C1E] border border-white/[0.08] rounded-[24px] p-5 md:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.15)] flex flex-col md:flex-row gap-6 md:gap-8 hover:border-white/15 transition-all group">
+                                                            <div key={booking.id} className="border-b border-white/[0.08] py-8 first:pt-4 last:border-b-0 flex flex-col xl:flex-row gap-8 hover:bg-white/[0.02] transition-colors -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-2xl xl:rounded-none">
                                                                 
                                                                 {/* Column 1: Time and Date */}
-                                                                <div className="md:w-[150px] shrink-0 border-b md:border-b-0 md:border-r border-white/10 pb-4 md:pb-0 pr-0 md:pr-6 flex flex-row md:flex-col items-center md:items-start justify-between md:justify-start">
-                                                                    <div className="flex items-center md:items-start flex-col">
-                                                                        <span className="text-4xl md:text-5xl font-black tracking-tighter text-white drop-shadow-sm">{booking.time}</span>
-                                                                        <span className="text-sm font-bold text-[#0A84FF] uppercase tracking-widest mt-1 md:mt-2 text-center md:text-left">
+                                                                <div className="xl:w-[160px] shrink-0 border-b xl:border-b-0 xl:border-r border-white/10 pb-6 xl:pb-0 pr-0 xl:pr-6 flex flex-row xl:flex-col items-center xl:items-start justify-between xl:justify-start">
+                                                                    <div className="flex items-center xl:items-start flex-col">
+                                                                        <span className="text-5xl font-black tracking-tighter text-white drop-shadow-sm">{booking.time}</span>
+                                                                        <span className="text-sm font-bold text-[#0A84FF] uppercase tracking-widest mt-2">
                                                                             {monthWord} {dayNum}, {yearNum}
                                                                         </span>
                                                                     </div>
-                                                                    <div className="text-right md:text-left mt-0 md:mt-4">
-                                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Total</p>
-                                                                        <p className="text-sm font-bold text-white mt-0.5">AED {booking.total_price.toLocaleString('en-US')}</p>
+                                                                    <div className="text-right xl:text-left mt-0 xl:mt-8">
+                                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Total Amount</p>
+                                                                        <p className="text-lg font-bold text-white mt-1">AED {booking.total_price.toLocaleString('en-US')}</p>
                                                                     </div>
                                                                 </div>
 
                                                                 {/* Column 2: Details */}
                                                                 <div className="flex-grow flex flex-col justify-center">
-                                                                    <div className="flex items-start justify-between mb-2">
+                                                                    <div className="flex items-start justify-between mb-4">
                                                                         <div>
-                                                                            <span className="bg-[#0A84FF]/20 text-[#0A84FF] px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest mb-3 inline-block shadow-sm">
+                                                                            <span className="bg-[#0A84FF]/10 text-[#0A84FF] px-3 py-1.5 rounded-sm text-[10px] font-bold uppercase tracking-widest mb-3 inline-block border border-[#0A84FF]/20">
                                                                                 {companyName}
                                                                             </span>
-                                                                            <h3 className="text-white font-bold text-xl md:text-2xl">{booking.customer_name}</h3>
+                                                                            <h3 className="text-white font-bold text-2xl">{booking.customer_name}</h3>
                                                                         </div>
                                                                     </div>
                                                                     
-                                                                    <div className="space-y-2 mt-2">
-                                                                        <p className="text-sm text-white/80 flex items-start gap-2">
-                                                                            <MapPin className="w-4 h-4 text-white/40 mt-0.5 shrink-0" />
-                                                                            <span className="leading-snug">{booking.address} <span className="text-white/40 ml-1">({booking.location_area}) {booking.room_number ? `Rm: ${booking.room_number}` : ''}</span></span>
-                                                                        </p>
-                                                                        <p className="text-sm text-white/80 flex items-start gap-2">
-                                                                            <Sparkles className="w-4 h-4 text-white/40 mt-0.5 shrink-0" />
-                                                                            <span className="leading-snug">{treatmentsList}</span>
-                                                                        </p>
-                                                                        {requestedTherapistsNames && (
-                                                                            <p className="text-sm text-white/80 flex items-start gap-2">
-                                                                                <Users className="w-4 h-4 text-white/40 mt-0.5 shrink-0" />
-                                                                                <span className="leading-snug">Requested: {requestedTherapistsNames}</span>
+                                                                    {/* Detailed Grid */}
+                                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5 mt-2">
+                                                                        
+                                                                        {/* Location Block */}
+                                                                        <div className="flex flex-col gap-1">
+                                                                            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Location Area & Address</p>
+                                                                            <p className="text-sm text-white/90 leading-relaxed font-medium">
+                                                                                {booking.location_area} - {booking.address}
                                                                             </p>
+                                                                        </div>
+
+                                                                        {/* Room Number Block */}
+                                                                        <div className="flex flex-col gap-1">
+                                                                            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Room Number</p>
+                                                                            <p className="text-sm text-white/90 leading-relaxed font-medium">
+                                                                                {booking.room_number || '-'}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        {/* Treatments Block */}
+                                                                        <div className="flex flex-col gap-3 md:col-span-2 pt-5 mt-2 border-t border-white/5">
+                                                                            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Treatments Selected</p>
+                                                                            {booking.treatments.map((t: any, idx: number) => (
+                                                                                <div key={idx} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-2 bg-[#1C1C1E] p-4 rounded-xl items-center border border-white/5">
+                                                                                    <div>
+                                                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Treatment Name</p>
+                                                                                        <p className="text-sm text-white font-bold mt-1">{t.title}</p>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Duration</p>
+                                                                                        <p className="text-sm text-white font-bold mt-1">{t.duration} Minutes</p>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Number of Persons</p>
+                                                                                        <p className="text-sm text-white font-bold mt-1">{t.guests}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+
+                                                                        {requestedTherapistsNames && (
+                                                                            <div className="flex flex-col gap-1 md:col-span-2 pt-3">
+                                                                                <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Requested Therapists</p>
+                                                                                <p className="text-sm text-[#0A84FF] leading-relaxed font-bold">
+                                                                                    {requestedTherapistsNames}
+                                                                                </p>
+                                                                            </div>
                                                                         )}
                                                                     </div>
                                                                 </div>
                                                                 
                                                                 {/* Column 3: Actions */}
-                                                                <div className="md:w-[220px] shrink-0 flex flex-col gap-2 justify-center border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 pl-0 md:pl-6">
+                                                                <div className="xl:w-[220px] shrink-0 flex flex-col gap-3 justify-center border-t xl:border-t-0 xl:border-l border-white/10 pt-6 xl:pt-0 pl-0 xl:pl-8">
                                                                     <button 
                                                                         onClick={(e) => {
                                                                             e.preventDefault();
-                                                                            const msg = `*NEW SPA BOOKING ASSIGNMENT*\n\n*CLIENT DETAILS:*\n- Name: ${booking.customer_name}\n- Date: ${monthWord} ${dayNum}, ${yearNum}\n- Time: ${booking.time}\n- Location Area: ${booking.location_area}\n- Address: ${booking.address}\n- Room Number: ${booking.room_number || 'N/A'}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* AED ${booking.total_price.toLocaleString('en-US')}\n\nPlease confirm if you can take this booking!`;
+                                                                            const treatmentsStr = booking.treatments.map((t: any) => `${t.title} (${t.duration} Minutes for ${t.guests} Persons)`).join('\n');
+                                                                            const msg = `*NEW SPA BOOKING ASSIGNMENT*\n\n*CLIENT DETAILS:*\n- Name: ${booking.customer_name}\n- Date: ${monthWord} ${dayNum}, ${yearNum}\n- Time: ${booking.time}\n- Location: ${booking.location_area} - ${booking.address}\n- Room Number: ${booking.room_number || '-'}\n\n*TREATMENTS:*\n${treatmentsStr}\n\n*TOTAL PRICE:* AED ${booking.total_price.toLocaleString('en-US')}\n\nPlease confirm if you can take this booking!`;
                                                                             const phone = companyPhone.replace(/[^0-9]/g, '');
                                                                             window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
                                                                         }}
                                                                         type="button"
-                                                                        className="w-full bg-[#25D366] text-white rounded-xl py-3 font-bold text-xs tracking-wider shadow-[0_4px_16px_rgba(37,211,102,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                                                        className="w-full bg-[#25D366] text-white rounded-xl py-3.5 font-bold text-xs tracking-wider hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                                                                     >
                                                                         <Share className="w-4 h-4" /> Dispatch to Partner
                                                                     </button>
@@ -1717,7 +1751,7 @@ export default function AdminDashboard() {
 
 
                                 {/* Submit Area */}
-                                {activeTab !== 'fees' && activeTab !== 'livemap' && (
+                                {activeTab !== 'fees' && activeTab !== 'livemap' && activeTab !== 'book' && (
                                     <div className="pt-6 border-t border-white/20/30 flex items-center justify-end gap-4">
                                         {success && (
                                         <motion.span 
