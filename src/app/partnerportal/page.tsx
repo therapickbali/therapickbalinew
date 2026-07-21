@@ -180,24 +180,9 @@ export default function PartnerPortal() {
                     </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-white/10">
-                    <div className="flex items-center justify-between">
-                        <div className="flex flex-col">
-                            <span className="text-[15px] font-semibold text-white flex items-center gap-2">
-                                <Navigation className="w-4 h-4 text-[#0A84FF]" />
-                                Share Live Location
-                            </span>
-                            <span className="text-xs text-white/50 mt-1">Updates map while app is open</span>
-                        </div>
-                        <button onClick={toggleLocationTracking} className={`w-14 h-8 rounded-full transition-colors duration-300 relative ${isTrackingLocation ? 'bg-[#34C759]' : 'bg-[#3A3A3C]'}`}>
-                            <div className={`w-7 h-7 bg-white rounded-full shadow-md absolute top-0.5 transition-transform duration-300 ${isTrackingLocation ? 'translate-x-6' : 'translate-x-0.5'}`} />
-                        </button>
-                    </div>
-                </div>
-
-                <div className="mt-6 w-full z-40 pb-6">
-                    <button onClick={handleSaveProfile} className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50">
-                        {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Profile</>}
+                <div className="mt-8 pt-6 border-t border-white/5 w-full z-40 pb-6">
+                    <button onClick={handleSaveProfile} className="w-full bg-[#0A84FF] text-white rounded-xl py-4 font-semibold text-[15px] tracking-wide shadow-lg hover:bg-[#007AFF] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Company Profile</>}
                     </button>
                 </div>
             </div>

@@ -73,9 +73,6 @@ export default function PartnerTreatments({ therapistId }: PartnerTreatmentsProp
                     <h2 className="font-serif text-2xl text-white font-medium">My Treatments</h2>
                     <p className="text-xs text-white/60 mt-1">Manage your services</p>
                 </div>
-                <button onClick={handleAddNew} className="bg-white/10 text-white rounded-full p-3 hover:bg-white/20 transition">
-                    <Plus size={20} />
-                </button>
             </div>
 
             {isLoading ? (

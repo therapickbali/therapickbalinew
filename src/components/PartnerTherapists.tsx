@@ -222,16 +222,7 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
 
     return (
         <div className="flex flex-col gap-6 w-full">
-            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex justify-between items-center relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
-                <div className="relative z-10">
-                    <h2 className="font-serif text-3xl text-white font-medium">Therapists</h2>
-                    <p className="text-xs text-white/60 mt-2 font-medium">Manage your team and availability</p>
-                </div>
-                <button onClick={handleAddNew} className="relative z-10 bg-white text-black rounded-full p-4 hover:scale-105 active:scale-95 transition-all shadow-[0_8px_20px_rgba(255,255,255,0.15)] flex items-center justify-center">
-                    <Plus strokeWidth={2.5} size={24} />
-                </button>
-            </div>
+
 
             {errorMessage && (
                 <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-5 rounded-3xl text-sm font-medium leading-relaxed">
@@ -331,6 +322,19 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
                             </div>
                         </div>
                     )})}
+                </div>
+            )}
+
+            {/* Bottom Add New Section */}
+            {!isLoading && therapists.length > 0 && (
+                <div className="mt-4 bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div className="text-center sm:text-left">
+                        <h3 className="font-serif text-2xl text-white font-medium mb-1">Expand Your Team</h3>
+                        <p className="text-xs text-white/60">Add a new therapist to increase your bookings capacity.</p>
+                    </div>
+                    <button onClick={handleAddNew} className="w-full sm:w-auto bg-[#0A84FF] text-white rounded-full py-3 px-6 font-semibold shadow-lg hover:bg-[#007AFF] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        <Plus size={20} /> Add Therapist
+                    </button>
                 </div>
             )}
         </div>
