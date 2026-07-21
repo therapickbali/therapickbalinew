@@ -237,7 +237,7 @@ export default function RitualsDetails() {
                 {/* Title & Location */}
                 <div className="mb-8">
                     <h1 className="font-serif text-4xl md:text-6xl text-white leading-[1.1] mb-4 tracking-tight">
-                        {treatment.title}
+                        {treatment.title.toUpperCase()}
                     </h1>
                 </div>
 

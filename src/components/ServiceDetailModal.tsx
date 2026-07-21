@@ -117,7 +117,7 @@ const ServiceDetailModal: React.FC<Props> = ({ service, onClose, onAdd }) => {
                                     {service.category}
                                 </span>
                                 <h2 className="font-serif text-5xl lg:text-7xl font-normal text-white mb-5 tracking-tight leading-none">
-                                    {service.name}
+                                    {service.name.toUpperCase()}
                                 </h2>
                                 <div className="flex items-center gap-2.5 text-xs font-medium text-white/90-muted">
                                     <div className="flex items-center gap-1">

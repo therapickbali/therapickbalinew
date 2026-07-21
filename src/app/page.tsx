@@ -542,6 +542,9 @@ ${treatmentsList}
                                         <p className="text-xs text-white/90-muted leading-relaxed font-light mb-6 flex-grow line-clamp-4">{item.desc.charAt(0).toUpperCase() + item.desc.slice(1).toLowerCase()}</p>
                                         
                                         <div className="mt-auto pt-5 border-t border-white/20/50">
+                                            <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/90-muted mb-3 uppercase tracking-widest">
+                                                <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration} MINS
+                                            </div>
                                             <div className="flex items-center justify-between bg-white/10/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-white/10">
                                                 <span className="font-semibold text-white text-[14px]">AED {parseInt(item.options[0]?.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                 <button className="w-10 h-10 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
