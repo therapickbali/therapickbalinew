@@ -17,9 +17,9 @@ const newsreader = Newsreader({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://therapickdubai.vercel.app'),
-  applicationName: 'Book Therapick',
+  applicationName: 'Therapick Dubai',
   appleWebApp: {
-    title: 'Book Therapick',
+    title: 'Therapick Dubai',
   },
   title: {
     default: "Therapick Dubai | Choose Available Therapists in Your Area",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "Therapick Dubai | Choose Available Therapists in Your Area",
     description: "Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Dubai.",
     url: 'https://therapickdubai.vercel.app',
-    siteName: 'Book Therapick',
+    siteName: 'Therapick Dubai',
     images: [
       {
         url: 'https://therapickdubai.vercel.app/logo.png',
@@ -104,13 +104,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const name = "Book Therapick";
+  const name = "Therapick Dubai";
   const url = "https://therapickdubai.vercel.app";
   
   const websiteJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Book Therapick',
+    name: 'Therapick Dubai',
     url: 'https://therapickdubai.vercel.app',
   };
   
