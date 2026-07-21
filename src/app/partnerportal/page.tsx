@@ -460,39 +460,34 @@ export default function PartnerPortal() {
                                                                 <div className="flex flex-col md:col-span-2 pt-6 mt-2 border-t border-white/[0.08]">
                                                                     <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-4">Treatments Selected</p>
                                                                     
-                                                                    {/* Table Header */}
-                                                                    <div className="hidden sm:flex items-center justify-between pb-3 border-b border-white/[0.08]">
-                                                                        <div className="flex-grow">
-                                                                            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Treatment Name</p>
-                                                                        </div>
-                                                                        <div className="flex items-center gap-8 shrink-0">
-                                                                            <div className="w-[100px]">
-                                                                                <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Duration</p>
+                                                                            <div className="hidden sm:grid grid-cols-12 gap-4 pb-3 border-b border-white/[0.08] w-full">
+                                                                                <div className="col-span-7">
+                                                                                    <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Treatment Name</p>
+                                                                                </div>
+                                                                                <div className="col-span-3">
+                                                                                    <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Duration</p>
+                                                                                </div>
+                                                                                <div className="col-span-2 text-right">
+                                                                                    <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Persons</p>
+                                                                                </div>
                                                                             </div>
-                                                                            <div className="w-[80px]">
-                                                                                <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Persons</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
 
-                                                                    <div className="flex flex-col">
-                                                                        {booking.treatments.map((t: any, idx: number) => (
-                                                                            <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-4 border-b border-white/[0.04] last:border-0">
-                                                                                <div className="flex-grow">
-                                                                                    <p className="text-[15px] text-white font-semibold">{t.title}</p>
-                                                                                </div>
-                                                                                <div className="flex items-center justify-between sm:justify-start gap-8 shrink-0 mt-2 sm:mt-0">
-                                                                                    <div className="w-auto sm:w-[100px]">
-                                                                                        <p className="sm:hidden text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Duration</p>
-                                                                                        <p className="text-[15px] text-white/90 font-medium">{t.duration} Min</p>
+                                                                            <div className="flex flex-col w-full">
+                                                                                {booking.treatments.map((t: any, idx: number) => (
+                                                                                    <div key={idx} className="grid grid-cols-1 sm:grid-cols-12 gap-4 py-4 border-b border-white/[0.04] last:border-0 items-center w-full">
+                                                                                        <div className="sm:col-span-7 pr-4">
+                                                                                            <p className="text-[15px] text-white font-semibold">{t.title}</p>
+                                                                                        </div>
+                                                                                        <div className="sm:col-span-3">
+                                                                                            <p className="sm:hidden text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Duration</p>
+                                                                                            <p className="text-[15px] text-white/90 font-medium">{t.duration}</p>
+                                                                                        </div>
+                                                                                        <div className="sm:col-span-2 sm:text-right">
+                                                                                            <p className="sm:hidden text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Persons</p>
+                                                                                            <p className="text-[15px] text-white/90 font-medium">{t.guests}</p>
+                                                                                        </div>
                                                                                     </div>
-                                                                                    <div className="w-auto sm:w-[80px]">
-                                                                                        <p className="sm:hidden text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Persons</p>
-                                                                                        <p className="text-[15px] text-white/90 font-medium">{t.guests}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        ))}
+                                                                                ))}
                                                                     </div>
                                                                 </div>
 
