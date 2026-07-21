@@ -8,7 +8,7 @@ export default function WhyChooseUs() {
     { title: "Certified Therapists", desc: "Highly trained professionals with years of luxury wellness experience." },
     { title: "Premium Massage Oils", desc: "100% organic, locally sourced essential oils for deep nourishment." },
     { title: "Villa & Hotel Service", desc: "We bring the complete spa setup directly to your private accommodation." },
-    { title: "Same-Day Booking", desc: "Flexible scheduling to fit your perfect Bali holiday itinerary." },
+    { title: "Same-Day Booking", desc: "Flexible scheduling to fit your perfect Dubai holiday itinerary." },
     { title: "Professional Wellness", desc: "Curated therapies focusing on holistic healing and deep relaxation." },
     { title: "Hygiene Standards", desc: "Impeccable cleanliness and sanitized equipment for every session." }
   ];

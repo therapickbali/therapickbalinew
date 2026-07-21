@@ -224,7 +224,7 @@ const ReservationSidebar: React.FC<Props> = ({
                             <LocationAutocomplete
                                 value={bookingDetails.location}
                                 onChange={(val) => setBookingDetails({ ...bookingDetails, location: val })}
-                                placeholder="Villa Name, Hotel or Ubud Area"
+                                placeholder="Villa Name, Hotel or Downtown Dubai Area"
                                 className="w-full bg-surface/50 border border-white/20/80 px-4 py-3 rounded-lg text-sm text-white placeholder-text-muted/40 outline-none focus:border-accent focus:bg-black transition-all duration-300"
                             />
                         </div>

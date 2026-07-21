@@ -1169,7 +1169,7 @@ export default function AdminDashboard() {
 
                                                 {/* Location Filter */}
                                                 <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-                                                    {['All', 'Ubud', 'Canggu', 'Seminyak'].map(loc => (
+                                                    {['All', 'Downtown Dubai', 'Dubai Marina', 'Jumeirah'].map(loc => (
                                                         <button 
                                                             key={loc}
                                                             onClick={() => setLocationFilter(loc)}
@@ -1689,9 +1689,9 @@ export default function AdminDashboard() {
                                         <div>
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 block mb-2">Location</label>
                                             <select value={editTherapistData.location || ''} onChange={e => setEditTherapistData({ ...editTherapistData, location: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-primary transition-colors appearance-none">
-                                                <option value="Ubud">Ubud</option>
-                                                <option value="Canggu">Canggu</option>
-                                                <option value="Seminyak">Seminyak</option>
+                                                <option value="Downtown Dubai">Downtown Dubai</option>
+                                                <option value="Dubai Marina">Dubai Marina</option>
+                                                <option value="Jumeirah">Jumeirah</option>
                                             </select>
                                         </div>
                                         <div>

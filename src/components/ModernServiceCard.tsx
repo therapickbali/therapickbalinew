@@ -29,7 +29,7 @@ const ModernServiceCard: React.FC<Props> = ({ service, onView, domRef }) => {
             <div className="relative aspect-[4/5] w-full overflow-hidden mb-4">
                 <img
                     src={service.image}
-                    alt={`${service.name} - Home Massage Ubud Bali`}
+                    alt={`${service.name} - Home Massage Downtown Dubai Dubai`}
                     className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
                 />
             </div>

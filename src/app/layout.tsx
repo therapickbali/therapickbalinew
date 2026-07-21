@@ -16,42 +16,42 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://therapickbali.vercel.app'),
+  metadataBase: new URL('https://therapickdubai.vercel.app'),
   title: {
-    default: "Therapick Bali | Choose Available Therapists in Your Area",
-    template: "%s | Therapick Bali"
+    default: "Therapick Dubai | Choose Available Therapists in Your Area",
+    template: "%s | Therapick Dubai"
   },
-  description: "Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Bali today.",
+  description: "Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Dubai today.",
   keywords: [
-    "Therapick Bali", "Home Massage Bali", "Home Spa Bali", "Bali Home Massage", 
-    "Bali Home Spa", "Mobile Massage Bali", "Mobile Spa Bali", "In-Villa Massage Bali",
-    "Hotel Massage Bali", "Villa Spa Service Bali", "Massage Delivery Bali",
-    "Home Massage Ubud", "Home Spa Ubud", "Home Massage Canggu", "Home Spa Canggu",
-    "Home Massage Seminyak", "Home Massage Kuta", "Home Massage Sanur", 
-    "Home Massage Uluwatu", "Home Massage Nusa Dua", "Home Massage Jimbaran",
-    "Home Massage Legian", "Home Massage Kerobokan", "Home Massage Pererenan",
+    "Therapick Dubai", "Home Massage Dubai", "Home Spa Dubai", "Dubai Home Massage", 
+    "Dubai Home Spa", "Mobile Massage Dubai", "Mobile Spa Dubai", "In-Villa Massage Dubai",
+    "Hotel Massage Dubai", "Villa Spa Service Dubai", "Massage Delivery Dubai",
+    "Home Massage Downtown Dubai", "Home Spa Downtown Dubai", "Home Massage Dubai Marina", "Home Spa Dubai Marina",
+    "Home Massage Jumeirah", "Home Massage Al Barsha", "Home Massage DIFC", 
+    "Home Massage Palm Jumeirah", "Home Massage Business Bay", "Home Massage Dubai Creek",
+    "Home Massage JLT", "Home Massage Kerobokan", "Home Massage Pererenan",
     "Home Massage Berawa", "Home Massage Bingin", "Home Massage Pecatu",
-    "Choose Massage Therapist Bali", "Book Available Therapist Bali", "Massage near me Bali"
+    "Choose Massage Therapist Dubai", "Book Available Therapist Dubai", "Massage near me Dubai"
   ],
-  authors: [{ name: "Therapick Bali" }],
-  creator: "Therapick Bali",
-  publisher: "Therapick Bali",
+  authors: [{ name: "Therapick Dubai" }],
+  creator: "Therapick Dubai",
+  publisher: "Therapick Dubai",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: "Therapick Bali | Choose Available Therapists in Your Area",
-    description: "Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Bali.",
-    url: 'https://therapickbali.vercel.app',
-    siteName: 'Therapick Bali',
+    title: "Therapick Dubai | Choose Available Therapists in Your Area",
+    description: "Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Dubai.",
+    url: 'https://therapickdubai.vercel.app',
+    siteName: 'Therapick Dubai',
     images: [
       {
-        url: 'https://therapickbali.vercel.app/logo.png',
+        url: 'https://therapickdubai.vercel.app/logo.png',
         width: 1200,
         height: 630,
-        alt: 'Therapick Bali - Find Massage Therapists',
+        alt: 'Therapick Dubai - Find Massage Therapists',
       },
     ],
     locale: 'en_US',
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Therapick Bali | Choose Available Therapists in Your Area',
+    title: 'Therapick Dubai | Choose Available Therapists in Your Area',
     description: 'Find and book available professional massage therapists in your area on-demand. Browse therapist profiles and check availability.',
-    images: ['https://therapickbali.vercel.app/logo.png'],
+    images: ['https://therapickdubai.vercel.app/logo.png'],
   },
   alternates: {
     canonical: '/',
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   other: {
     'geo.region': 'ID-BA',
-    'geo.placename': 'Bali',
+    'geo.placename': 'Dubai',
     'geo.position': '-8.4095;115.1889',
     'ICBM': '-8.4095, 115.1889',
   }
@@ -100,22 +100,22 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const name = "Therapick Bali";
-  const url = "https://therapickbali.vercel.app";
+  const name = "Therapick Dubai";
+  const url = "https://therapickdubai.vercel.app";
   
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': ['HealthAndBeautyBusiness', 'DaySpa'],
     name: name,
-    image: 'https://therapickbali.vercel.app/logo.png',
+    image: 'https://therapickdubai.vercel.app/logo.png',
     '@id': url,
     url: url,
     telephone: '+6285174119423',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Jl. Sri Wedari, Ubud',
+      streetAddress: 'Jl. Sri Wedari, Downtown Dubai',
       addressLocality: 'Gianyar',
-      addressRegion: 'Bali',
+      addressRegion: 'Dubai',
       postalCode: '80571',
       addressCountry: 'ID'
     },
@@ -125,15 +125,15 @@ export default async function RootLayout({
       longitude: 115.2625
     },
     areaServed: [
-      { '@type': 'City', name: 'Ubud' },
-      { '@type': 'City', name: 'Canggu' },
-      { '@type': 'City', name: 'Seminyak' },
-      { '@type': 'City', name: 'Uluwatu' },
-      { '@type': 'City', name: 'Sanur' },
-      { '@type': 'City', name: 'Nusa Dua' },
-      { '@type': 'City', name: 'Jimbaran' },
-      { '@type': 'City', name: 'Kuta' },
-      { '@type': 'City', name: 'Legian' }
+      { '@type': 'City', name: 'Downtown Dubai' },
+      { '@type': 'City', name: 'Dubai Marina' },
+      { '@type': 'City', name: 'Jumeirah' },
+      { '@type': 'City', name: 'Palm Jumeirah' },
+      { '@type': 'City', name: 'DIFC' },
+      { '@type': 'City', name: 'Business Bay' },
+      { '@type': 'City', name: 'Dubai Creek' },
+      { '@type': 'City', name: 'Al Barsha' },
+      { '@type': 'City', name: 'JLT' }
     ],
     priceRange: "$$$",
     openingHoursSpecification: {
@@ -152,9 +152,9 @@ export default async function RootLayout({
       worstRating: '1'
     },
     sameAs: [
-      'https://instagram.com/therapickbali'
+      'https://instagram.com/therapickdubai'
     ],
-    description: 'Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Bali.'
+    description: 'Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Dubai.'
   };
 
   const serviceJsonLd = {
@@ -164,7 +164,7 @@ export default async function RootLayout({
     provider: {
       '@type': 'LocalBusiness',
       name: name,
-      image: 'https://therapickbali.vercel.app/logo.png'
+      image: 'https://therapickdubai.vercel.app/logo.png'
     },
     areaServed: {
       '@type': 'GeoCircle',
@@ -190,10 +190,10 @@ export default async function RootLayout({
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'What is the best home spa in Bali?',
+        name: 'What is the best home spa in Dubai?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `${name} is highly rated as one of the best luxury mobile spas in Bali, offering 5-star professional treatments directly to your villa or hotel.`
+          text: `${name} is highly rated as one of the best luxury mobile spas in Dubai, offering 5-star professional treatments directly to your villa or hotel.`
         }
       },
       {
@@ -201,23 +201,23 @@ export default async function RootLayout({
         name: 'Do you provide massage in villas?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, we specialize in in-villa massages and home spa services across Bali, allowing you to choose available therapists in your specific area.'
+          text: 'Yes, we specialize in in-villa massages and home spa services across Dubai, allowing you to choose available therapists in your specific area.'
         }
       },
       {
         '@type': 'Question',
-        name: 'Can I get a massage delivered to my hotel or villa in Bali?',
+        name: 'Can I get a massage delivered to my hotel or villa in Dubai?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes! Therapick provides premium massage delivery and mobile spa services directly to your hotel, villa, or home in Canggu, Seminyak, Ubud, Uluwatu, and other major areas in Bali.'
+          text: 'Yes! Therapick provides premium massage delivery and mobile spa services directly to your hotel, villa, or home in Dubai Marina, Jumeirah, Downtown Dubai, Palm Jumeirah, and other major areas in Dubai.'
         }
       },
       {
         '@type': 'Question',
-        name: 'What types of mobile massage services do you offer in Bali?',
+        name: 'What types of mobile massage services do you offer in Dubai?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'We offer Traditional Balinese Massage, Deep Tissue therapies, couples massage packages, and facial treatments all brought to your location by professional therapists.'
+          text: 'We offer Traditional Dubainese Massage, Deep Tissue therapies, couples massage packages, and facial treatments all brought to your location by professional therapists.'
         }
       }
     ]

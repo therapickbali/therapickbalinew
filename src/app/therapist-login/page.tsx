@@ -232,9 +232,9 @@ export default function TherapistLogin() {
                                                         className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-11 pr-3 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none [&>option]:text-black"
                                                     >
                                                         <option value="" disabled>Location</option>
-                                                        <option value="Ubud">Ubud</option>
-                                                        <option value="Canggu">Canggu</option>
-                                                        <option value="Seminyak">Seminyak</option>
+                                                        <option value="Downtown Dubai">Downtown Dubai</option>
+                                                        <option value="Dubai Marina">Dubai Marina</option>
+                                                        <option value="Jumeirah">Jumeirah</option>
                                                     </select>
                                                 </div>
                                             </div>

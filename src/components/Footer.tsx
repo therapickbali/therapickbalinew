@@ -19,10 +19,10 @@ export default function Footer() {
               <div className="flex items-center gap-2"><img src="/logo.png" alt="Therapick" className="h-6 object-contain" style={{ filter: 'invert(1)' }} /><span className="font-serif text-xl font-medium tracking-wide">Therapick</span></div>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed font-light mb-6">
-              Bali's premier luxury mobile spa. Bringing 5-star professional massages and organic wellness treatments directly to your private villa or hotel.
+              Dubai's premier luxury mobile spa. Bringing 5-star professional massages and organic wellness treatments directly to your private villa or hotel.
             </p>
             <div className="flex gap-4">
-              <a href="https://instagram.com/therapickbali" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-white hover:text-white transition-all">
+              <a href="https://instagram.com/therapickdubai" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:bg-white hover:text-white transition-all">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
             </div>
@@ -43,7 +43,7 @@ export default function Footer() {
           <div>
             <h4 className="text-[11px] font-bold uppercase tracking-widest text-white/40 mb-6">Top Services</h4>
             <ul className="space-y-4">
-              <li><Link href="/rituals" className="text-sm text-white/70 hover:text-white transition-colors">Balinese Massage</Link></li>
+              <li><Link href="/rituals" className="text-sm text-white/70 hover:text-white transition-colors">Dubainese Massage</Link></li>
               <li><Link href="/rituals" className="text-sm text-white/70 hover:text-white transition-colors">Deep Tissue Massage</Link></li>
               <li><Link href="/rituals" className="text-sm text-white/70 hover:text-white transition-colors">Couples Massage</Link></li>
               <li><Link href="/rituals" className="text-sm text-white/70 hover:text-white transition-colors">Foot Reflexology</Link></li>
@@ -61,12 +61,12 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-white/40 shrink-0 mt-0.5" />
-                <span className="text-sm text-white/70 font-light">hello@therapickbali.com</span>
+                <span className="text-sm text-white/70 font-light">hello@therapickdubai.com</span>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-white/40 shrink-0 mt-0.5" />
                 <span className="text-sm text-white/70 font-light leading-relaxed">
-                  Available in Ubud, Canggu, Seminyak, Uluwatu, Sanur, Nusa Dua & Jimbaran.
+                  Available in Downtown Dubai, Dubai Marina, Jumeirah, Palm Jumeirah, DIFC, Business Bay & Dubai Creek.
                 </span>
               </li>
             </ul>

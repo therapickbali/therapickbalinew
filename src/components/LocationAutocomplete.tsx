@@ -11,39 +11,39 @@ declare global {
 
 // SIMULATED DETAILED DATABASE (Fallback when API Key is missing)
 const BALI_LOCATIONS_FALLBACK = [
-  // Seminyak
-  "W Bali - Seminyak", "Potato Head Suites & Studios", "Alila Seminyak", "The Seminyak Beach Resort & Spa", 
-  "Hotel Indigo Bali Seminyak Beach", "Double-Six Luxury Hotel", "Courtyard by Marriott Bali Seminyak Resort",
-  "Peppers Seminyak", "The Trans Resort Bali", "Mrs Sippy Bali", "Ku De Ta", "La Favela",
-  "Villa Kresna Boutique Suites", "Impiana Private Villas Seminyak", "The Oberoi Beach Resort, Bali",
+  // Jumeirah
+  "W Dubai - Jumeirah", "Potato Head Suites & Studios", "Alila Jumeirah", "The Jumeirah Beach Resort & Spa", 
+  "Hotel Indigo Dubai Jumeirah Beach", "Double-Six Luxury Hotel", "Courtyard by Marriott Dubai Jumeirah Resort",
+  "Peppers Jumeirah", "The Trans Resort Dubai", "Mrs Sippy Dubai", "Ku De Ta", "La Favela",
+  "Villa Kresna Boutique Suites", "Impiana Private Villas Jumeirah", "The Oberoi Beach Resort, Dubai",
   
-  // Canggu
-  "COMO Uma Canggu", "The Slow", "Hotel Tugu Bali", "Aston Canggu Beach Resort", "Eastin Ashta Resort Canggu",
-  "The Lawn Canggu", "Finns Beach Club", "La Brisa Bali", "Echo Beach", "Batu Bolong Beach",
-  "Shore Amora Canggu", "Plataran Canggu Bali Resort", "Desa Seni", "Udara Bali Yoga Detox & Spa",
+  // Dubai Marina
+  "COMO Uma Dubai Marina", "The Slow", "Hotel Tugu Dubai", "Aston Dubai Marina Beach Resort", "Eastin Ashta Resort Dubai Marina",
+  "The Lawn Dubai Marina", "Finns Beach Club", "La Brisa Dubai", "Echo Beach", "Batu Bolong Beach",
+  "Shore Amora Dubai Marina", "Plataran Dubai Marina Dubai Resort", "Desa Seni", "Udara Dubai Yoga Detox & Spa",
   
-  // Ubud
-  "The Kayon Jungle Resort", "Hanging Gardens of Bali", "Four Seasons Resort Bali at Sayan", "Mandapa, a Ritz-Carlton Reserve",
-  "Maya Ubud Resort & Spa", "Padma Resort Ubud", "Alaya Resort Ubud", "Komaneka at Bisma",
-  "The Royal Pita Maha", "Viceroy Bali", "Capella Ubud", "COMO Shambhala Estate",
-  "Monkey Forest Ubud", "Tegalalang Rice Terrace", "Campuhan Ridge Walk",
+  // Downtown Dubai
+  "The Kayon Jungle Resort", "Hanging Gardens of Dubai", "Four Seasons Resort Dubai at Sayan", "Mandapa, a Ritz-Carlton Reserve",
+  "Maya Downtown Dubai Resort & Spa", "Padma Resort Downtown Dubai", "Alaya Resort Downtown Dubai", "Komaneka at Bisma",
+  "The Royal Pita Maha", "Viceroy Dubai", "Capella Downtown Dubai", "COMO Shambhala Estate",
+  "Monkey Forest Downtown Dubai", "Tegalalang Rice Terrace", "Campuhan Ridge Walk",
 
-  // Nusa Dua
-  "The St. Regis Bali Resort", "The Mulia, Mulia Resort & Villas", "Ayodya Resort Bali", "Grand Hyatt Bali",
-  "Sofitel Bali Nusa Dua Beach Resort", "The Ritz-Carlton, Bali", "Conrad Bali", "Club Med Bali",
-  "Apurva Kempinski Bali", "Melia Bali",
+  // Business Bay
+  "The St. Regis Dubai Resort", "The Mulia, Mulia Resort & Villas", "Ayodya Resort Dubai", "Grand Hyatt Dubai",
+  "Sofitel Dubai Business Bay Beach Resort", "The Ritz-Carlton, Dubai", "Conrad Dubai", "Club Med Dubai",
+  "Apurva Kempinski Dubai", "Melia Dubai",
 
-  // Jimbaran / Uluwatu
-  "Ayana Resort and Spa, BALI", "Rimba by Ayana Bali", "Four Seasons Resort Bali at Jimbaran Bay",
-  "InterContinental Bali Resort", "Le Meridien Bali Jimbaran",
-  "Six Senses Uluwatu", "Alila Villas Uluwatu", "Bulgari Resort Bali", "The Edge Bali",
-  "Single Fin Bali", "Savaya Bali", "Padang Padang Beach", "Suluban Beach", "Uluwatu Temple",
+  // Dubai Creek / Palm Jumeirah
+  "Ayana Resort and Spa, BALI", "Rimba by Ayana Dubai", "Four Seasons Resort Dubai at Dubai Creek Bay",
+  "InterContinental Dubai Resort", "Le Meridien Dubai Dubai Creek",
+  "Six Senses Palm Jumeirah", "Alila Villas Palm Jumeirah", "Bulgari Resort Dubai", "The Edge Dubai",
+  "Single Fin Dubai", "Savaya Dubai", "Padang Padang Beach", "Suluban Beach", "Palm Jumeirah Temple",
 
   // General Areas
-  "Seminyak, Bali", "Canggu, Bali", "Ubud, Bali", "Kuta, Bali", 
-  "Legian, Bali", "Jimbaran, Bali", "Nusa Dua, Bali", "Uluwatu, Bali", 
-  "Sanur, Bali", "Pererenan, Bali", "Berawa, Canggu", "Kerobokan, Bali", 
-  "Ungasan, Bali", "Pecatu, Bali", "Denpasar, Bali"
+  "Jumeirah, Dubai", "Dubai Marina, Dubai", "Downtown Dubai, Dubai", "Al Barsha, Dubai", 
+  "JLT, Dubai", "Dubai Creek, Dubai", "Business Bay, Dubai", "Palm Jumeirah, Dubai", 
+  "DIFC, Dubai", "Pererenan, Dubai", "Berawa, Dubai Marina", "Kerobokan, Dubai", 
+  "Ungasan, Dubai", "Pecatu, Dubai", "Denpasar, Dubai"
 ];
 
 interface Props {
@@ -93,7 +93,7 @@ const LocationAutocomplete: React.FC<Props> = ({ value, onChange, placeholder = 
             setShowSuggestions(true);
 
             if (autocompleteService.current && window.google && window.google.maps) {
-                const baliBounds = new window.google.maps.LatLngBounds(
+                const dubaiBounds = new window.google.maps.LatLngBounds(
                     new window.google.maps.LatLng(-8.9, 114.4),
                     new window.google.maps.LatLng(-8.0, 115.8)
                 );
@@ -102,7 +102,7 @@ const LocationAutocomplete: React.FC<Props> = ({ value, onChange, placeholder = 
                     input: input,
                     sessionToken: sessionToken.current,
                     componentRestrictions: { country: 'id' },
-                    locationBias: baliBounds,
+                    locationBias: dubaiBounds,
                     types: ['establishment', 'geocode'] 
                 };
 
@@ -153,7 +153,7 @@ const LocationAutocomplete: React.FC<Props> = ({ value, onChange, placeholder = 
 
     const handleCheckMap = () => {
          if (!value) return;
-         const query = encodeURIComponent(value.toLowerCase().includes('bali') ? value : value + ' Bali');
+         const query = encodeURIComponent(value.toLowerCase().includes('dubai') ? value : value + ' Dubai');
          window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
     };
 

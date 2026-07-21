@@ -16,15 +16,15 @@ const ServiceMap = dynamic(() => import('./ServiceMap'), {
 
 export default function ServiceAreas() {
   const areas = [
-    { name: "Ubud", slug: "ubud", desc: "Premium Home Massage & Spa in Ubud." },
-    { name: "Canggu", slug: "canggu", desc: "Luxury Mobile Massage for Canggu villas." },
-    { name: "Seminyak", slug: "seminyak", desc: "Exclusive In-Villa Spa Treatments in Seminyak." },
-    { name: "Uluwatu", slug: "uluwatu", desc: "Relaxing Home Massage experiences in Uluwatu." },
-    { name: "Sanur", slug: "sanur", desc: "Tranquil Mobile Spa brought to your Sanur hotel." },
-    { name: "Nusa Dua", slug: "nusa-dua", desc: "5-star Spa Delivery to Nusa Dua resorts." },
-    { name: "Jimbaran", slug: "jimbaran", desc: "Sunset relaxation with our Jimbaran Home Massage." },
-    { name: "Kuta", slug: "kuta", desc: "Professional Mobile Massage delivered to Kuta." },
-    { name: "Legian", slug: "legian", desc: "Best Home Spa and Massage Delivery in Legian." },
+    { name: "Downtown Dubai", slug: "downtown-dubai", desc: "Premium Home Massage & Spa in Downtown Dubai." },
+    { name: "Dubai Marina", slug: "dubai-marina", desc: "Luxury Mobile Massage for Dubai Marina villas." },
+    { name: "Jumeirah", slug: "jumeirah", desc: "Exclusive In-Villa Spa Treatments in Jumeirah." },
+    { name: "Palm Jumeirah", slug: "palm-jumeirah", desc: "Relaxing Home Massage experiences in Palm Jumeirah." },
+    { name: "DIFC", slug: "difc", desc: "Tranquil Mobile Spa brought to your DIFC hotel." },
+    { name: "Business Bay", slug: "business-bay", desc: "5-star Spa Delivery to Business Bay resorts." },
+    { name: "Dubai Creek", slug: "dubai-creek", desc: "Sunset relaxation with our Dubai Creek Home Massage." },
+    { name: "Al Barsha", slug: "al-barsha", desc: "Professional Mobile Massage delivered to Al Barsha." },
+    { name: "JLT", slug: "jlt", desc: "Best Home Spa and Massage Delivery in JLT." },
     { name: "Kerobokan", slug: "kerobokan", desc: "Premium In-Villa Massage in Kerobokan." },
     { name: "Pererenan", slug: "pererenan", desc: "Luxury Home Massage services in Pererenan." },
     { name: "Berawa", slug: "berawa", desc: "Mobile Spa and Wellness delivered to Berawa." },
@@ -39,7 +39,7 @@ export default function ServiceAreas() {
           <span className="text-[10px] font-bold uppercase tracking-widest text-white/80 mb-3 block">Service Areas</span>
           <h2 className="font-serif text-3xl md:text-4xl text-white leading-tight mb-4">We Come to Your Sanctuary</h2>
           <p className="text-sm text-white/90-muted leading-relaxed font-light">
-            Therapick provides luxury mobile massage and wellness services directly to private villas, estates, and hotels across Bali's most prestigious locations.
+            Therapick provides luxury mobile massage and wellness services directly to private villas, estates, and hotels across Dubai's most prestigious locations.
           </p>
         </div>
       </div>

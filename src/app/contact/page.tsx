@@ -35,13 +35,13 @@ export default function ContactPage() {
                         </div>
                     </a>
 
-                    <a href="mailto:info@therapickbali.com" className="flex items-center gap-4 bg-surface p-5 rounded-2xl border border-white/20/80 active:scale-95 transition-transform">
+                    <a href="mailto:info@therapickdubai.com" className="flex items-center gap-4 bg-surface p-5 rounded-2xl border border-white/20/80 active:scale-95 transition-transform">
                         <div className="w-10 h-10 rounded-full bg-black border border-white/20 flex items-center justify-center shrink-0">
                             <Mail size={18} className="text-white" />
                         </div>
                         <div>
                             <span className="text-[10px] font-bold uppercase tracking-widest text-white/90-muted block mb-1">Email</span>
-                            <span className="font-sans font-medium text-sm text-white">info@therapickbali.com</span>
+                            <span className="font-sans font-medium text-sm text-white">info@therapickdubai.com</span>
                         </div>
                     </a>
 
@@ -51,7 +51,7 @@ export default function ContactPage() {
                         </div>
                         <div>
                             <span className="text-[10px] font-bold uppercase tracking-widest text-white/90-muted block mb-1">Service Area</span>
-                            <span className="font-sans font-medium text-sm text-white">Ubud & Surrounding Areas</span>
+                            <span className="font-sans font-medium text-sm text-white">Downtown Dubai & Surrounding Areas</span>
                         </div>
                     </div>
                 </div>

@@ -10,31 +10,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const locationName = slug.split('-').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
     return {
-        title: "Therapick Bali | Choose Available Therapists in Your Area",
-        description: `Premium home massage and mobile spa services in ${locationName}, Bali. Therapick allows you to book professional, available massage therapists directly to your villa, hotel, or home in ${locationName}.`,
-        keywords: [`Home Massage ${locationName}`, `Home Spa ${locationName}`, `Mobile Massage ${locationName}`, `Mobile Spa ${locationName}`, `In-Villa Massage ${locationName}`, `Massage Delivery ${locationName}`, `Bali Home Massage`, `Bali Home Spa`, `${locationName} Massage Therapist`],
+        title: "Therapick Dubai | Choose Available Therapists in Your Area",
+        description: `Premium home massage and mobile spa services in ${locationName}, Dubai. Therapick allows you to book professional, available massage therapists directly to your villa, hotel, or home in ${locationName}.`,
+        keywords: [`Home Massage ${locationName}`, `Home Spa ${locationName}`, `Mobile Massage ${locationName}`, `Mobile Spa ${locationName}`, `In-Villa Massage ${locationName}`, `Massage Delivery ${locationName}`, `Dubai Home Massage`, `Dubai Home Spa`, `${locationName} Massage Therapist`],
         openGraph: {
-            title: "Therapick Bali | Choose Available Therapists in Your Area",
-            description: `Premium home massage and mobile spa services in ${locationName}, Bali. Book available professional therapists directly to your villa or hotel.`,
-            url: `https://therapickbali.vercel.app/locations/${slug}`,
+            title: "Therapick Dubai | Choose Available Therapists in Your Area",
+            description: `Premium home massage and mobile spa services in ${locationName}, Dubai. Book available professional therapists directly to your villa or hotel.`,
+            url: `https://therapickdubai.vercel.app/locations/${slug}`,
         },
         alternates: {
-            canonical: `https://therapickbali.vercel.app/locations/${slug}`,
+            canonical: `https://therapickdubai.vercel.app/locations/${slug}`,
         }
     };
 }
 
 export function generateStaticParams() {
     return [
-        { slug: 'ubud' },
-        { slug: 'canggu' },
-        { slug: 'seminyak' },
-        { slug: 'kuta' },
-        { slug: 'sanur' },
-        { slug: 'uluwatu' },
-        { slug: 'nusa-dua' },
-        { slug: 'jimbaran' },
-        { slug: 'legian' },
+        { slug: 'downtown-dubai' },
+        { slug: 'dubai-marina' },
+        { slug: 'jumeirah' },
+        { slug: 'al-barsha' },
+        { slug: 'difc' },
+        { slug: 'palm-jumeirah' },
+        { slug: 'business-bay' },
+        { slug: 'dubai-creek' },
+        { slug: 'jlt' },
         { slug: 'kerobokan' },
         { slug: 'pererenan' },
         { slug: 'berawa' },
@@ -50,13 +50,13 @@ export default async function LocationPage({ params }: Props) {
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': ['HealthAndBeautyBusiness', 'DaySpa'],
-        name: 'Therapick Bali',
-        image: 'https://therapickbali.vercel.app/logo.png',
-        '@id': `https://therapickbali.vercel.app/locations/${slug}`,
-        url: `https://therapickbali.vercel.app/locations/${slug}`,
+        name: 'Therapick Dubai',
+        image: 'https://therapickdubai.vercel.app/logo.png',
+        '@id': `https://therapickdubai.vercel.app/locations/${slug}`,
+        url: `https://therapickdubai.vercel.app/locations/${slug}`,
         telephone: '+6285174119423',
         areaServed: { '@type': 'City', name: locationName },
-        description: `Premium home massage and mobile spa services in ${locationName}, Bali.`
+        description: `Premium home massage and mobile spa services in ${locationName}, Dubai.`
     };
     
     const serviceJsonLd = {
@@ -65,8 +65,8 @@ export default async function LocationPage({ params }: Props) {
         serviceType: `Mobile Massage and In-Villa Spa Service in ${locationName}`,
         provider: {
             '@type': 'LocalBusiness',
-            name: 'Therapick Bali',
-            image: 'https://therapickbali.vercel.app/logo.png'
+            name: 'Therapick Dubai',
+            image: 'https://therapickdubai.vercel.app/logo.png'
         },
         areaServed: { '@type': 'City', name: locationName }
     };

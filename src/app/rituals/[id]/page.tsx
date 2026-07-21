@@ -15,7 +15,7 @@ export default function RitualsDetails() {
     const treatment = treatments.find(t => {
         if (!id) return false;
         if (t.id === id) return true;
-        // Generate a clean slug from the title: e.g. "Balinese Massage" -> "balinesemassage"
+        // Generate a clean slug from the title: e.g. "Dubainese Massage" -> "dubainesemassage"
         const slug = t.title.toLowerCase().replace(/[^a-z0-9]+/g, '');
         const targetSlug = id.toLowerCase().replace(/[^a-z0-9]+/g, '');
         return slug === targetSlug;
@@ -63,7 +63,7 @@ export default function RitualsDetails() {
         }
     };
 
-    const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
+    const LOCATIONS = ['Downtown Dubai', 'Dubai Marina', 'Jumeirah', 'Palm Jumeirah', 'Business Bay'];
 
     if (!treatment) {
         if (!isLoading) {
@@ -168,13 +168,13 @@ export default function RitualsDetails() {
 
 
     const handleShare = async () => {
-        // Generate a clean slug from the title: e.g. "Balinese Massage" -> "balinesemassage"
+        // Generate a clean slug from the title: e.g. "Dubainese Massage" -> "dubainesemassage"
         const slug = treatment.title.toLowerCase().replace(/[^a-z0-9]+/g, '');
         const shareUrl = `${window.location.origin}/${slug}`;
         
         const shareData = {
             title: `${treatment.title} - Therapick`,
-            text: `Book the ${treatment.title} at Therapick Ubud!`,
+            text: `Book the ${treatment.title} at Therapick Downtown Dubai!`,
             url: shareUrl,
         };
 
@@ -333,7 +333,7 @@ export default function RitualsDetails() {
                                 Recommended For
                             </h3>
                             <p className="text-sm text-white/90-muted leading-relaxed font-light">
-                                Perfect for those experiencing muscle tension, travel fatigue, or seeking profound relaxation during their Bali holiday. Ideal for couples, honeymooners, and wellness enthusiasts looking for an authentic, premium mobile spa experience.
+                                Perfect for those experiencing muscle tension, travel fatigue, or seeking profound relaxation during their Dubai holiday. Ideal for couples, honeymooners, and wellness enthusiasts looking for an authentic, premium mobile spa experience.
                             </p>
                         </div>
                         <div>
@@ -341,7 +341,7 @@ export default function RitualsDetails() {
                                 Expected Results
                             </h3>
                             <p className="text-sm text-white/90-muted leading-relaxed font-light">
-                                Immediate relief from physical stress and mental fatigue. Promotes improved blood circulation, deeper sleep, restored energy levels, and a lasting sense of holistic wellbeing perfectly aligned with the tranquil spirit of Bali.
+                                Immediate relief from physical stress and mental fatigue. Promotes improved blood circulation, deeper sleep, restored energy levels, and a lasting sense of holistic wellbeing perfectly aligned with the tranquil spirit of Dubai.
                             </p>
                         </div>
                     </div>
@@ -636,7 +636,7 @@ export default function RitualsDetails() {
                                         </button>
                                         <h2 className="font-serif text-2xl text-white">Where are you staying?</h2>
                                     </div>
-                                    <p className="text-xs text-white/90-muted mb-4 shrink-0">Select your area in Bali so we can match you with nearby therapists.</p>
+                                    <p className="text-xs text-white/90-muted mb-4 shrink-0">Select your area in Dubai so we can match you with nearby therapists.</p>
                                     <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
                                     <div className="space-y-3 overflow-y-auto pb-8">
                                         {LOCATIONS.map(loc => (

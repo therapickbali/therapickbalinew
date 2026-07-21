@@ -80,9 +80,9 @@ export const NAV_LINKS = [
 
 export const SERVICES: ServiceItem[] = [
   {
-    id: 'balinese-massage',
-    name: 'Balinese Massage',
-    description: 'Experience the essence of authentic Balinese healing in the sanctuary of your private villa. Our signature full-body ritual employs a harmonious blend of long, rhythmic strokes, gentle stretching, and targeted palm pressure. Designed to restore the body\'s natural energy flow, this treatment is the perfect antidote to travel fatigue and jet lag. Benefits: Alleviates travel-induced stress, stimulates circulation, and cultivates profound physical and mental relaxation.',
+    id: 'dubainese-massage',
+    name: 'Dubainese Massage',
+    description: 'Experience the essence of authentic Dubainese healing in the sanctuary of your private villa. Our signature full-body ritual employs a harmonious blend of long, rhythmic strokes, gentle stretching, and targeted palm pressure. Designed to restore the body\'s natural energy flow, this treatment is the perfect antidote to travel fatigue and jet lag. Benefits: Alleviates travel-induced stress, stimulates circulation, and cultivates profound physical and mental relaxation.',
     duration: '60 / 90 / 120 mins',
     price: 'IDR 250k / 375k / 500k',
     category: 'massage',
@@ -118,7 +118,7 @@ export const SERVICES: ServiceItem[] = [
   {
     id: 'reflexology-foot-massage',
     name: 'Reflexology Foot Massage',
-    description: 'An ancient healing art that applies targeted pressure to specific reflex points on the feet, corresponding to the body\'s internal organs and systems. This therapeutic treatment is the ultimate remedy for revitalizing tired, aching legs after days of exploring Bali\'s landscapes. We transform your living space into a restorative foot sanctuary. Benefits: Stimulates optimal organ function, restores systemic balance, and provides immediate relief from foot and leg fatigue.',
+    description: 'An ancient healing art that applies targeted pressure to specific reflex points on the feet, corresponding to the body\'s internal organs and systems. This therapeutic treatment is the ultimate remedy for revitalizing tired, aching legs after days of exploring Dubai\'s landscapes. We transform your living space into a restorative foot sanctuary. Benefits: Stimulates optimal organ function, restores systemic balance, and provides immediate relief from foot and leg fatigue.',
     duration: '60 / 90 / 120 mins',
     price: 'IDR 250k / 375k / 500k',
     category: 'massage',
@@ -172,7 +172,7 @@ export const SERVICES: ServiceItem[] = [
   {
     id: 'couple-massage',
     name: 'Couple Massage – Home Service',
-    description: 'A beautifully curated, side-by-side Balinese Massage experience designed for two, performed in the intimate setting of your private villa. Complete with two professional therapists and a full luxury spa setup, this ritual is the perfect celebration of connection for honeymoons, anniversaries, or simply shared relaxation. Benefits: Cultivates shared tranquility, deepens emotional connection, and provides comprehensive physical rejuvenation.',
+    description: 'A beautifully curated, side-by-side Dubainese Massage experience designed for two, performed in the intimate setting of your private villa. Complete with two professional therapists and a full luxury spa setup, this ritual is the perfect celebration of connection for honeymoons, anniversaries, or simply shared relaxation. Benefits: Cultivates shared tranquility, deepens emotional connection, and provides comprehensive physical rejuvenation.',
     duration: '60 / 90 / 120 mins',
     price: 'IDR 500k / 750k / 1,000k',
     category: 'packages',
@@ -190,18 +190,18 @@ export const SERVICES: ServiceItem[] = [
 ];
 
 export const TESTIMONIALS: Testimonial[] = [
-  { id: 1, name: "Sarah J.", text: "The best massage I had in Bali! The therapist was so professional and came right to our villa in Seminyak. Pure bliss.", rating: 5 },
+  { id: 1, name: "Sarah J.", text: "The best massage I had in Dubai! The therapist was so professional and came right to our villa in Jumeirah. Pure bliss.", rating: 5 },
   { id: 2, name: "Emily R.", text: "Loved the easy booking via WhatsApp. The aromatherapy massage was heavenly after our long flight.", rating: 5 },
-  { id: 3, name: "Jessica M.", text: "Highly recommend the deep tissue package. My muscles feel amazing! Best home massage service in Canggu.", rating: 5 },
+  { id: 3, name: "Jessica M.", text: "Highly recommend the deep tissue package. My muscles feel amazing! Best home massage service in Dubai Marina.", rating: 5 },
   { id: 4, name: "Michael T.", text: "I'm a surfer and the Deep Tissue massage saved my back. The therapist knew exactly which muscles to target.", rating: 5 },
-  { id: 5, name: "Chloe & Tom", text: "We booked the couples massage for our anniversary in Ubud. It was magical having the therapists come to us.", rating: 5 },
+  { id: 5, name: "Chloe & Tom", text: "We booked the couples massage for our anniversary in Downtown Dubai. It was magical having the therapists come to us.", rating: 5 },
   { id: 6, name: "Amanda L.", text: "Very hygienic and professional. They brought everything including fresh sheets and music. Felt like a 5-star hotel.", rating: 5 },
   { id: 7, name: "David K.", text: "Fast response and great service. The hot stone massage was exactly what I needed to relax.", rating: 5 },
   { id: 8, name: "Sophie W.", text: "The facial acupressure added to my massage was a game changer. I felt totally relieved of stress!", rating: 5 },
-  { id: 9, name: "James P.", text: "Reliable and on time. Hard to find good mobile massage in Uluwatu but Therapick delivered perfectly.", rating: 5 },
+  { id: 9, name: "James P.", text: "Reliable and on time. Hard to find good mobile massage in Palm Jumeirah but Therapick delivered perfectly.", rating: 5 },
   { id: 10, name: "Rebecca H.", text: " booked a late night massage at 9pm. So grateful they offer evening appointments. Will book again!", rating: 5 },
 ];
 
 export const SERVICE_AREAS = [
-  "Seminyak", "Canggu", "Ubud", "Kuta", "Legian", "Jimbaran", "Nusa Dua", "Uluwatu", "Sanur", "All Bali Areas"
+  "Jumeirah", "Dubai Marina", "Downtown Dubai", "Al Barsha", "JLT", "Dubai Creek", "Business Bay", "Palm Jumeirah", "DIFC", "All Dubai Areas"
 ];

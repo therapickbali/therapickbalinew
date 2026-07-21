@@ -171,7 +171,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
 
     return (
         <div className="min-h-screen bg-black relative overflow-hidden font-sans text-white/90 pb-24 md:pb-12">
-            <h1 className="sr-only">{`Premium Home Massage and Mobile Spa Services in ${locationName}, Bali`}</h1>
+            <h1 className="sr-only">{`Premium Home Massage and Mobile Spa Services in ${locationName}, Dubai`}</h1>
             
             {/* Top Gradient Background */}
             <div className="absolute top-0 left-0 right-0 h-[400px] md:h-[500px] bg-gradient-to-b from-[#D2F34C]/20 to-black z-0 pointer-events-none"></div>
@@ -444,7 +444,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                             Sanctuary for the Soul
                         </h3>
                         <p className="text-white/90-muted leading-relaxed mb-8 font-light">
-                            Born from the ancient healing traditions of Bali, Therapick was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
+                            Born from the ancient healing traditions of Dubai, Therapick was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
                         </p>
                         <button className="text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-70 transition-opacity">
                             Discover Our Story <ArrowRight size={16} />
@@ -476,7 +476,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                     </p>
                     <h3 className="text-xl font-serif mb-3">In-Villa Massage Services {locationName}</h3>
                     <p className="text-white/70 text-sm leading-relaxed mb-6">
-                        We specialize in traditional Balinese Massage, Deep Tissue therapies, and exclusive Couples Massage packages. 
+                        We specialize in traditional Dubainese Massage, Deep Tissue therapies, and exclusive Couples Massage packages. 
                         Using only premium, organic massage oils and authentic holistic healing techniques, our bespoke spa treatments in {locationName} 
                         transform your private space into a tranquil sanctuary of rejuvenation. Book your <strong>in-villa massage {locationName}</strong> today.
                     </p>

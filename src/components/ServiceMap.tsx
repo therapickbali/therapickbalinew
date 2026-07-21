@@ -26,14 +26,14 @@ const createCustomIcon = (name: string) => {
 };
 
 const locations = [
-  { name: "Ubud", coords: [-8.5069, 115.2625] as [number, number], desc: "Cultural Heart" },
-  { name: "Canggu", coords: [-8.6478, 115.1385] as [number, number], desc: "Coastal Lifestyle" },
-  { name: "Seminyak", coords: [-8.6913, 115.1639] as [number, number], desc: "Exclusive Villas" },
-  { name: "Uluwatu", coords: [-8.8291, 115.0886] as [number, number], desc: "Cliff-side Relaxation" },
-  { name: "Sanur", coords: [-8.6946, 115.2599] as [number, number], desc: "Tranquil Wellness" },
-  { name: "Nusa Dua", coords: [-8.8066, 115.2268] as [number, number], desc: "5-Star Resorts" },
-  { name: "Jimbaran", coords: [-8.7847, 115.1643] as [number, number], desc: "Sunset Relaxation" },
-  { name: "Kuta", coords: [-8.7233, 115.1723] as [number, number], desc: "Professional Therapy" }
+  { name: "Downtown Dubai", coords: [-8.5069, 115.2625] as [number, number], desc: "Cultural Heart" },
+  { name: "Dubai Marina", coords: [-8.6478, 115.1385] as [number, number], desc: "Coastal Lifestyle" },
+  { name: "Jumeirah", coords: [-8.6913, 115.1639] as [number, number], desc: "Exclusive Villas" },
+  { name: "Palm Jumeirah", coords: [-8.8291, 115.0886] as [number, number], desc: "Cliff-side Relaxation" },
+  { name: "DIFC", coords: [-8.6946, 115.2599] as [number, number], desc: "Tranquil Wellness" },
+  { name: "Business Bay", coords: [-8.8066, 115.2268] as [number, number], desc: "5-Star Resorts" },
+  { name: "Dubai Creek", coords: [-8.7847, 115.1643] as [number, number], desc: "Sunset Relaxation" },
+  { name: "Al Barsha", coords: [-8.7233, 115.1723] as [number, number], desc: "Professional Therapy" }
 ];
 
 export default function ServiceMap() {

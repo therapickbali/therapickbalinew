@@ -75,17 +75,16 @@ export default function Home() {
     const totalGuests = cartItems.reduce((acc, item) => acc + item.guests, 0);
     const [viewingTherapist, setViewingTherapist] = useState<any>(null);
 
-    const [selectedRegion, setSelectedRegion] = useState('Bali');
+    const [selectedRegion, setSelectedRegion] = useState('Dubai');
     const [selectedAreaFilter, setSelectedAreaFilter] = useState('All');
 
 
     
     const REGION_AREAS = {
-        'Bali': ['All', 'Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'],
-        'Dubai': ['All', 'Downtown', 'Marina', 'Palm Jumeirah']
+        'Dubai': ['All', 'Downtown Dubai', 'Dubai Marina', 'Jumeirah', 'Palm Jumeirah', 'Business Bay']
     };
 
-    const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
+    const LOCATIONS = ['Downtown Dubai', 'Dubai Marina', 'Jumeirah', 'Palm Jumeirah', 'Business Bay'];
 
     const filteredAndSortedTreatments = React.useMemo(() => {
         let result = treatments.filter(t => {
@@ -229,7 +228,7 @@ ${treatmentsList}
 
     return (
         <div className="min-h-screen bg-black relative overflow-x-hidden font-sans text-white/90">
-            <h1 className="sr-only">Premium Home Massage, Mobile Spa, and In-Villa Massage Services in Bali</h1>
+            <h1 className="sr-only">Premium Home Massage, Mobile Spa, and In-Villa Massage Services in Dubai</h1>
             
             {/* Global Loading Splash Screen for New Users */}
             <AnimatePresence>
@@ -267,7 +266,7 @@ ${treatmentsList}
                         {/* Region Toggle Button */}
                         <button 
                             onClick={() => {
-                                setSelectedRegion(selectedRegion === 'Bali' ? 'Dubai' : 'Bali');
+                                setSelectedRegion(selectedRegion === 'Dubai' ? 'Dubai' : 'Dubai');
                                 setSelectedAreaFilter('All');
                             }}
                             className={`flex items-center gap-1 shrink-0 px-4 h-10 rounded-full transition-all duration-300 font-serif font-bold tracking-wide ${selectedAreaFilter === 'All' ? 'bg-white/20 shadow-md text-white' : 'text-white/60 hover:bg-white/10'}`}
@@ -327,7 +326,7 @@ ${treatmentsList}
                                 <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-sm relative ${selectedTherapists.includes(t.partner_id) ? 'bg-gradient-to-tr from-white via-white/80 to-white shadow-[0_8px_20px_rgb(0,0,0,0.3)] scale-110' : 'bg-gradient-to-tr from-white/40 to-white/10 hover:scale-105'}`}>
                                     <div className="w-full h-full rounded-full border-[3px] border-[#111] overflow-hidden bg-black">
                                         {t.image_url ? (
-                                            <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Bali`} className="w-full h-full object-cover object-top" />
+                                            <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Dubai`} className="w-full h-full object-cover object-top" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center"><User size={24} className="text-white/20" /></div>
                                         )}
@@ -357,7 +356,7 @@ ${treatmentsList}
                         {/* Background Image */}
                         <img 
                             src={campaign.image || "https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop&crop=center"} 
-                            alt={campaign.title ? `${campaign.title} - Mobile Spa Bali` : "Premium Home Massage in Bali"} 
+                            alt={campaign.title ? `${campaign.title} - Mobile Spa Dubai` : "Premium Home Massage in Dubai"} 
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
                         />
                         
@@ -410,7 +409,7 @@ ${treatmentsList}
                                     <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-[24px] p-2 flex flex-col h-full hover:shadow-none transition-all duration-300 relative group">
                                         <div className="aspect-[4/3] relative bg-[#111] overflow-hidden rounded-[16px]">
                                             {treatment.pinned_image ? (
-                                                <img src={treatment.pinned_image} alt={`${treatment.title} - In-Villa Massage Bali`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                <img src={treatment.pinned_image} alt={`${treatment.title} - In-Villa Massage Dubai`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                             ) : (
                                                 <div className={`w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black opacity-30 group-hover:opacity-50 transition-opacity duration-500`}></div>
                                             )}
@@ -575,7 +574,7 @@ ${treatmentsList}
                                     
                                     {/* Image */}
                                     <div className="aspect-[4/5] relative bg-[#111] overflow-hidden rounded-[16px]">
-                                        <img src={product.image} alt={`${product.title} - Home Spa Product Bali`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                        <img src={product.image} alt={`${product.title} - Home Spa Product Dubai`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     </div>
                                     
                                     {/* Text Info */}
@@ -635,7 +634,7 @@ ${treatmentsList}
                                 <div className="relative mb-5 group-hover:scale-105 transition-transform duration-500">
                                     <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 bg-black">
                                         {t.image_url ? (
-                                            <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Bali`} className="w-full h-full object-cover object-top" />
+                                            <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Dubai`} className="w-full h-full object-cover object-top" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center"><User size={32} className="text-white/20" /></div>
                                         )}
@@ -666,14 +665,14 @@ ${treatmentsList}
                 <div className="mb-24 flex flex-col md:flex-row gap-12 md:gap-24 items-center max-w-7xl mx-auto px-6">
                     <div className="flex-1">
                         <span className="text-xs font-bold uppercase tracking-widest text-white/50 mb-4 block">Our Philosophy</span>
-                        <h3 className="font-serif text-4xl md:text-5xl text-white font-medium mb-6 leading-tight domain-ubud-only">
+                        <h3 className="font-serif text-4xl md:text-5xl text-white font-medium mb-6 leading-tight domain-downtown-dubai-only">
                             Sanctuary for the Soul
                         </h3>
                         <h3 className="font-serif text-4xl md:text-5xl text-white font-medium mb-6 leading-tight domain-bali-only">
-                            The Best Mobile Spa in <span className="italic">Bali</span>
+                            The Best Mobile Spa in <span className="italic">Dubai</span>
                         </h3>
                         <p className="text-white/90-muted leading-relaxed mb-8 font-light">
-                            Born from the ancient healing traditions of Bali, Therapick was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
+                            Born from the ancient healing traditions of Dubai, Therapick was created with a singular vision: to bring unparalleled luxury and profound relaxation directly to your sanctuary. We believe that true wellness requires an environment where you feel completely at ease—your own home or villa.
                         </p>
                         <AnimatePresence>
                             {showStory && (
@@ -684,13 +683,13 @@ ${treatmentsList}
                                     className="overflow-hidden mt-6 mb-8"
                                 >
                                     <h4 className="font-serif text-2xl text-white mb-4 leading-tight">
-                                        The Ultimate <span className="italic">Luxury Home Spa</span> in Bali
+                                        The Ultimate <span className="italic">Luxury Home Spa</span> in Dubai
                                     </h4>
                                     <p className="text-white/90-muted leading-relaxed font-light mb-6">
-                                        Elevate your wellness journey with Therapick, Bali's premier mobile spa and in-villa massage service. Whether you are staying in the lush jungles of Ubud, the vibrant coasts of Canggu and Seminyak, or the breathtaking cliffs of Uluwatu, our certified professional therapists bring the ultimate 5-star spa experience directly to your doorstep.
+                                        Elevate your wellness journey with Therapick, Dubai's premier mobile spa and in-villa massage service. Whether you are staying in the lush jungles of Downtown Dubai, the vibrant coasts of Dubai Marina and Jumeirah, or the breathtaking cliffs of Palm Jumeirah, our certified professional therapists bring the ultimate 5-star spa experience directly to your doorstep.
                                     </p>
                                     <p className="text-white/90-muted leading-relaxed font-light mb-6">
-                                        We specialize in traditional Balinese Massage, Deep Tissue therapies, and exclusive Couples Massage packages designed for absolute relaxation. Using only premium, organic massage oils and authentic holistic healing techniques, our bespoke spa treatments in Bali transform your private villa or hotel room into a tranquil sanctuary of rejuvenation.
+                                        We specialize in traditional Dubainese Massage, Deep Tissue therapies, and exclusive Couples Massage packages designed for absolute relaxation. Using only premium, organic massage oils and authentic holistic healing techniques, our bespoke spa treatments in Dubai transform your private villa or hotel room into a tranquil sanctuary of rejuvenation.
                                     </p>
                                 </motion.div>
                             )}
@@ -1062,7 +1061,7 @@ ${treatmentsList}
                                         </button>
                                         <h2 className="font-serif text-2xl text-white">Where are you staying?</h2>
                                     </div>
-                                    <p className="text-xs text-white/90-muted mb-4 shrink-0">Select your area in Bali so we can match you with nearby therapists.</p>
+                                    <p className="text-xs text-white/90-muted mb-4 shrink-0">Select your area in Dubai so we can match you with nearby therapists.</p>
                                     <div className="w-full h-[1px] bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 mb-6 shrink-0"></div>
                                     <div className="space-y-3 overflow-y-auto pb-8">
                                         {LOCATIONS.map(loc => (
@@ -1163,7 +1162,7 @@ ${treatmentsList}
                                                             }`}
                                                         >
                                                             <div onClick={(e) => { e.stopPropagation(); setViewingTherapist(t); }} className="relative group/avatar cursor-pointer rounded-full overflow-hidden shrink-0 border-2 border-white/50 shadow-sm w-16 h-16">
-                                                                <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Bali`} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
+                                                                <img src={t.image_url} alt={`${t.name} - Professional Massage Therapist in Dubai`} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" />
                                                                 <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity backdrop-blur-sm">
                                                                     <span className="text-[9px] font-bold text-white uppercase tracking-wider">View</span>
                                                                 </div>
@@ -1247,7 +1246,7 @@ ${treatmentsList}
                                                                 <img 
                                                                     src={t.image_url} 
                                                                     className="w-10 h-10 rounded-full object-cover border border-white/20"
-                                                                    alt={`${t.name} - Professional Massage Therapist in Bali`}
+                                                                    alt={`${t.name} - Professional Massage Therapist in Dubai`}
                                                                 />
                                                                 <div>
                                                                     <p className="text-sm font-bold text-white flex items-center gap-2">
@@ -1278,7 +1277,7 @@ ${treatmentsList}
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-white/80 ml-1">Villa / Hotel Address</label>
                                             <input 
-                                                type="text" required placeholder="e.g. Four Seasons Sayan, Ubud"
+                                                type="text" required placeholder="e.g. Four Seasons Sayan, Downtown Dubai"
                                                 value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
                                                 className="w-full bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/90-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                             />

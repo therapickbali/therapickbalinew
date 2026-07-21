@@ -204,7 +204,7 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
                         </div>
                         <div>
                             <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Short Bio & Specialities</label>
-                            <textarea value={bio} onChange={e => setBio(e.target.value)} rows={3} placeholder="e.g. Specialist in Balinese Massage with 5 years experience..." className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-2xl py-4 px-5 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-[#0A84FF]/50 transition-all shadow-inner resize-none" />
+                            <textarea value={bio} onChange={e => setBio(e.target.value)} rows={3} placeholder="e.g. Specialist in Dubainese Massage with 5 years experience..." className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-2xl py-4 px-5 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-[#0A84FF]/50 transition-all shadow-inner resize-none" />
                         </div>
 
                         <button onClick={handleSave} disabled={isSaving} className="w-full mt-2 bg-white text-black rounded-full py-4 font-bold text-[15px] tracking-wide shadow-[0_8px_30px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:scale-100">

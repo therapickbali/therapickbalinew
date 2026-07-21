@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const baseUrl = 'https://therapickbali.vercel.app';
+  const baseUrl = 'https://therapickdubai.vercel.app';
 
   return {
     rules: {

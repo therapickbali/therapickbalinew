@@ -51,7 +51,7 @@ export default function BookingModal({
     const [isProcessing, setIsProcessing] = useState(false);
     const [popupState, setPopupState] = useState<{ isOpen: boolean, type: 'group' | 'time' | null, therapistId: string | null, availableAt: string, availableDate?: string }>({ isOpen: false, type: null, therapistId: null, availableAt: '' });
 
-    const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
+    const LOCATIONS = ['Downtown Dubai', 'Dubai Marina', 'Jumeirah', 'Palm Jumeirah', 'Business Bay'];
     const totalGuests = cartItems.reduce((acc, item) => acc + item.guests, 0);
 
     const toggleTherapist = (id: string) => {

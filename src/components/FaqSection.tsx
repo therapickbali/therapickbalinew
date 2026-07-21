@@ -8,12 +8,12 @@ export default function FaqSection() {
 
   const faqs = [
     {
-      q: "What is the best home spa in Bali?",
-      a: "Therapick is highly rated as one of the best luxury mobile spas in Bali. We specialize in bringing 5-star professional spa treatments, premium organic oils, and certified therapists directly to your private villa or hotel."
+      q: "What is the best home spa in Dubai?",
+      a: "Therapick is highly rated as one of the best luxury mobile spas in Dubai. We specialize in bringing 5-star professional spa treatments, premium organic oils, and certified therapists directly to your private villa or hotel."
     },
     {
       q: "Do you provide massage in villas?",
-      a: "Yes, we specialize exclusively in in-villa massages and home spa services. Our therapists arrive fully equipped to transform your living space into a tranquil wellness sanctuary across Ubud, Canggu, Seminyak, Uluwatu, and beyond."
+      a: "Yes, we specialize exclusively in in-villa massages and home spa services. Our therapists arrive fully equipped to transform your living space into a tranquil wellness sanctuary across Downtown Dubai, Dubai Marina, Jumeirah, Palm Jumeirah, and beyond."
     },
     {
       q: "Do you offer couples massage?",
@@ -25,7 +25,7 @@ export default function FaqSection() {
     },
     {
       q: "Can therapists come to hotels?",
-      a: "Yes, our certified professional therapists can provide mobile massage services directly to your hotel room. We operate seamlessly within Bali's top resorts to ensure you receive the utmost privacy and luxury."
+      a: "Yes, our certified professional therapists can provide mobile massage services directly to your hotel room. We operate seamlessly within Dubai's top resorts to ensure you receive the utmost privacy and luxury."
     },
     {
       q: "How do I book a home spa treatment?",

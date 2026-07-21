@@ -169,9 +169,9 @@ export default function PartnerPortal() {
                     <div>
                         <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Base Location</label>
                         <select value={profile.location} onChange={e => setProfile({...profile, location: e.target.value})} className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3 px-4 text-white focus:outline-none focus:ring-1 focus:ring-white/20 transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] [&>option]:text-black">
-                            <option value="Ubud">Ubud</option>
-                            <option value="Canggu">Canggu</option>
-                            <option value="Seminyak">Seminyak</option>
+                            <option value="Downtown Dubai">Downtown Dubai</option>
+                            <option value="Dubai Marina">Dubai Marina</option>
+                            <option value="Jumeirah">Jumeirah</option>
                         </select>
                     </div>
                     <div>
