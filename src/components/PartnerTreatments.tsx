@@ -67,13 +67,7 @@ export default function PartnerTreatments({ therapistId }: PartnerTreatmentsProp
     }
 
     return (
-        <div className="flex flex-col gap-6">
-            <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex justify-between items-center">
-                <div>
-                    <h2 className="font-serif text-2xl text-white font-medium">My Treatments</h2>
-                    <p className="text-xs text-white/60 mt-1">Manage your services</p>
-                </div>
-            </div>
+        <div className="flex flex-col gap-4">
 
             {isLoading ? (
                 <div className="text-center text-white/50 py-10">Loading...</div>

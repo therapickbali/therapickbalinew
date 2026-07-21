@@ -327,13 +327,9 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
 
             {/* Bottom Add New Section */}
             {!isLoading && therapists.length > 0 && (
-                <div className="mt-4 bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div className="text-center sm:text-left">
-                        <h3 className="font-serif text-2xl text-white font-medium mb-1">Expand Your Team</h3>
-                        <p className="text-xs text-white/60">Add a new therapist to increase your bookings capacity.</p>
-                    </div>
-                    <button onClick={handleAddNew} className="w-full sm:w-auto bg-[#0A84FF] text-white rounded-full py-3 px-6 font-semibold shadow-lg hover:bg-[#007AFF] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                        <Plus size={20} /> Add Therapist
+                <div className="mt-2 flex justify-center">
+                    <button onClick={handleAddNew} className="bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-full py-3 px-8 font-medium transition-all flex items-center justify-center gap-2">
+                        <Plus size={18} /> Add More Therapist
                     </button>
                 </div>
             )}
