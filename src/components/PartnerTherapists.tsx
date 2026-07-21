@@ -16,6 +16,7 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
     const [isEditing, setIsEditing] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
     
     // Form state
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -231,6 +232,18 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
                 </div>
             )}
 
+            {!isLoading && therapists.length > 0 && !isEditing && (
+                <div className="relative">
+                    <input 
+                        type="text" 
+                        placeholder="Search therapist by name..." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] rounded-full py-4 px-6 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#0A84FF]/50 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.37)]"
+                    />
+                </div>
+            )}
+
             {isLoading ? (
                 <div className="flex items-center justify-center py-20">
                     <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin" />
@@ -244,12 +257,12 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-4 pb-12">
-                    {therapists.map(t => {
+                    {therapists.filter(t => t.name.toLowerCase().includes(searchTerm.toLowerCase())).map(t => {
                         const isOnline = t.online_status === 'READY TO ACCEPT JOBS' || t.online_status === 'Online';
                         const isBusy = t.online_status === 'HANDLING CUSTOMER' || t.online_status === 'Busy';
                         
                         return (
-                        <div key={t.id} className="group bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.15)] rounded-[32px] overflow-hidden flex flex-col relative transition-all hover:border-white/15">
+                        <div key={t.id} className="group bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.15)] rounded-[40px] overflow-hidden flex flex-col relative transition-all hover:border-white/20 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)]">
                             {/* Card Header & Profile */}
                             <div className="p-5 flex items-center gap-4 relative">
                                 <div className="relative shrink-0">
