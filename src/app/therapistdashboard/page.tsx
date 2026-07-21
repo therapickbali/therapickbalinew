@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Home, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck, Share, PlusSquare, X, AlertTriangle, MapPin, Navigation } from 'lucide-react';
+import { Home, User, Clock, Camera, Save, CheckCircle2, LogOut, Download, Smartphone, CalendarCheck, Share, PlusSquare, X, AlertTriangle, MapPin, Navigation, List, Plus, Edit2, Trash2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Therapist } from '@/context/SpaContext';
+import PartnerTreatments from '@/components/PartnerTreatments';
 
-type Tab = 'home' | 'booking' | 'profile';
+type Tab = 'home' | 'booking' | 'treatments' | 'profile';
 
 
 const MapContainer = dynamic(
@@ -86,7 +87,7 @@ export default function TherapistDashboard() {
             }
             setIsTrackingLocation(false);
             setProfile(prev => ({ ...prev, latitude: undefined, longitude: undefined }));
-            
+
             if (therapistId) {
                 await supabase.from('therapists').update({ latitude: null, longitude: null }).eq('id', therapistId);
             }
@@ -97,7 +98,7 @@ export default function TherapistDashboard() {
                 async (position) => {
                     const { latitude, longitude } = position.coords;
                     setProfile(prev => ({ ...prev, latitude, longitude }));
-                    
+
                     if (therapistId) {
                         await supabase.from('therapists').update({ latitude, longitude }).eq('id', therapistId);
                     }
@@ -123,11 +124,11 @@ export default function TherapistDashboard() {
         return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     }, []);
 
-    
+
 
     const handleAndroidInstall = async () => {
         const isSamsungBrowser = navigator.userAgent.match(/SamsungBrowser/i);
-        
+
         if (isSamsungBrowser) {
             setShowSamsungWarning(true);
             return;
@@ -143,11 +144,11 @@ export default function TherapistDashboard() {
             alert('To install the app on Android, tap the menu (three dots) in your browser and select "Add to Home screen" or "Install app".');
         }
     };
-    
+
     // Status State
     const [status, setStatus] = useState<'Online' | 'Busy' | 'Off'>('Online');
     const [availableAt, setAvailableAt] = useState('');
-    
+
     // Auto-set current time when busy is clicked
     useEffect(() => {
         if (status === 'Busy' && !availableAt) {
@@ -174,11 +175,11 @@ export default function TherapistDashboard() {
             return () => clearInterval(interval);
         }
     }, [status, availableAt, therapistId]);
-    
+
     // Schedule State
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
     const [scheduleTimes, setScheduleTimes] = useState<Record<string, string>>({});
-    
+
     const currentScheduleTime = scheduleTimes[selectedDate] || '09:00';
 
     const handleTimeChange = (time: string) => {
@@ -186,8 +187,9 @@ export default function TherapistDashboard() {
     };
 
     // Profile State
-    const [profile, setProfile] = useState<{name: string, bio: string, location: string, avatar: string, latitude?: number, longitude?: number}>({
+    const [profile, setProfile] = useState<{ name: string, brand: string, bio: string, location: string, avatar: string, latitude?: number, longitude?: number }>({
         name: '',
+        brand: '',
         location: '',
         bio: '',
         avatar: ''
@@ -224,6 +226,7 @@ export default function TherapistDashboard() {
                     latitude: undefined,
                     longitude: undefined,
                     name: therapistData.name,
+                    brand: therapistData.brand || '',
                     location: therapistData.location || '',
                     bio: therapistData.bio,
                     avatar: therapistData.image_url || ''
@@ -242,9 +245,10 @@ export default function TherapistDashboard() {
     const handleSave = async () => {
         if (!therapistId) return;
         try {
-            const updatePayload: any = { 
+            const updatePayload: any = {
                 online_status: status,
                 name: profile.name,
+                brand: profile.brand,
                 location: profile.location,
                 bio: profile.bio,
                 image_url: profile.avatar
@@ -255,17 +259,17 @@ export default function TherapistDashboard() {
                 const currentMin = now.getMinutes();
                 const [ah, am] = availableAt.split(':').map(Number);
                 let targetDate = new Date(now);
-                
+
                 if (ah < currentHour || (ah === currentHour && am < currentMin)) {
                     targetDate.setDate(targetDate.getDate() + 1);
                 }
-                
+
                 const targetDateStr = new Date(targetDate.getTime() - (targetDate.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
                 updatePayload.available_at = `${targetDateStr}|${availableAt}`;
             } else {
                 updatePayload.available_at = null;
             }
-            
+
             await supabase.from('therapists').update(updatePayload).eq('id', therapistId);
             setSaved(true);
             setTimeout(() => setSaved(false), 3000);
@@ -284,7 +288,7 @@ export default function TherapistDashboard() {
                     let { width, height } = img;
                     const MAX_WIDTH = 600;
                     const MAX_HEIGHT = 600;
-                    
+
                     if (width > height && width > MAX_WIDTH) {
                         height *= MAX_WIDTH / width;
                         width = MAX_WIDTH;
@@ -292,7 +296,7 @@ export default function TherapistDashboard() {
                         width *= MAX_HEIGHT / height;
                         height = MAX_HEIGHT;
                     }
-                    
+
                     canvas.width = width;
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
@@ -319,7 +323,7 @@ export default function TherapistDashboard() {
 
     // Render Home Tab
     const renderHome = () => (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -362,7 +366,7 @@ export default function TherapistDashboard() {
                 {/* Handling Customer Time Picker Add-on */}
                 <AnimatePresence>
                     {status === 'Busy' && (
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, height: 0, marginTop: -10 }}
                             animate={{ opacity: 1, height: 'auto', marginTop: 0 }}
                             exit={{ opacity: 0, height: 0, marginTop: -10 }}
@@ -371,10 +375,10 @@ export default function TherapistDashboard() {
                             <label className="text-xs font-medium text-amber-100 uppercase tracking-widest block mb-3">When will you be ready?</label>
                             <div className="flex items-center gap-3 bg-white/10 rounded-2xl p-2 border border-amber-200/20 shadow-inner">
                                 <Clock className="w-5 h-5 text-amber-300 ml-2" />
-                                <input 
-                                    type="time" 
-                                    value={availableAt} 
-                                    onChange={e => setAvailableAt(e.target.value)} 
+                                <input
+                                    type="time"
+                                    value={availableAt}
+                                    onChange={e => setAvailableAt(e.target.value)}
                                     className="flex-1 bg-transparent border-none focus:outline-none text-white font-bold text-lg py-2 [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
                                 />
                             </div>
@@ -401,7 +405,7 @@ export default function TherapistDashboard() {
 
     // Render Booking Tab
     const renderBooking = () => (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -411,7 +415,7 @@ export default function TherapistDashboard() {
                 <h2 className="font-serif text-3xl text-white font-medium">Live Bookings</h2>
                 <p className="text-sm text-white/70 mt-1">Manage real-time requests</p>
             </div>
-            
+
             <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
                 <CalendarCheck className="w-12 h-12 text-white/30 mb-4" />
                 <h3 className="text-white font-bold text-lg">No Active Requests</h3>
@@ -423,14 +427,14 @@ export default function TherapistDashboard() {
 
     // Render Profile Tab
     const renderProfile = () => (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="flex flex-col gap-6"
         >
             <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.37)] flex flex-col items-center">
-                
+
                 {/* Avatar Uploader */}
                 <div className="relative mb-8 group cursor-pointer">
                     <div className="w-28 h-28 rounded-full bg-[#1C1C1E]/80 border border-white/10 shadow-lg flex items-center justify-center overflow-hidden relative backdrop-blur-md">
@@ -442,9 +446,9 @@ export default function TherapistDashboard() {
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <Camera className="w-8 h-8 text-white" />
                         </div>
-                        <input 
-                            type="file" 
-                            accept="image/*" 
+                        <input
+                            type="file"
+                            accept="image/*"
                             onChange={handleImageUpload}
                             className="absolute inset-0 opacity-0 cursor-pointer z-10"
                         />
@@ -455,27 +459,36 @@ export default function TherapistDashboard() {
                 <div className="w-full space-y-4">
                     <div>
                         <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Full Name</label>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             value={profile.name}
-                            onChange={(e) => setProfile({...profile, name: e.target.value})}
+                            onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                             className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3.5 px-4 text-[17px] font-medium text-white focus:outline-none focus:bg-[#3A3A3C] transition-all shadow-inner"
                         />
                     </div>
                     <div>
-                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Bio</label>
-                        <textarea 
+                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Company / Brand Name</label>
+                        <input
+                            type="text"
+                            value={profile.brand}
+                            onChange={(e) => setProfile({ ...profile, brand: e.target.value })}
+                            className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3.5 px-4 text-[17px] font-medium text-white focus:outline-none focus:bg-[#3A3A3C] transition-all shadow-inner"
+                        />
+                    </div>
+                    <div>
+                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Company Description / Bio</label>
+                        <textarea
                             value={profile.bio}
-                            onChange={(e) => setProfile({...profile, bio: e.target.value})}
+                            onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
                             rows={3}
                             className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3.5 px-4 text-[17px] font-medium text-white focus:outline-none focus:bg-[#3A3A3C] transition-all shadow-inner resize-none text-[17px]"
                         />
                     </div>
                     <div>
-                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Base Location</label>
-                        <select 
+                        <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest ml-4 block mb-1">Company Address / Location</label>
+                        <select
                             value={profile.location}
-                            onChange={(e) => setProfile({...profile, location: e.target.value})}
+                            onChange={(e) => setProfile({ ...profile, location: e.target.value })}
                             className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-xl py-3.5 px-4 text-[17px] font-medium text-white focus:outline-none focus:bg-[#3A3A3C] transition-all shadow-inner appearance-none text-[17px] [&>option]:text-black"
                         >
                             <option value="Ubud">Ubud</option>
@@ -491,8 +504,8 @@ export default function TherapistDashboard() {
                             </span>
                             <span className="text-xs text-white/50 mt-1">Updates map while app is open</span>
                         </div>
-                        
-                        <button 
+
+                        <button
                             onClick={toggleLocationTracking}
                             className={`w-14 h-8 rounded-full transition-colors duration-300 relative ${isTrackingLocation ? 'bg-[#34C759]' : 'bg-[#3A3A3C]'}`}
                         >
@@ -500,15 +513,15 @@ export default function TherapistDashboard() {
                         </button>
                     </div>
                 </div>
-                
-            <div className="mt-6 w-full z-40 pb-6">
-                <button 
-                    onClick={handleSave}
-                    className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
-                >
-                    {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Profile</>}
-                </button>
-            </div>
+
+                <div className="mt-6 w-full z-40 pb-6">
+                    <button
+                        onClick={handleSave}
+                        className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
+                    >
+                        {saved ? <><CheckCircle2 className="w-5 h-5" /> Profile Updated</> : <><Save className="w-5 h-5" /> Update Profile</>}
+                    </button>
+                </div>
             </div>
 
             {/* App Installation Section */}
@@ -524,7 +537,7 @@ export default function TherapistDashboard() {
                 </div>
             </div>
 
-            <button 
+            <button
                 onClick={handleLogout}
                 className="mt-2 w-full bg-red-500/10 border border-red-500/30 text-red-400 rounded-2xl py-4 font-bold shadow-sm hover:bg-red-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
@@ -557,7 +570,7 @@ export default function TherapistDashboard() {
                     <p className="text-white/60 text-sm mb-8">
                         Your application has been received and is currently being reviewed by our team. We will reach out to you via WhatsApp for verification soon.
                     </p>
-                    <button 
+                    <button
                         onClick={handleLogout}
                         className="w-full bg-white/5 border border-white/20 text-white rounded-2xl py-3.5 text-sm font-semibold hover:bg-white/10 transition-colors"
                     >
@@ -578,7 +591,11 @@ export default function TherapistDashboard() {
                 <AnimatePresence mode="wait">
                     {activeTab === 'home' && <motion.div key="home">{renderHome()}</motion.div>}
                     {activeTab === 'booking' && <motion.div key="booking">{renderBooking()}</motion.div>}
-                    
+                    {activeTab === 'treatments' && therapistId && (
+                        <motion.div key="treatments" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                            <PartnerTreatments therapistId={therapistId} />
+                        </motion.div>
+                    )}
                     {activeTab === 'profile' && <motion.div key="profile">{renderProfile()}</motion.div>}
                 </AnimatePresence>
             </main>
@@ -586,13 +603,13 @@ export default function TherapistDashboard() {
             {/* Floating Update Status Button */}
             <AnimatePresence>
                 {activeTab === 'home' && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
                         className="fixed bottom-[104px] left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-[408px] z-40"
                     >
-                        <button 
+                        <button
                             onClick={handleSave}
                             className="w-full bg-[#0A84FF] text-white rounded-full py-4 font-semibold text-[17px] tracking-wide shadow-[0_8px_32px_rgba(10,132,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-[#0A84FF]/50"
                         >
@@ -605,16 +622,16 @@ export default function TherapistDashboard() {
             {/* Floating Bottom Navbar */}
             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-sm z-50">
                 <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] flex items-center justify-between p-2 px-3">
-                    
-                    <button 
+
+                    <button
                         onClick={() => setActiveTab('home')}
                         className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'home' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
                     >
                         <Home className="w-5 h-5 mb-1" strokeWidth={activeTab === 'home' ? 2.5 : 2} />
                         <span className="text-[9px] font-bold tracking-widest uppercase">Home</span>
                     </button>
-                    
-                    <button 
+
+                    <button
                         onClick={() => setActiveTab('booking')}
                         className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'booking' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
                     >
@@ -622,9 +639,15 @@ export default function TherapistDashboard() {
                         <span className="text-[9px] font-bold tracking-widest uppercase">Live</span>
                     </button>
 
+                    <button
+                        onClick={() => setActiveTab('treatments')}
+                        className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'treatments' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
+                    >
+                        <List className="w-5 h-5 mb-1" strokeWidth={activeTab === 'treatments' ? 2.5 : 2} />
+                        <span className="text-[9px] font-bold tracking-widest uppercase">My Spa</span>
+                    </button>
 
-                    
-                    <button 
+                    <button
                         onClick={() => setActiveTab('profile')}
                         className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'profile' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}
                     >
@@ -650,22 +673,22 @@ export default function TherapistDashboard() {
                             exit={{ scale: 0.95, opacity: 0, y: 20 }}
                             className="relative w-full max-w-sm bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-3xl p-6 sm:p-8 overflow-hidden"
                         >
-                            <button 
+                            <button
                                 onClick={() => setShowInstallPopup(false)}
                                 className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all"
                             >
                                 <X className="w-5 h-5" />
                             </button>
-                            
+
                             <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 flex items-center justify-center mx-auto mb-6 shadow-sm">
                                 <Smartphone className="w-8 h-8" />
                             </div>
-                            
+
                             <h3 className="font-serif text-xl text-white mb-2 text-center">Install on iPhone</h3>
                             <p className="text-sm text-white/70 mb-6 text-center leading-relaxed">
                                 Install the Therapick Dashboard on your iPhone for quick access.
                             </p>
-                            
+
                             <div className="space-y-4 mb-8 bg-black/20 rounded-2xl p-4">
                                 <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
@@ -685,8 +708,8 @@ export default function TherapistDashboard() {
                                     </p>
                                 </div>
                             </div>
-                            
-                            <button 
+
+                            <button
                                 onClick={() => setShowInstallPopup(false)}
                                 className="w-full bg-[#292831] text-white px-6 py-4 rounded-2xl text-sm font-bold shadow-md hover:bg-[#292831]/90 active:scale-95 transition-all"
                             >
@@ -712,27 +735,27 @@ export default function TherapistDashboard() {
                             exit={{ scale: 0.95, opacity: 0, y: 20 }}
                             className="relative w-full max-w-sm bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] rounded-3xl p-6 sm:p-8 overflow-hidden"
                         >
-                            <button 
+                            <button
                                 onClick={() => setShowSamsungWarning(false)}
                                 className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all"
                             >
                                 <X className="w-5 h-5" />
                             </button>
-                            
+
                             <div className="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center mx-auto mb-6 shadow-sm">
                                 <AlertTriangle className="w-8 h-8" />
                             </div>
-                            
+
                             <h3 className="font-serif text-xl text-white mb-2 text-center">Samsung Browser Detected</h3>
                             <p className="text-sm text-white/70 mb-6 text-center leading-relaxed">
-                                Samsung's app installer often shows a <strong className="text-red-400">"Built for older version of Android"</strong> warning due to their outdated installation service. 
+                                Samsung's app installer often shows a <strong className="text-red-400">"Built for older version of Android"</strong> warning due to their outdated installation service.
                             </p>
                             <p className="text-sm text-white/90 mb-8 text-center bg-black/20 p-4 rounded-xl border border-white/5">
                                 For a fast, secure, and warning-free installation, please open <strong className="text-green-400">www.booktherapick.com</strong> in <strong className="text-white font-bold tracking-wide">Google Chrome</strong> instead.
                             </p>
-                            
+
                             <div className="flex gap-3">
-                                <button 
+                                <button
                                     onClick={async () => {
                                         setShowSamsungWarning(false);
                                         if (deferredPrompt) {
@@ -747,7 +770,7 @@ export default function TherapistDashboard() {
                                 >
                                     Try Anyway
                                 </button>
-                                <button 
+                                <button
                                     onClick={() => setShowSamsungWarning(false)}
                                     className="flex-[1.5] bg-[#34C759] text-white border border-[#34C759]/50 font-medium px-4 py-4 rounded-2xl text-sm font-bold shadow-md hover:bg-[#3DDC84]/90 active:scale-95 transition-all"
                                 >

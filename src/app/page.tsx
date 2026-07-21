@@ -402,7 +402,20 @@ ${treatmentsList}
                                             )}
                                         </div>
                                         <div className="flex flex-col flex-grow px-2 pt-3 pb-2">
-                                            <p className="text-white/50 text-[10px] font-bold mb-1 line-clamp-1 uppercase tracking-widest">{treatment.category}</p>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <p className="text-white/50 text-[10px] font-bold line-clamp-1 uppercase tracking-widest">{treatment.category}</p>
+                                                {treatment.therapist_id && (
+                                                    (() => {
+                                                        const partner = therapists.find(t => t.id === treatment.therapist_id);
+                                                        return partner ? (
+                                                            <div className="flex items-center gap-1.5">
+                                                                {partner.image_url && <img src={partner.image_url} alt={partner.brand} className="w-4 h-4 rounded-full object-cover" />}
+                                                                <span className="text-[9px] font-medium text-white/70">{partner.brand || partner.name}</span>
+                                                            </div>
+                                                        ) : null;
+                                                    })()
+                                                )}
+                                            </div>
                                             <h4 className="font-bold text-white text-[13px] line-clamp-1 mb-3">{treatment.title}</h4>
                                             <div className="flex items-center justify-between bg-white/10 rounded-full p-1 pl-3 mt-auto border border-white/10">
                                                 <span className="font-semibold text-white text-[12px]">
@@ -491,6 +504,17 @@ ${treatmentsList}
                                         <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] border border-primary/10 text-white px-4 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
                                             {item.category}
                                         </div>
+                                        {item.therapist_id && (
+                                            (() => {
+                                                const partner = therapists.find(t => t.id === item.therapist_id);
+                                                return partner ? (
+                                                    <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full py-1.5 px-3 border border-white/10">
+                                                        {partner.image_url && <img src={partner.image_url} alt={partner.brand} className="w-5 h-5 rounded-full object-cover" />}
+                                                        <span className="text-[11px] font-medium text-white/90">{partner.brand || partner.name}</span>
+                                                    </div>
+                                                ) : null;
+                                            })()
+                                        )}
                                     </div>
 
                                     <div className="relative z-10 flex-grow flex flex-col">

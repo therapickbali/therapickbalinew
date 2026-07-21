@@ -20,7 +20,7 @@ export default function TopNav() {
         { href: '/service-areas', label: 'SERVICE AREAS' },
         { href: '/faq', label: 'FAQ' },
         { href: '/contact', label: 'CONTACT' },
-        { href: '/therapist-login', label: 'THERAPIST PORTAL' },
+        { href: '/therapist-login', label: 'PARTNER PORTAL' },
     ];
 
     // Scroll listener for dynamic navbar

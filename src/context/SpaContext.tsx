@@ -20,6 +20,7 @@ export type Treatment = {
     is_published?: boolean;
     is_pinned?: boolean;
     pinned_image?: string;
+    therapist_id?: string;
     created_at?: string;
     updated_at?: string;
 };
