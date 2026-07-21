@@ -100,7 +100,7 @@ export default function BookingModal({
 
             // 1. Insert into Supabase
             try {
-                fetch('/api/bookings/create', {
+                await fetch('/api/bookings/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

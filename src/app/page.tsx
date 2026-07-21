@@ -139,7 +139,7 @@ export default function Home() {
             
             // Insert into DB via API
             try {
-                fetch('/api/bookings/create', {
+                await fetch('/api/bookings/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

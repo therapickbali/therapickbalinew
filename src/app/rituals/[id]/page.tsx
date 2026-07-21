@@ -107,6 +107,27 @@ export default function RitualsDetails() {
             const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration?.replace(/mins?/i, '').trim()} MINS)`).join(', ');
 
             const waNumber = '6285174119423';
+            
+            // Insert into DB via API
+            try {
+                await fetch('/api/bookings/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer_name: formData.name,
+                        date: formData.date,
+                        time: formData.time,
+                        location_area: selectedArea,
+                        address: formData.location,
+                        room_number: formData.room || '',
+                        treatments: cartItems,
+                        total_price: totalPrice,
+                        requested_therapist_ids: selectedTherapists
+                    })
+                });
+            } catch(e) {
+                console.error("API call failed:", e);
+            }
             const treatmentsList = cartItems.map(item => {
                 const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k));
                 const multiplier = isCouple ? (item.guests / 2) : item.guests;
