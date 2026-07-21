@@ -95,6 +95,12 @@ export default function AdminDashboard() {
     const [statusFilter, setStatusFilter] = useState<'New' | 'Working'>('Working');
     const [detailedTherapist, setDetailedTherapist] = useState<Therapist | null>(null);
     const [detailedTab, setDetailedTab] = useState<'profile' | 'treatments' | 'team'>('profile');
+    const [bookingFilter, setBookingFilter] = useState<'Upcoming' | 'Past'>('Upcoming');
+    const [selectedBookingDate, setSelectedBookingDate] = useState<Date>(() => {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        return d;
+    });
 
     useEffect(() => {
         async function checkAuth() {
@@ -1504,126 +1510,201 @@ export default function AdminDashboard() {
                                 )}
 
 
-                                {activeTab === 'book' && (
-                                    <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 w-full">
-                                        <div className="w-full lg:w-[320px] shrink-0">
-                                            <div className="bg-[#1C1C1E] border border-white/[0.08] rounded-[32px] p-6 lg:p-8 sticky top-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
-                                                <h3 className="text-white font-bold text-xl mb-6">Calendar</h3>
-                                                <div className="grid grid-cols-7 gap-1 text-center mb-3">
-                                                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => (
-                                                        <div key={d} className="text-white/40 text-[10px] font-bold uppercase">{d}</div>
-                                                    ))}
-                                                </div>
-                                                <div className="grid grid-cols-7 gap-1">
-                                                    {Array.from({ length: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() }).map((_, i) => (
-                                                        <button 
-                                                            key={i} 
-                                                            className={`aspect-square rounded-full flex items-center justify-center text-xs font-bold transition-colors ${i+1 === new Date().getDate() ? 'bg-[#0A84FF] text-white shadow-[0_4px_16px_rgba(10,132,255,0.4)]' : 'text-white/80 hover:bg-white/10'}`}
-                                                        >
-                                                            {i + 1}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                                <div className="mt-8 pt-6 border-t border-white/[0.08]">
-                                                    <p className="text-xs text-white/50 uppercase tracking-widest font-bold mb-2">Total Bookings</p>
-                                                    <p className="text-4xl font-serif text-white">{bookings.length}</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                {activeTab === 'book' && (() => {
+                                    const today = new Date();
+                                    today.setHours(0, 0, 0, 0);
 
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -10 }}
-                                            className="flex flex-col gap-4 md:gap-6 w-full flex-grow"
-                                        >
-                                            {bookings.length === 0 ? (
-                                                <div className="bg-[#1C1C1E] border border-white/[0.08] rounded-[32px] p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
-                                                    <CalendarCheck className="w-12 h-12 text-white/30 mb-4" />
-                                                    <h3 className="text-white font-bold text-lg">No Bookings Yet</h3>
-                                                    <p className="text-white/50 text-sm mt-2">New bookings from the website will appear here instantly.</p>
-                                                </div>
-                                            ) : (
-                                                bookings.map((booking) => {
-                                                    let companyName = 'Unknown Company';
-                                                    let companyPhone = '6285174119423';
+                                    // Generate 7 days for the calendar strip based on today
+                                    const calendarDays = [];
+                                    for(let i=0; i<7; i++) {
+                                        const d = new Date();
+                                        d.setHours(0, 0, 0, 0);
+                                        d.setDate(d.getDate() + i);
+                                        calendarDays.push(d);
+                                    }
+
+                                    // Filter Bookings by Upcoming/Past and Date
+                                    let filteredBookings = bookings.filter(b => {
+                                        const bDate = new Date(b.date);
+                                        bDate.setHours(0, 0, 0, 0);
+                                        
+                                        if (bookingFilter === 'Upcoming') {
+                                            // Only show bookings matching the selected calendar date
+                                            return bDate.getTime() === selectedBookingDate.getTime();
+                                        } else {
+                                            // Past bookings: any booking before today
+                                            return bDate.getTime() < today.getTime();
+                                        }
+                                    });
+
+                                    // Sort chronologically (earliest first for upcoming, most recent first for past)
+                                    filteredBookings.sort((a, b) => {
+                                        const tA = new Date(`${a.date} ${a.time}`).getTime();
+                                        const tB = new Date(`${b.date} ${b.time}`).getTime();
+                                        return bookingFilter === 'Upcoming' ? tA - tB : tB - tA;
+                                    });
+
+                                    return (
+                                        <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
+                                            
+                                            {/* Filters & Calendar Header */}
+                                            <div className="sticky top-0 z-20 bg-[#000000]/90 backdrop-blur-xl border-b border-white/[0.08] pb-6 pt-2">
+                                                
+                                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                                                    <h2 className="font-serif text-3xl text-white">Bookings List</h2>
                                                     
-                                                    if (booking.treatments && booking.treatments.length > 0) {
-                                                        const firstTreatment = booking.treatments[0];
-                                                        const treatmentDetails = treatments.find((t: any) => t.id === firstTreatment.treatmentId);
-                                                        if (treatmentDetails && treatmentDetails.therapist_id) {
-                                                            const partner = allTherapists.find(t => t.id === treatmentDetails.therapist_id);
-                                                            if (partner) {
-                                                                companyName = partner.brand || partner.name;
-                                                                if (partner.whatsapp) companyPhone = partner.whatsapp;
+                                                    {/* Toggle Upcoming / Past */}
+                                                    <div className="flex bg-[#1C1C1E] p-1 rounded-full border border-white/5 w-fit">
+                                                        <button 
+                                                            onClick={() => setBookingFilter('Upcoming')}
+                                                            className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${bookingFilter === 'Upcoming' ? 'bg-white text-black' : 'text-white/50 hover:text-white'}`}
+                                                        >
+                                                            Upcoming
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => setBookingFilter('Past')}
+                                                            className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${bookingFilter === 'Past' ? 'bg-white text-black' : 'text-white/50 hover:text-white'}`}
+                                                        >
+                                                            Past
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* 7-Day Horizontal Calendar Strip (Only for Upcoming) */}
+                                                {bookingFilter === 'Upcoming' && (
+                                                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                                                        {calendarDays.map((d, i) => {
+                                                            const isSelected = selectedBookingDate.getTime() === d.getTime();
+                                                            return (
+                                                                <button 
+                                                                    key={i} 
+                                                                    type="button"
+                                                                    onClick={() => setSelectedBookingDate(d)}
+                                                                    className={`flex flex-col items-center justify-center min-w-[70px] py-3 rounded-2xl border transition-all ${isSelected ? 'bg-[#0A84FF] border-[#0A84FF] shadow-[0_4px_16px_rgba(10,132,255,0.3)] text-white' : 'bg-[#1C1C1E] border-white/5 text-white/50 hover:border-white/20'}`}
+                                                                >
+                                                                    <span className="text-[10px] font-bold uppercase tracking-widest mb-1">{d.toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                                                                    <span className="text-xl font-bold">{d.getDate()}</span>
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Bookings List */}
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                className="flex flex-col gap-4 w-full"
+                                            >
+                                                {filteredBookings.length === 0 ? (
+                                                    <div className="bg-[#1C1C1E] border border-white/[0.08] rounded-[32px] p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
+                                                        <CalendarCheck className="w-12 h-12 text-white/30 mb-4" />
+                                                        <h3 className="text-white font-bold text-lg">No {bookingFilter} Bookings</h3>
+                                                        <p className="text-white/50 text-sm mt-2">Bookings for the selected category will appear here.</p>
+                                                    </div>
+                                                ) : (
+                                                    filteredBookings.map((booking) => {
+                                                        let companyName = 'Unknown Company';
+                                                        let companyPhone = '6285174119423';
+                                                        
+                                                        if (booking.treatments && booking.treatments.length > 0) {
+                                                            const firstTreatment = booking.treatments[0];
+                                                            const treatmentDetails = treatments.find((t: any) => t.id === firstTreatment.treatmentId);
+                                                            if (treatmentDetails && treatmentDetails.therapist_id) {
+                                                                const partner = allTherapists.find(t => t.id === treatmentDetails.therapist_id);
+                                                                if (partner) {
+                                                                    companyName = partner.brand || partner.name;
+                                                                    if (partner.whatsapp) companyPhone = partner.whatsapp;
+                                                                }
                                                             }
                                                         }
-                                                    }
 
-                                                    const requestedTherapistsNames = (booking.requested_therapist_ids || [])
-                                                        .map(id => allPartnerTherapists.find(t => t.id === id)?.name || 'Unknown')
-                                                        .join(', ');
-                                                        
-                                                    const treatmentsList = booking.treatments.map((t: any) => `${t.title} (${t.duration}m x${t.guests})`).join(', ');
-
-                                                    return (
-                                                        <div key={booking.id} className="bg-[#1C1C1E] border border-white/[0.08] rounded-[32px] p-5 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
-                                                            <div className="flex justify-between items-start mb-6">
-                                                                <div>
-                                                                    <span className="bg-[#0A84FF]/20 text-[#0A84FF] px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4 inline-block shadow-sm">
-                                                                        {companyName}
-                                                                    </span>
-                                                                    <h3 className="text-white font-bold text-xl md:text-2xl">{booking.customer_name}</h3>
-                                                                    <p className="text-[#0A84FF] text-sm md:text-base font-semibold mt-2">AED {booking.total_price.toLocaleString('en-US')}</p>
-                                                                </div>
-                                                                <div className="text-right">
-                                                                    <span className="bg-[#34C759]/20 text-[#34C759] px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider">
-                                                                        {booking.status}
-                                                                    </span>
-                                                                    <p className="text-white/40 text-[10px] mt-3 font-medium">{new Date(booking.created_at).toLocaleString()}</p>
-                                                                </div>
-                                                            </div>
+                                                        const requestedTherapistsNames = (booking.requested_therapist_ids || [])
+                                                            .map(id => allPartnerTherapists.find(t => t.id === id)?.name || 'Unknown')
+                                                            .join(', ');
                                                             
-                                                            <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6">
-                                                                <div className="bg-white/5 rounded-2xl p-4 md:p-5 border border-white/5">
-                                                                    <div className="flex items-center gap-2 text-white/50 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-2"><Clock className="w-3.5 h-3.5"/> Time</div>
-                                                                    <p className="text-white font-bold text-xs md:text-sm">{booking.date} at {booking.time}</p>
-                                                                </div>
-                                                                <div className="bg-white/5 rounded-2xl p-4 md:p-5 border border-white/5">
-                                                                    <div className="flex items-center gap-2 text-white/50 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-2"><MapPin className="w-3.5 h-3.5"/> Area</div>
-                                                                    <p className="text-white font-bold text-xs md:text-sm line-clamp-1">{booking.location_area}</p>
-                                                                </div>
-                                                            </div>
+                                                        const treatmentsList = booking.treatments.map((t: any) => `${t.title} (${t.duration}m x${t.guests})`).join(', ');
 
-                                                            <div className="space-y-3 mb-8 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
-                                                                <p className="text-xs md:text-sm text-white/90 flex flex-col md:flex-row md:items-start gap-1 md:gap-4"><strong className="text-white/40 uppercase text-[10px] tracking-widest md:w-28 shrink-0 mt-0.5">Address:</strong> <span>{booking.address} {booking.room_number ? `(Room: ${booking.room_number})` : ''}</span></p>
-                                                                <p className="text-xs md:text-sm text-white/90 flex flex-col md:flex-row md:items-start gap-1 md:gap-4"><strong className="text-white/40 uppercase text-[10px] tracking-widest md:w-28 shrink-0 mt-0.5">Treatments:</strong> <span>{treatmentsList}</span></p>
-                                                                <p className="text-xs md:text-sm text-white/90 flex flex-col md:flex-row md:items-start gap-1 md:gap-4"><strong className="text-white/40 uppercase text-[10px] tracking-widest md:w-28 shrink-0 mt-0.5">Therapists:</strong> <span>{requestedTherapistsNames || 'Auto Assign'}</span></p>
-                                                            </div>
-                                                            
-                                                            <div className="flex flex-col md:flex-row gap-3">
-                                                                <button 
-                                                                    onClick={() => {
-                                                                        const msg = `*NEW SPA BOOKING ASSIGNMENT*\n\n*CLIENT DETAILS:*\n- Name: ${booking.customer_name}\n- Date: ${booking.date}\n- Time: ${booking.time}\n- Location Area: ${booking.location_area}\n- Address: ${booking.address}\n- Room Number: ${booking.room_number || 'N/A'}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* AED ${booking.total_price.toLocaleString('en-US')}\n\nPlease confirm if you can take this booking!`;
-                                                                        const phone = companyPhone.replace(/[^0-9]/g, '');
-                                                                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-                                                                    }}
-                                                                    className="flex-1 bg-[#25D366] text-white rounded-xl py-3.5 font-bold text-sm tracking-wide shadow-[0_8px_24px_rgba(37,211,102,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-                                                                >
-                                                                    <Share className="w-5 h-5" /> Dispatch to Partner
-                                                                </button>
+                                                        const dateObj = new Date(booking.date);
+                                                        const monthWord = dateObj.toLocaleDateString('en-US', { month: 'long' });
+                                                        const dayNum = dateObj.getDate();
+                                                        const yearNum = dateObj.getFullYear();
+
+                                                        return (
+                                                            <div key={booking.id} className="bg-[#1C1C1E] border border-white/[0.08] rounded-[24px] p-5 md:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.15)] flex flex-col md:flex-row gap-6 md:gap-8 hover:border-white/15 transition-all group">
                                                                 
-                                                                <div className="flex-1">
-                                                                    <InvoiceGenerator booking={booking} companyName={companyName} />
+                                                                {/* Column 1: Time and Date */}
+                                                                <div className="md:w-[150px] shrink-0 border-b md:border-b-0 md:border-r border-white/10 pb-4 md:pb-0 pr-0 md:pr-6 flex flex-row md:flex-col items-center md:items-start justify-between md:justify-start">
+                                                                    <div className="flex items-center md:items-start flex-col">
+                                                                        <span className="text-4xl md:text-5xl font-black tracking-tighter text-white drop-shadow-sm">{booking.time}</span>
+                                                                        <span className="text-sm font-bold text-[#0A84FF] uppercase tracking-widest mt-1 md:mt-2 text-center md:text-left">
+                                                                            {monthWord} {dayNum}, {yearNum}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="text-right md:text-left mt-0 md:mt-4">
+                                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Total</p>
+                                                                        <p className="text-sm font-bold text-white mt-0.5">AED {booking.total_price.toLocaleString('en-US')}</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Column 2: Details */}
+                                                                <div className="flex-grow flex flex-col justify-center">
+                                                                    <div className="flex items-start justify-between mb-2">
+                                                                        <div>
+                                                                            <span className="bg-[#0A84FF]/20 text-[#0A84FF] px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest mb-3 inline-block shadow-sm">
+                                                                                {companyName}
+                                                                            </span>
+                                                                            <h3 className="text-white font-bold text-xl md:text-2xl">{booking.customer_name}</h3>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div className="space-y-2 mt-2">
+                                                                        <p className="text-sm text-white/80 flex items-start gap-2">
+                                                                            <MapPin className="w-4 h-4 text-white/40 mt-0.5 shrink-0" />
+                                                                            <span className="leading-snug">{booking.address} <span className="text-white/40 ml-1">({booking.location_area}) {booking.room_number ? `Rm: ${booking.room_number}` : ''}</span></span>
+                                                                        </p>
+                                                                        <p className="text-sm text-white/80 flex items-start gap-2">
+                                                                            <Sparkles className="w-4 h-4 text-white/40 mt-0.5 shrink-0" />
+                                                                            <span className="leading-snug">{treatmentsList}</span>
+                                                                        </p>
+                                                                        {requestedTherapistsNames && (
+                                                                            <p className="text-sm text-white/80 flex items-start gap-2">
+                                                                                <Users className="w-4 h-4 text-white/40 mt-0.5 shrink-0" />
+                                                                                <span className="leading-snug">Requested: {requestedTherapistsNames}</span>
+                                                                            </p>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                {/* Column 3: Actions */}
+                                                                <div className="md:w-[220px] shrink-0 flex flex-col gap-2 justify-center border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 pl-0 md:pl-6">
+                                                                    <button 
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            const msg = `*NEW SPA BOOKING ASSIGNMENT*\n\n*CLIENT DETAILS:*\n- Name: ${booking.customer_name}\n- Date: ${monthWord} ${dayNum}, ${yearNum}\n- Time: ${booking.time}\n- Location Area: ${booking.location_area}\n- Address: ${booking.address}\n- Room Number: ${booking.room_number || 'N/A'}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* AED ${booking.total_price.toLocaleString('en-US')}\n\nPlease confirm if you can take this booking!`;
+                                                                            const phone = companyPhone.replace(/[^0-9]/g, '');
+                                                                            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+                                                                        }}
+                                                                        type="button"
+                                                                        className="w-full bg-[#25D366] text-white rounded-xl py-3 font-bold text-xs tracking-wider shadow-[0_4px_16px_rgba(37,211,102,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                                                    >
+                                                                        <Share className="w-4 h-4" /> Dispatch to Partner
+                                                                    </button>
+                                                                    
+                                                                    <div className="w-full">
+                                                                        <InvoiceGenerator booking={booking} companyName={companyName} />
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    );
-                                                })
-                                            )}
-                                        </motion.div>
-                                    </div>
-                                )}
+                                                        );
+                                                    })
+                                                )}
+                                            </motion.div>
+                                        </div>
+                                    );
+                                })()}
 
                                 {activeTab === 'settings' && (
                                     <div className="flex flex-col items-center justify-center py-20 text-white/90-muted">
