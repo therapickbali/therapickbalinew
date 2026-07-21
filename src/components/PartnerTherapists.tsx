@@ -402,7 +402,7 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
                             <div className="space-y-6">
                                 <div>
                                     <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest block mb-3">Select Date</label>
-                                    <FloatingCalendar value={busyDate} onChange={setBusyDate} days={7} />
+                                    <FloatingCalendar value={busyDate} onChange={setBusyDate} days={8} />
                                 </div>
 
                                 <div>

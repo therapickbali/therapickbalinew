@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Home, User, Save, CheckCircle2, LogOut, Download, Smartphone, Share, PlusSquare, X, AlertTriangle, MapPin, Navigation, List, Plus, Users, PlusCircle } from 'lucide-react';
+import { Home, User, Save, CheckCircle2, LogOut, Download, Smartphone, Share, PlusSquare, X, AlertTriangle, MapPin, Navigation, List, Plus, Users, PlusCircle, Menu, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
@@ -9,7 +9,7 @@ import PartnerTreatments from '@/components/PartnerTreatments';
 import PartnerTherapists from '@/components/PartnerTherapists';
 import PartnerTreatmentForm from '@/components/PartnerTreatmentForm';
 
-type Tab = 'therapists' | 'myspa' | 'treatments' | 'profile';
+type Tab = 'therapists' | 'myspa' | 'treatments' | 'profile' | 'bookings';
 
 export default function PartnerPortal() {
     const router = useRouter();
@@ -20,6 +20,7 @@ export default function PartnerPortal() {
     const [showInstallPopup, setShowInstallPopup] = useState(false);
     const [isTrackingLocation, setIsTrackingLocation] = useState(false);
     const watchId = useRef<number | null>(null);
+    const [showMobileMenu, setShowMobileMenu] = useState(false);
     
     // Profile State
     const [profile, setProfile] = useState<{ name: string, brand: string, bio: string, location: string, avatar: string, latitude?: number, longitude?: number }>({
@@ -237,6 +238,9 @@ export default function PartnerPortal() {
                     <button onClick={() => setActiveTab('therapists')} className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'therapists' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70 hover:bg-white/5'}`}>
                         <Users className="w-5 h-5" /> <span className="font-medium text-sm tracking-wide">Team</span>
                     </button>
+                    <button onClick={() => setActiveTab('bookings')} className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'bookings' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70 hover:bg-white/5'}`}>
+                        <Calendar className="w-5 h-5" /> <span className="font-medium text-sm tracking-wide">Bookings</span>
+                    </button>
                     <button onClick={() => setActiveTab('treatments')} className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'treatments' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70 hover:bg-white/5'}`}>
                         <List className="w-5 h-5" /> <span className="font-medium text-sm tracking-wide">Treatments</span>
                     </button>
@@ -271,29 +275,68 @@ export default function PartnerPortal() {
                             <PartnerTreatments therapistId={therapistId} />
                         </motion.div>
                     )}
+                    {activeTab === 'bookings' && (
+                        <motion.div key="bookings" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                            <div className="flex flex-col gap-6 w-full">
+                                <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] rounded-[32px] p-8 text-center shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+                                    <Calendar className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                                    <h2 className="font-serif text-2xl text-white font-medium mb-2">Bookings</h2>
+                                    <p className="text-white/60 text-sm">Your bookings list will appear here soon.</p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
                     {activeTab === 'profile' && <motion.div key="profile">{renderProfile()}</motion.div>}
                 </AnimatePresence>
             </main>
 
             {/* Floating Bottom Navbar (Mobile Only) */}
             <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-sm z-50">
-                <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] flex items-center justify-between p-2 px-3">
-                    <button onClick={() => setActiveTab('therapists')} className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'therapists' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}>
+                <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] flex items-center justify-between p-2 px-3 relative">
+                    <button onClick={() => { setActiveTab('therapists'); setShowMobileMenu(false); }} className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'therapists' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}>
                         <Users className="w-5 h-5 mb-1" strokeWidth={activeTab === 'therapists' ? 2.5 : 2} />
-                        <span className="text-[9px] font-bold tracking-widest uppercase">Therapists</span>
+                        <span className="text-[9px] font-bold tracking-widest uppercase">Team</span>
                     </button>
-                    <button onClick={() => setActiveTab('treatments')} className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'treatments' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}>
-                        <List className="w-5 h-5 mb-1" strokeWidth={activeTab === 'treatments' ? 2.5 : 2} />
-                        <span className="text-[9px] font-bold tracking-widest uppercase">Treatments</span>
+                    
+                    <button onClick={() => { setActiveTab('bookings'); setShowMobileMenu(false); }} className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'bookings' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}>
+                        <Calendar className="w-5 h-5 mb-1" strokeWidth={activeTab === 'bookings' ? 2.5 : 2} />
+                        <span className="text-[9px] font-bold tracking-widest uppercase">Bookings</span>
                     </button>
-                    <button onClick={() => setActiveTab('myspa')} className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'myspa' ? 'text-[#0A84FF] scale-110' : 'text-white/40 hover:text-white/70'}`}>
+                    
+                    <button onClick={() => { setActiveTab('myspa'); setShowMobileMenu(false); }} className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'myspa' ? 'text-[#0A84FF] scale-110' : 'text-white/40 hover:text-white/70'}`}>
                         <PlusCircle className="w-5 h-5 mb-1" strokeWidth={activeTab === 'myspa' ? 2.5 : 2} />
                         <span className="text-[9px] font-bold tracking-widest uppercase">Create</span>
                     </button>
-                    <button onClick={() => setActiveTab('profile')} className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'profile' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}>
-                        <User className="w-5 h-5 mb-1" strokeWidth={activeTab === 'profile' ? 2.5 : 2} />
-                        <span className="text-[9px] font-bold tracking-widest uppercase">Profile</span>
+                    
+                    <button onClick={() => setShowMobileMenu(!showMobileMenu)} className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${showMobileMenu || activeTab === 'profile' || activeTab === 'treatments' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}>
+                        <Menu className="w-5 h-5 mb-1" strokeWidth={(showMobileMenu || activeTab === 'profile' || activeTab === 'treatments') ? 2.5 : 2} />
+                        <span className="text-[9px] font-bold tracking-widest uppercase">More</span>
                     </button>
+
+                    {/* Mobile Dropdown Menu */}
+                    <AnimatePresence>
+                        {showMobileMenu && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                className="absolute bottom-[110%] right-0 w-48 bg-[#2C2C2E] border border-white/10 shadow-2xl rounded-2xl overflow-hidden py-2"
+                            >
+                                <button 
+                                    onClick={() => { setActiveTab('treatments'); setShowMobileMenu(false); }}
+                                    className={`w-full px-4 py-3 flex items-center gap-3 text-sm transition-colors ${activeTab === 'treatments' ? 'text-white bg-white/10' : 'text-white/70 hover:bg-white/5'}`}
+                                >
+                                    <List className="w-4 h-4" /> Treatments
+                                </button>
+                                <button 
+                                    onClick={() => { setActiveTab('profile'); setShowMobileMenu(false); }}
+                                    className={`w-full px-4 py-3 flex items-center gap-3 text-sm transition-colors ${activeTab === 'profile' ? 'text-white bg-white/10' : 'text-white/70 hover:bg-white/5'}`}
+                                >
+                                    <User className="w-4 h-4" /> Profile
+                                </button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
             
