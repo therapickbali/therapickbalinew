@@ -1680,24 +1680,43 @@ export default function AdminDashboard() {
                                                                         </div>
 
                                                                         {/* Treatments Block */}
-                                                                        <div className="flex flex-col gap-3 md:col-span-2 pt-5 mt-2 border-t border-white/5">
-                                                                            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Treatments Selected</p>
-                                                                            {booking.treatments.map((t: any, idx: number) => (
-                                                                                <div key={idx} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-2 bg-[#1C1C1E] p-4 rounded-xl items-center border border-white/5">
-                                                                                    <div>
-                                                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Treatment Name</p>
-                                                                                        <p className="text-sm text-white font-bold mt-1">{t.title}</p>
-                                                                                    </div>
-                                                                                    <div>
+                                                                        <div className="flex flex-col md:col-span-2 pt-6 mt-2 border-t border-white/[0.08]">
+                                                                            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-4">Treatments Selected</p>
+                                                                            
+                                                                            {/* Table Header */}
+                                                                            <div className="hidden sm:flex items-center justify-between pb-3 border-b border-white/[0.08]">
+                                                                                <div className="flex-grow">
+                                                                                    <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Treatment Name</p>
+                                                                                </div>
+                                                                                <div className="flex items-center gap-8 shrink-0">
+                                                                                    <div className="w-[100px]">
                                                                                         <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Duration</p>
-                                                                                        <p className="text-sm text-white font-bold mt-1">{t.duration} Minutes</p>
                                                                                     </div>
-                                                                                    <div>
-                                                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Number of Persons</p>
-                                                                                        <p className="text-sm text-white font-bold mt-1">{t.guests}</p>
+                                                                                    <div className="w-[80px]">
+                                                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Persons</p>
                                                                                     </div>
                                                                                 </div>
-                                                                            ))}
+                                                                            </div>
+
+                                                                            <div className="flex flex-col">
+                                                                                {booking.treatments.map((t: any, idx: number) => (
+                                                                                    <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-4 border-b border-white/[0.04] last:border-0">
+                                                                                        <div className="flex-grow">
+                                                                                            <p className="text-[15px] text-white font-semibold">{t.title}</p>
+                                                                                        </div>
+                                                                                        <div className="flex items-center justify-between sm:justify-start gap-8 shrink-0 mt-2 sm:mt-0">
+                                                                                            <div className="w-auto sm:w-[100px]">
+                                                                                                <p className="sm:hidden text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Duration</p>
+                                                                                                <p className="text-[15px] text-white/90 font-medium">{t.duration} Min</p>
+                                                                                            </div>
+                                                                                            <div className="w-auto sm:w-[80px]">
+                                                                                                <p className="sm:hidden text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Persons</p>
+                                                                                                <p className="text-[15px] text-white/90 font-medium">{t.guests}</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                ))}
+                                                                            </div>
                                                                         </div>
 
                                                                         {requestedTherapistsNames && (
