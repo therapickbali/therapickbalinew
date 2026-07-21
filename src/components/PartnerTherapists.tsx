@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { Plus, Edit2, Trash2, X, Save, Camera, CheckCircle2, MoreVertical, Power, UserCircle } from 'lucide-react';
 import { PartnerTherapist } from '@/context/SpaContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import FloatingCalendar from './FloatingCalendar';
 
 interface PartnerTherapistsProps {
     partnerId: string;
@@ -17,6 +18,11 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    
+    // Busy Popup state
+    const [busyPopupTherapistId, setBusyPopupTherapistId] = useState<string | null>(null);
+    const [busyDate, setBusyDate] = useState('');
+    const [busyTime, setBusyTime] = useState('09:00');
     
     // Form state
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -157,13 +163,34 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
         fetchTherapists();
     };
 
-    const handleStatusUpdate = async (id: string, status: string) => {
-        const { error } = await supabase.from('partner_therapists').update({ online_status: status }).eq('id', id);
+    const handleStatusUpdate = async (id: string, status: string, availableAt?: string) => {
+        const updateData: any = { online_status: status };
+        if (availableAt !== undefined) {
+            updateData.available_at = availableAt;
+        } else if (status !== 'HANDLING CUSTOMER') {
+            updateData.available_at = null;
+        }
+
+        const { error } = await supabase.from('partner_therapists').update(updateData).eq('id', id);
         if (error) {
             alert(`Error updating status: ${error.message}`);
             return;
         }
         fetchTherapists();
+    };
+
+    const handleBusyClick = (id: string) => {
+        setBusyPopupTherapistId(id);
+        const today = new Date();
+        setBusyDate(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
+        setBusyTime('09:00');
+    };
+
+    const handleSaveBusy = () => {
+        if (!busyPopupTherapistId) return;
+        const availableAt = `${busyDate} ${busyTime}:00`;
+        handleStatusUpdate(busyPopupTherapistId, 'HANDLING CUSTOMER', availableAt);
+        setBusyPopupTherapistId(null);
     };
 
     if (isEditing) {
@@ -256,7 +283,7 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
                     <button onClick={handleAddNew} className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full text-sm font-semibold transition-all">Add Therapist</button>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 gap-4 pb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-12">
                     {therapists.filter(t => t.name.toLowerCase().includes(searchTerm.toLowerCase())).map(t => {
                         const isOnline = t.online_status === 'READY TO ACCEPT JOBS' || t.online_status === 'Online';
                         const isBusy = t.online_status === 'HANDLING CUSTOMER' || t.online_status === 'Busy';
@@ -320,7 +347,7 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
                                 </button>
                                 
                                 <button 
-                                    onClick={() => handleStatusUpdate(t.id, 'HANDLING CUSTOMER')}
+                                    onClick={() => handleBusyClick(t.id)}
                                     className={`flex-1 py-2.5 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all duration-300 border ${isBusy ? 'bg-amber-500/10 border-amber-500/30' : 'bg-transparent border-transparent hover:bg-white/5'}`}
                                 >
                                     <span className={`text-[9px] font-bold tracking-widest uppercase ${isBusy ? 'text-amber-500' : 'text-white/40'}`}>Busy</span>
@@ -346,6 +373,59 @@ export default function PartnerTherapists({ partnerId }: PartnerTherapistsProps)
                     </button>
                 </div>
             )}
+
+            {/* Busy Status Popup */}
+            <AnimatePresence>
+                {busyPopupTherapistId && (
+                    <motion.div 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                    >
+                        <motion.div 
+                            initial={{ scale: 0.95, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.95, y: 20 }}
+                            className="w-full max-w-md bg-[#1C1C1E] rounded-[32px] p-6 border border-white/10 shadow-2xl"
+                        >
+                            <div className="flex justify-between items-center mb-6">
+                                <div>
+                                    <h3 className="text-xl font-serif text-white font-medium">Set Availability</h3>
+                                    <p className="text-xs text-white/50 mt-1">When will this therapist be available?</p>
+                                </div>
+                                <button onClick={() => setBusyPopupTherapistId(null)} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
+                                    <X size={16} />
+                                </button>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest block mb-3">Select Date</label>
+                                    <FloatingCalendar value={busyDate} onChange={setBusyDate} days={7} />
+                                </div>
+
+                                <div>
+                                    <label className="text-[10px] font-bold text-white/60 uppercase tracking-widest block mb-2">Select Time</label>
+                                    <input 
+                                        type="time" 
+                                        value={busyTime}
+                                        onChange={(e) => setBusyTime(e.target.value)}
+                                        className="w-full bg-[#2C2C2E] border border-transparent rounded-2xl py-4 px-5 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all shadow-inner"
+                                    />
+                                </div>
+
+                                <button 
+                                    onClick={handleSaveBusy}
+                                    className="w-full bg-amber-500 text-black rounded-full py-4 font-bold text-[15px] shadow-lg hover:bg-amber-400 transition-all flex items-center justify-center gap-2 mt-4"
+                                >
+                                    Confirm Busy Status
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

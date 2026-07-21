@@ -5,9 +5,10 @@ interface FloatingCalendarProps {
     value: string;
     onChange: (date: string) => void;
     currentTime?: string;
+    days?: number;
 }
 
-export default function FloatingCalendar({ value, onChange, currentTime }: FloatingCalendarProps) {
+export default function FloatingCalendar({ value, onChange, currentTime, days = 30 }: FloatingCalendarProps) {
     const [selectedDateObj, setSelectedDateObj] = useState<Date | null>(value ? new Date(value) : null);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -30,8 +31,8 @@ export default function FloatingCalendar({ value, onChange, currentTime }: Float
         onChange(`${year}-${month}-${dateStr}`);
     };
 
-    // Generate next 30 days
-    const nextDays = Array.from({ length: 30 }).map((_, i) => {
+    // Generate next N days
+    const nextDays = Array.from({ length: days }).map((_, i) => {
         const d = new Date();
         d.setDate(d.getDate() + i);
         return d;
