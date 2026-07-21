@@ -23,7 +23,7 @@ const CATEGORIES = [
 
 
 export default function Home() {
-    const { treatments, products, campaigns, siteBrandFilter, setSiteBrandFilter, partnerTherapists, isFetchingTherapists } = useSpa();
+    const { treatments, therapists, campaign, products, isLoading, isFetchingTherapists, partnerTherapists } = useSpa();
 
     const [activeCategory, setActiveCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
