@@ -202,7 +202,7 @@ Room: ${formData.room || 'Not specified'}${therapistMsg}
 *Treatments Selected*
 ${treatmentsList}
 
-*TOTAL IDR ${totalPrice.toLocaleString('en-US')}*`)}`;
+*TOTAL AED ${totalPrice.toLocaleString('en-US')}*`)}`;
 
             setTimeout(() => {
                 if (newWindow) {
@@ -432,7 +432,7 @@ ${treatmentsList}
                                             <h4 className="font-bold text-white text-[13px] line-clamp-1 mb-3">{treatment.title}</h4>
                                             <div className="flex items-center justify-between bg-white/10 rounded-full p-1 pl-3 mt-auto border border-white/10">
                                                 <span className="font-semibold text-white text-[12px]">
-                                                    IDR {parseInt((treatment.options[0]?.price || '0').replace(/,/g, '')).toLocaleString('en-US')}
+                                                    AED {parseInt((treatment.options[0]?.price || '0').replace(/,/g, '')).toLocaleString('en-US')}
                                                 </span>
                                                 <div className="w-7 h-7 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                                                     <Plus size={14} strokeWidth={2.5} />
@@ -519,13 +519,20 @@ ${treatmentsList}
                                         </div>
                                         {item.therapist_id && (
                                             (() => {
-                                                const pTherapist = partnerTherapists.find(t => t.partner_id === item.therapist_id && (t.online_status === 'READY TO ACCEPT JOBS' || t.online_status === 'Online')) || partnerTherapists.find(t => t.partner_id === item.therapist_id);
-                                                return pTherapist ? (
-                                                    <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full py-1.5 px-3 border border-white/10">
-                                                        {pTherapist.image_url && <img src={pTherapist.image_url} alt={pTherapist.name} className="w-5 h-5 rounded-full object-cover" />}
-                                                        <span className="text-[11px] font-medium text-white/90">{pTherapist.name}</span>
-                                                    </div>
-                                                ) : null;
+                                                const companyTherapists = partnerTherapists.filter(t => t.partner_id === item.therapist_id && t.image_url);
+                                                // Randomly select up to 3 therapists
+                                                const selectedTherapists = [...companyTherapists].sort(() => 0.5 - Math.random()).slice(0, 3);
+                                                
+                                                if (selectedTherapists.length > 0) {
+                                                    return (
+                                                        <div className="flex items-center -space-x-2">
+                                                            {selectedTherapists.map((t, idx) => (
+                                                                <img key={idx} src={t.image_url} alt="Therapist" className="w-7 h-7 rounded-full object-cover border-2 border-black/80 shadow-sm relative z-10" style={{ zIndex: 3 - idx }} />
+                                                            ))}
+                                                        </div>
+                                                    );
+                                                }
+                                                return null;
                                             })()
                                         )}
                                     </div>
@@ -539,7 +546,7 @@ ${treatmentsList}
                                                 <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration} MINS
                                             </div>
                                             <div className="flex items-center justify-between bg-white/10/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-white/10">
-                                                <span className="font-semibold text-white text-[14px]">IDR {parseInt(item.options[0]?.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
+                                                <span className="font-semibold text-white text-[14px]">AED {parseInt(item.options[0]?.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                 <button className="w-10 h-10 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                                                     <Plus size={20} strokeWidth={2.5} />
                                                 </button>
@@ -900,7 +907,7 @@ ${treatmentsList}
                                                                             className="w-full flex items-center justify-between p-3 rounded-xl border border-white/20 hover:border-primary/50 hover:bg-white/5 transition-all group"
                                                                         >
                                                                             <span className="text-sm font-bold text-white group-hover:text-white transition-colors">{opt.duration} Mins</span>
-                                                                            <span className="text-sm font-serif text-white">IDR {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
+                                                                            <span className="text-sm font-serif text-white">AED {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                                         </button>
                                                                     ))}
                                                                 </div>
@@ -950,7 +957,7 @@ ${treatmentsList}
                                                         </p>
                                                     </div>
                                                     <span className="font-serif text-white font-medium text-right flex flex-col shrink-0">
-                                                        IDR {item.price.toLocaleString('en-US')}
+                                                        AED {item.price.toLocaleString('en-US')}
                                                         <span className="text-[10px] font-sans text-white/90-muted font-normal uppercase tracking-wider">
                                                             {['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
                                                         </span>
@@ -1001,7 +1008,7 @@ ${treatmentsList}
                                     <div className="mt-8 pt-6 border-t border-white/20/50">
                                         <div className="flex items-end justify-between mb-6">
                                             <span className="text-xs font-bold text-white/90-muted uppercase tracking-widest">Total Price</span>
-                                            <span className="text-2xl font-serif text-white">IDR {cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0).toLocaleString('en-US')}</span>
+                                            <span className="text-2xl font-serif text-white">AED {cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0).toLocaleString('en-US')}</span>
                                         </div>
                                         <button 
                                             type="button"

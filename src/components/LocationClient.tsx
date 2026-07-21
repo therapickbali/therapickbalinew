@@ -22,7 +22,7 @@ const CATEGORIES = [
 
 
 export default function LocationClient({ locationName, locationSlug }: { locationName: string, locationSlug: string }) {
-    const { treatments, campaign, products, isLoading } = useSpa();
+    const { treatments, campaign, products, partnerTherapists, isLoading } = useSpa();
 
     const [activeCategory, setActiveCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
@@ -143,13 +143,13 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                 if (item.isCampaign) {
                     const originalPriceNum = item.price / (1 - (item.discountPercentage / 100));
                     const originalPrice = (originalPriceNum * item.guests).toLocaleString('en-US');
-                    return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nIDR ${price} ~IDR ${originalPrice}~${whatsIncludedText}`;
+                    return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nAED ${price} ~AED ${originalPrice}~${whatsIncludedText}`;
                 }
-                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
+                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
             }).join('\n\n------------------------\n\n');
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
-            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.`;
+            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* AED ${totalPrice.toLocaleString('en-US')}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location/Villa: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}\n\nHello! I would like to confirm this booking.`;
             
             const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(baseMessage)}`;
             if (newWindow) {
@@ -367,6 +367,22 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                         <div className="bg-white/10 backdrop-blur-[40px] border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] border border-primary/10 text-white px-4 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
                                             {item.category}
                                         </div>
+                                        {item.therapist_id && (
+                                            (() => {
+                                                const companyTherapists = partnerTherapists.filter(t => t.partner_id === item.therapist_id && t.image_url);
+                                                const selectedTherapists = [...companyTherapists].sort(() => 0.5 - Math.random()).slice(0, 3);
+                                                if (selectedTherapists.length > 0) {
+                                                    return (
+                                                        <div className="flex items-center -space-x-2">
+                                                            {selectedTherapists.map((t, idx) => (
+                                                                <img key={idx} src={t.image_url} alt="Therapist" className="w-7 h-7 rounded-full object-cover border-2 border-black/80 shadow-sm relative z-10" style={{ zIndex: 3 - idx }} />
+                                                            ))}
+                                                        </div>
+                                                    );
+                                                }
+                                                return null;
+                                            })()
+                                        )}
                                     </div>
 
                                     <div className="relative z-10 flex-grow flex flex-col">
@@ -378,7 +394,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                 <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration} MINS
                                             </div>
                                             <div className="flex items-center justify-between bg-white/10/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-white/10">
-                                                <span className="font-semibold text-white text-[14px]">IDR {parseInt(item.options[0]?.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
+                                                <span className="font-semibold text-white text-[14px]">AED {parseInt(item.options[0]?.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                 <button className="w-10 h-10 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                                                     <Plus size={20} strokeWidth={2.5} />
                                                 </button>
@@ -659,7 +675,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                                             className="w-full flex items-center justify-between p-3 rounded-xl border border-white/20 hover:border-primary/50 hover:bg-white/5 transition-all group"
                                                                         >
                                                                             <span className="text-sm font-bold text-white group-hover:text-white transition-colors">{opt.duration} Mins</span>
-                                                                            <span className="text-sm font-serif text-white">IDR {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
+                                                                            <span className="text-sm font-serif text-white">AED {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                                         </button>
                                                                     ))}
                                                                 </div>
@@ -707,7 +723,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                         </p>
                                                     </div>
                                                     <span className="font-serif text-white font-medium text-right flex flex-col shrink-0">
-                                                        IDR {item.price.toLocaleString('en-US')}
+                                                        AED {item.price.toLocaleString('en-US')}
                                                         <span className="text-[9px] font-sans text-white/90-muted font-normal uppercase tracking-wider">Per Person</span>
                                                     </span>
                                                 </div>
@@ -790,7 +806,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                         <div className="mt-8 pt-6 border-t border-white/20/50">
                                             <div className="flex items-end justify-between mb-6">
                                                 <span className="text-xs font-bold text-white/90-muted uppercase tracking-widest">Total Price</span>
-                                                <span className="text-2xl font-serif text-white">IDR {cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0).toLocaleString('en-US')}</span>
+                                                <span className="text-2xl font-serif text-white">AED {cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0).toLocaleString('en-US')}</span>
                                             </div>
                                             <div className="flex flex-col gap-3">
                                                 <button 

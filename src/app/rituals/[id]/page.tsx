@@ -122,7 +122,7 @@ export default function RitualsDetails() {
                     }
                 }
 
-                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
+                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
             }).join('\n\n------------------------\n\n');
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
@@ -130,7 +130,7 @@ export default function RitualsDetails() {
                 ? `\n*Therapist Request:* ${selectedTherapists.map(id => partnerTherapists.find(t => t.id === id)?.name).join(', ')}`
                 : `\n*Therapist Request:* Assign Automatically`;
 
-            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
+            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* AED ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
             
             const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(baseMessage)}`;
             if (newWindow) {
@@ -285,7 +285,7 @@ export default function RitualsDetails() {
                                     exit={{ opacity: 0, y: -10 }}
                                     className="flex items-baseline gap-2 text-white drop-shadow-sm"
                                 >
-                                    <span className="text-lg font-medium text-white/70">IDR</span>
+                                    <span className="text-lg font-medium text-white/70">AED</span>
                                     <span className="text-4xl md:text-5xl font-serif">{parseInt(selectedOption.price.replace(/,/g, "") || "0").toLocaleString("en-US")}</span>
                                 </motion.div>
                             </AnimatePresence>
@@ -377,7 +377,7 @@ export default function RitualsDetails() {
                                                 <Clock className="w-3.5 h-3.5" /> {item.options && item.options[0] ? item.options[0].duration : '60'} MINS
                                             </div>
                                             <div className="flex items-center justify-between bg-white/10/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-white/10">
-                                                <span className="font-semibold text-white text-[14px]">IDR {item.options && item.options[0] ? parseInt(item.options[0].price.replace(/,/g, '') || '0').toLocaleString('en-US') : '0'}</span>
+                                                <span className="font-semibold text-white text-[14px]">AED {item.options && item.options[0] ? parseInt(item.options[0].price.replace(/,/g, '') || '0').toLocaleString('en-US') : '0'}</span>
                                                 <button className="w-10 h-10 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                                                     <Plus size={20} strokeWidth={2.5} />
                                                 </button>
@@ -477,7 +477,7 @@ export default function RitualsDetails() {
                                                                             className="w-full flex items-center justify-between p-3 rounded-xl border border-white/20 hover:border-primary/50 hover:bg-white/5 transition-all group"
                                                                         >
                                                                             <span className="text-sm font-bold text-white group-hover:text-white transition-colors">{opt.duration} Mins</span>
-                                                                            <span className="text-sm font-serif text-white">IDR {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
+                                                                            <span className="text-sm font-serif text-white">AED {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                                         </button>
                                                                     ))}
                                                                 </div>
@@ -522,7 +522,7 @@ export default function RitualsDetails() {
                                                         </p>
                                                     </div>
                                                     <span className="font-serif text-white font-medium text-right flex flex-col shrink-0">
-                                                        IDR {item.price.toLocaleString('en-US')}
+                                                        AED {item.price.toLocaleString('en-US')}
                                                         <span className="text-[9px] font-sans text-white/90-muted font-normal uppercase tracking-wider">
                                                             {['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
                                                         </span>
@@ -573,7 +573,7 @@ export default function RitualsDetails() {
                                     <div className="mt-8 pt-6 border-t border-white/20/50">
                                         <div className="flex items-end justify-between mb-6">
                                             <span className="text-xs font-bold text-white/90-muted uppercase tracking-widest">Total Price</span>
-                                            <span className="text-2xl font-serif text-white">IDR {formattedTotalPrice}</span>
+                                            <span className="text-2xl font-serif text-white">AED {formattedTotalPrice}</span>
                                         </div>
                                         <button 
                                             type="button"
@@ -861,7 +861,7 @@ export default function RitualsDetails() {
                                         <div className="mt-8 pt-6 border-t border-white/20/50">
                                             <div className="flex items-end justify-between mb-6">
                                                 <span className="text-xs font-bold text-white/90-muted uppercase tracking-widest">Total Price</span>
-                                                <span className="text-2xl font-serif text-white">IDR {formattedTotalPrice}</span>
+                                                <span className="text-2xl font-serif text-white">AED {formattedTotalPrice}</span>
                                             </div>
                                             <div className="flex flex-col gap-3">
                                                 <button 

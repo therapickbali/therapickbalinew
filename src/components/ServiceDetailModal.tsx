@@ -203,7 +203,7 @@ const ServiceDetailModal: React.FC<Props> = ({ service, onClose, onAdd }) => {
                                                         <span className={`font-serif font-normal text-base normal-case tracking-normal ${
                                                             selectedOptionIdx === i ? 'text-white' : 'text-white/90-muted/60'
                                                         }`}>
-                                                            {opt.price.replace(/IDR/i, '').trim()}k IDR
+                                                            {opt.price.replace(/AED/i, '').trim()}k AED
                                                         </span>
                                                     </button>
                                                 ))}
@@ -214,9 +214,9 @@ const ServiceDetailModal: React.FC<Props> = ({ service, onClose, onAdd }) => {
                                             <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-accent">Total Investment</span>
                                             <div className="flex items-baseline gap-2 mt-1">
                                                 <span className="font-serif text-4xl font-normal text-white">
-                                                    {currentOption.price.replace(/IDR/i, '').trim()}
+                                                    {currentOption.price.replace(/AED/i, '').trim()}
                                                 </span>
-                                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">IDR</span>
+                                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">AED</span>
                                             </div>
                                         </div>
 
@@ -257,9 +257,9 @@ const ServiceDetailModal: React.FC<Props> = ({ service, onClose, onAdd }) => {
                                 <div className="flex items-center justify-between gap-4">
                                     <div className="flex items-baseline gap-1">
                                         <span className="font-serif text-3xl font-normal text-white">
-                                            {currentOption.price.replace(/IDR/i, '').trim()}
+                                            {currentOption.price.replace(/AED/i, '').trim()}
                                         </span>
-                                        <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">IDR</span>
+                                        <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">AED</span>
                                     </div>
                                     <button
                                         onClick={handleAdd}

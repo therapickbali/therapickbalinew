@@ -177,7 +177,7 @@ export default async function RootLayout({
     },
     offers: {
       '@type': 'AggregateOffer',
-      priceCurrency: 'IDR',
+      priceCurrency: 'AED',
       lowPrice: '250000',
       highPrice: '1500000',
       offerCount: '20'

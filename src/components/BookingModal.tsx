@@ -90,7 +90,7 @@ export default function BookingModal({
                         whatsIncludedText = `\n\n*WHAT'S INCLUDED:*\n${cleanIncluded}`;
                     }
                 }
-                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
+                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
             }).join('\n\n------------------------\n\n');
 
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
@@ -119,7 +119,7 @@ export default function BookingModal({
                 console.error('API call failed:', e);
             }
 
-            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* IDR ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
+            const baseMessage = `*NEW SPA BOOKING*\n${websiteSource}\n\n*TREATMENTS:*\n${treatmentsList}\n\n*TOTAL PRICE:* AED ${formattedTotalPrice}\n\n*CLIENT DETAILS:*\n- Name: ${formData.name}\n- Date: ${formData.date}\n- Time: ${formData.time}\n- Location Area: ${selectedArea}\n- Address: ${formData.location}\n- Room Number: ${formData.room || 'N/A'}${therapistMsg}\n\nHello! I would like to confirm this booking.`;
 
             const waUrl = `https://wa.me/6285174119423?text=${encodeURIComponent(baseMessage)}`;
             if (newWindow) {
@@ -234,7 +234,7 @@ export default function BookingModal({
                                                                     className="w-full flex items-center justify-between p-3 rounded-xl border border-white/40 hover:bg-white/60 transition-all group/btn"
                                                                 >
                                                                     <span className="text-sm font-bold text-white">{opt.duration} Mins</span>
-                                                                    <span className="text-sm font-serif text-white">IDR {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
+                                                                    <span className="text-sm font-serif text-white">AED {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                                 </button>
                                                             ))}
                                                         </div>
@@ -262,7 +262,7 @@ export default function BookingModal({
                                                         <p className="text-xs text-white/90-muted mt-1">{item.duration} Mins</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <div className="font-serif text-white">IDR {item.price.toLocaleString('en-US')}</div>
+                                                        <div className="font-serif text-white">AED {item.price.toLocaleString('en-US')}</div>
                                                         <div className="text-[9px] uppercase tracking-wider text-white/90-muted/70">
                                                             {['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k)) ? 'For 2 Persons' : 'Per Person'}
                                                         </div>
@@ -481,7 +481,7 @@ export default function BookingModal({
                         <div className="bg-transparent border-t border-white/10 p-6 z-10 shrink-0">
                             <div className="flex items-end justify-between mb-4">
                                 <span className="text-xs font-bold text-white/90-muted uppercase tracking-widest">Total Price</span>
-                                <span className="text-2xl font-serif text-white">IDR {formattedTotalPrice}</span>
+                                <span className="text-2xl font-serif text-white">AED {formattedTotalPrice}</span>
                             </div>
                             {bookingStep === 1 ? (
                                 <button onClick={() => setBookingStep(2)} disabled={cartItems.length === 0} className="w-full bg-white text-black px-6 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/90 transition-all">
