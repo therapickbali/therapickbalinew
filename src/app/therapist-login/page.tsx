@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, User, MapPin, ChevronRight, Eye, EyeOff, Phone, FileText, Upload } from 'lucide-react';
+import { Mail, Lock, User, MapPin, ChevronRight, Eye, EyeOff, Phone, FileText, Upload, Store } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import TopNav from '@/components/TopNav';
 
@@ -13,6 +13,7 @@ export default function TherapistLogin() {
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
+        brand: '',
         email: '',
         password: '',
         location: '',
@@ -96,7 +97,7 @@ export default function TherapistLogin() {
                         bio: formData.bio,
                         email: formData.email,
                         image_url: image_url,
-                        brand: 'Therapick Bali',
+                        brand: formData.brand || formData.name,
                         is_active: false
                     }]);
 
@@ -179,6 +180,21 @@ export default function TherapistLogin() {
                                 >
                                     {!isLogin && (
                                         <div className="space-y-4">
+                                            {/* Company Name */}
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                    <Store className="h-5 w-5 text-white/90-muted/50" />
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={formData.brand}
+                                                    onChange={(e) => setFormData({...formData, brand: e.target.value})}
+                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
+                                                    placeholder="Company / Brand Name"
+                                                />
+                                            </div>
+
+                                            {/* Contact Person */}
                                             <div className="relative">
                                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                                     <User className="h-5 w-5 text-white/90-muted/50" />
@@ -188,24 +204,24 @@ export default function TherapistLogin() {
                                                     value={formData.name}
                                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                                                     className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
-                                                    placeholder="Full Name"
+                                                    placeholder="Contact Person Name"
                                                 />
                                             </div>
 
-                                            <div className="relative">
-                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                    <Phone className="h-5 w-5 text-white/90-muted/50" />
-                                                </div>
-                                                <input
-                                                    type="tel"
-                                                    value={formData.whatsapp}
-                                                    onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
-                                                    className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
-                                                    placeholder="WhatsApp Number"
-                                                />
-                                            </div>
-
+                                            {/* WhatsApp and Location */}
                                             <div className="grid grid-cols-2 gap-4">
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                        <Phone className="h-5 w-5 text-white/90-muted/50" />
+                                                    </div>
+                                                    <input
+                                                        type="tel"
+                                                        value={formData.whatsapp}
+                                                        onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
+                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-11 pr-3 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
+                                                        placeholder="WhatsApp"
+                                                    />
+                                                </div>
                                                 <div className="relative">
                                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                                         <MapPin className="h-5 w-5 text-white/90-muted/50" />
@@ -213,7 +229,7 @@ export default function TherapistLogin() {
                                                     <select
                                                         value={formData.location}
                                                         onChange={(e) => setFormData({...formData, location: e.target.value})}
-                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none"
+                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-11 pr-3 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all appearance-none [&>option]:text-black"
                                                     >
                                                         <option value="" disabled>Location</option>
                                                         <option value="Ubud">Ubud</option>
@@ -221,19 +237,25 @@ export default function TherapistLogin() {
                                                         <option value="Seminyak">Seminyak</option>
                                                     </select>
                                                 </div>
-                                                <div className="relative">
-                                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                        <Upload className="h-5 w-5 text-white/90-muted/50" />
-                                                    </div>
+                                            </div>
+
+                                            {/* Logo Upload */}
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                    <Upload className="h-5 w-5 text-white/90-muted/50" />
+                                                </div>
+                                                <div className="w-full bg-white/5 border border-white/20 rounded-2xl py-2 pl-12 pr-4 flex items-center focus-within:ring-2 focus-within:ring-primary/10 transition-all">
+                                                    <span className="text-sm text-white/90-muted flex-1">Company Logo</span>
                                                     <input
                                                         type="file"
                                                         accept="image/*"
                                                         onChange={(e) => setFormData({...formData, image: e.target.files?.[0] || null})}
-                                                        className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white/90-muted file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all cursor-pointer"
+                                                        className="w-24 text-sm text-white/90-muted file:mr-0 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all cursor-pointer"
                                                     />
                                                 </div>
                                             </div>
 
+                                            {/* Description */}
                                             <div className="relative">
                                                 <div className="absolute top-3.5 left-4 pointer-events-none">
                                                     <FileText className="h-5 w-5 text-white/90-muted/50" />
@@ -242,7 +264,7 @@ export default function TherapistLogin() {
                                                     value={formData.bio}
                                                     onChange={(e) => setFormData({...formData, bio: e.target.value})}
                                                     className="w-full bg-white/5 border border-white/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-white/90-muted focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all min-h-[100px] resize-y appearance-none"
-                                                    placeholder="Short Bio"
+                                                    placeholder="Company Description"
                                                 />
                                             </div>
                                         </div>
