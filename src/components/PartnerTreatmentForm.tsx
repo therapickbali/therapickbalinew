@@ -123,24 +123,30 @@ export default function PartnerTreatmentForm({ partnerId, treatmentToEdit, onSav
                     </button>
                 </div>
                 {pricingOptions.map((option, idx) => (
-                    <div key={idx} className="flex items-center gap-4">
-                        <div className="flex-1 relative">
-                            <input 
-                                type="number" required placeholder="60" value={option.duration} onChange={(e) => handlePricingChange(idx, 'duration', e.target.value)}
-                                className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-2xl px-5 py-4 pr-16 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
-                            />
-                            <span className="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-semibold text-white/90-muted">MINS</span>
+                    <div key={idx} className="flex flex-col md:flex-row items-center gap-4 bg-[#2C2C2E]/30 p-4 rounded-2xl border border-white/5 relative">
+                        <div className="w-full md:flex-1 relative">
+                            <select 
+                                required value={option.duration} onChange={(e) => handlePricingChange(idx, 'duration', e.target.value)}
+                                className="w-full bg-[#2C2C2E] border border-transparent rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none [&>option]:text-black"
+                            >
+                                <option value="" disabled>Duration</option>
+                                <option value="30">30 Mins</option>
+                                <option value="45">45 Mins</option>
+                                <option value="60">60 Mins</option>
+                                <option value="90">90 Mins</option>
+                                <option value="120">120 Mins</option>
+                            </select>
                         </div>
-                        <div className="flex-[2] relative">
-                            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-sm font-semibold text-white/90-muted">Rp</span>
+                        <div className="w-full md:flex-[2] relative">
+                            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-sm font-semibold text-white/90-muted">AED</span>
                             <input 
-                                type="text" required placeholder="450,000" value={option.price} onChange={(e) => handlePricingChange(idx, 'price', e.target.value)}
-                                className="w-full bg-[#2C2C2E]/80 border border-transparent rounded-2xl px-12 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
+                                type="text" required placeholder="450" value={option.price} onChange={(e) => handlePricingChange(idx, 'price', e.target.value)}
+                                className="w-full bg-[#2C2C2E] border border-transparent rounded-2xl px-14 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
                             />
                         </div>
                         {pricingOptions.length > 1 && (
-                            <button type="button" onClick={() => handleRemovePricing(idx)} className="w-12 h-12 rounded-full bg-red-500/10 text-red-400 flex items-center justify-center shrink-0 hover:bg-red-500/20 transition-colors">
-                                <Trash2 size={16} />
+                            <button type="button" onClick={() => handleRemovePricing(idx)} className="md:static absolute -top-3 -right-3 w-8 h-8 md:w-12 md:h-12 rounded-full bg-red-500/90 md:bg-red-500/10 text-white md:text-red-400 flex items-center justify-center shrink-0 hover:bg-red-500 hover:text-white transition-colors shadow-lg md:shadow-none z-10">
+                                <Trash2 size={14} />
                             </button>
                         )}
                     </div>

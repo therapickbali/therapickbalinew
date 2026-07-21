@@ -761,7 +761,7 @@ export default function AdminDashboard() {
                                                         <span className="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-semibold text-white/90-muted">MINS</span>
                                                     </div>
                                                     <div className="flex-[2] relative">
-                                                        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-sm font-semibold text-white/90-muted">Rp</span>
+                                                        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-sm font-semibold text-white/90-muted">AED</span>
                                                         <input 
                                                             type="text" required placeholder="450,000" value={option.price} onChange={(e) => handlePricingChange(idx, 'price', e.target.value)}
                                                             className="w-full bg-white/5 border border-white/20 rounded-2xl px-12 py-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-white/40 transition-all appearance-none"
@@ -934,7 +934,7 @@ export default function AdminDashboard() {
                                                                                 : 'bg-white border-white/20/60 text-white/90-muted hover:bg-surface'
                                                                             }`}
                                                                         >
-                                                                            {opt.duration} - Rp {opt.price}
+                                                                            {opt.duration} - AED {opt.price}
                                                                         </button>
                                                                     );
                                                                 })}
@@ -972,7 +972,7 @@ export default function AdminDashboard() {
                                         {/* Product Price & Stock */}
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
-                                                <label className="text-xs font-bold uppercase tracking-widest text-white/90-muted ml-1">Price (Rp)</label>
+                                                <label className="text-xs font-bold uppercase tracking-widest text-white/90-muted ml-1">Price (AED)</label>
                                                 <input 
                                                     type="text" required placeholder="e.g. 350,000" 
                                                     value={productPrice} onChange={e => setProductPrice(e.target.value)}
@@ -1104,12 +1104,12 @@ export default function AdminDashboard() {
                                                                             <div key={opt.duration} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white/5 border border-white/20 rounded-xl gap-4 hover:border-primary/20 transition-colors">
                                                                                 <div className="flex items-center justify-between sm:justify-start gap-4">
                                                                                     <span className="text-sm font-bold text-white bg-white/5 px-3 py-1.5 rounded-md">{opt.duration}</span>
-                                                                                    <span className="text-xs font-semibold text-white/90-muted">Cust. Price: Rp {opt.price}</span>
+                                                                                    <span className="text-xs font-semibold text-white/90-muted">Cust. Price: AED {opt.price}</span>
                                                                                 </div>
                                                                                 <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto border-t border-white/20/30 pt-3 sm:border-0 sm:pt-0">
                                                                                     <label className="text-xs font-bold text-white/90-muted">Therapist Fee:</label>
                                                                                     <div className="relative">
-                                                                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/90-muted text-xs font-bold">Rp.</span>
+                                                                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/90-muted text-xs font-bold">AED</span>
                                                                                         <input 
                                                                                             type="text"
                                                                                             placeholder="0"
@@ -1371,7 +1371,7 @@ export default function AdminDashboard() {
                                                                 <div className="flex flex-col items-start md:items-end gap-1">
                                                                     {t.options.map(opt => (
                                                                         <span key={opt.duration} className="text-[11px] font-bold text-white bg-white/5 px-2 py-0.5 rounded-md">
-                                                                            {opt.duration} • Rp {opt.price}
+                                                                            {opt.duration} • AED {opt.price}
                                                                         </span>
                                                                     ))}
                                                                 </div>
@@ -1464,7 +1464,7 @@ export default function AdminDashboard() {
                                                                         <span className="text-[10px] font-bold text-white/90-muted bg-surface px-2 py-0.5 rounded-full whitespace-nowrap">Stock: {p.stock || 0}</span>
                                                                     </div>
                                                                     <p className="text-[10px] font-semibold text-white/90-muted uppercase tracking-widest mb-1">{p.category}</p>
-                                                                    <span className="text-xs font-bold text-accent">Rp {p.price}</span>
+                                                                    <span className="text-xs font-bold text-accent">AED {p.price}</span>
                                                                 </div>
                                                             </div>
                                                             <p className="text-xs text-white/90-muted/80 line-clamp-2 mb-2">{p.description}</p>

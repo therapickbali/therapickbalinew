@@ -43,7 +43,7 @@ const ModernServiceCard: React.FC<Props> = ({ service, onView, domRef }) => {
                     {durationDisplay}
                 </p>
                 <div className="flex items-center justify-between bg-white/10 rounded-full p-1 pl-3 mt-auto border border-white/10">
-                    <span className="font-semibold text-white text-[13px] md:text-sm">Rp {startingPrice.toLocaleString()}</span>
+                    <span className="font-semibold text-white text-[13px] md:text-sm">AED {startingPrice.toLocaleString()}</span>
                     <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                         <Plus size={18} strokeWidth={2.5} />
                     </div>

@@ -74,24 +74,24 @@ export default function PartnerTreatments({ therapistId }: PartnerTreatmentsProp
             ) : treatments.length === 0 ? (
                 <div className="text-center text-white/50 py-10 bg-white/5 rounded-3xl">No treatments found. Create one!</div>
             ) : (
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-12">
                     {treatments.map(t => (
-                        <div key={t.id} className="bg-white/5 border border-white/10 rounded-[24px] p-5 backdrop-blur-md flex flex-col gap-3">
-                            <div className="flex justify-between items-start">
+                        <div key={t.id} className="group bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.15)] rounded-[40px] overflow-hidden flex flex-col relative transition-all hover:border-white/20 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] p-6">
+                            <div className="flex justify-between items-start mb-3">
                                 <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 bg-white/5 px-2 py-1 rounded-md">{t.category}</span>
-                                    <h3 className="text-white font-semibold mt-2">{t.title}</h3>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 bg-white/5 px-3 py-1.5 rounded-full">{t.category}</span>
+                                    <h3 className="text-white font-serif text-xl mt-3">{t.title}</h3>
                                 </div>
                                 <div className="flex gap-2">
-                                    <button onClick={() => handleEdit(t)} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white"><Edit2 size={14} /></button>
-                                    <button onClick={() => handleDelete(t.id)} className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 hover:text-red-300"><Trash2 size={14} /></button>
+                                    <button onClick={() => handleEdit(t)} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"><Edit2 size={16} /></button>
+                                    <button onClick={() => handleDelete(t.id)} className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 hover:text-red-300 hover:bg-red-500/20 transition-colors"><Trash2 size={16} /></button>
                                 </div>
                             </div>
-                            <p className="text-xs text-white/70 line-clamp-2">{t.desc}</p>
-                            <div className="flex flex-wrap gap-2 mt-2">
+                            <p className="text-sm text-white/60 line-clamp-2 leading-relaxed flex-1">{t.desc}</p>
+                            <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-white/5">
                                 {t.options.map((opt, i) => (
-                                    <div key={i} className="bg-white/10 text-[11px] px-3 py-1.5 rounded-full text-white/90">
-                                        {opt.duration} - Rp {opt.price}
+                                    <div key={i} className="bg-white/10 text-xs px-4 py-2 rounded-full text-white/90 font-medium">
+                                        {opt.duration}
                                     </div>
                                 ))}
                             </div>

@@ -584,7 +584,7 @@ ${treatmentsList}
                                         
                                         {/* Price and Add Button */}
                                         <div className="flex items-center justify-between bg-white/10 rounded-full p-1 pl-3 mt-auto border border-white/10">
-                                            <span className="font-semibold text-white text-[13px]">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
+                                            <span className="font-semibold text-white text-[13px]">AED {parseInt(product.price.replace(/,/g, '')).toLocaleString('en-US')}</span>
                                             <div className="w-8 h-8 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                                                 <Plus size={16} strokeWidth={2.5} />
                                             </div>
@@ -796,8 +796,8 @@ ${treatmentsList}
                                                         <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/60 mb-3 uppercase tracking-widest"><Clock className="w-3.5 h-3.5" /> {duration} MINS</div>
                                                         <div className="flex items-end justify-between">
                                                             <div>
-                                                                <span className="text-[10px] text-white/90-muted line-through mr-2">Rp {option.price}</span>
-                                                                <span className="font-serif text-lg text-white">Rp {discountedPriceNum.toLocaleString('en-US')}</span>
+                                                                <span className="text-[10px] text-white/90-muted line-through mr-2">AED {option.price}</span>
+                                                                <span className="font-serif text-lg text-white">AED {discountedPriceNum.toLocaleString('en-US')}</span>
                                                             </div>
                                                             <button className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                                                                 <ArrowRight size={16} />

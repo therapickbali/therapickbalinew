@@ -30,7 +30,7 @@ export default function StorePage() {
             const numericPrice = parseInt(item.product.price.replace(/,/g, ''), 10);
             total += numericPrice * item.quantity;
         });
-        return `Rp ${total.toLocaleString('id-ID')}`;
+        return `AED ${total.toLocaleString('en-US')}`;
     };
 
     const categories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
@@ -62,12 +62,12 @@ export default function StorePage() {
             cartItems.forEach(item => {
                 const numericPrice = parseInt(item.product.price.replace(/,/g, ''), 10);
                 total += numericPrice * item.quantity;
-                itemsList.push(`${item.quantity}x ${item.product.title} (Rp ${(numericPrice * item.quantity).toLocaleString('id-ID')})`);
+                itemsList.push(`${item.quantity}x ${item.product.title} (AED ${(numericPrice * item.quantity).toLocaleString('en-US')})`);
             });
 
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
             const waNumber = '6285174119423';
-            const baseMessage = `*NEW STORE ORDER*\n${websiteSource}\n\n*ITEMS:*\n${itemsList.join('\n')}\n\n*TOTAL PRICE:* Rp ${total.toLocaleString('id-ID')}\n\n*CUSTOMER DETAILS:*\n- Name: ${formData.name}\n- Phone: ${formData.phone}\n- Address: ${formData.address}\n\nHello! I would like to place this order.`;
+            const baseMessage = `*NEW STORE ORDER*\n${websiteSource}\n\n*ITEMS:*\n${itemsList.join('\n')}\n\n*TOTAL PRICE:* AED ${total.toLocaleString('en-US')}\n\n*CUSTOMER DETAILS:*\n- Name: ${formData.name}\n- Phone: ${formData.phone}\n- Address: ${formData.address}\n\nHello! I would like to place this order.`;
             
             const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(baseMessage)}`;
             clearCart();
@@ -188,7 +188,7 @@ export default function StorePage() {
                                     
                                     {/* Price and Add Button */}
                                     <div className="flex items-center justify-between bg-white/10 rounded-full p-1 pl-3 mt-auto border border-white/10">
-                                        <span className="font-semibold text-white text-[13px] md:text-sm">Rp {parseInt(product.price.replace(/,/g, '')).toLocaleString('id-ID')}</span>
+                                        <span className="font-semibold text-white text-[13px] md:text-sm">AED {parseInt(product.price.replace(/,/g, '')).toLocaleString('en-US')}</span>
                                         <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center hover:bg-black transition-colors shrink-0 shadow-sm">
                                             <Plus size={18} strokeWidth={2.5} />
                                         </div>
@@ -253,7 +253,7 @@ export default function StorePage() {
                                         <div className="flex justify-between items-center mb-3">
                                             <div>
                                                 <p className="text-[10px] text-[#9CA3AF] mb-0.5">Price</p>
-                                                <p className="font-bold text-xl text-[#2B2B2B]">Rp {parseInt(selectedProduct.price.replace(/,/g, '')).toLocaleString('id-ID')}</p>
+                                                <p className="font-bold text-xl text-[#2B2B2B]">AED {parseInt(selectedProduct.price.replace(/,/g, '')).toLocaleString('en-US')}</p>
                                             </div>
                                             <div className="flex items-center gap-3 border border-[#E5E7EB] rounded-lg px-2 py-1">
                                                 <button onClick={() => handleQuantityChange('dec')} className="w-6 h-6 flex items-center justify-center text-[#2B2B2B] disabled:opacity-30 hover:bg-[#F3F4F6] rounded-md transition-colors" disabled={quantity <= 1}><Minus size={14} /></button>
@@ -308,7 +308,7 @@ export default function StorePage() {
                                                             <div className="flex-1 min-w-0 pr-2">
                                                                 <h5 className="font-bold text-sm text-[#2B2B2B] truncate">{item.product.title}</h5>
                                                                 <p className="text-xs text-[#9CA3AF] mb-1 truncate">{item.product.category} • 100ml</p>
-                                                                <p className="font-bold text-[#2B2B2B]">Rp {parseInt(item.product.price.replace(/,/g, '')).toLocaleString('id-ID')}</p>
+                                                                <p className="font-bold text-[#2B2B2B]">AED {parseInt(item.product.price.replace(/,/g, '')).toLocaleString('en-US')}</p>
                                                             </div>
                                                             <div className="flex flex-col items-end gap-2 shrink-0">
                                                                 <button onClick={() => removeFromCart(item.product.id)} className="text-[#9CA3AF] hover:text-[#EF4444] transition-colors p-1" title="Remove Item">
@@ -349,7 +349,7 @@ export default function StorePage() {
                                                     </div>
                                                     <div className="flex justify-between text-sm">
                                                         <span className="text-[#9CA3AF]">Shipping</span>
-                                                        <span className="text-[#9CA3AF]">Rp 0</span>
+                                                        <span className="text-[#9CA3AF]">AED 0</span>
                                                     </div>
                                                     <div className="flex justify-between text-base font-bold text-[#2B2B2B] pt-3">
                                                         <span>Total payment</span>
