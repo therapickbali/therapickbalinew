@@ -17,6 +17,10 @@ const newsreader = Newsreader({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://therapickdubai.vercel.app'),
+  applicationName: 'Book Therapick',
+  appleWebApp: {
+    title: 'Book Therapick',
+  },
   title: {
     default: "Therapick Dubai | Choose Available Therapists in Your Area",
     template: "%s | Therapick Dubai"
@@ -45,7 +49,7 @@ export const metadata: Metadata = {
     title: "Therapick Dubai | Choose Available Therapists in Your Area",
     description: "Find and book available professional massage therapists in your area on-demand. Browse therapist profiles, check availability, and book your premium home spa experience in Dubai.",
     url: 'https://therapickdubai.vercel.app',
-    siteName: 'Therapick Dubai',
+    siteName: 'Book Therapick',
     images: [
       {
         url: 'https://therapickdubai.vercel.app/logo.png',
@@ -100,8 +104,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const name = "Therapick Dubai";
+  const name = "Book Therapick";
   const url = "https://therapickdubai.vercel.app";
+  
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Book Therapick',
+    url: 'https://therapickdubai.vercel.app',
+  };
   
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -226,6 +237,10 @@ export default async function RootLayout({
   return (
     <html lang="en" className="antialiased scroll-smooth">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
