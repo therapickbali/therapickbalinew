@@ -365,13 +365,13 @@ export default function PartnerPortal() {
 
                         return (
                             <motion.div key="bookings" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                                <div className="flex flex-col lg:flex-row gap-6 w-full h-[calc(100vh-120px)] mx-auto relative overflow-hidden">
+                                <div className="flex flex-col lg:flex-row gap-6 w-full h-[calc(100vh-120px)] mx-auto relative">
                                     
                                     {/* LEFT PANEL: Master List */}
-                                    <div className={`flex-grow flex flex-col min-w-0 bg-[#111111] border border-white/[0.08] rounded-[24px] overflow-hidden transition-all duration-300 ${selectedBooking ? 'hidden lg:flex lg:w-1/2 xl:w-2/3' : 'w-full'}`}>
+                                    <div className={`flex-grow flex flex-col min-w-0 transition-all duration-300 ${selectedBooking ? 'hidden lg:flex lg:w-1/2 xl:w-2/3' : 'w-full'}`}>
                                         
                                         {/* Header & Search */}
-                                        <div className="sticky top-0 z-20 bg-[#111111] border-b border-white/[0.08] p-6">
+                                        <div className="sticky top-0 z-20 pb-6">
                                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                                                 <h2 className="font-serif text-3xl text-white">My Bookings</h2>
                                                 <div className="flex bg-[#1C1C1E] p-1 rounded-full border border-white/5 w-fit shrink-0">
@@ -405,15 +405,15 @@ export default function PartnerPortal() {
                                         </div>
 
                                         {/* Table Header (Hidden on Mobile) */}
-                                        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/[0.04] bg-[#1C1C1E]/50">
-                                            <div className="col-span-4"><p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Customer</p></div>
-                                            <div className="col-span-4"><p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Check in & Check out</p></div>
-                                            <div className="col-span-2"><p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Earning</p></div>
-                                            <div className="col-span-2"><p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Status</p></div>
+                                        <div className="hidden md:grid grid-cols-12 gap-4 py-4 border-b border-white/[0.08]">
+                                            <div className="col-span-3"><p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Customer</p></div>
+                                            <div className="col-span-3"><p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Date & Time</p></div>
+                                            <div className="col-span-4"><p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Location</p></div>
+                                            <div className="col-span-2"><p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Total Amount</p></div>
                                         </div>
 
                                         {/* List Body */}
-                                        <div className="flex-1 overflow-y-auto">
+                                        <div className="flex-1 overflow-y-auto scrollbar-hide pb-20">
                                             {searchedBookings.length === 0 ? (
                                                 <div className="flex flex-col items-center justify-center p-12 text-center h-full min-h-[300px]">
                                                     <CalendarCheck className="w-12 h-12 text-white/20 mb-4" />
@@ -431,31 +431,32 @@ export default function PartnerPortal() {
                                                             <div 
                                                                 key={booking.id}
                                                                 onClick={() => setSelectedBooking(booking)}
-                                                                className={`grid grid-cols-1 md:grid-cols-12 gap-4 p-6 border-b border-white/[0.04] last:border-b-0 cursor-pointer transition-colors relative group ${isSelected ? 'bg-white/[0.04] md:border-l-4 md:border-l-[#0A84FF]' : 'hover:bg-white/[0.02] border-l-4 border-transparent'}`}
+                                                                className={`grid grid-cols-1 md:grid-cols-12 gap-4 py-6 border-b border-white/[0.04] last:border-b-0 cursor-pointer transition-all relative group ${isSelected ? 'bg-white/[0.04] -mx-4 px-4 rounded-xl' : 'hover:bg-white/[0.02] -mx-4 px-4 rounded-xl'}`}
                                                             >
                                                                 {/* Customer */}
-                                                                <div className="md:col-span-4 flex flex-col justify-center">
+                                                                <div className="md:col-span-3 flex flex-col justify-center">
                                                                     <p className="text-sm text-white font-bold mb-1">{booking.customer_name}</p>
                                                                     <p className="text-[11px] text-white/50">{booking.id.split('-')[0].toUpperCase()}</p>
                                                                 </div>
                                                                 
                                                                 {/* Date & Time */}
-                                                                <div className="md:col-span-4 flex flex-col justify-center mt-2 md:mt-0">
-                                                                    <p className="text-[13px] text-white/90 mb-1">{formattedDate} - Same day</p>
+                                                                <div className="md:col-span-3 flex flex-col justify-center mt-2 md:mt-0">
+                                                                    <p className="text-[13px] text-white/90 mb-1">{formattedDate}</p>
                                                                     <p className="text-[11px] text-white/50">{booking.time}</p>
                                                                 </div>
-                                                                
-                                                                {/* Earning */}
-                                                                <div className="md:col-span-2 flex flex-col justify-center mt-2 md:mt-0">
-                                                                    <p className="text-sm font-bold text-white mb-1">AED {booking.total_price.toLocaleString()}</p>
-                                                                    <p className="text-[11px] text-white/50">{booking.treatments.length} Items</p>
+
+                                                                {/* Location */}
+                                                                <div className="md:col-span-4 flex flex-col justify-center mt-2 md:mt-0 pr-4">
+                                                                    <p className="text-[13px] text-white/90 mb-1 truncate">{booking.location_area}</p>
+                                                                    <p className="text-[11px] text-white/50 truncate">{booking.address}</p>
                                                                 </div>
                                                                 
-                                                                {/* Status & Chevron */}
+                                                                {/* Total Amount & Chevron */}
                                                                 <div className="md:col-span-2 flex items-center justify-between md:justify-start gap-4 mt-4 md:mt-0">
-                                                                    <span className={`px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${bookingFilter === 'Past' ? 'bg-green-500/10 text-green-400' : 'bg-[#0A84FF]/10 text-[#0A84FF]'}`}>
-                                                                        {bookingFilter === 'Past' ? 'Completed' : 'Active'}
-                                                                    </span>
+                                                                    <div className="flex flex-col justify-center">
+                                                                        <p className="text-sm font-bold text-white mb-1">AED {booking.total_price.toLocaleString()}</p>
+                                                                        <p className="text-[11px] text-white/50">{booking.treatments.length} Items</p>
+                                                                    </div>
                                                                     <ChevronRight className={`w-4 h-4 ml-auto transition-transform ${isSelected ? 'text-[#0A84FF] translate-x-1' : 'text-white/20 group-hover:text-white/60'}`} />
                                                                 </div>
                                                             </div>
