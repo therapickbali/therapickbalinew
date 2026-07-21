@@ -1662,30 +1662,21 @@ export default function AdminDashboard() {
                             className="w-full max-w-2xl bg-[#111] border border-white/10 rounded-[32px] overflow-hidden flex flex-col max-h-[90vh]"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <div className="relative w-full h-[400px] bg-[#111] shrink-0">
-                                {detailedTherapist.image_url ? (
-                                    <img src={detailedTherapist.image_url} alt={detailedTherapist.name} className="w-full h-full object-cover object-top" />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center"><Users size={48} className="text-white/20" /></div>
-                                )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent pointer-events-none" />
-                                <button 
-                                    className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-colors"
-                                    onClick={() => { setDetailedTherapist(null); setEditingTherapistId(null); setEditTherapistData({}); }}
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                </button>
-                                <div className="absolute bottom-6 left-8">
-                                    <h2 className="font-serif text-4xl text-white drop-shadow-md mb-2">{detailedTherapist.name}</h2>
+                            <div className="relative w-full bg-[#1A1A1C] border-b border-white/5 shrink-0 p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div>
+                                    <h2 className="font-serif text-3xl text-white mb-2">{detailedTherapist.brand || detailedTherapist.name}</h2>
                                     <div className="flex items-center gap-3">
-                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg text-sm text-white/90">
-                                            <MapPin size={14} className="text-white/50" /> {detailedTherapist.location || 'Unknown'}
-                                        </div>
-                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg text-sm text-white/90">
-                                            <Store size={14} className="text-white/50" /> {detailedTherapist.brand || 'No Brand'}
+                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-white/5 rounded-lg text-xs text-white/50 font-medium">
+                                            <MapPin size={14} /> {detailedTherapist.location || 'Unknown'}
                                         </div>
                                     </div>
                                 </div>
+                                <button 
+                                    className="absolute top-8 right-8 md:relative md:top-0 md:right-0 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center text-white transition-colors border border-white/5 shadow-sm shrink-0"
+                                    onClick={() => { setDetailedTherapist(null); setEditingTherapistId(null); setEditTherapistData({}); }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
                             </div>
                             
                             <div className="p-8 overflow-y-auto flex-1 space-y-6">

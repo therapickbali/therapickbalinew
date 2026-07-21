@@ -241,11 +241,35 @@ export default function PartnerPortal() {
     }
 
     return (
-        <div className="min-h-screen bg-black font-sans text-white relative overflow-hidden pb-32">
+        <div className="min-h-screen bg-black font-sans text-white relative overflow-hidden md:pb-0 pb-32">
             <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-white/5 rounded-full blur-[100px] pointer-events-none fixed" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-white/5 rounded-full blur-[120px] pointer-events-none fixed" />
 
-            <main className="max-w-md mx-auto px-5 pt-12 pb-48 relative z-10 min-h-screen">
+            {/* Desktop Sidebar */}
+            <div className="hidden md:flex fixed top-0 left-0 h-screen w-64 bg-[#111]/80 backdrop-blur-xl border-r border-white/5 flex-col p-6 z-50">
+                <div className="text-xl font-serif text-white mb-12 px-4">Partner Portal</div>
+                <nav className="flex flex-col gap-2">
+                    <button onClick={() => setActiveTab('therapists')} className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'therapists' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70 hover:bg-white/5'}`}>
+                        <Users className="w-5 h-5" /> <span className="font-medium text-sm tracking-wide">Team</span>
+                    </button>
+                    <button onClick={() => setActiveTab('treatments')} className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'treatments' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70 hover:bg-white/5'}`}>
+                        <List className="w-5 h-5" /> <span className="font-medium text-sm tracking-wide">Treatments</span>
+                    </button>
+                    <button onClick={() => setActiveTab('myspa')} className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'myspa' ? 'bg-[#0A84FF]/20 text-[#0A84FF]' : 'text-white/40 hover:text-white/70 hover:bg-white/5'}`}>
+                        <PlusCircle className="w-5 h-5" /> <span className="font-medium text-sm tracking-wide">Create New</span>
+                    </button>
+                    <button onClick={() => setActiveTab('profile')} className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'profile' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70 hover:bg-white/5'}`}>
+                        <User className="w-5 h-5" /> <span className="font-medium text-sm tracking-wide">Profile Settings</span>
+                    </button>
+                </nav>
+                <div className="mt-auto">
+                    <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-red-400 hover:bg-red-500/10 w-full">
+                        <LogOut className="w-5 h-5" /> <span className="font-medium text-sm tracking-wide">Sign Out</span>
+                    </button>
+                </div>
+            </div>
+
+            <main className="max-w-md mx-auto md:max-w-6xl md:mx-0 md:ml-64 px-5 md:px-12 pt-12 md:pt-16 pb-48 md:pb-12 relative z-10 min-h-screen">
                 <AnimatePresence mode="wait">
                     {activeTab === 'therapists' && therapistId && (
                         <motion.div key="therapists" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
@@ -266,8 +290,8 @@ export default function PartnerPortal() {
                 </AnimatePresence>
             </main>
 
-            {/* Floating Bottom Navbar */}
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-sm z-50">
+            {/* Floating Bottom Navbar (Mobile Only) */}
+            <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-sm z-50">
                 <div className="bg-[#1C1C1E]/80 backdrop-blur-[60px] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] rounded-[32px] flex items-center justify-between p-2 px-3">
                     <button onClick={() => setActiveTab('therapists')} className={`flex-1 flex flex-col items-center justify-center py-2 transition-all ${activeTab === 'therapists' ? 'text-white scale-110' : 'text-white/40 hover:text-white/70'}`}>
                         <Users className="w-5 h-5 mb-1" strokeWidth={activeTab === 'therapists' ? 2.5 : 2} />
