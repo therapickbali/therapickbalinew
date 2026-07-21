@@ -101,7 +101,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
         try {
             const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.guests), 0);
             
-            const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration} MINS)`).join(', ');
+            const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration?.replace(/mins?/i, '').trim()} MINS)`).join(', ');
 
             const waNumber = '6285174119423';
             
@@ -143,9 +143,9 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                 if (item.isCampaign) {
                     const originalPriceNum = item.price / (1 - (item.discountPercentage / 100));
                     const originalPrice = (originalPriceNum * item.guests).toLocaleString('en-US');
-                    return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nAED ${price} ~AED ${originalPrice}~${whatsIncludedText}`;
+                    return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration?.replace(/mins?/i, '').trim()} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nAED ${price} ~AED ${originalPrice}~${whatsIncludedText}`;
                 }
-                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
+                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration?.replace(/mins?/i, '').trim()} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
             }).join('\n\n------------------------\n\n');
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
@@ -391,7 +391,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                         
                                         <div className="mt-auto pt-5 border-t border-white/20/50">
                                             <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/90-muted mb-3 uppercase tracking-widest">
-                                                <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration} MINS
+                                                <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration?.replace(/mins?/i, '').trim()} MINS
                                             </div>
                                             <div className="flex items-center justify-between bg-white/10/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-white/10">
                                                 <span className="font-semibold text-white text-[14px]">AED {parseInt(item.options[0]?.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
@@ -568,7 +568,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                     <p className="text-xs text-white/90-muted leading-relaxed font-light mb-6 flex-grow">{treatment.desc}</p>
                                                     
                                                     <div className="mt-auto pt-4 border-t border-white/20/50">
-                                                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/90-muted mb-2.5 uppercase tracking-widest"><Clock className="w-3.5 h-3.5" /> {duration} MINS</div>
+                                                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/90-muted mb-2.5 uppercase tracking-widest"><Clock className="w-3.5 h-3.5" /> {duration?.replace(/mins?/i, '').trim()} MINS</div>
                                                         <div className="flex items-end justify-between">
                                                             <div>
                                                                 <span className="text-[10px] text-white/90-muted line-through mr-2">AED {option.price}</span>
@@ -674,7 +674,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                                             }}
                                                                             className="w-full flex items-center justify-between p-3 rounded-xl border border-white/20 hover:border-primary/50 hover:bg-white/5 transition-all group"
                                                                         >
-                                                                            <span className="text-sm font-bold text-white group-hover:text-white transition-colors">{opt.duration} Mins</span>
+                                                                            <span className="text-sm font-bold text-white group-hover:text-white transition-colors">{opt.duration?.replace(/mins?/i, '').trim()} MINS</span>
                                                                             <span className="text-sm font-serif text-white">AED {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                                         </button>
                                                                     ))}
@@ -719,7 +719,7 @@ export default function LocationClient({ locationName, locationSlug }: { locatio
                                                         )}
                                                         <h3 className="font-bold text-sm text-white leading-tight">{item.title}</h3>
                                                         <p className="text-xs text-white/90-muted flex items-center gap-1 mt-1">
-                                                            <Clock className="w-3 h-3" /> {item.duration} Mins
+                                                            <Clock className="w-3 h-3" /> {item.duration?.replace(/mins?/i, '').trim()} MINS
                                                         </p>
                                                     </div>
                                                     <span className="font-serif text-white font-medium text-right flex flex-col shrink-0">

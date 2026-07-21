@@ -133,7 +133,7 @@ export default function Home() {
                 return acc + (item.price * multiplier);
             }, 0);
 
-            const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration} MINS)`).join(', ');
+            const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration?.replace(/mins?/i, '').trim()} MINS)`).join(', ');
 
             const waNumber = '6285174119423';
             
@@ -179,9 +179,9 @@ export default function Home() {
                     const isCouple = ['couple', 'fourhand', 'four-hand', 'four hand'].some(k => item.title.toLowerCase().includes(k));
                     const multiplier = isCouple ? (item.guests / 2) : item.guests;
                     const originalPrice = (originalPriceNum * multiplier).toLocaleString('en-US');
-                    return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nIDR ${price} ~IDR ${originalPrice}~${whatsIncludedText}`;
+                    return `*${item.campaignTitle.trim().toUpperCase()}*\n*${item.title.toUpperCase()}*\nDURATION ${item.duration?.replace(/mins?/i, '').trim()} MINS\n${item.guests} PERSON [${item.discountPercentage}% OFF]\nAED ${price} ~AED ${originalPrice}~${whatsIncludedText}`;
                 }
-                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON IDR ${price}${whatsIncludedText}`;
+                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration?.replace(/mins?/i, '').trim()} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
             }).join('\n\n------------------------\n\n');
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
@@ -543,7 +543,7 @@ ${treatmentsList}
                                         
                                         <div className="mt-auto pt-5 border-t border-white/20/50">
                                             <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/90-muted mb-3 uppercase tracking-widest">
-                                                <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration} MINS
+                                                <Clock className="w-3.5 h-3.5" /> {item.options[0]?.duration?.replace(/mins?/i, '').trim()} MINS
                                             </div>
                                             <div className="flex items-center justify-between bg-white/10/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-white/10">
                                                 <span className="font-semibold text-white text-[14px]">AED {parseInt(item.options[0]?.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
@@ -800,7 +800,7 @@ ${treatmentsList}
                                                     <p className="text-sm text-white/70 leading-relaxed font-light mb-8 flex-grow">{treatment.desc}</p>
                                                     
                                                     <div className="mt-auto pt-5 border-t border-white/10">
-                                                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/60 mb-3 uppercase tracking-widest"><Clock className="w-3.5 h-3.5" /> {duration} MINS</div>
+                                                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/60 mb-3 uppercase tracking-widest"><Clock className="w-3.5 h-3.5" /> {duration?.replace(/mins?/i, '').trim()} MINS</div>
                                                         <div className="flex items-end justify-between">
                                                             <div>
                                                                 <span className="text-[10px] text-white/90-muted line-through mr-2">AED {option.price}</span>
@@ -906,7 +906,7 @@ ${treatmentsList}
                                                                             }}
                                                                             className="w-full flex items-center justify-between p-3 rounded-xl border border-white/20 hover:border-primary/50 hover:bg-white/5 transition-all group"
                                                                         >
-                                                                            <span className="text-sm font-bold text-white group-hover:text-white transition-colors">{opt.duration} Mins</span>
+                                                                            <span className="text-sm font-bold text-white group-hover:text-white transition-colors">{opt.duration?.replace(/mins?/i, '').trim()} MINS</span>
                                                                             <span className="text-sm font-serif text-white">AED {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                                         </button>
                                                                     ))}
@@ -953,7 +953,7 @@ ${treatmentsList}
                                                         )}
                                                         <h3 className="font-bold text-sm text-white leading-tight">{item.title}</h3>
                                                         <p className="text-xs text-white/90-muted flex items-center gap-1 mt-1">
-                                                            <Clock className="w-3 h-3" /> {item.duration} Mins
+                                                            <Clock className="w-3 h-3" /> {item.duration?.replace(/mins?/i, '').trim()} MINS
                                                         </p>
                                                     </div>
                                                     <span className="font-serif text-white font-medium text-right flex flex-col shrink-0">
@@ -1236,7 +1236,7 @@ ${treatmentsList}
                                                 <div key={idx} className="flex justify-between items-start">
                                                     <div>
                                                         <p className="text-sm font-bold text-white">{item.title}</p>
-                                                        <p className="text-xs text-white/90-muted">{item.duration} Mins • {item.guests} Guest(s)</p>
+                                                        <p className="text-xs text-white/90-muted">{item.duration?.replace(/mins?/i, '').trim()} MINS • {item.guests} Guest(s)</p>
                                                     </div>
                                                 </div>
                                             ))}

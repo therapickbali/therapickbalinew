@@ -90,7 +90,7 @@ export default function BookingModal({
                         whatsIncludedText = `\n\n*WHAT'S INCLUDED:*\n${cleanIncluded}`;
                     }
                 }
-                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
+                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration?.replace(/mins?/i, '').trim()} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
             }).join('\n\n------------------------\n\n');
 
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
@@ -233,7 +233,7 @@ export default function BookingModal({
                                                                     }}
                                                                     className="w-full flex items-center justify-between p-3 rounded-xl border border-white/40 hover:bg-white/60 transition-all group/btn"
                                                                 >
-                                                                    <span className="text-sm font-bold text-white">{opt.duration} Mins</span>
+                                                                    <span className="text-sm font-bold text-white">{opt.duration?.replace(/mins?/i, '').trim()} MINS</span>
                                                                     <span className="text-sm font-serif text-white">AED {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                                 </button>
                                                             ))}
@@ -259,7 +259,7 @@ export default function BookingModal({
                                                 <div className="flex justify-between items-start mb-4">
                                                     <div>
                                                         <h3 className="font-bold text-[15px] text-white">{item.title}</h3>
-                                                        <p className="text-xs text-white/90-muted mt-1">{item.duration} Mins</p>
+                                                        <p className="text-xs text-white/90-muted mt-1">{item.duration?.replace(/mins?/i, '').trim()} MINS</p>
                                                     </div>
                                                     <div className="text-right">
                                                         <div className="font-serif text-white">AED {item.price.toLocaleString('en-US')}</div>

@@ -104,7 +104,7 @@ export default function RitualsDetails() {
         setIsProcessing(true);
 
         try {
-            const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration} MINS)`).join(', ');
+            const treatmentsListStr = cartItems.map(item => `${item.title} (${item.duration?.replace(/mins?/i, '').trim()} MINS)`).join(', ');
 
             const waNumber = '6285174119423';
             const treatmentsList = cartItems.map(item => {
@@ -122,7 +122,7 @@ export default function RitualsDetails() {
                     }
                 }
 
-                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
+                return `*${item.title.toUpperCase()}*\nDURATION ${item.duration?.replace(/mins?/i, '').trim()} MINS\n${item.guests} PERSON AED ${price}${whatsIncludedText}`;
             }).join('\n\n------------------------\n\n');
             
             const websiteSource = typeof window !== 'undefined' ? window.location.hostname : 'Unknown';
@@ -264,7 +264,7 @@ export default function RitualsDetails() {
                                             : "text-white/50 hover:text-white hover:bg-white/10"
                                         }`}
                                     >
-                                        {opt.duration} <span className={`text-[10px] ${isActive ? 'text-black/60' : 'text-white/40'}`}>MINS</span>
+                                        {opt.duration?.replace(/mins?/i, '').trim()} <span className={`text-[10px] ${isActive ? 'text-black/60' : 'text-white/40'}`}>MINS</span>
                                     </button>
                                 );
                             })}
@@ -374,7 +374,7 @@ export default function RitualsDetails() {
                                         
                                         <div className="mt-auto pt-4 border-t border-white/20/50">
                                             <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/90-muted mb-3 uppercase tracking-widest">
-                                                <Clock className="w-3.5 h-3.5" /> {item.options && item.options[0] ? item.options[0].duration : '60'} MINS
+                                                <Clock className="w-3.5 h-3.5" /> {item.options && item.options[0] ? item.options[0].duration.replace(/mins?/i, '').trim() : '60'} MINS
                                             </div>
                                             <div className="flex items-center justify-between bg-white/10/80 backdrop-blur-sm rounded-full p-1 pl-4 border border-white/10">
                                                 <span className="font-semibold text-white text-[14px]">AED {item.options && item.options[0] ? parseInt(item.options[0].price.replace(/,/g, '') || '0').toLocaleString('en-US') : '0'}</span>
@@ -476,7 +476,7 @@ export default function RitualsDetails() {
                                                                             }}
                                                                             className="w-full flex items-center justify-between p-3 rounded-xl border border-white/20 hover:border-primary/50 hover:bg-white/5 transition-all group"
                                                                         >
-                                                                            <span className="text-sm font-bold text-white group-hover:text-white transition-colors">{opt.duration} Mins</span>
+                                                                            <span className="text-sm font-bold text-white group-hover:text-white transition-colors">{opt.duration?.replace(/mins?/i, '').trim()} MINS</span>
                                                                             <span className="text-sm font-serif text-white">AED {parseInt(opt.price.replace(/,/g, '') || '0').toLocaleString('en-US')}</span>
                                                                         </button>
                                                                     ))}
@@ -518,7 +518,7 @@ export default function RitualsDetails() {
                                                     <div>
                                                         <h3 className="font-bold text-sm text-white leading-tight">{item.title}</h3>
                                                         <p className="text-xs text-white/90-muted flex items-center gap-1 mt-1">
-                                                            <Clock className="w-3 h-3" /> {item.duration} Mins
+                                                            <Clock className="w-3 h-3" /> {item.duration?.replace(/mins?/i, '').trim()} MINS
                                                         </p>
                                                     </div>
                                                     <span className="font-serif text-white font-medium text-right flex flex-col shrink-0">
@@ -801,7 +801,7 @@ export default function RitualsDetails() {
                                                 <div key={idx} className="flex justify-between items-start">
                                                     <div>
                                                         <p className="text-sm font-bold text-white">{item.title}</p>
-                                                        <p className="text-xs text-white/90-muted">{item.duration} Mins • {item.guests} Guest(s)</p>
+                                                        <p className="text-xs text-white/90-muted">{item.duration?.replace(/mins?/i, '').trim()} MINS • {item.guests} Guest(s)</p>
                                                     </div>
                                                 </div>
                                             ))}
