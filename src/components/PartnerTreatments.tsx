@@ -80,7 +80,7 @@ export default function PartnerTreatments({ therapistId }: PartnerTreatmentsProp
                             <div className="flex justify-between items-start mb-3">
                                 <div>
                                     <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 bg-white/5 px-3 py-1.5 rounded-full">{t.category}</span>
-                                    <h3 className="text-white font-serif text-xl mt-3">{t.title}</h3>
+                                    <h3 className="text-white font-serif text-xl mt-3">{t.title.toUpperCase()}</h3>
                                 </div>
                                 <div className="flex gap-2">
                                     <button onClick={() => handleEdit(t)} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"><Edit2 size={16} /></button>
@@ -88,13 +88,7 @@ export default function PartnerTreatments({ therapistId }: PartnerTreatmentsProp
                                 </div>
                             </div>
                             <p className="text-sm text-white/60 line-clamp-2 leading-relaxed flex-1">{t.desc}</p>
-                            <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-white/5">
-                                {t.options.map((opt, i) => (
-                                    <div key={i} className="bg-white/10 text-xs px-4 py-2 rounded-full text-white/90 font-medium">
-                                        {opt.duration}
-                                    </div>
-                                ))}
-                            </div>
+
                         </div>
                     ))}
                 </div>
