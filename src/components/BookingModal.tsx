@@ -49,7 +49,7 @@ export default function BookingModal({
     const [selectedArea, setSelectedArea] = useState('');
     const [selectedTherapists, setSelectedTherapists] = useState<string[]>([]);
     const [isProcessing, setIsProcessing] = useState(false);
-    const [popupState, setPopupState] = useState<{isOpen: boolean, type: 'group' | 'time' | null, therapistId: string | null, availableAt: string, availableDate?: string}>({isOpen: false, type: null, therapistId: null, availableAt: ''});
+    const [popupState, setPopupState] = useState<{ isOpen: boolean, type: 'group' | 'time' | null, therapistId: string | null, availableAt: string, availableDate?: string }>({ isOpen: false, type: null, therapistId: null, availableAt: '' });
 
     const LOCATIONS = ['Ubud', 'Canggu', 'Seminyak', 'Uluwatu', 'Nusa Dua'];
     const totalGuests = cartItems.reduce((acc, item) => acc + item.guests, 0);
@@ -115,7 +115,7 @@ export default function BookingModal({
                         requested_therapist_ids: selectedTherapists
                     })
                 });
-            } catch(e) {
+            } catch (e) {
                 console.error('API call failed:', e);
             }
 
@@ -335,8 +335,8 @@ export default function BookingModal({
                                                     key={loc}
                                                     onClick={() => setSelectedArea(loc)}
                                                     className={`py-4 px-3 rounded-2xl border text-sm font-bold transition-all duration-300 ${selectedArea === loc
-                                                            ? 'bg-white border-primary text-black shadow-md'
-                                                            : `${liquidGlassClasses} text-white hover:bg-white/40`
+                                                        ? 'bg-white border-primary text-black shadow-md'
+                                                        : `${liquidGlassClasses} text-white hover:bg-white/40`
                                                         }`}
                                                 >
                                                     {loc}
@@ -364,11 +364,11 @@ export default function BookingModal({
                                             const todayStr = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
                                             const isFuture = formData.date && formData.date !== todayStr;
                                             const t = { ...rawT } as any;
-                                            
+
                                             // Handle late night closing hours (23:00 - 08:00)
                                             const currentHour = new Date().getHours();
                                             const isLateNight = currentHour >= 23 || currentHour < 8;
-                                            
+
                                             if (isLateNight && !isFuture) {
                                                 t.online_status = 'Busy';
                                                 t.available_at = '08:00';
@@ -394,10 +394,10 @@ export default function BookingModal({
                                                                     setPopupState({ isOpen: true, type: 'group', therapistId: null, availableAt: '' });
                                                                     return;
                                                                 }
-                                                                setPopupState({ 
-                                                                    isOpen: true, 
-                                                                    type: 'time', 
-                                                                    therapistId: t.id, 
+                                                                setPopupState({
+                                                                    isOpen: true,
+                                                                    type: 'time',
+                                                                    therapistId: t.id,
                                                                     availableAt: t.available_at || '',
                                                                     availableDate: t.availableDate
                                                                 });
@@ -407,8 +407,8 @@ export default function BookingModal({
                                                         }
                                                     }}
                                                     className={`w-full p-4 rounded-[24px] border text-left transition-all duration-300 flex items-start gap-4 ${selectedTherapists.includes(t.id)
-                                                            ? 'bg-white/10 border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]'
-                                                            : 'bg-surface/50 border-white/10 hover:border-white/20 hover:bg-surface'
+                                                        ? 'bg-white/10 border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]'
+                                                        : 'bg-surface/50 border-white/10 hover:border-white/20 hover:bg-surface'
                                                         }`}
                                                 >
                                                     <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-white/10 relative bg-white/5 flex items-center justify-center">
@@ -533,7 +533,7 @@ export default function BookingModal({
                                     <p className="text-sm text-white/90-muted mb-8 leading-relaxed">
                                         For group bookings, please select therapists who are currently <strong className="text-white font-bold">'ONLINE'</strong> to ensure synchronized scheduling.
                                     </p>
-                                    <button 
+                                    <button
                                         onClick={() => setPopupState({ ...popupState, isOpen: false })}
                                         className="w-full bg-[#292831] text-white px-6 py-3.5 rounded-2xl text-sm font-bold shadow-md hover:bg-[#292831]/90 active:scale-95 transition-all"
                                     >
@@ -550,13 +550,13 @@ export default function BookingModal({
                                         This therapist will be ready at <strong className="text-white font-bold">{popupState.availableAt}</strong>. Your booking time will be automatically updated to match their availability.
                                     </p>
                                     <div className="flex gap-3">
-                                        <button 
+                                        <button
                                             onClick={() => setPopupState({ ...popupState, isOpen: false })}
                                             className="flex-1 bg-white/20 border border-white/40 text-white px-4 py-3.5 rounded-2xl text-sm font-bold shadow-sm hover:bg-white/40 active:scale-95 transition-all"
                                         >
                                             Cancel
                                         </button>
-                                        <button 
+                                        <button
                                             onClick={() => {
                                                 setFormData({ ...formData, time: popupState.availableAt, date: popupState.availableDate || formData.date });
                                                 setSelectedTherapists([...selectedTherapists, popupState.therapistId as string]);

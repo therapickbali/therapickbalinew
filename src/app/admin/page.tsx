@@ -634,14 +634,7 @@ export default function AdminDashboard() {
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${activeTab === 'therapists' ? 'bg-surface/80 text-white' : 'text-white/90-muted hover:bg-surface/50 hover:text-white'}`}
                     >
                         <Users size={18} />
-                        Therapists
-                    </button>
-                    <button 
-                        onClick={() => setActiveTab('livemap')}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${activeTab === 'livemap' ? 'bg-[#0A84FF]/20 text-[#0A84FF]' : 'text-white/90-muted hover:bg-surface/50 hover:text-white'}`}
-                    >
-                        <MapPin size={18} />
-                        Live Map
+                        Partner Portal
                     </button>
                     <button 
                         onClick={() => setActiveTab('book')}
@@ -1592,47 +1585,7 @@ export default function AdminDashboard() {
                                 )}
 
                                 
-                                {activeTab === 'livemap' && (
-                                    <div className="absolute inset-0 z-0">
-                                        <div className="absolute top-6 right-6 z-[1000] bg-black/80 backdrop-blur-md border border-white/10 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
-                                            <span className="relative flex h-3 w-3">
-                                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                            </span>
-                                            <span className="text-sm text-white font-semibold tracking-wide">{allTherapists.filter(t => t.latitude && t.longitude).length} Broadcasting</span>
-                                        </div>
 
-                                        <div className="w-full h-[100vh] rounded-none overflow-hidden relative shadow-2xl border-0">
-                                            {typeof window !== 'undefined' && (
-                                                <MapContainer center={[-8.409518, 115.188919]} zoom={10} style={{ height: '100%', width: '100%', zIndex: 0 }} attributionControl={false}>
-                                                    <TileLayer
-                                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                                    />
-                                                    {allTherapists.filter(t => t.latitude && t.longitude).map(therapist => {
-                                                        const icon = createTherapistIcon(therapist.image_url);
-                                                        return (
-                                                            <Marker 
-                                                                key={therapist.id} 
-                                                                position={[therapist.latitude!, therapist.longitude!]}
-                                                                icon={icon || undefined}
-                                                            >
-                                                                <Popup className="custom-popup">
-                                                                    <div className="p-1">
-                                                                        <h3 className="font-bold text-[15px] text-black">{therapist.name}</h3>
-                                                                        <p className="text-sm text-gray-500">{therapist.location}</p>
-                                                                        <div className="mt-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full inline-block font-medium">
-                                                                            {therapist.online_status || 'Online'}
-                                                                        </div>
-                                                                    </div>
-                                                                </Popup>
-                                                            </Marker>
-                                                        );
-                                                    })}
-                                                </MapContainer>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
 
                                 {/* Submit Area */}
                                 {activeTab !== 'fees' && activeTab !== 'livemap' && (
@@ -1767,6 +1720,57 @@ export default function AdminDashboard() {
                                                 </a>
                                             </div>
                                         )}
+                                        
+                                        <div className="pt-4 border-t border-white/5 space-y-4">
+                                            <h3 className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Partner Treatments</h3>
+                                            {treatments.filter(t => t.therapist_id === detailedTherapist.id).length > 0 ? (
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    {treatments.filter(t => t.therapist_id === detailedTherapist.id).map(t => (
+                                                        <div key={t.id} className="bg-white/5 p-4 rounded-xl border border-white/10 shadow-sm flex flex-col justify-between">
+                                                            <div>
+                                                                <div className="font-bold text-sm text-white">{t.title}</div>
+                                                                <div className="text-[10px] text-white/50 uppercase tracking-widest font-bold mt-1">{t.category}</div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="text-white/40 text-xs italic bg-white/5 p-4 rounded-xl border border-white/5">No treatments associated with this partner.</div>
+                                            )}
+                                        </div>
+
+                                        <div className="pt-4 border-t border-white/5 space-y-4">
+                                            <h3 className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Partner Team</h3>
+                                            {allPartnerTherapists.filter(t => t.partner_id === detailedTherapist.id).length > 0 ? (
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    {allPartnerTherapists.filter(t => t.partner_id === detailedTherapist.id).map(t => (
+                                                        <div key={t.id} className="flex items-center gap-4 bg-white/5 p-3 rounded-xl border border-white/10 shadow-sm">
+                                                            <div className="w-12 h-12 rounded-full bg-black overflow-hidden shrink-0 border border-white/10">
+                                                                {t.image_url ? (
+                                                                    <img src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
+                                                                ) : (
+                                                                    <div className="w-full h-full flex items-center justify-center text-white/30 text-xs font-bold">{t.name.substring(0, 2)}</div>
+                                                                )}
+                                                            </div>
+                                                            <div>
+                                                                <div className="font-bold text-sm text-white line-clamp-1">{t.name}</div>
+                                                                <div className="text-[10px] uppercase font-bold tracking-widest mt-1">
+                                                                    {t.online_status === 'Off' ? (
+                                                                        <span className="text-red-400">Offline</span>
+                                                                    ) : t.online_status === 'Busy' || t.online_status === 'HANDLING CUSTOMER' ? (
+                                                                        <span className="text-amber-500">Busy</span>
+                                                                    ) : (
+                                                                        <span className="text-green-500">Online</span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="text-white/40 text-xs italic bg-white/5 p-4 rounded-xl border border-white/5">No team members yet.</div>
+                                            )}
+                                        </div>
                                     </>
                                 )}
                                 

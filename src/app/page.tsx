@@ -311,7 +311,18 @@ ${treatmentsList}
                         {partnerTherapists.filter(t => t.is_active && (selectedAreaFilter === 'All' || therapists.find(th => th.id === t.partner_id)?.location?.toLowerCase() === selectedAreaFilter.toLowerCase())).map(t => (
                             <div key={t.id} className="flex flex-col items-center gap-2 cursor-pointer group shrink-0 snap-center outline-none" onClick={() => {
                                 const parentTherapist = therapists.find(th => th.id === t.partner_id);
-                                if (parentTherapist) setViewingTherapist(parentTherapist);
+                                if (parentTherapist) {
+                                    let mappedStatus = t.online_status;
+                                    if (t.online_status === 'READY TO ACCEPT JOBS') mappedStatus = 'Online';
+                                    if (t.online_status === 'HANDLING CUSTOMER') mappedStatus = 'Busy';
+                                    setViewingTherapist({
+                                        ...parentTherapist,
+                                        name: t.name,
+                                        image_url: t.image_url,
+                                        bio: t.bio,
+                                        online_status: mappedStatus || parentTherapist.online_status
+                                    });
+                                }
                             }}>
                                 <div className={`w-[72px] h-[72px] rounded-full p-[3px] transition-all duration-300 shadow-sm relative ${selectedTherapists.includes(t.partner_id) ? 'bg-gradient-to-tr from-white via-white/80 to-white shadow-[0_8px_20px_rgb(0,0,0,0.3)] scale-110' : 'bg-gradient-to-tr from-white/40 to-white/10 hover:scale-105'}`}>
                                     <div className="w-full h-full rounded-full border-[3px] border-[#111] overflow-hidden bg-black">
