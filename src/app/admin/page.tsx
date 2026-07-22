@@ -1731,17 +1731,17 @@ export default function AdminDashboard() {
                                                                             </a>
                                                                         </div>
 
-                                                                        {/* Check In / Check Out */}
+                                                                        {/* Date & Time / Provider */}
                                                                         <div className="grid grid-cols-2 gap-4 pb-6 border-b border-white/[0.04]">
                                                                             <div>
-                                                                                <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Check In</p>
+                                                                                <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Date & Time</p>
                                                                                 <p className="text-sm font-medium text-white">{formattedDate}</p>
                                                                                 <p className="text-[11px] text-white/50 mt-1">{selectedBooking.time}</p>
                                                                             </div>
                                                                             <div>
-                                                                                <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Check Out</p>
-                                                                                <p className="text-sm font-medium text-white">Same day</p>
-                                                                                <p className="text-[11px] text-white/50 mt-1">Company: {companyName}</p>
+                                                                                <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Service Provider</p>
+                                                                                <p className="text-sm font-medium text-white">{companyName}</p>
+                                                                                <p className="text-[11px] text-white/50 mt-1">Partner</p>
                                                                             </div>
                                                                         </div>
 
