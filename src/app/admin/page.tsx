@@ -683,7 +683,7 @@ export default function AdminDashboard() {
             <main className="flex-1 relative overflow-y-auto">
                 {/* Background Details Removed for solid black background */}
 
-                <div className={`${activeTab === 'livemap' ? 'w-full h-full p-0' : activeTab === 'book' ? 'max-w-4xl mx-auto p-4 md:p-12 pb-32 pt-4 md:pt-12' : activeTab === 'therapists' ? 'max-w-[95%] xl:max-w-[1400px] mx-auto p-6 md:p-12 pb-32 md:pb-12 pt-12 md:pt-12' : 'max-w-4xl mx-auto p-6 md:p-12 pt-12 md:pt-12 pb-32 md:pb-12'} relative z-10 transition-all duration-300`}>
+                <div className={`${activeTab === 'livemap' ? 'w-full h-full p-0' : activeTab === 'book' ? 'max-w-[95%] xl:max-w-[1400px] mx-auto p-4 md:p-12 pb-32 pt-4 md:pt-12' : activeTab === 'therapists' ? 'max-w-[95%] xl:max-w-[1400px] mx-auto p-6 md:p-12 pb-32 md:pb-12 pt-12 md:pt-12' : 'max-w-4xl mx-auto p-6 md:p-12 pt-12 md:pt-12 pb-32 md:pb-12'} relative z-10 transition-all duration-300`}>
                     
                     {/* Mobile Header (Hidden on Desktop) */}
                     {activeTab !== 'therapists' && activeTab !== 'livemap' && (
@@ -1533,8 +1533,8 @@ export default function AdminDashboard() {
                                         bDate.setHours(0, 0, 0, 0);
                                         
                                         if (bookingFilter === 'Upcoming') {
-                                            // Only show bookings matching the selected calendar date
-                                            return bDate.getTime() === selectedBookingDate.getTime();
+                                            // Show all upcoming bookings (today and future)
+                                            return bDate.getTime() >= today.getTime();
                                         } else {
                                             // Past bookings: any booking before today
                                             return bDate.getTime() < today.getTime();
@@ -1561,7 +1561,7 @@ export default function AdminDashboard() {
                                                 {/* Header & Search */}
                                                 <div className="sticky top-0 z-20 pb-6">
                                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                                                        <h2 className="font-serif text-3xl text-white">Bookings</h2>
+                                                        <h2 className="text-3xl font-medium text-white">My Bookings</h2>
                                                         <div className="flex bg-[#1C1C1E] p-1 rounded-full border border-white/5 w-fit shrink-0">
                                                             <button 
                                                                 onClick={() => setBookingFilter('Upcoming')}
