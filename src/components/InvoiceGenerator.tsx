@@ -39,8 +39,8 @@ export default function InvoiceGenerator({ booking, companyName }: Props) {
                 <Download size={18} /> Generate Invoice (PDF)
             </button>
 
-            {/* Hidden Invoice Template */}
-            <div className="hidden">
+            {/* Hidden Invoice Template (Off-screen for html2canvas) */}
+            <div className="absolute -left-[9999px] -top-[9999px]">
                 <div ref={invoiceRef} className="bg-white text-black p-12 w-[800px] font-sans">
                     <div className="flex justify-between items-start mb-12 border-b-2 border-black pb-8">
                         <div>
